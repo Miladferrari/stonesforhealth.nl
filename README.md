@@ -38,3 +38,4 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 # Deployment test - Wed Sep 10 03:14:51 CEST 2025
 Test automatische deployment - Wed Sep 10 09:15:50 CEST 2025
 Test HTTP webhook - Wed Sep 10 09:20:37 CEST 2025
+Test correcte app naam - Wed Sep 10 09:24:07 CEST 2025
