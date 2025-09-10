@@ -24,6 +24,7 @@ export default async function Home() {
   let featuredProducts: any[] = [];
   let categories: Category[] = [];
   let categoryPrices: Record<number, number> = {};
+  let apiError = false;
   
   try {
     // Fetch featured products
@@ -62,6 +63,21 @@ export default async function Home() {
     }
   } catch (err) {
     console.error('Failed to load data:', err);
+    apiError = true;
+    // Use fallback data when API fails
+    featuredProducts = [];
+    categories = [
+      {
+        id: 15,
+        name: "Noodpakketten",
+        slug: "noodpakketten",
+        parent: 0,
+        description: "Essentiële noodpakketten voor uw veiligheid",
+        display: "default",
+        image: null,
+        count: 0
+      }
+    ];
   }
 
   return (

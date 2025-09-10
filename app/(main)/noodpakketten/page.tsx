@@ -19,6 +19,7 @@ export default async function CatalogPage({ searchParams }: CatalogPageProps) {
   let categoryPrices: Record<number, number> = {};
   let selectedCategory: Category | null = null;
   let categoryProducts: any[] = [];
+  let apiError = false;
   
   try {
     // Fetch product categories
@@ -65,6 +66,20 @@ export default async function CatalogPage({ searchParams }: CatalogPageProps) {
     }
   } catch (err) {
     console.error('Failed to load categories:', err);
+    apiError = true;
+    // Use fallback/dummy data when API fails
+    categories = [
+      {
+        id: 15,
+        name: "Noodpakketten",
+        slug: "noodpakketten",
+        parent: 0,
+        description: "Essentiële noodpakketten voor uw veiligheid",
+        display: "default",
+        image: null,
+        count: 0
+      }
+    ];
   }
 
   return (
@@ -82,6 +97,19 @@ export default async function CatalogPage({ searchParams }: CatalogPageProps) {
           </p>
         </div>
       </section>
+
+      {/* Show API error message if needed */}
+      {apiError && (
+        <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 my-4 max-w-7xl mx-auto">
+          <div className="flex">
+            <div className="ml-3">
+              <p className="text-sm text-yellow-700">
+                De productcatalogus wordt momenteel bijgewerkt. Probeer het later opnieuw of neem contact met ons op.
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Show products if category is selected, otherwise show categories */}
       {selectedCategory && categoryProducts.length > 0 ? (
