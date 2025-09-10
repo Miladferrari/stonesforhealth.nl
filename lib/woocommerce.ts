@@ -306,16 +306,17 @@ class WooCommerceAPI {
         if (textContent.includes("<!DOCTYPE") || textContent.includes("<html")) {
           // Only log HTML preview in development
           if (process.env.NODE_ENV === 'development') {
-            console.warn(`[WooCommerce API] Received HTML instead of JSON. This usually indicates server issues or incorrect endpoint.`);
+            console.warn(`[WooCommerce API] Received HTML instead of JSON. WordPress may not be installed or API endpoint is incorrect.`);
           }
-          throw new Error(
-            "WooCommerce API returned an HTML page instead of JSON. The API endpoint may be incorrect or the server may be experiencing issues."
-          );
+          // Return empty array as fallback for any HTML response
+          // This prevents the app from crashing when WordPress is not installed
+          console.warn('[WooCommerce API] Returning empty data due to HTML response');
+          return [] as T;
         }
         
-        throw new Error(
-          "WooCommerce API returned non-JSON response. Please check the API configuration."
-        );
+        // For other non-JSON responses, also return empty data
+        console.warn('[WooCommerce API] Returning empty data due to non-JSON response');
+        return [] as T;
       }
 
       let data;
@@ -326,9 +327,8 @@ class WooCommerceAPI {
         if (process.env.NODE_ENV === 'development') {
           console.warn(`[WooCommerce API] Failed to parse JSON:`, jsonError);
         }
-        throw new Error(
-          "Failed to parse WooCommerce API response. The server may be returning invalid JSON."
-        );
+        console.warn('[WooCommerce API] Failed to parse JSON response, returning empty data');
+        return [] as T;
       }
 
       console.log(
@@ -346,26 +346,24 @@ class WooCommerceAPI {
         console.warn(`[WooCommerce API] Fetch error:`, error.message);
       }
       
-      // Handle connection errors
+      // Handle connection errors gracefully - return empty data instead of throwing
       if (error.code === 'ENOTFOUND' || error.message?.includes('ENOTFOUND')) {
-        throw new Error(
-          "Cannot connect to WooCommerce API. Please check the API URL is correct."
-        );
+        console.warn('[WooCommerce API] Cannot connect - API URL not found, returning empty data');
+        return [] as T;
       } else if (error.code === 'ECONNREFUSED' || error.message?.includes('ECONNREFUSED')) {
-        throw new Error(
-          "Connection to WooCommerce API refused. Please check if the server is running."
-        );
+        console.warn('[WooCommerce API] Connection refused, returning empty data');
+        return [] as T;
       } else if (error.code === 'ETIMEDOUT' || error.message?.includes('ETIMEDOUT')) {
-        throw new Error(
-          "Connection to WooCommerce API timed out. Please try again later."
-        );
+        console.warn('[WooCommerce API] Connection timed out, returning empty data');
+        return [] as T;
       } else if (error.message?.includes('fetch failed')) {
-        throw new Error(
-          "Failed to connect to WooCommerce API. Please check your internet connection and API URL."
-        );
+        console.warn('[WooCommerce API] Fetch failed, returning empty data');
+        return [] as T;
       }
       
-      throw error;
+      // For any other errors, also return empty data to prevent crashes
+      console.warn('[WooCommerce API] Unexpected error, returning empty data:', error.message);
+      return [] as T;
     }
   }
 
