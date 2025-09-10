@@ -1,0 +1,68 @@
+# Build stage
+FROM node:18-alpine AS builder
+
+# Set working directory
+WORKDIR /app
+
+# Copy package files
+COPY package*.json ./
+
+# Install dependencies
+RUN npm ci
+
+# Copy all project files
+COPY . .
+
+# Set build arguments
+ARG NEXT_PUBLIC_WORDPRESS_API_URL
+ARG WC_CONSUMER_KEY
+ARG WC_CONSUMER_SECRET
+ARG NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY
+ARG STRIPE_SECRET_KEY
+ARG STRIPE_WEBHOOK_SECRET
+
+# Set environment variables for build
+ENV NEXT_PUBLIC_WORDPRESS_API_URL=${NEXT_PUBLIC_WORDPRESS_API_URL}
+ENV WC_CONSUMER_KEY=${WC_CONSUMER_KEY}
+ENV WC_CONSUMER_SECRET=${WC_CONSUMER_SECRET}
+ENV NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=${NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY}
+ENV STRIPE_SECRET_KEY=${STRIPE_SECRET_KEY}
+ENV STRIPE_WEBHOOK_SECRET=${STRIPE_WEBHOOK_SECRET}
+
+# Build the Next.js application
+RUN npm run build
+
+# Production stage
+FROM node:18-alpine AS runner
+
+WORKDIR /app
+
+# Copy necessary files from builder
+COPY --from=builder /app/public ./public
+COPY --from=builder /app/.next/standalone ./
+COPY --from=builder /app/.next/static ./.next/static
+
+# Copy package.json for version info
+COPY --from=builder /app/package.json ./package.json
+
+# Set runtime environment variables
+ARG NEXT_PUBLIC_WORDPRESS_API_URL
+ARG WC_CONSUMER_KEY
+ARG WC_CONSUMER_SECRET
+ARG NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY
+ARG STRIPE_SECRET_KEY
+ARG STRIPE_WEBHOOK_SECRET
+
+ENV NEXT_PUBLIC_WORDPRESS_API_URL=${NEXT_PUBLIC_WORDPRESS_API_URL}
+ENV WC_CONSUMER_KEY=${WC_CONSUMER_KEY}
+ENV WC_CONSUMER_SECRET=${WC_CONSUMER_SECRET}
+ENV NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=${NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY}
+ENV STRIPE_SECRET_KEY=${STRIPE_SECRET_KEY}
+ENV STRIPE_WEBHOOK_SECRET=${STRIPE_WEBHOOK_SECRET}
+ENV NODE_ENV=production
+ENV PORT=3000
+
+EXPOSE 3000
+
+# Start the standalone server
+CMD ["node", "server.js"]
