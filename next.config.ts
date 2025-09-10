@@ -19,6 +19,11 @@ const nextConfig: NextConfig = {
         hostname: 'wordpress.123noodklaar.nl',
         pathname: '/**',
       },
+      {
+        protocol: 'http',
+        hostname: 'wordpress.overlevingstotaal.com',
+        pathname: '/**',
+      },
       // Add other image domains if needed
     ],
     formats: ['image/avif', 'image/webp'],
