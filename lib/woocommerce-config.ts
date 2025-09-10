@@ -5,8 +5,8 @@ export function getWooCommerceConfig() {
   // Use environment variables if available, otherwise use default
   const config = {
     baseUrl: process.env.NEXT_PUBLIC_WOOCOMMERCE_URL || "http://wordpress.overlevingstotaal.com/wp-json/wc/v3",
-    consumerKey: process.env.WOOCOMMERCE_CONSUMER_KEY || "ck_67de37be09579abac76682634c5d89c6f822098c",
-    consumerSecret: process.env.WOOCOMMERCE_CONSUMER_SECRET || "cs_afc1a164ef96c2aa4e90d175d4d8b3b201b90892",
+    consumerKey: process.env.WOOCOMMERCE_CONSUMER_KEY || "ck_985cd9ec2ed24cc8ecb5165eacc6c762c8daf32d",
+    consumerSecret: process.env.WOOCOMMERCE_CONSUMER_SECRET || "cs_31f5a66230017ac9aa92002d1ca4e61e2224a174",
   };
 
   // Log which credentials are being used (without showing the full secret)

@@ -141,6 +141,46 @@ class WooCommerceAPI {
 
   private async fetchAPI<T>(
     endpoint: string,
+    options?: RequestInit & { useCache?: boolean; retries?: number }
+  ): Promise<T> {
+    const maxRetries = options?.retries ?? 2;
+    let lastError: any;
+    
+    for (let attempt = 0; attempt <= maxRetries; attempt++) {
+      try {
+        return await this.fetchAPIInternal<T>(endpoint, options);
+      } catch (error: any) {
+        lastError = error;
+        
+        // Don't retry on certain errors
+        if (error.message?.includes('authentication failed') ||
+            error.message?.includes('access denied') ||
+            error.message?.includes('Cannot view this resource')) {
+          throw error;
+        }
+        
+        // Only retry on network/server errors
+        if (attempt < maxRetries && 
+            (error.message?.includes('HTML page instead of JSON') ||
+             error.message?.includes('fetch failed') ||
+             error.message?.includes('ETIMEDOUT') ||
+             error.message?.includes('ECONNREFUSED'))) {
+          if (process.env.NODE_ENV === 'development') {
+            console.warn(`[WooCommerce API] Attempt ${attempt + 1} failed, retrying...`);
+          }
+          // Wait a bit before retrying (exponential backoff)
+          await new Promise(resolve => setTimeout(resolve, Math.pow(2, attempt) * 1000));
+        } else {
+          throw error;
+        }
+      }
+    }
+    
+    throw lastError;
+  }
+
+  private async fetchAPIInternal<T>(
+    endpoint: string,
     options?: RequestInit & { useCache?: boolean }
   ): Promise<T> {
     // Caching disabled - always fetch fresh data
@@ -251,7 +291,46 @@ class WooCommerceAPI {
         }
       }
 
-      const data = await response.json();
+      // Check if response is JSON
+      const contentType = response.headers.get("content-type");
+      if (!contentType || !contentType.includes("application/json")) {
+        // Log to console only in development for debugging
+        if (process.env.NODE_ENV === 'development') {
+          console.warn(`[WooCommerce API] Non-JSON response received. Content-Type: ${contentType}`);
+        }
+        
+        // Try to get the text content for debugging
+        const textContent = await response.text();
+        
+        // Check if it's HTML (common error page)
+        if (textContent.includes("<!DOCTYPE") || textContent.includes("<html")) {
+          // Only log HTML preview in development
+          if (process.env.NODE_ENV === 'development') {
+            console.warn(`[WooCommerce API] Received HTML instead of JSON. This usually indicates server issues or incorrect endpoint.`);
+          }
+          throw new Error(
+            "WooCommerce API returned an HTML page instead of JSON. The API endpoint may be incorrect or the server may be experiencing issues."
+          );
+        }
+        
+        throw new Error(
+          "WooCommerce API returned non-JSON response. Please check the API configuration."
+        );
+      }
+
+      let data;
+      try {
+        data = await response.json();
+      } catch (jsonError) {
+        // Only log in development
+        if (process.env.NODE_ENV === 'development') {
+          console.warn(`[WooCommerce API] Failed to parse JSON:`, jsonError);
+        }
+        throw new Error(
+          "Failed to parse WooCommerce API response. The server may be returning invalid JSON."
+        );
+      }
+
       console.log(
         `[WooCommerce API] Success: Found ${
           Array.isArray(data) ? data.length : 1
@@ -262,7 +341,10 @@ class WooCommerceAPI {
 
       return data;
     } catch (error: any) {
-      console.error(`[WooCommerce API] Fetch error:`, error);
+      // Only log errors in development
+      if (process.env.NODE_ENV === 'development') {
+        console.warn(`[WooCommerce API] Fetch error:`, error.message);
+      }
       
       // Handle connection errors
       if (error.code === 'ENOTFOUND' || error.message?.includes('ENOTFOUND')) {
