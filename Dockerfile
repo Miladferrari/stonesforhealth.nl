@@ -1,42 +1,28 @@
-# Build stage
-FROM node:18-alpine AS builder
+# Single stage build for CapRover
+FROM node:18-alpine
 
-# Set working directory
 WORKDIR /app
 
 # Copy package files
 COPY package*.json ./
 
-# Install dependencies
+# Install all dependencies (including devDependencies for build)
 RUN npm ci
 
 # Copy all project files
 COPY . .
 
 # Build the Next.js application
-# The build will use default/empty values for environment variables
-# Actual values will be provided at runtime by CapRover
 RUN npm run build
 
-# Production stage
-FROM node:18-alpine AS runner
-
-WORKDIR /app
-
-# Copy necessary files from builder
-COPY --from=builder /app/public ./public
-COPY --from=builder /app/.next/standalone ./
-COPY --from=builder /app/.next/static ./.next/static
-
-# Copy package.json for version info
-COPY --from=builder /app/package.json ./package.json
+# Remove dev dependencies after build
+RUN npm prune --production
 
 # Set runtime environment variables
-# These will be overridden by CapRover environment variables
 ENV NODE_ENV=production
 ENV PORT=3000
 
 EXPOSE 3000
 
-# Start the standalone server
-CMD ["node", "server.js"]
+# Start the application using the standalone server
+CMD ["node", ".next/standalone/server.js"]
