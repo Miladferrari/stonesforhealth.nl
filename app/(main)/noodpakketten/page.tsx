@@ -1,11 +1,18 @@
 import Link from 'next/link';
-import { woocommerce, Category } from '@/lib/woocommerce';
+import { Category } from '@/lib/woocommerce';
 import ProductCard from '../../components/ProductCard';
 import FilteredProducts from '../../components/FilteredProducts';
 
 // Force dynamic rendering to always fetch fresh data
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
+
+// Get the base URL for API calls
+function getBaseUrl() {
+  if (process.env.VERCEL_URL) return `https://${process.env.VERCEL_URL}`;
+  if (process.env.NEXT_PUBLIC_SITE_URL) return process.env.NEXT_PUBLIC_SITE_URL;
+  return 'http://localhost:3000';
+}
 
 interface CatalogPageProps {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
@@ -22,13 +29,19 @@ export default async function CatalogPage({ searchParams }: CatalogPageProps) {
   let apiError = false;
   
   try {
-    // Fetch product categories
-    categories = await woocommerce.getCategories({
-      per_page: 100,
-      orderby: 'count',
-      order: 'desc',
-      hide_empty: false  // Show all categories
+    const baseUrl = getBaseUrl();
+    
+    // Fetch product categories via API route
+    const categoriesRes = await fetch(`${baseUrl}/api/woocommerce/categories?per_page=100&orderby=count&order=desc&hide_empty=false`, {
+      cache: 'no-store',
+      headers: {
+        'Content-Type': 'application/json',
+      }
     });
+    
+    if (categoriesRes.ok) {
+      categories = await categoriesRes.json();
+    }
     
     // If a category is selected, find it and fetch its products
     if (selectedCategorySlug) {
@@ -36,11 +49,16 @@ export default async function CatalogPage({ searchParams }: CatalogPageProps) {
       
       if (selectedCategory) {
         try {
-          categoryProducts = await woocommerce.getProductsByCategory(selectedCategory.id, {
-            per_page: 100,
-            orderby: 'menu_order',
-            order: 'asc'
+          const productsRes = await fetch(`${baseUrl}/api/woocommerce/products?category=${selectedCategory.id}&per_page=100&orderby=menu_order&order=asc`, {
+            cache: 'no-store',
+            headers: {
+              'Content-Type': 'application/json',
+            }
           });
+          
+          if (productsRes.ok) {
+            categoryProducts = await productsRes.json();
+          }
         } catch (error) {
           console.error('[Collection Page] Error fetching products:', error);
         }
@@ -49,15 +67,19 @@ export default async function CatalogPage({ searchParams }: CatalogPageProps) {
       // Fetch lowest price for each category only when showing all categories
       for (const category of categories) {
         try {
-          const products = await woocommerce.getProductsByCategory(category.id, {
-            per_page: 100,
-            orderby: 'price',
-            order: 'asc'
+          const productsRes = await fetch(`${baseUrl}/api/woocommerce/products?category=${category.id}&per_page=100&orderby=price&order=asc`, {
+            cache: 'no-store',
+            headers: {
+              'Content-Type': 'application/json',
+            }
           });
           
-          if (products.length > 0) {
-            const lowestPrice = Math.min(...products.map(p => parseFloat(p.price) || 0));
-            categoryPrices[category.id] = lowestPrice;
+          if (productsRes.ok) {
+            const products = await productsRes.json();
+            if (products.length > 0) {
+              const lowestPrice = Math.min(...products.map((p: any) => parseFloat(p.price) || 0));
+              categoryPrices[category.id] = lowestPrice;
+            }
           }
         } catch (err) {
           console.error(`Failed to fetch products for category ${category.id}:`, err);

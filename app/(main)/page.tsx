@@ -1,10 +1,17 @@
-import { woocommerce, Category } from '@/lib/woocommerce';
+import { Category } from '@/lib/woocommerce';
 import dynamicImport from 'next/dynamic';
 import Link from 'next/link';
 
 // Force dynamic rendering to always fetch fresh data
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
+
+// Get the base URL for API calls
+function getBaseUrl() {
+  if (process.env.VERCEL_URL) return `https://${process.env.VERCEL_URL}`;
+  if (process.env.NEXT_PUBLIC_SITE_URL) return process.env.NEXT_PUBLIC_SITE_URL;
+  return 'http://localhost:3000';
+}
 
 // Lazy load heavy components
 const ProductCard = dynamicImport(() => import('../components/ProductCard'), {
@@ -27,35 +34,49 @@ export default async function Home() {
   let apiError = false;
   
   try {
-    // Fetch featured products
-    featuredProducts = await woocommerce.getProducts({
-      per_page: 3,
-      page: 1,
-      orderby: 'popularity',
-      order: 'desc'
+    const baseUrl = getBaseUrl();
+    
+    // Fetch featured products via API route
+    const productsRes = await fetch(`${baseUrl}/api/woocommerce/products?per_page=3&page=1&orderby=popularity&order=desc`, {
+      cache: 'no-store',
+      headers: {
+        'Content-Type': 'application/json',
+      }
     });
     
-    // Fetch product categories
-    categories = await woocommerce.getCategories({
-      per_page: 10,
-      orderby: 'count',
-      order: 'desc',
-      hide_empty: true
+    if (productsRes.ok) {
+      featuredProducts = await productsRes.json();
+    }
+    
+    // Fetch product categories via API route
+    const categoriesRes = await fetch(`${baseUrl}/api/woocommerce/categories?per_page=10&orderby=count&order=desc&hide_empty=true`, {
+      cache: 'no-store',
+      headers: {
+        'Content-Type': 'application/json',
+      }
     });
+    
+    if (categoriesRes.ok) {
+      categories = await categoriesRes.json();
+    }
     
     // Fetch lowest price for each category
     for (const category of categories.slice(0, 6)) {
       try {
-        const products = await woocommerce.getProductsByCategory(category.id, {
-          per_page: 100,
-          orderby: 'price',
-          order: 'asc'
+        const categoryProductsRes = await fetch(`${baseUrl}/api/woocommerce/products?category=${category.id}&per_page=100&orderby=price&order=asc`, {
+          cache: 'no-store',
+          headers: {
+            'Content-Type': 'application/json',
+          }
         });
         
-        if (products.length > 0) {
-          // Find the lowest price among products
-          const lowestPrice = Math.min(...products.map(p => parseFloat(p.price) || 0));
-          categoryPrices[category.id] = lowestPrice;
+        if (categoryProductsRes.ok) {
+          const products = await categoryProductsRes.json();
+          if (products.length > 0) {
+            // Find the lowest price among products
+            const lowestPrice = Math.min(...products.map((p: any) => parseFloat(p.price) || 0));
+            categoryPrices[category.id] = lowestPrice;
+          }
         }
       } catch (err) {
         console.error(`Failed to fetch products for category ${category.id}:`, err);

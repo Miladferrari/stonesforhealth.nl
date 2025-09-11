@@ -1,4 +1,3 @@
-import { woocommerce } from '@/lib/woocommerce';
 import ProductCard from '@/app/components/ProductCard';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
@@ -6,6 +5,13 @@ import { notFound } from 'next/navigation';
 // Force dynamic rendering to always fetch fresh data
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
+
+// Get the base URL for API calls
+function getBaseUrl() {
+  if (process.env.VERCEL_URL) return `https://${process.env.VERCEL_URL}`;
+  if (process.env.NEXT_PUBLIC_SITE_URL) return process.env.NEXT_PUBLIC_SITE_URL;
+  return 'http://localhost:3000';
+}
 
 interface CatalogPageProps {
   params: Promise<{ slug: string }>;
@@ -137,12 +143,19 @@ export default async function CatalogProductsPage({ params }: CatalogPageProps) 
   let error = null;
 
   try {
-    products = await woocommerce.getProducts({
-      per_page: 20,
-      page: 1,
-      orderby: 'date',
-      order: 'desc'
+    const baseUrl = getBaseUrl();
+    const productsRes = await fetch(`${baseUrl}/api/woocommerce/products?per_page=20&page=1&orderby=date&order=desc`, {
+      cache: 'no-store',
+      headers: {
+        'Content-Type': 'application/json',
+      }
     });
+    
+    if (productsRes.ok) {
+      products = await productsRes.json();
+    } else {
+      error = 'Failed to load products';
+    }
   } catch (err) {
     error = err instanceof Error ? err.message : 'Failed to load products';
   }
