@@ -197,7 +197,6 @@ class WooCommerceAPI {
       Accept: "application/json",
       "Cache-Control": "no-cache, no-store, must-revalidate",
       Pragma: "no-cache",
-      ...options?.headers,
     };
 
     // Check if we need OAuth (HTTP) or can use query params (HTTPS)

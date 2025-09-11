@@ -37,7 +37,7 @@ export function createOAuthHeader(
   // Build OAuth header string
   const oauthParams = Object.keys(authData)
     .sort()
-    .map(key => `${key}="${encodeURIComponent(authData[key])}"`)
+    .map(key => `${key}="${encodeURIComponent((authData as any)[key])}"`)
     .join(', ');
 
   return {
