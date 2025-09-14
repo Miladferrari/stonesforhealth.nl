@@ -202,7 +202,11 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       const data = await response.json();
       if (data.countries) {
         console.log('[Cart] Loaded allowed countries:', data.countries);
-        setAllowedCountries(data.countries);
+        // Extract just the country codes if the API returns objects
+        const countryCodes = data.countries.map((country: any) =>
+          typeof country === 'string' ? country : country.code
+        );
+        setAllowedCountries(countryCodes);
       }
     } catch (error) {
       console.error('Failed to load allowed countries:', error);

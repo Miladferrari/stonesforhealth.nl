@@ -42,14 +42,8 @@ export async function POST(request: NextRequest) {
 }
 
 export async function GET() {
-  // Return allowed countries for shipping
-  const countries = [
-    { code: 'NL', name: 'Nederland' },
-    { code: 'BE', name: 'België' },
-    { code: 'DE', name: 'Duitsland' },
-    { code: 'FR', name: 'Frankrijk' },
-    { code: 'LU', name: 'Luxemburg' }
-  ];
+  // Return allowed countries for shipping (just codes)
+  const countries = ['NL', 'BE', 'DE', 'FR', 'LU'];
 
   return NextResponse.json({ countries });
 }

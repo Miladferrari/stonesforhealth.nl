@@ -178,11 +178,6 @@ export default function SlideInCart() {
                               <a href={`/product/${item.product.id}`} className="text-sm font-medium text-gray-900 hover:text-[#492c4a] transition-colors line-clamp-2">
                                 {item.product.name}
                               </a>
-                              {item.product.attributes && item.product.attributes.length > 0 && (
-                                <p className="text-xs text-gray-500 mt-1">
-                                  {item.product.attributes.map(attr => attr.option).join(' / ')}
-                                </p>
-                              )}
                             </div>
                             <button
                               onClick={() => removeFromCart(item.product.id)}
