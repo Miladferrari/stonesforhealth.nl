@@ -3,10 +3,25 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
+import dynamic from 'next/dynamic';
 import { useCart } from '../../contexts/CartContext';
 import CouponInput from '../../components/CouponInput';
 
-export default function CheckoutPage() {
+// Dynamically import Stripe component to avoid SSR issues
+const StripePaymentForm = dynamic(
+  () => import('./payment/StripePaymentForm'),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="text-center py-8">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#492c4a] mx-auto mb-4"></div>
+        <p className="text-[#2D2D2D] font-[family-name:var(--font-eb-garamond)]">Betaalopties worden geladen...</p>
+      </div>
+    )
+  }
+);
+
+export default function UnifiedCheckoutPage() {
   const router = useRouter();
   const {
     items,
@@ -24,37 +39,52 @@ export default function CheckoutPage() {
     allowedCountries,
     isHydrated
   } = useCart();
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
-  const [showOrderSummary, setShowOrderSummary] = useState(false);
-  const [countryNames, setCountryNames] = useState<{ [key: string]: string }>({});
-  
+
+  // Form state
   const [formData, setFormData] = useState({
-    firstName: '',
-    lastName: '',
     email: '',
     phone: '',
+    firstName: '',
+    lastName: '',
     address: '',
     address2: '',
     city: '',
     postcode: '',
     country: 'NL',
+    billingAddressSame: true,
+    billingFirstName: '',
+    billingLastName: '',
+    billingAddress: '',
+    billingAddress2: '',
+    billingCity: '',
+    billingPostcode: '',
+    billingCountry: 'NL',
   });
 
-  // Restore form data from sessionStorage on mount
+  // UI states
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+  const [showOrderSummary, setShowOrderSummary] = useState(true);
+  const [countryNames, setCountryNames] = useState<{ [key: string]: string }>({});
+  const [orderId, setOrderId] = useState<number | null>(null);
+  const [orderCreated, setOrderCreated] = useState(false);
+
+  // Field validation states
+  const [fieldErrors, setFieldErrors] = useState<{ [key: string]: string }>({});
+
+  // Auto-save to sessionStorage
   useEffect(() => {
     const savedFormData = sessionStorage.getItem('checkoutFormData');
     if (savedFormData) {
       try {
         const parsedData = JSON.parse(savedFormData);
-        setFormData(parsedData);
-        console.log('Restored checkout form data from session');
+        setFormData(prev => ({ ...prev, ...parsedData }));
       } catch (error) {
         console.error('Error restoring form data:', error);
       }
     }
 
-    // Also restore shipping rate if saved
+    // Restore shipping rate if saved
     const savedShippingRate = sessionStorage.getItem('selectedShippingRate');
     if (savedShippingRate && shipping.rates.length > 0) {
       try {
@@ -69,9 +99,9 @@ export default function CheckoutPage() {
     }
   }, [shipping.rates]);
 
-  // Save form data to sessionStorage whenever it changes
+  // Save form data whenever it changes
   useEffect(() => {
-    if (formData.firstName || formData.lastName || formData.email) {
+    if (formData.email || formData.firstName) {
       sessionStorage.setItem('checkoutFormData', JSON.stringify(formData));
     }
   }, [formData]);
@@ -85,7 +115,6 @@ export default function CheckoutPage() {
 
   // Country names mapping
   useEffect(() => {
-    // Extended country codes to names mapping
     const names: { [key: string]: string } = {
       'NL': 'Nederland',
       'BE': 'België',
@@ -118,53 +147,119 @@ export default function CheckoutPage() {
     setCountryNames(names);
   }, []);
 
-  // Update shipping country when form country changes
+  // Update shipping when address changes
   useEffect(() => {
     if (formData.country && formData.country !== shipping.country) {
       setShippingCountry(formData.country);
     }
   }, [formData.country]);
 
-  // Update shipping postcode when form postcode changes
   useEffect(() => {
     if (formData.postcode && formData.postcode !== shipping.postcode) {
       setShippingPostcode(formData.postcode);
     }
   }, [formData.postcode]);
 
-  // Calculate pricing details
+  // Calculate pricing
   const subtotal = getTotalPrice();
   const discountAmount = getDiscountAmount();
   const subtotalAfterDiscount = getTotalPriceAfterDiscount();
   const shippingCost = getShippingCost();
-  const total = getFinalTotal(); // Total without VAT since prices already include VAT
+  const total = getFinalTotal();
 
+  // Input handlers
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
+    const { name, value, type } = e.target;
+    const newValue = type === 'checkbox' ? (e.target as HTMLInputElement).checked : value;
+
+    setFormData(prev => ({
+      ...prev,
+      [name]: newValue
+    }));
+
+    // Clear field error when user starts typing
+    if (fieldErrors[name]) {
+      setFieldErrors(prev => {
+        const newErrors = { ...prev };
+        delete newErrors[name];
+        return newErrors;
+      });
+    }
   };
 
+  // Validate individual field
+  const validateField = (name: string, value: string): string | null => {
+    switch (name) {
+      case 'email':
+        if (!value) return 'Voer een e-mailadres in';
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) return 'Voer een geldig e-mailadres in';
+        return null;
+      case 'firstName':
+        // First name is now optional
+        return null;
+      case 'lastName':
+        if (!value) return 'Voer een achternaam in';
+        return null;
+      case 'address':
+        if (!value) return 'Voer een adres in';
+        return null;
+      case 'city':
+        if (!value) return 'Voer een stad in';
+        return null;
+      case 'postcode':
+        if (!value) return 'Voer een postcode in';
+        return null;
+      default:
+        return null;
+    }
+  };
+
+  // Validate all required fields
+  const validateForm = (): boolean => {
+    const errors: { [key: string]: string } = {};
+
+    // Validate required fields (firstName is now optional)
+    const requiredFields = ['email', 'lastName', 'address', 'city', 'postcode'];
+    requiredFields.forEach(field => {
+      const error = validateField(field, formData[field as keyof typeof formData] as string);
+      if (error) errors[field] = error;
+    });
+
+    // Check shipping method
+    if (!shipping.selectedRate && shipping.rates.length > 0) {
+      errors.shippingMethod = 'Selecteer een verzendmethode';
+    }
+
+    setFieldErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
+
+  // Create order and process payment
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (!validateForm()) {
+      // Scroll to first error
+      const firstError = document.querySelector('.border-red-500');
+      if (firstError) {
+        firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+      return;
+    }
+
     setLoading(true);
     setError('');
 
     try {
-      // First, validate stock availability
+      // Validate stock
       const stockResponse = await fetch('/api/validate-stock', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ items }),
       });
 
       const stockValidation = await stockResponse.json();
-
       if (!stockValidation.valid) {
-        // Build error message
         let errorMessage = 'Er zijn problemen met de voorraad:\n\n';
         stockValidation.issues.forEach((issue: any) => {
           if (issue.issue === 'out_of_stock') {
@@ -173,20 +268,16 @@ export default function CheckoutPage() {
             errorMessage += `• ${issue.productName}: slechts ${issue.available} beschikbaar (${issue.requested} gevraagd)\n`;
           }
         });
-        errorMessage += '\nPas je winkelwagen aan en probeer het opnieuw.';
-        
         setError(errorMessage);
         setLoading(false);
-        // Scroll to top to show error
         window.scrollTo({ top: 0, behavior: 'smooth' });
         return;
       }
 
-      // Prepare shipping lines based on selected shipping method
+      // Prepare order data
       const shippingLines = [];
       const selectedRate = shipping.selectedRate || shipping.rates[0];
       if (selectedRate) {
-        // WooCommerce expects the full method_id (e.g., 'flat_rate:1')
         shippingLines.push({
           method_id: selectedRate.method_id,
           method_title: selectedRate.method_title,
@@ -200,13 +291,13 @@ export default function CheckoutPage() {
         set_paid: false,
         status: 'pending',
         billing: {
-          first_name: formData.firstName,
-          last_name: formData.lastName,
-          address_1: formData.address,
-          address_2: formData.address2,
-          city: formData.city,
-          postcode: formData.postcode,
-          country: formData.country,
+          first_name: formData.billingAddressSame ? formData.firstName : formData.billingFirstName,
+          last_name: formData.billingAddressSame ? formData.lastName : formData.billingLastName,
+          address_1: formData.billingAddressSame ? formData.address : formData.billingAddress,
+          address_2: formData.billingAddressSame ? formData.address2 : formData.billingAddress2,
+          city: formData.billingAddressSame ? formData.city : formData.billingCity,
+          postcode: formData.billingAddressSame ? formData.postcode : formData.billingPostcode,
+          country: formData.billingAddressSame ? formData.country : formData.billingCountry,
           email: formData.email,
           phone: formData.phone,
         },
@@ -231,34 +322,23 @@ export default function CheckoutPage() {
         })
       };
 
-      // Create return URL for after payment
-      const returnUrl = `${window.location.origin}/checkout/success`;
-      
-      // Create order via API route to avoid CORS issues
       const orderResponse = await fetch('/api/create-order', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           orderData: orderData,
-          returnUrl: returnUrl
+          returnUrl: `${window.location.origin}/checkout/success`
         }),
       });
 
       const result = await orderResponse.json();
-      
+
       if (!result.success || !result.order || !result.order.id) {
         throw new Error(result.error || 'Failed to create order');
       }
 
-      console.log('Order created successfully with ID:', result.order.id);
-      console.log('Redirecting to payment URL:', result.paymentUrl);
-      
-      // Store order ID in session storage for later retrieval
+      // Store order data for payment processing
       sessionStorage.setItem('pendingOrderId', result.order.id.toString());
-      
-      // Store order data for payment page
       sessionStorage.setItem('orderData', JSON.stringify({
         ...result.order,
         customer: orderData.billing,
@@ -267,37 +347,36 @@ export default function CheckoutPage() {
         items: items,
         coupon: appliedCoupon
       }));
-      
-      // Do NOT clear cart here - only clear after successful payment
-      // clearCart();
-      
-      // Redirect to our custom payment page
-      router.push('/checkout/payment');
+
+      setOrderId(result.order.id);
+      setOrderCreated(true);
+
+      // Scroll to payment section
+      const paymentSection = document.getElementById('payment-section');
+      if (paymentSection) {
+        paymentSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
     } catch (err: any) {
       console.error('Order error:', err);
-      
-      // Provide more specific error messages
-      if (err.message?.includes('stock') || err.message?.includes('voorraad')) {
-        setError('Een of meer producten zijn niet meer op voorraad. Controleer je winkelwagen.');
-      } else if (err.message?.includes('coupon') || err.message?.includes('korting')) {
-        setError('De kortingscode is niet meer geldig. Probeer het opnieuw zonder kortingscode.');
-      } else if (err.message?.includes('shipping')) {
-        setError('Er is een probleem met de verzendmethode. Selecteer een andere verzendoptie.');
-      } else {
-        setError('Er is een fout opgetreden bij het verwerken van je bestelling. Probeer het opnieuw of neem contact met ons op.');
-      }
-      
-      // Scroll to top to show error
+      setError('Er is een fout opgetreden bij het verwerken van je bestelling.');
       window.scrollTo({ top: 0, behavior: 'smooth' });
     } finally {
       setLoading(false);
     }
   };
 
-  // Show loading state while cart is being hydrated from localStorage
+  // Handle payment success
+  const handlePaymentSuccess = async () => {
+    clearCart();
+    sessionStorage.removeItem('checkoutFormData');
+    sessionStorage.removeItem('selectedShippingRate');
+    router.push('/checkout/success');
+  };
+
+  // Loading state
   if (!isHydrated) {
     return (
-      <div className="min-h-screen bg-[#F5F1E8]">
+      <div className="min-h-screen bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
           <div className="flex flex-col items-center justify-center">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#492c4a] mb-4"></div>
@@ -308,10 +387,10 @@ export default function CheckoutPage() {
     );
   }
 
-  // Only show empty cart message after hydration is complete
+  // Empty cart state
   if (isHydrated && items.length === 0) {
     return (
-      <div className="min-h-screen bg-[#F5F1E8]">
+      <div className="min-h-screen bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
           <div className="text-center">
             <h1 className="text-3xl font-bold text-[#492c4a] mb-4 font-[family-name:var(--font-eb-garamond)]">Je winkelwagen is leeg</h1>
@@ -326,602 +405,1021 @@ export default function CheckoutPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#F5F1E8]">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div className="min-h-screen bg-white">
+      <div className="relative">
         {/* Mobile order summary toggle */}
-        <button
-          type="button"
-          className="w-full bg-white/60 backdrop-blur-sm border border-[#E8DCC6] p-4 flex items-center justify-center font-medium text-base text-[#492c4a] mb-4 lg:hidden rounded-lg font-[family-name:var(--font-eb-garamond)]"
-          onClick={() => setShowOrderSummary(!showOrderSummary)}
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 19.38 18" className="mr-2" width="27" height="25" role="img">
-            <path d="M14 16.5c0-.83.67-1.5 1.5-1.5s1.5.67 1.5 1.5-.67 1.5-1.5 1.5-1.5-.67-1.5-1.5zm-10 0c0-.83.67-1.5 1.5-1.5s1.5.67 1.5 1.5S6.33 18 5.5 18 4 17.33 4 16.5zM6 13c-.45 0-.85-.3-.97-.74L2.23 2H1c-.55 0-1-.45-1-1s.45-1 1-1h2c.45 0 .85.3.97.74L4.59 3h12.8c1.1 0 2 .9 2 2 0 .31-.07.62-.21.89l-3.28 6.55a1 1 0 0 1-.89.55H6z" fill="currentColor"/>
-            <title>cart-filled</title>
-          </svg>
-          <span>Toon besteloverzicht</span>
-          <span className="ml-2 font-semibold text-[#492c4a]">€{total.toFixed(2)}</span>
-          <svg 
-            xmlns="http://www.w3.org/2000/svg" 
-            viewBox="0 0 10 6" 
-            className={`ml-2 transition-transform ${showOrderSummary ? 'rotate-180' : ''}`} 
-            width="10" 
-            height="6" 
-            role="img"
+        <div className="lg:hidden">
+          <button
+            type="button"
+            className="w-full bg-gray-50 border-b border-gray-200 p-4 flex items-center justify-between font-medium text-base text-[#1a1a1a] font-[family-name:var(--font-eb-garamond)]"
+            onClick={() => setShowOrderSummary(!showOrderSummary)}
           >
-            <path d="M0 1c0-.6.4-1 1-1 .3 0 .5.1.7.3L5 3.6 8.3.4c.4-.4 1-.4 1.4 0 .4.4.4 1 0 1.4l-4 3.9c-.4.4-1 .4-1.4 0l-4-4C.1 1.5 0 1.3 0 1" fill="currentColor"/>
-            <title>chevron-down</title>
-          </svg>
-        </button>
-        
+            <span className="flex items-center gap-2">
+              <span className="text-base">Besteloverzicht</span>
+              <span className="inline-flex items-center">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 14 14"
+                  className={`w-3.5 h-3.5 transition-transform ${showOrderSummary ? 'rotate-180' : ''}`}
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.75 7.354 9.396a.5.5 0 0 1-.708 0L2 4.75"></path>
+                </svg>
+              </span>
+            </span>
+            <span className="text-lg font-bold text-[#1a1a1a]">€&nbsp;{total.toFixed(2).replace('.', ',')}</span>
+          </button>
+        </div>
+
         {/* Mobile order summary content */}
         {showOrderSummary && (
-          <div className="lg:hidden mb-6">
-            <div className="bg-white rounded-lg shadow-sm p-6">
-              <h2 className="text-xl font-semibold text-gray-900 mb-4">Besteloverzicht</h2>
-              
-              {/* Products list */}
-              <div className="space-y-3 mb-4 max-h-64 overflow-y-auto">
-                {items.map((item) => (
-                  <div key={item.product.id} className="flex items-start gap-3 text-sm">
-                    {/* Product image */}
-                    <div className="flex-shrink-0 w-16 h-16 bg-gray-50 rounded overflow-hidden">
-                      {item.product.images?.[0]?.src ? (
-                        <Image
-                          src={item.product.images[0].src}
-                          alt={item.product.name}
-                          width={64}
-                          height={64}
-                          className="w-full h-full object-cover"
-                        />
-                      ) : (
-                        <div className="w-full h-full flex items-center justify-center text-gray-400">
-                          <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                          </svg>
+          <div className="lg:hidden bg-gray-50 border-b border-gray-200">
+            <div className="px-4 py-6">
+              {/* Products section */}
+              <section className="mb-6">
+                <div className="max-h-64 overflow-y-auto overflow-x-hidden pr-1">
+                  <div role="table" className="space-y-3 pb-2">
+                    {items.map((item: any, index: number) => (
+                      <div key={item.product.id} role="row" className={`flex gap-3 ${index > 0 ? 'pt-3 border-t border-gray-200' : ''}`}>
+                        {/* Product Image */}
+                        <div className="flex-shrink-0 pb-1">
+                          <div className="relative w-16 h-16">
+                            <div className="w-16 h-16 rounded-lg overflow-hidden border border-gray-200 bg-white">
+                              {item.product.images?.[0]?.src ? (
+                                <Image
+                                  src={item.product.images[0].src}
+                                  alt={item.product.name}
+                                  width={64}
+                                  height={64}
+                                  className="w-full h-full object-cover"
+                                />
+                              ) : (
+                                <div className="w-full h-full flex items-center justify-center text-gray-400 bg-gray-50">
+                                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                  </svg>
+                                </div>
+                              )}
+                            </div>
+                            <div className="absolute -bottom-1 -right-1 bg-[#492c4a] text-white text-xs min-w-[20px] h-5 px-1.5 rounded-full flex items-center justify-center font-semibold border-2 border-gray-50">
+                              {item.quantity}
+                            </div>
+                          </div>
                         </div>
-                      )}
-                    </div>
-                    
-                    {/* Product details */}
-                    <div className="flex-1">
-                      <p className="font-medium text-gray-900">{item.product.name}</p>
-                      <p className="text-steel-gray">Aantal: {item.quantity}</p>
-                    </div>
-                    
-                    {/* Price */}
-                    <span className="font-medium text-gray-900 text-right">€{(parseFloat(item.product.price) * item.quantity).toFixed(2)}</span>
-                  </div>
-                ))}
-              </div>
-              
-              {/* Price breakdown */}
-              <div className="border-t pt-4 space-y-2">
-                <div className="flex justify-between text-sm">
-                  <span className="text-steel-gray">Subtotaal</span>
-                  <span className="text-gray-900">€{subtotal.toFixed(2)}</span>
-                </div>
-                
-                {appliedCoupon && (
-                  <div className="flex justify-between text-sm text-green-600">
-                    <span>
-                      Korting
-                      {appliedCoupon.discount_type === 'percent' && ` (${appliedCoupon.amount}%)`}
-                    </span>
-                    <span>-€{discountAmount.toFixed(2)}</span>
-                  </div>
-                )}
-                
-                <div className="flex justify-between text-sm">
-                  <span className="text-steel-gray">
-                    Verzending naar {countryNames[formData.country] || formData.country}
-                  </span>
-                  {shipping.loading ? (
-                    <span className="text-gray-400">Berekenen...</span>
-                  ) : (
-                    <span className={shippingCost === 0 ? 'text-green-600 font-medium' : 'text-gray-900'}>
-                      {shippingCost === 0 ? 'GRATIS' : `€${shippingCost.toFixed(2)}`}
-                    </span>
-                  )}
-                </div>
-                
-                {/* Shipping error message - Mobile */}
-                {shipping.error && (
-                  <div className="mt-2 p-2 bg-red-50 border border-red-200 rounded-md">
-                    <p className="text-xs text-red-600 flex items-center gap-1">
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                      </svg>
-                      {shipping.error}
-                    </p>
-                  </div>
-                )}
-                
-                {/* Free shipping progress or notice - Mobile */}
-                {(() => {
-                  const currentRate = shipping.selectedRate || shipping.rates[0];
-                  
-                  if (currentRate?.free_shipping_remaining && currentRate.free_shipping_remaining > 0) {
-                    const progressPercentage = Math.min(
-                      (subtotalAfterDiscount / (subtotalAfterDiscount + currentRate.free_shipping_remaining)) * 100,
-                      100
-                    );
-                    
-                    return (
-                      <div className="my-2 p-2 bg-amber-50 rounded border border-amber-200">
-                        <div className="flex items-center gap-2 mb-1">
-                          <svg className="w-4 h-4 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
-                          </svg>
-                          <span className="text-xs font-medium text-amber-800">
-                            Nog €{currentRate.free_shipping_remaining.toFixed(2)} tot gratis verzending!
+
+                        {/* Product details */}
+                        <div className="flex-1 min-w-0">
+                          <p className="text-base font-medium text-[#1a1a1a] font-[family-name:var(--font-eb-garamond)]">
+                            {item.product.name}
+                          </p>
+                          {item.selectedVariation && (
+                            <p className="text-base text-gray-600 mt-0.5 font-[family-name:var(--font-eb-garamond)]">
+                              {Object.entries(item.selectedVariation).map(([key, value]) =>
+                                `${value}`
+                              ).join(' / ')}
+                            </p>
+                          )}
+                        </div>
+
+                        {/* Price */}
+                        <div className="text-right">
+                          <span className="text-base font-medium text-[#1a1a1a] font-[family-name:var(--font-eb-garamond)]">
+                            €&nbsp;{(parseFloat(item.product.price) * item.quantity).toFixed(2).replace('.', ',')}
                           </span>
                         </div>
-                        <div className="w-full bg-amber-200 rounded-full h-1">
-                          <div 
-                            className="bg-amber-600 h-1 rounded-full transition-all duration-300"
-                            style={{ width: `${progressPercentage}%` }}
-                          />
-                        </div>
                       </div>
-                    );
-                  } else if (currentRate?.free && currentRate?.free_shipping_eligible) {
-                    return (
-                      <div className="my-2 p-2 bg-green-50 rounded-lg border border-green-200 flex items-center gap-2">
-                        <svg className="w-4 h-4 text-green-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                        </svg>
-                        <span className="text-xs font-medium text-green-800">
-                          Je komt in aanmerking voor gratis verzending!
-                        </span>
-                      </div>
-                    );
-                  }
-                  return null;
-                })()}
-                
-                <div className="flex justify-between font-semibold text-lg pt-2 border-t">
-                  <span className="text-gray-900">Totaal</span>
-                  <span className="text-[#492c4a] font-[family-name:var(--font-eb-garamond)]">€{total.toFixed(2)}</span>
+                    ))}
+                  </div>
+                  {items.length > 3 && (
+                    <div className="mt-3 pt-3 border-t border-gray-200 text-base text-gray-600 text-center flex items-center justify-center gap-1 font-[family-name:var(--font-eb-garamond)]">
+                      Scroll voor meer artikelen
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 14 14">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M1.5 7h11m0 0-3.826 4.75M12.5 7 8.674 2.25" />
+                      </svg>
+                    </div>
+                  )}
                 </div>
-              </div>
+              </section>
 
               {/* Discount code section */}
-              <div className="mt-4 pt-4 border-t">
-                <CouponInput variant="compact" />
-              </div>
+              <section className="mb-6">
+                <div className="flex gap-2">
+                  <input
+                    type="text"
+                    placeholder="Kortingscode of cadeaubon"
+                    className="flex-1 px-3 py-2.5 border border-gray-300 rounded-md text-base text-black placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-[#492c4a] focus:border-[#492c4a] font-[family-name:var(--font-eb-garamond)]"
+                  />
+                  <button
+                    type="button"
+                    className="px-4 py-2.5 bg-gray-200 text-gray-400 rounded-md text-base font-medium cursor-not-allowed font-[family-name:var(--font-eb-garamond)]"
+                    disabled
+                  >
+                    Toepassen
+                  </button>
+                </div>
+                {appliedCoupon && (
+                  <div className="mt-2 flex items-center justify-between bg-green-50 px-3 py-2 rounded-md">
+                    <span className="text-base text-green-700 font-[family-name:var(--font-eb-garamond)]">
+                      {appliedCoupon.code} toegepast
+                    </span>
+                    <button className="text-green-700 hover:text-green-800">
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                      </svg>
+                    </button>
+                  </div>
+                )}
+              </section>
+
+              {/* Cost breakdown section */}
+              <section>
+                <div role="table" className="space-y-2">
+                  <div role="rowgroup" className="space-y-2">
+                    <div role="row" className="flex justify-between">
+                      <div role="rowheader">
+                        <span className="text-base text-[#1a1a1a] font-[family-name:var(--font-eb-garamond)]">
+                          Subtotaal · {items.reduce((acc: number, item: any) => acc + item.quantity, 0)} artikelen
+                        </span>
+                      </div>
+                      <div role="cell">
+                        <span className="text-base text-[#1a1a1a] font-[family-name:var(--font-eb-garamond)]">
+                          €&nbsp;{subtotal.toFixed(2).replace('.', ',')}
+                        </span>
+                      </div>
+                    </div>
+
+                    {appliedCoupon && (
+                      <div role="row" className="flex justify-between">
+                        <div role="rowheader">
+                          <span className="text-base text-[#1a1a1a] font-[family-name:var(--font-eb-garamond)]">
+                            Korting
+                            {appliedCoupon.discount_type === 'percent' && ` (${appliedCoupon.amount}%)`}
+                          </span>
+                        </div>
+                        <div role="cell">
+                          <span className="text-base text-green-600 font-[family-name:var(--font-eb-garamond)]">
+                            -€&nbsp;{discountAmount.toFixed(2).replace('.', ',')}
+                          </span>
+                        </div>
+                      </div>
+                    )}
+
+                    <div role="row" className="flex justify-between">
+                      <div role="rowheader">
+                        <span className="text-base text-[#1a1a1a] font-[family-name:var(--font-eb-garamond)]">
+                          Verzending
+                        </span>
+                      </div>
+                      <div role="cell">
+                        {shipping.loading ? (
+                          <span className="text-base text-gray-500 font-[family-name:var(--font-eb-garamond)]">Berekenen...</span>
+                        ) : (
+                          <span className={`text-base font-[family-name:var(--font-eb-garamond)] ${shippingCost === 0 ? 'text-green-600' : 'text-[#1a1a1a]'}`}>
+                            {shippingCost === 0 ? 'Gratis' : `€&nbsp;${shippingCost.toFixed(2).replace('.', ',')}`}
+                          </span>
+                        )}
+                      </div>
+                    </div>
+
+                    <div role="row" className="flex justify-between items-center pt-3 mt-3">
+                      <div role="rowheader">
+                        <strong className="text-lg font-bold text-[#1a1a1a] font-[family-name:var(--font-eb-garamond)]">
+                          Totaal
+                        </strong>
+                      </div>
+                      <div role="cell">
+                        <div className="flex items-center gap-1.5">
+                          <abbr className="no-underline">
+                            <span className="text-base text-gray-500 font-[family-name:var(--font-eb-garamond)]">EUR</span>
+                          </abbr>
+                          <strong className="text-lg font-bold text-[#1a1a1a] font-[family-name:var(--font-eb-garamond)]">
+                            €&nbsp;{total.toFixed(2).replace('.', ',')}
+                          </strong>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </section>
+
             </div>
           </div>
         )}
-        
-        {/* Progress indicator */}
-        <nav className="mb-8 w-full">
-          <div className="flex items-start justify-evenly">
-            {/* Step 1: Winkelwagen - Completed */}
-            <a href="/cart" className="relative flex flex-col items-center justify-start flex-1 group">
-              <span className="absolute w-full h-1 lg:h-[7px] bg-[#93c84a] rounded-l-full top-4"></span>
-              <span className="w-[38px] h-[38px] shrink-0 rounded-full bg-white border-[5px] lg:border-[7px] border-[#93c84a] flex items-center justify-center relative z-10">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12.01 9.5" className="text-[#93c84a]" width="16" height="13" role="img">
-                  <path d="M10.15 0 4.5 5.78l-2.64-2.5L0 5.14 4.5 9.5l7.51-7.64L10.15 0z" fill="currentColor"/>
-                  <title>check</title>
-                </svg>
-              </span>
-              <span className="block text-center relative pt-2 leading-5 text-xs sm:text-sm text-[#2D2D2D] group-hover:text-[#93c84a] transition-colors font-[family-name:var(--font-eb-garamond)]">
-                Jouw winkelwagen
-              </span>
-            </a>
-            
-            {/* Step 2: Bezorging - Active */}
-            <div className="relative flex flex-col items-center justify-start flex-1">
-              <span className="absolute w-full h-1 lg:h-[7px] bg-[#492c4a] top-4"></span>
-              <span className="w-[38px] h-[38px] shrink-0 rounded-full bg-white border-[5px] lg:border-[7px] border-[#492c4a] flex items-center justify-center relative z-10">
-                <span className="font-bold text-lg lg:text-base text-[#492c4a]">2</span>
-              </span>
-              <span className="block text-center relative pt-2 leading-5 text-xs sm:text-sm font-semibold text-[#492c4a] font-[family-name:var(--font-eb-garamond)]">
-                Bezorging
-              </span>
-            </div>
-            
-            {/* Step 3: Controleren en Betalen - Locked */}
-            <div className="relative flex flex-col items-center justify-start flex-1">
-              <span className="absolute w-full h-1 lg:h-[7px] bg-gray-300 rounded-r-full top-4"></span>
-              <span className="w-[38px] h-[38px] shrink-0 rounded-full bg-white border-[5px] lg:border-[7px] border-gray-300 flex items-center justify-center relative z-10">
-                <span className="font-bold text-lg lg:text-base text-gray-400">3</span>
-              </span>
-              <span className="block text-center relative pt-2 leading-5 text-xs sm:text-sm text-gray-400 font-[family-name:var(--font-eb-garamond)]">
-                Controleren en Betalen
-              </span>
-            </div>
-          </div>
-        </nav>
 
-        <h1 className="text-4xl font-bold text-[#492c4a] mb-2 text-center font-[family-name:var(--font-eb-garamond)]">Veilig Afrekenen</h1>
-        <p className="text-center text-[#2D2D2D] mb-8 font-[family-name:var(--font-eb-garamond)]">Je gegevens zijn veilig en versleuteld</p>
-        
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Checkout form */}
-          <div className="lg:col-span-2">
-            <form onSubmit={handleSubmit} className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-sm border border-[#E8DCC6]/40 p-6">
-              <div className="flex items-center mb-6">
-                <h2 className="text-xl font-semibold text-[#492c4a] font-[family-name:var(--font-eb-garamond)]">Factuurgegevens</h2>
-                <div className="ml-auto flex items-center text-sm text-[#2D2D2D]">
-                  <svg className="w-4 h-4 mr-1 text-[#93c84a]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                  </svg>
-                  <span className="font-[family-name:var(--font-eb-garamond)]">SSL Versleuteld</span>
-                </div>
+        {/* Gray background wrapper for desktop */}
+        <div className="hidden lg:block absolute inset-y-0 right-0 w-1/3 bg-gray-100"></div>
+
+        {/* Checkout form and order summary grid */}
+        <div className="relative max-w-7xl mx-auto w-full flex flex-col lg:flex-row min-h-screen px-4 sm:px-6 lg:px-8">
+          {/* Main checkout form - left side */}
+          <div className="flex-1 lg:flex-initial lg:w-2/3 py-8 pr-0 lg:pr-8 bg-white">
+            {error && (
+              <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg mb-6 flex items-start">
+                <svg className="w-5 h-5 mr-2 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <span className="font-[family-name:var(--font-eb-garamond)]">{error}</span>
               </div>
-              
-              {error && (
-                <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded mb-6 flex items-center">
-                  <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
-                  {error}
-                </div>
-              )}
-              
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-[#2D2D2D] mb-1 font-[family-name:var(--font-eb-garamond)]">
-                    Voornaam *
-                  </label>
-                  <input
-                    type="text"
-                    name="firstName"
-                    value={formData.firstName}
-                    onChange={handleInputChange}
-                    required
-                    className="w-full px-3 py-2 border border-[#E8DCC6] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#492c4a]/20 focus:border-[#492c4a] text-gray-900 bg-white/50 font-[family-name:var(--font-eb-garamond)]"
-                  />
-                </div>
-                
-                <div>
-                  <label className="block text-sm font-medium text-[#2D2D2D] mb-1 font-[family-name:var(--font-eb-garamond)]">
-                    Achternaam *
-                  </label>
-                  <input
-                    type="text"
-                    name="lastName"
-                    value={formData.lastName}
-                    onChange={handleInputChange}
-                    required
-                    className="w-full px-3 py-2 border border-[#E8DCC6] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#492c4a]/20 focus:border-[#492c4a] text-gray-900 bg-white/50 font-[family-name:var(--font-eb-garamond)]"
-                  />
-                </div>
-                
-                <div>
-                  <label className="block text-sm font-medium text-[#2D2D2D] mb-1 font-[family-name:var(--font-eb-garamond)]">
-                    E-mailadres *
-                  </label>
-                  <input
-                    type="email"
-                    name="email"
-                    value={formData.email}
-                    onChange={handleInputChange}
-                    required
-                    className="w-full px-3 py-2 border border-[#E8DCC6] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#492c4a]/20 focus:border-[#492c4a] text-gray-900 bg-white/50 font-[family-name:var(--font-eb-garamond)]"
-                  />
-                </div>
-                
-                <div>
-                  <label className="block text-sm font-medium text-[#2D2D2D] mb-1 font-[family-name:var(--font-eb-garamond)]">
-                    Telefoonnummer
-                  </label>
-                  <input
-                    type="tel"
-                    name="phone"
-                    value={formData.phone}
-                    onChange={handleInputChange}
-                    className="w-full px-3 py-2 border border-[#E8DCC6] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#492c4a]/20 focus:border-[#492c4a] text-gray-900 bg-white/50 font-[family-name:var(--font-eb-garamond)]"
-                  />
-                </div>
-                
-                <div className="md:col-span-2">
-                  <label className="block text-sm font-medium text-[#2D2D2D] mb-1 font-[family-name:var(--font-eb-garamond)]">
-                    Straatnaam en huisnummer *
-                  </label>
-                  <input
-                    type="text"
-                    name="address"
-                    value={formData.address}
-                    onChange={handleInputChange}
-                    required
-                    placeholder="Huisnummer en straatnaam"
-                    className="w-full px-3 py-2 border border-[#E8DCC6] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#492c4a]/20 focus:border-[#492c4a] text-gray-900 bg-white/50 font-[family-name:var(--font-eb-garamond)]"
-                  />
-                </div>
-                
-                <div className="md:col-span-2">
-                  <label className="block text-sm font-medium text-[#2D2D2D] mb-1 font-[family-name:var(--font-eb-garamond)]">
-                    Appartement, suite, etc. (optioneel)
-                  </label>
-                  <input
-                    type="text"
-                    name="address2"
-                    value={formData.address2}
-                    onChange={handleInputChange}
-                    className="w-full px-3 py-2 border border-[#E8DCC6] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#492c4a]/20 focus:border-[#492c4a] text-gray-900 bg-white/50 font-[family-name:var(--font-eb-garamond)]"
-                  />
-                </div>
-                
-                <div>
-                  <label className="block text-sm font-medium text-[#2D2D2D] mb-1 font-[family-name:var(--font-eb-garamond)]">
-                    Stad *
-                  </label>
-                  <input
-                    type="text"
-                    name="city"
-                    value={formData.city}
-                    onChange={handleInputChange}
-                    required
-                    className="w-full px-3 py-2 border border-[#E8DCC6] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#492c4a]/20 focus:border-[#492c4a] text-gray-900 bg-white/50 font-[family-name:var(--font-eb-garamond)]"
-                  />
-                </div>
-                
-                <div>
-                  <label className="block text-sm font-medium text-[#2D2D2D] mb-1 font-[family-name:var(--font-eb-garamond)]">
-                    Postcode *
-                  </label>
-                  <input
-                    type="text"
-                    name="postcode"
-                    value={formData.postcode}
-                    onChange={handleInputChange}
-                    required
-                    className="w-full px-3 py-2 border border-[#E8DCC6] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#492c4a]/20 focus:border-[#492c4a] text-gray-900 bg-white/50 font-[family-name:var(--font-eb-garamond)]"
-                  />
-                </div>
-                
-                <div className="md:col-span-2">
-                  <label className="block text-sm font-medium text-[#2D2D2D] mb-1 font-[family-name:var(--font-eb-garamond)]">
-                    Land *
-                  </label>
-                  <select
-                    name="country"
-                    value={formData.country}
-                    onChange={handleInputChange}
-                    required
-                    className="w-full px-3 py-2 border border-[#E8DCC6] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#492c4a]/20 focus:border-[#492c4a] text-gray-900 bg-white/50 font-[family-name:var(--font-eb-garamond)]"
-                  >
-                    {allowedCountries.length === 0 ? (
-                      // Fallback to common countries if API hasn't loaded
-                      <>
-                        <option value="NL">Nederland</option>
-                        <option value="BE">België</option>
-                      </>
-                    ) : (
-                      allowedCountries.map(code => (
-                        <option key={code} value={code}>
-                          {countryNames[code] || code}
-                        </option>
-                      ))
+            )}
+
+            {/* Single unified checkout form */}
+            <form onSubmit={handleSubmit} className="space-y-8">
+              {/* Contact Information */}
+              <div className="mb-8">
+                <h2 className="text-2xl font-bold text-[#492c4a] mb-6 font-[family-name:var(--font-eb-garamond)]">
+                  Contact
+                </h2>
+                <div className="space-y-5">
+                  <div className="relative">
+                    <input
+                      type="email"
+                      name="email"
+                      value={formData.email}
+                      onChange={handleInputChange}
+                      required
+                      className={`w-full px-4 pt-6 pb-2 border ${fieldErrors.email ? 'border-red-500' : 'border-[#d1d5db]'} rounded-md focus:outline-none focus:ring-1 focus:ring-[#492c4a] focus:border-[#492c4a] text-[#1a1a1a] bg-white font-[family-name:var(--font-eb-garamond)] text-base peer`}
+                      placeholder=" "
+                    />
+                    <label className="absolute left-4 top-4 text-[#6b7280] text-base transition-all duration-150 peer-placeholder-shown:text-lg peer-placeholder-shown:top-4 peer-focus:text-base peer-focus:top-1.5 peer-[:not(:placeholder-shown)]:text-base peer-[:not(:placeholder-shown)]:top-1.5 font-[family-name:var(--font-eb-garamond)]">
+                      E-mail
+                    </label>
+                    {fieldErrors.email && (
+                      <p className="mt-1 text-base text-red-600">{fieldErrors.email}</p>
                     )}
-                  </select>
-                  {!allowedCountries.includes(formData.country) && allowedCountries.length > 0 && (
-                    <p className="mt-1 text-sm text-red-600">
-                      We verzenden momenteel alleen naar geselecteerde landen.
-                    </p>
-                  )}
-                </div>
-              </div>
-              
-              {/* Payment info notice */}
-              <div className="mt-6 p-4 bg-blue-50 rounded-lg border border-blue-200">
-                <div className="flex items-start">
-                  <svg className="w-5 h-5 text-blue-600 mt-0.5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
-                  <div className="text-sm text-blue-800">
-                    <p className="font-semibold mb-1">Veilige Betalingsverwerking</p>
-                    <p>Je betalingsgegevens worden veilig verwerkt via onze betalingsprovider. We slaan nooit je creditcardgegevens op.</p>
                   </div>
                 </div>
               </div>
 
-              <button
-                type="submit"
-                disabled={loading || !!shipping.error}
-                className="w-full mt-6 bg-[#492c4a] text-white py-4 px-6 rounded-full font-semibold hover:bg-[#6b4069] transition-all transform hover:scale-[1.02] disabled:bg-gray-300 disabled:transform-none flex items-center justify-center font-[family-name:var(--font-eb-garamond)]"
-              >
-                {loading ? (
-                  <>
-                    <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              {/* Delivery */}
+              <div className="mb-8">
+                <h2 className="text-2xl font-bold text-[#492c4a] mb-6 font-[family-name:var(--font-eb-garamond)]">
+                  Bezorging
+                </h2>
+                <div className="space-y-5">
+                  <div className="relative">
+                    <select
+                      name="country"
+                      value={formData.country}
+                      onChange={handleInputChange}
+                      required
+                      className="w-full px-4 pt-6 pb-2 border border-[#d1d5db] rounded-md focus:outline-none focus:ring-1 focus:ring-[#492c4a] focus:border-[#492c4a] text-[#1a1a1a] bg-white font-[family-name:var(--font-eb-garamond)] text-base appearance-none peer"
+                    >
+                      {allowedCountries.length === 0 ? (
+                        <>
+                          <option value="NL">Nederland</option>
+                          <option value="BE">België</option>
+                        </>
+                      ) : (
+                        allowedCountries.map(code => (
+                          <option key={code} value={code}>
+                            {countryNames[code] || code}
+                          </option>
+                        ))
+                      )}
+                    </select>
+                    <label className="absolute left-4 top-1.5 text-[#6b7280] text-base font-[family-name:var(--font-eb-garamond)]">
+                      Land/Regio
+                    </label>
+                    <svg className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#6b7280] pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                     </svg>
-                    Je bestelling wordt verwerkt...
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                    <div className="relative">
+                      <input
+                        type="text"
+                        name="firstName"
+                        value={formData.firstName}
+                        onChange={handleInputChange}
+                        className={`w-full px-4 pt-6 pb-2 border ${fieldErrors.firstName ? 'border-red-500' : 'border-[#d1d5db]'} rounded-md focus:outline-none focus:ring-1 focus:ring-[#492c4a] focus:border-[#492c4a] text-[#1a1a1a] bg-white font-[family-name:var(--font-eb-garamond)] text-base peer`}
+                        placeholder=" "
+                      />
+                      <label className="absolute left-4 top-4 text-[#6b7280] text-base transition-all duration-150 peer-placeholder-shown:text-lg peer-placeholder-shown:top-4 peer-focus:text-base peer-focus:top-1.5 peer-[:not(:placeholder-shown)]:text-base peer-[:not(:placeholder-shown)]:top-1.5 font-[family-name:var(--font-eb-garamond)]">
+                        Voornaam (optioneel)
+                      </label>
+                      {fieldErrors.firstName && (
+                        <p className="mt-1 text-base text-red-600">{fieldErrors.firstName}</p>
+                      )}
+                    </div>
+
+                    <div className="relative">
+                      <input
+                        type="text"
+                        name="lastName"
+                        value={formData.lastName}
+                        onChange={handleInputChange}
+                        required
+                        className={`w-full px-4 pt-6 pb-2 border ${fieldErrors.lastName ? 'border-red-500' : 'border-[#d1d5db]'} rounded-md focus:outline-none focus:ring-1 focus:ring-[#492c4a] focus:border-[#492c4a] text-[#1a1a1a] bg-white font-[family-name:var(--font-eb-garamond)] text-base peer`}
+                        placeholder=" "
+                      />
+                      <label className="absolute left-4 top-4 text-[#6b7280] text-base transition-all duration-150 peer-placeholder-shown:text-lg peer-placeholder-shown:top-4 peer-focus:text-base peer-focus:top-1.5 peer-[:not(:placeholder-shown)]:text-base peer-[:not(:placeholder-shown)]:top-1.5 font-[family-name:var(--font-eb-garamond)]">
+                        Achternaam
+                      </label>
+                      {fieldErrors.lastName && (
+                        <p className="mt-1 text-base text-red-600">{fieldErrors.lastName}</p>
+                      )}
+                    </div>
+                  </div>
+
+                  <div className="relative">
+                    <input
+                      type="text"
+                      name="address"
+                      value={formData.address}
+                      onChange={handleInputChange}
+                      required
+                      className={`w-full px-4 pt-6 pb-2 border ${fieldErrors.address ? 'border-red-500' : 'border-[#d1d5db]'} rounded-md focus:outline-none focus:ring-1 focus:ring-[#492c4a] focus:border-[#492c4a] text-[#1a1a1a] bg-white font-[family-name:var(--font-eb-garamond)] text-base peer`}
+                      placeholder=" "
+                    />
+                    <label className="absolute left-4 top-4 text-[#6b7280] text-base transition-all duration-150 peer-placeholder-shown:text-lg peer-placeholder-shown:top-4 peer-focus:text-base peer-focus:top-1.5 peer-[:not(:placeholder-shown)]:text-base peer-[:not(:placeholder-shown)]:top-1.5 font-[family-name:var(--font-eb-garamond)]">
+                      Straat en huisnummer
+                    </label>
+                    {fieldErrors.address && (
+                      <p className="mt-1 text-base text-red-600">{fieldErrors.address}</p>
+                    )}
+                  </div>
+
+                  <div className="relative">
+                    <input
+                      type="text"
+                      name="address2"
+                      value={formData.address2}
+                      onChange={handleInputChange}
+                      className="w-full px-4 pt-6 pb-2 border border-[#d1d5db] rounded-md focus:outline-none focus:ring-1 focus:ring-[#492c4a] focus:border-[#492c4a] text-[#1a1a1a] bg-white font-[family-name:var(--font-eb-garamond)] text-base peer"
+                      placeholder=" "
+                    />
+                    <label className="absolute left-4 top-4 text-[#6b7280] text-base transition-all duration-150 peer-placeholder-shown:text-lg peer-placeholder-shown:top-4 peer-focus:text-base peer-focus:top-1.5 peer-[:not(:placeholder-shown)]:text-base peer-[:not(:placeholder-shown)]:top-1.5 font-[family-name:var(--font-eb-garamond)]">
+                      Appartement, suite, etc. (optioneel)
+                    </label>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+                    <div className="relative md:col-span-2">
+                      <input
+                        type="text"
+                        name="city"
+                        value={formData.city}
+                        onChange={handleInputChange}
+                        required
+                        className={`w-full px-4 pt-6 pb-2 border ${fieldErrors.city ? 'border-red-500' : 'border-[#d1d5db]'} rounded-md focus:outline-none focus:ring-1 focus:ring-[#492c4a] focus:border-[#492c4a] text-[#1a1a1a] bg-white font-[family-name:var(--font-eb-garamond)] text-base peer`}
+                        placeholder=" "
+                      />
+                      <label className="absolute left-4 top-4 text-[#6b7280] text-base transition-all duration-150 peer-placeholder-shown:text-lg peer-placeholder-shown:top-4 peer-focus:text-base peer-focus:top-1.5 peer-[:not(:placeholder-shown)]:text-base peer-[:not(:placeholder-shown)]:top-1.5 font-[family-name:var(--font-eb-garamond)]">
+                        Stad
+                      </label>
+                      {fieldErrors.city && (
+                        <p className="mt-1 text-base text-red-600">{fieldErrors.city}</p>
+                      )}
+                    </div>
+
+                    <div className="relative">
+                      <input
+                        type="text"
+                        name="postcode"
+                        value={formData.postcode}
+                        onChange={handleInputChange}
+                        required
+                        className={`w-full px-4 pt-6 pb-2 border ${fieldErrors.postcode ? 'border-red-500' : 'border-[#d1d5db]'} rounded-md focus:outline-none focus:ring-1 focus:ring-[#492c4a] focus:border-[#492c4a] text-[#1a1a1a] bg-white font-[family-name:var(--font-eb-garamond)] text-base peer`}
+                        placeholder=" "
+                      />
+                      <label className="absolute left-4 top-4 text-[#6b7280] text-base transition-all duration-150 peer-placeholder-shown:text-lg peer-placeholder-shown:top-4 peer-focus:text-base peer-focus:top-1.5 peer-[:not(:placeholder-shown)]:text-base peer-[:not(:placeholder-shown)]:top-1.5 font-[family-name:var(--font-eb-garamond)]">
+                        Postcode
+                      </label>
+                      {fieldErrors.postcode && (
+                        <p className="mt-1 text-base text-red-600">{fieldErrors.postcode}</p>
+                      )}
+                    </div>
+                  </div>
+
+                  <div className="relative">
+                    <input
+                      type="tel"
+                      name="phone"
+                      value={formData.phone}
+                      onChange={handleInputChange}
+                      className="w-full px-4 pt-6 pb-2 border border-[#d1d5db] rounded-md focus:outline-none focus:ring-1 focus:ring-[#492c4a] focus:border-[#492c4a] text-[#1a1a1a] bg-white font-[family-name:var(--font-eb-garamond)] text-base peer"
+                      placeholder=" "
+                    />
+                    <label className="absolute left-4 top-4 text-[#6b7280] text-base transition-all duration-150 peer-placeholder-shown:text-lg peer-placeholder-shown:top-4 peer-focus:text-base peer-focus:top-1.5 peer-[:not(:placeholder-shown)]:text-base peer-[:not(:placeholder-shown)]:top-1.5 font-[family-name:var(--font-eb-garamond)]">
+                      Telefoon (optioneel)
+                    </label>
+                  </div>
+                </div>
+              </div>
+
+              {/* Shipping Method */}
+              <div className="mb-8">
+                <h2 className="text-2xl font-bold text-[#492c4a] mb-6 font-[family-name:var(--font-eb-garamond)]">
+                  Verzendwijze
+                </h2>
+                {shipping.loading ? (
+                  <div className="text-center py-4">
+                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#492c4a] mx-auto mb-2"></div>
+                    <p className="text-base text-[#2D2D2D]">Verzendopties worden geladen...</p>
+                  </div>
+                ) : shipping.error ? (
+                  <div className="p-3 bg-red-50 border border-red-200 rounded-lg">
+                    <p className="text-base text-red-600">{shipping.error}</p>
+                  </div>
+                ) : shipping.rates.length > 0 ? (
+                  <>
+                    <div className="space-y-3">
+                      {shipping.rates.map((rate) => (
+                        <label
+                          key={rate.method_id}
+                          className={`block p-4 border rounded-lg cursor-pointer transition-all ${
+                            shipping.selectedRate?.method_id === rate.method_id
+                              ? 'border-[#492c4a] bg-[#492c4a]/5'
+                              : 'border-[#E8DCC6] hover:border-[#492c4a]/50'
+                          }`}
+                        >
+                          <div className="flex items-center justify-between">
+                            <div className="flex items-center">
+                              <input
+                                type="radio"
+                                name="shippingMethod"
+                                value={rate.method_id}
+                                checked={shipping.selectedRate?.method_id === rate.method_id}
+                                onChange={() => setSelectedShippingRate(rate)}
+                                className="mr-3 text-[#492c4a] focus:ring-[#492c4a]"
+                              />
+                              <div>
+                                <p className="font-medium text-[#2D2D2D]">{rate.method_title}</p>
+                                {rate.delivery_time && (
+                                  <p className="text-base text-gray-600">{rate.delivery_time}</p>
+                                )}
+                              </div>
+                            </div>
+                            <span className="font-semibold text-[#492c4a]">
+                              {rate.free ? 'Gratis' : `€${rate.cost.toFixed(2)}`}
+                            </span>
+                          </div>
+                        </label>
+                      ))}
+                    </div>
+                    {fieldErrors.shippingMethod && (
+                      <p className="mt-2 text-base text-red-600">{fieldErrors.shippingMethod}</p>
+                    )}
                   </>
                 ) : (
-                  <>
-                    <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                    </svg>
-                    Veilig Afrekenen - €{total.toFixed(2)}
-                  </>
+                  <p className="text-center text-gray-600">Geen verzendmethodes beschikbaar</p>
                 )}
-              </button>
+              </div>
 
-              {/* Money-back guarantee */}
-              <div className="mt-4 text-center">
-                <p className="text-xs text-steel-gray">
-                  <svg className="w-4 h-4 inline mr-1 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
-                  14 Dagen Bedenktijd • Wettelijke Garantie • Verzekerde Verzending
+              {/* Payment */}
+              <div className="mb-8">
+                <h2 className="text-2xl font-bold text-[#492c4a] mb-3 font-[family-name:var(--font-eb-garamond)]">
+                  Betaling
+                </h2>
+                <p className="text-base text-[#6b7280] mb-5 font-[family-name:var(--font-eb-garamond)]">
+                  Alle transacties zijn beveiligd en versleuteld.
                 </p>
-              </div>
-            </form>
 
-            {/* Customer testimonial */}
-            <div className="mt-6 bg-gray-50 rounded-lg p-4 border border-gray-200">
-              <div className="flex items-start">
-                <div className="flex-shrink-0">
-                  <div className="w-10 h-10 bg-amber-orange rounded-full flex items-center justify-center text-white font-semibold">
-                    JD
-                  </div>
-                </div>
-                <div className="ml-3">
-                  <p className="text-sm text-gray-900 italic">"Uitstekende service! Mijn bestelling kwam snel aan en het afrekenproces was soepel en veilig."</p>
-                  <p className="text-xs text-steel-gray mt-1">- Jan de Vries, geverifieerde klant</p>
-                </div>
-              </div>
-            </div>
-          </div>
-          
-          {/* Order summary - Desktop only */}
-          <div className="hidden lg:block lg:col-span-1">
-            <div className="bg-white rounded-lg shadow-sm p-6 lg:sticky lg:top-20">
-              <h2 className="text-xl font-semibold text-gray-900 mb-4">Besteloverzicht</h2>
-              
-              {/* Products list */}
-              <div className="space-y-3 mb-4 max-h-64 overflow-y-auto">
-                {items.map((item) => (
-                  <div key={item.product.id} className="flex items-start gap-3 text-sm">
-                    {/* Product image */}
-                    <div className="flex-shrink-0 w-16 h-16 bg-gray-50 rounded overflow-hidden">
-                      {item.product.images?.[0]?.src ? (
-                        <Image
-                          src={item.product.images[0].src}
-                          alt={item.product.name}
-                          width={64}
-                          height={64}
-                          className="w-full h-full object-cover"
+                {/* Payment Methods */}
+                <div className="space-y-3 mb-6">
+                  {/* iDEAL */}
+                  <label className="block border border-[#d1d5db] rounded-lg p-4 cursor-pointer hover:border-[#492c4a]/50 transition-all">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center">
+                        <input
+                          type="radio"
+                          name="paymentMethod"
+                          value="ideal"
+                          defaultChecked
+                          className="mr-3 text-[#492c4a] focus:ring-[#492c4a]"
                         />
-                      ) : (
-                        <div className="w-full h-full flex items-center justify-center text-gray-400">
-                          <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                          </svg>
+                        <img src="https://cdn.shopify.com/shopifycloud/checkout-web/assets/c1/assets/ideal.Dvz0zDwq.svg" alt="iDEAL" className="h-6" />
+                      </div>
+                    </div>
+                  </label>
+
+                  {/* Credit Card */}
+                  <label className="block border border-[#d1d5db] rounded-lg p-4 cursor-pointer hover:border-[#492c4a]/50 transition-all">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center">
+                        <input
+                          type="radio"
+                          name="paymentMethod"
+                          value="creditcard"
+                          className="mr-3 text-[#492c4a] focus:ring-[#492c4a]"
+                        />
+                        <span className="font-[family-name:var(--font-eb-garamond)] text-[#1a1a1a]">Creditcard</span>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <img src="https://cdn.shopify.com/shopifycloud/checkout-web/assets/c1/assets/visa.sxIq5Dot.svg" alt="VISA" className="h-6" />
+                        <img src="https://cdn.shopify.com/shopifycloud/checkout-web/assets/c1/assets/mastercard.1c4_lyMp.svg" alt="Mastercard" className="h-6" />
+                        <img src="https://cdn.shopify.com/shopifycloud/checkout-web/assets/c1/assets/amex.Csr7hRoy.svg" alt="Amex" className="h-6" />
+                      </div>
+                    </div>
+                  </label>
+
+                  {/* PayPal */}
+                  <label className="block border border-[#d1d5db] rounded-lg p-4 cursor-pointer hover:border-[#492c4a]/50 transition-all">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center">
+                        <input
+                          type="radio"
+                          name="paymentMethod"
+                          value="paypal"
+                          className="mr-3 text-[#492c4a] focus:ring-[#492c4a]"
+                        />
+                        <span className="font-[family-name:var(--font-eb-garamond)] text-[#1a1a1a]">PayPal</span>
+                      </div>
+                      <div className="flex items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 38 11" className="h-4" style={{ width: 'auto' }}>
+                          <path fill="#253B80" d="M4.54.022c.973 0 1.706.269 2.12.777.376.463.5 1.124.37 1.966-.288 1.923-1.393 2.894-3.308 2.894h-.92a.41.41 0 0 0-.4.358l-.317 2.106a.41.41 0 0 1-.398.358H.299a.25.25 0 0 1-.24-.293L1.235.379a.41.41 0 0 1 .4-.357zm-1.282 1.69c-.119 0-.22.09-.24.213L2.71 3.966h.44c.77 0 1.567 0 1.726-1.093.058-.383.011-.661-.141-.848-.256-.314-.752-.314-1.277-.314zm6.539.989c.67 0 1.343.153 1.645.612l.096.147.063-.407a.25.25 0 0 1 .24-.215h1.39c.15 0 .262.14.239.293l-.752 4.992a.41.41 0 0 1-.4.358h-1.253c-.149 0-.263-.14-.24-.294l.063-.406c-.01.013-.697.835-1.927.835-.722 0-1.329-.218-1.753-.742-.462-.57-.651-1.386-.518-2.24C6.946 3.922 8.259 2.7 9.797 2.7Zm.33 1.546c-.793 0-1.435.578-1.56 1.403-.066.406.012.77.217 1.026.208.257.531.392.935.392.805 0 1.437-.559 1.571-1.392.06-.403-.023-.77-.235-1.031s-.534-.398-.929-.398Zm10.516-1.408h-1.399a.4.4 0 0 0-.334.186l-1.93 2.977-.817-2.861a.41.41 0 0 0-.388-.302H14.4c-.167 0-.283.171-.23.336l1.541 4.737-1.448 2.142c-.114.169 0 .4.197.4h1.397a.4.4 0 0 0 .332-.18l4.653-7.036c.111-.169-.003-.399-.199-.399"></path>
+                          <path fill="#179BD7" d="M25.275.022c.973 0 1.706.269 2.118.777.376.463.502 1.124.371 1.966-.289 1.923-1.393 2.894-3.308 2.894h-.92a.41.41 0 0 0-.399.358l-.334 2.214a.29.29 0 0 1-.279.25h-1.491c-.148 0-.263-.14-.24-.293L21.97.379a.41.41 0 0 1 .398-.357zm-1.283 1.69c-.12 0-.22.09-.24.213l-.308 2.041h.439c.77 0 1.568 0 1.726-1.093.058-.383.012-.661-.14-.848-.256-.314-.752-.314-1.277-.314zm6.54.989c.671 0 1.343.153 1.644.612l.098.147.061-.407a.246.246 0 0 1 .24-.215h1.39c.15 0 .263.14.24.293l-.753 4.992a.41.41 0 0 1-.398.358H31.8c-.149 0-.262-.14-.24-.294l.062-.406a2.62 2.62 0 0 1-1.927.835c-.721 0-1.328-.218-1.752-.742-.463-.57-.65-1.386-.518-2.24.256-1.712 1.57-2.933 3.107-2.933m.33 1.546c-.793 0-1.435.578-1.561 1.403-.065.406.013.77.219 1.026.207.257.531.392.934.392.805 0 1.437-.559 1.57-1.392.062-.403-.022-.77-.235-1.031-.211-.26-.532-.398-.928-.398ZM35.606.236l-1.193 7.952c-.023.154.09.293.239.293h1.2a.41.41 0 0 0 .398-.357L37.427.315c.023-.154-.09-.293-.239-.293h-1.343a.25.25 0 0 0-.24.214Z"></path>
+                        </svg>
+                      </div>
+                    </div>
+                  </label>
+                </div>
+
+                {/* Billing Address Section */}
+                <div className="border-t border-[#e5e7eb] pt-6">
+                  <h3 className="text-2xl font-bold text-[#492c4a] mb-4 font-[family-name:var(--font-eb-garamond)]">
+                    Factuuradres
+                  </h3>
+                  <div className="space-y-3">
+                    <label className="block border border-[#d1d5db] rounded-lg p-4 cursor-pointer hover:border-[#492c4a]/50 transition-all">
+                      <div className="flex items-center">
+                        <input
+                          type="radio"
+                          name="billingAddress"
+                          value="same"
+                          checked={formData.billingAddressSame}
+                          onChange={(e) => setFormData(prev => ({ ...prev, billingAddressSame: e.target.value === 'same' }))}
+                          className="mr-3 text-[#492c4a] focus:ring-[#492c4a]"
+                        />
+                        <span className="text-base text-[#1a1a1a] font-[family-name:var(--font-eb-garamond)]">
+                          Zelfde als bezorgadres
+                        </span>
+                      </div>
+                    </label>
+                    <div className={`border border-[#d1d5db] rounded-lg overflow-hidden ${!formData.billingAddressSame ? 'border-[#492c4a]/50' : ''}`}>
+                      <label className="block p-4 cursor-pointer hover:bg-gray-50 transition-all">
+                        <div className="flex items-center">
+                          <input
+                            type="radio"
+                            name="billingAddress"
+                            value="different"
+                            checked={!formData.billingAddressSame}
+                            onChange={(e) => setFormData(prev => ({ ...prev, billingAddressSame: e.target.value === 'same' }))}
+                            className="mr-3 text-[#492c4a] focus:ring-[#492c4a]"
+                          />
+                          <span className="text-base text-[#1a1a1a] font-[family-name:var(--font-eb-garamond)]">
+                            Een ander factuuradres gebruiken
+                          </span>
+                        </div>
+                      </label>
+
+                      {!formData.billingAddressSame && (
+                        <div className="border-t border-[#d1d5db] p-5 bg-gray-50 space-y-5">
+                      {/* Billing Country */}
+                      <div className="relative">
+                        <select
+                          name="billingCountry"
+                          value={formData.billingCountry}
+                          onChange={handleInputChange}
+                          required
+                          className="w-full px-4 pt-6 pb-2 border border-[#d1d5db] rounded-md focus:outline-none focus:ring-1 focus:ring-[#492c4a] focus:border-[#492c4a] text-[#1a1a1a] bg-white font-[family-name:var(--font-eb-garamond)] text-base appearance-none peer"
+                        >
+                          {allowedCountries.length === 0 ? (
+                            <>
+                              <option value="NL">Nederland</option>
+                              <option value="BE">België</option>
+                            </>
+                          ) : (
+                            allowedCountries.map(code => (
+                              <option key={code} value={code}>
+                                {countryNames[code] || code}
+                              </option>
+                            ))
+                          )}
+                        </select>
+                        <label className="absolute left-4 top-1.5 text-[#6b7280] text-base font-[family-name:var(--font-eb-garamond)]">
+                          Land/Regio
+                        </label>
+                        <svg className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#6b7280] pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                        </svg>
+                      </div>
+
+                      {/* Billing Name */}
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                        <div className="relative">
+                          <input
+                            type="text"
+                            name="billingFirstName"
+                            value={formData.billingFirstName}
+                            onChange={handleInputChange}
+                            className="w-full px-4 pt-6 pb-2 border border-[#d1d5db] rounded-md focus:outline-none focus:ring-1 focus:ring-[#492c4a] focus:border-[#492c4a] text-[#1a1a1a] bg-white font-[family-name:var(--font-eb-garamond)] text-base peer"
+                            placeholder=" "
+                          />
+                          <label className="absolute left-4 top-4 text-[#6b7280] text-base transition-all duration-150 peer-placeholder-shown:text-lg peer-placeholder-shown:top-4 peer-focus:text-base peer-focus:top-1.5 peer-[:not(:placeholder-shown)]:text-base peer-[:not(:placeholder-shown)]:top-1.5 font-[family-name:var(--font-eb-garamond)]">
+                            Voornaam (optioneel)
+                          </label>
+                        </div>
+
+                        <div className="relative">
+                          <input
+                            type="text"
+                            name="billingLastName"
+                            value={formData.billingLastName}
+                            onChange={handleInputChange}
+                            required
+                            className="w-full px-4 pt-6 pb-2 border border-[#d1d5db] rounded-md focus:outline-none focus:ring-1 focus:ring-[#492c4a] focus:border-[#492c4a] text-[#1a1a1a] bg-white font-[family-name:var(--font-eb-garamond)] text-base peer"
+                            placeholder=" "
+                          />
+                          <label className="absolute left-4 top-4 text-[#6b7280] text-base transition-all duration-150 peer-placeholder-shown:text-lg peer-placeholder-shown:top-4 peer-focus:text-base peer-focus:top-1.5 peer-[:not(:placeholder-shown)]:text-base peer-[:not(:placeholder-shown)]:top-1.5 font-[family-name:var(--font-eb-garamond)]">
+                            Achternaam
+                          </label>
+                        </div>
+                      </div>
+
+                      {/* Billing Address */}
+                      <div className="relative">
+                        <input
+                          type="text"
+                          name="billingAddress"
+                          value={formData.billingAddress}
+                          onChange={handleInputChange}
+                          required
+                          className="w-full px-4 pt-6 pb-2 border border-[#d1d5db] rounded-md focus:outline-none focus:ring-1 focus:ring-[#492c4a] focus:border-[#492c4a] text-[#1a1a1a] bg-white font-[family-name:var(--font-eb-garamond)] text-base peer"
+                          placeholder=" "
+                        />
+                        <label className="absolute left-4 top-4 text-[#6b7280] text-base transition-all duration-150 peer-placeholder-shown:text-lg peer-placeholder-shown:top-4 peer-focus:text-base peer-focus:top-1.5 peer-[:not(:placeholder-shown)]:text-base peer-[:not(:placeholder-shown)]:top-1.5 font-[family-name:var(--font-eb-garamond)]">
+                          Straat en huisnummer
+                        </label>
+                      </div>
+
+                      {/* Billing Address 2 */}
+                      <div className="relative">
+                        <input
+                          type="text"
+                          name="billingAddress2"
+                          value={formData.billingAddress2}
+                          onChange={handleInputChange}
+                          className="w-full px-4 pt-6 pb-2 border border-[#d1d5db] rounded-md focus:outline-none focus:ring-1 focus:ring-[#492c4a] focus:border-[#492c4a] text-[#1a1a1a] bg-white font-[family-name:var(--font-eb-garamond)] text-base peer"
+                          placeholder=" "
+                        />
+                        <label className="absolute left-4 top-4 text-[#6b7280] text-base transition-all duration-150 peer-placeholder-shown:text-lg peer-placeholder-shown:top-4 peer-focus:text-base peer-focus:top-1.5 peer-[:not(:placeholder-shown)]:text-base peer-[:not(:placeholder-shown)]:top-1.5 font-[family-name:var(--font-eb-garamond)]">
+                          Appartement, suite, etc. (optioneel)
+                        </label>
+                      </div>
+
+                      {/* Billing City and Postcode */}
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+                        <div className="relative md:col-span-2">
+                          <input
+                            type="text"
+                            name="billingCity"
+                            value={formData.billingCity}
+                            onChange={handleInputChange}
+                            required
+                            className="w-full px-4 pt-6 pb-2 border border-[#d1d5db] rounded-md focus:outline-none focus:ring-1 focus:ring-[#492c4a] focus:border-[#492c4a] text-[#1a1a1a] bg-white font-[family-name:var(--font-eb-garamond)] text-base peer"
+                            placeholder=" "
+                          />
+                          <label className="absolute left-4 top-4 text-[#6b7280] text-base transition-all duration-150 peer-placeholder-shown:text-lg peer-placeholder-shown:top-4 peer-focus:text-base peer-focus:top-1.5 peer-[:not(:placeholder-shown)]:text-base peer-[:not(:placeholder-shown)]:top-1.5 font-[family-name:var(--font-eb-garamond)]">
+                            Stad
+                          </label>
+                        </div>
+
+                        <div className="relative">
+                          <input
+                            type="text"
+                            name="billingPostcode"
+                            value={formData.billingPostcode}
+                            onChange={handleInputChange}
+                            required
+                            className="w-full px-4 pt-6 pb-2 border border-[#d1d5db] rounded-md focus:outline-none focus:ring-1 focus:ring-[#492c4a] focus:border-[#492c4a] text-[#1a1a1a] bg-white font-[family-name:var(--font-eb-garamond)] text-base peer"
+                            placeholder=" "
+                          />
+                          <label className="absolute left-4 top-4 text-[#6b7280] text-base transition-all duration-150 peer-placeholder-shown:text-lg peer-placeholder-shown:top-4 peer-focus:text-base peer-focus:top-1.5 peer-[:not(:placeholder-shown)]:text-base peer-[:not(:placeholder-shown)]:top-1.5 font-[family-name:var(--font-eb-garamond)]">
+                            Postcode
+                          </label>
+                        </div>
+                      </div>
                         </div>
                       )}
                     </div>
-                    
-                    {/* Product details */}
-                    <div className="flex-1">
-                      <p className="font-medium text-gray-900">{item.product.name}</p>
-                      <p className="text-steel-gray">Aantal: {item.quantity}</p>
-                    </div>
-                    
-                    {/* Price */}
-                    <span className="font-medium text-gray-900 text-right">€{(parseFloat(item.product.price) * item.quantity).toFixed(2)}</span>
                   </div>
-                ))}
-              </div>
-              
-              {/* Price breakdown */}
-              <div className="border-t pt-4 space-y-2">
-                <div className="flex justify-between text-sm">
-                  <span className="text-steel-gray">Subtotaal</span>
-                  <span className="text-gray-900">€{subtotal.toFixed(2)}</span>
                 </div>
-                
-                {appliedCoupon && (
-                  <div className="flex justify-between text-sm text-green-600">
-                    <span>
-                      Korting
-                      {appliedCoupon.discount_type === 'percent' && ` (${appliedCoupon.amount}%)`}
-                    </span>
-                    <span>-€{discountAmount.toFixed(2)}</span>
+
+                {/* Security Note */}
+                <div className="flex items-center space-x-2 mt-6 pt-6 border-t border-[#e5e7eb]">
+                  <svg className="w-4 h-4 text-[#6b7280]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                  </svg>
+                  <span className="text-base text-[#6b7280] font-[family-name:var(--font-eb-garamond)]">
+                    Veilig en versleuteld
+                  </span>
+                </div>
+              </div>
+
+              {/* Submit button - creates order */}
+              {!orderCreated ? (
+                <button
+                  type="submit"
+                  disabled={loading || !!shipping.error}
+                  className="w-full bg-[#492c4a] text-white py-4 px-6 rounded-full font-semibold hover:bg-[#6b4069] transition-all transform hover:scale-[1.02] disabled:bg-gray-300 disabled:transform-none flex items-center justify-center font-[family-name:var(--font-eb-garamond)]"
+                >
+                  {loading ? (
+                    <>
+                      <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                      </svg>
+                      Order wordt aangemaakt...
+                    </>
+                  ) : (
+                    'Ga verder naar betaling'
+                  )}
+                </button>
+              ) : (
+                <div className="bg-green-50 border border-green-200 p-4 rounded-lg">
+                  <p className="text-green-800 font-medium mb-2">✓ Order succesvol aangemaakt</p>
+                  <p className="text-base text-green-700">Vul hieronder je betaalgegevens in om de bestelling af te ronden.</p>
+                </div>
+              )}
+            </form>
+
+            {/* Payment Section - appears after order creation */}
+            {orderCreated && orderId && (
+              <div id="payment-section" className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-sm border border-[#E8DCC6]/40 p-6 mt-6">
+                <h2 className="text-xl font-semibold text-[#492c4a] mb-4 font-[family-name:var(--font-eb-garamond)]">
+                  Betaling
+                </h2>
+                <StripePaymentForm
+                  orderId={orderId}
+                  amount={total}
+                  onSuccess={handlePaymentSuccess}
+                  onError={(error) => setError(error)}
+                />
+              </div>
+            )}
+          </div>
+
+          {/* Order summary - right side (desktop) */}
+          <div className="hidden lg:block lg:w-1/3 bg-gray-100">
+            <div className="sticky top-0 h-screen overflow-y-auto py-8 pl-8">
+              {/* Trust banner */}
+              <div className="mb-4">
+                <img
+                  src="https://cdn.shopify.com/s/files/1/0762/7286/1524/files/Figma_2024-09-25_10.52.45.png?v=1727254377"
+                  loading="eager"
+                  alt="Trust banner"
+                  className="w-full h-auto"
+                />
+              </div>
+
+              {/* Products section with table layout */}
+              <div className="pb-4">
+                <div className="max-h-80 overflow-y-auto pr-1" role="table">
+                  <div className="sr-only" role="rowgroup">
+                    <div role="row">
+                      <div role="columnheader">Productafbeelding</div>
+                      <div role="columnheader">Beschrijving</div>
+                      <div role="columnheader">Aantal</div>
+                      <div role="columnheader">Prijs</div>
+                    </div>
+                  </div>
+                  <div role="rowgroup">
+                    {items.map((item: any, index: number) => (
+                      <div key={item.product.id} role="row" className={`flex items-start gap-3 py-3 ${index > 0 ? 'border-t border-gray-100' : ''}`}>
+                        {/* Product Image Cell */}
+                        <div role="cell" className="flex-shrink-0">
+                          <div className="w-16 h-16">
+                            <div className="relative">
+                              <div className="w-16 h-16 rounded-md overflow-hidden border border-gray-200 bg-white">
+                                {item.product.images?.[0]?.src ? (
+                                  <Image
+                                    src={item.product.images[0].src}
+                                    alt={item.product.name}
+                                    width={64}
+                                    height={64}
+                                    className="w-full h-full object-cover"
+                                  />
+                                ) : (
+                                  <div className="w-full h-full flex items-center justify-center text-gray-400 bg-gray-50">
+                                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                    </svg>
+                                  </div>
+                                )}
+                              </div>
+                              <div className="absolute -bottom-1 -right-1 bg-[#492c4a] text-white text-xs min-w-[20px] h-5 px-1 rounded-full flex items-center justify-center font-semibold border-2 border-white">
+                                <span className="sr-only">Aantal</span>
+                                <span>{item.quantity}</span>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Description Cell */}
+                        <div role="cell" className="flex-1 min-w-0">
+                          <p className="text-base font-medium text-black font-[family-name:var(--font-eb-garamond)] leading-tight">
+                            {item.product.name}
+                          </p>
+                          {item.selectedVariation && (
+                            <div className="mt-1">
+                              <p className="text-base text-black/70 font-medium font-[family-name:var(--font-eb-garamond)]">
+                                {Object.entries(item.selectedVariation).map(([key, value]) =>
+                                  `${value}`
+                                ).join(' / ')}
+                              </p>
+                            </div>
+                          )}
+                        </div>
+
+                        {/* Quantity Cell (hidden visually but present for screen readers) */}
+                        <div role="cell" className="sr-only">
+                          <span>{item.quantity}</span>
+                        </div>
+
+                        {/* Price Cell */}
+                        <div role="cell" className="text-right">
+                          <span className="text-base font-medium text-black font-[family-name:var(--font-eb-garamond)]">
+                            €&nbsp;{(parseFloat(item.product.price) * item.quantity).toFixed(2).replace('.', ',')}
+                          </span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+                {items.length > 3 && (
+                  <div className="mt-3 pt-3 border-t border-gray-100 text-base text-black/70 font-medium text-center font-[family-name:var(--font-eb-garamond)]">
+                    Scroll voor meer artikelen
                   </div>
                 )}
-                
-                {/* Discount code section */}
-                <div className="my-3 py-3 border-y">
-                  <CouponInput variant="compact" />
-                </div>
-                
-                <div className="flex justify-between text-sm">
-                  <span className="text-steel-gray">
-                    Verzending naar {countryNames[formData.country] || formData.country}
-                  </span>
-                  {shipping.loading ? (
-                    <span className="text-gray-400">Berekenen...</span>
-                  ) : (
-                    <span className={shippingCost === 0 ? 'text-green-600 font-medium' : 'text-gray-900'}>
-                      {shippingCost === 0 ? 'GRATIS' : `€${shippingCost.toFixed(2)}`}
-                    </span>
+              </div>
+
+              {/* Discount code section */}
+              <div className="pb-4">
+                <div className="border-t border-[#e5e7eb] pt-4">
+                  <div className="flex gap-2">
+                    <input
+                      type="text"
+                      placeholder="Kortingscode of cadeaubon"
+                      className="flex-1 px-3 py-2 border border-[#d1d5db] rounded-md text-base text-black placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-[#492c4a] focus:border-[#492c4a] font-[family-name:var(--font-eb-garamond)]"
+                    />
+                    <button
+                      type="button"
+                      className="px-4 py-2 bg-gray-100 border border-gray-300 text-black rounded-md text-base font-medium cursor-not-allowed font-[family-name:var(--font-eb-garamond)] transition-colors"
+                      disabled
+                    >
+                      Toepassen
+                    </button>
+                  </div>
+                  {appliedCoupon && (
+                    <div className="mt-2 flex items-center justify-between bg-green-50 px-3 py-2 rounded-md">
+                      <span className="text-base text-green-700 font-[family-name:var(--font-eb-garamond)]">
+                        {appliedCoupon.code} toegepast
+                      </span>
+                      <button className="text-green-700 hover:text-green-800">
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                      </button>
+                    </div>
                   )}
                 </div>
-                
-                {/* Shipping error message */}
-                {shipping.error && (
-                  <div className="mt-2 p-2 bg-red-50 border border-red-200 rounded-md">
-                    <p className="text-xs text-red-600 flex items-center gap-1">
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                      </svg>
-                      {shipping.error}
-                    </p>
-                  </div>
-                )}
-                
-                {/* Shipping method selection if multiple options */}
-                {shipping.rates.length > 1 && (
-                  <div className="mt-2">
-                    <select
-                      value={shipping.selectedRate?.method_id || ''}
-                      onChange={(e) => {
-                        const rate = shipping.rates.find(r => r.method_id === e.target.value);
-                        if (rate) setSelectedShippingRate(rate);
-                      }}
-                      className="w-full px-2 py-1 text-sm border border-gray-300 rounded-md text-gray-900"
-                    >
-                      {shipping.rates.map(rate => (
-                        <option key={rate.method_id} value={rate.method_id}>
-                          {rate.method_title} - {rate.free ? 'Gratis' : `€${rate.cost.toFixed(2)}`}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                )}
-                
-                {/* Free shipping progress or notice */}
-                {(() => {
-                  const currentRate = shipping.selectedRate || shipping.rates[0];
-                  
-                  if (currentRate?.free_shipping_remaining && currentRate.free_shipping_remaining > 0) {
-                    const progressPercentage = Math.min(
-                      (subtotalAfterDiscount / (subtotalAfterDiscount + currentRate.free_shipping_remaining)) * 100,
-                      100
-                    );
-                    
-                    return (
-                      <div className="mt-3 p-3 bg-amber-50 rounded-lg border border-amber-200">
-                        <div className="flex items-center justify-between mb-2">
-                          <div className="flex items-center gap-2">
-                            <svg className="w-4 h-4 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
-                            </svg>
-                            <span className="text-xs font-medium text-amber-800">
-                              Nog €{currentRate.free_shipping_remaining.toFixed(2)} tot gratis verzending!
+              </div>
+
+              {/* Cost breakdown */}
+              <div className="pb-6">
+                <div className="border-t border-[#e5e7eb] pt-4">
+                  <div role="table" className="space-y-2">
+                    <div role="rowgroup" className="space-y-2">
+                      <div role="row" className="flex justify-between">
+                        <div role="rowheader">
+                          <span className="text-base text-black font-medium font-[family-name:var(--font-eb-garamond)]">
+                            Subtotaal · {items.reduce((acc: number, item: any) => acc + item.quantity, 0)} artikelen
+                          </span>
+                        </div>
+                        <div role="cell">
+                          <span className="text-base text-black font-medium font-[family-name:var(--font-eb-garamond)]">
+                            €&nbsp;{subtotal.toFixed(2).replace('.', ',')}
+                          </span>
+                        </div>
+                      </div>
+
+                      {appliedCoupon && (
+                        <div role="row" className="flex justify-between">
+                          <div role="rowheader">
+                            <span className="text-base text-black font-medium font-[family-name:var(--font-eb-garamond)]">
+                              Korting
+                              {appliedCoupon.discount_type === 'percent' && ` (${appliedCoupon.amount}%)`}
+                            </span>
+                          </div>
+                          <div role="cell">
+                            <span className="text-base text-green-600 font-medium font-[family-name:var(--font-eb-garamond)]">
+                              -€&nbsp;{discountAmount.toFixed(2).replace('.', ',')}
                             </span>
                           </div>
                         </div>
-                        <div className="w-full bg-amber-200 rounded-full h-1.5">
-                          <div 
-                            className="bg-amber-600 h-1.5 rounded-full transition-all duration-300"
-                            style={{ width: `${progressPercentage}%` }}
-                          />
+                      )}
+
+                      <div role="row" className="flex justify-between">
+                        <div role="rowheader">
+                          <span className="text-base text-black font-medium font-[family-name:var(--font-eb-garamond)]">
+                            Verzending
+                          </span>
+                        </div>
+                        <div role="cell">
+                          {shipping.loading ? (
+                            <span className="text-base text-gray-500 font-[family-name:var(--font-eb-garamond)]">Berekenen...</span>
+                          ) : (
+                            <span className={`text-base font-medium font-[family-name:var(--font-eb-garamond)] ${shippingCost === 0 ? 'text-green-600' : 'text-black'}`}>
+                              {shippingCost === 0 ? 'Gratis' : `€&nbsp;${shippingCost.toFixed(2).replace('.', ',')}`}
+                            </span>
+                          )}
                         </div>
                       </div>
-                    );
-                  } else if (currentRate?.free && currentRate?.free_shipping_eligible) {
-                    return (
-                      <div className="mt-3 p-3 bg-green-50 rounded-lg border border-green-200 flex items-center gap-2">
-                        <svg className="w-5 h-5 text-green-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                        </svg>
-                        <span className="text-sm font-medium text-green-800">
-                          Je komt in aanmerking voor gratis verzending!
-                        </span>
+
+                      <div role="row" className="flex justify-between items-center pt-3 mt-3">
+                        <div role="rowheader">
+                          <strong className="text-xl font-bold text-[#492c4a] font-[family-name:var(--font-eb-garamond)]">
+                            Totaal
+                          </strong>
+                        </div>
+                        <div role="cell">
+                          <div className="flex items-center gap-2">
+                            <abbr className="no-underline">
+                              <span className="text-base text-black/70 font-medium font-[family-name:var(--font-eb-garamond)]">EUR</span>
+                            </abbr>
+                            <strong className="text-2xl font-bold text-[#492c4a] font-[family-name:var(--font-eb-garamond)]">
+                              €&nbsp;{total.toFixed(2).replace('.', ',')}
+                            </strong>
+                          </div>
+                        </div>
                       </div>
-                    );
-                  }
-                  return null;
-                })()}
-                <div className="flex justify-between font-semibold text-lg pt-2 border-t">
-                  <span className="text-gray-900">Totaal</span>
-                  <span className="text-[#492c4a] font-[family-name:var(--font-eb-garamond)]">€{total.toFixed(2)}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Trust Icons Section */}
+              <div className="pb-6">
+                <div className="border-t border-[#e5e7eb] pt-6">
+                  <h4 className="text-base font-medium text-black mb-4 text-left uppercase tracking-wider font-[family-name:var(--font-eb-garamond)]">
+                    WAAROM MEER DAN 10.000 KLANTEN VOOR STONESFORHEALTH KOZEN
+                  </h4>
+                  <div className="space-y-4">
+                    {/* 30 Days Return */}
+                    <div className="flex items-start gap-3">
+                      <div className="flex-shrink-0 w-10 h-10">
+                        <svg className="w-10 h-10 text-[#492c4a]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6" />
+                        </svg>
+                      </div>
+                      <div className="flex-1">
+                        <p className="text-base font-medium text-black font-[family-name:var(--font-eb-garamond)]">
+                          30 dagen retourrecht
+                        </p>
+                        <p className="text-sm text-black/70 font-medium mt-0.5 font-[family-name:var(--font-eb-garamond)]">
+                          Niet tevreden? Retourneer gratis binnen 30 dagen
+                        </p>
+                      </div>
+                    </div>
+
+                    {/* Secure Payment */}
+                    <div className="flex items-start gap-3">
+                      <div className="flex-shrink-0 w-10 h-10">
+                        <svg className="w-10 h-10 text-[#492c4a]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                        </svg>
+                      </div>
+                      <div className="flex-1">
+                        <p className="text-base font-medium text-black font-[family-name:var(--font-eb-garamond)]">
+                          100% Veilig betalen
+                        </p>
+                        <p className="text-sm text-black/70 font-medium mt-0.5 font-[family-name:var(--font-eb-garamond)]">
+                          Beveiligde betaling met SSL-encryptie
+                        </p>
+                      </div>
+                    </div>
+
+                    {/* Natural Stones */}
+                    <div className="flex items-start gap-3">
+                      <div className="flex-shrink-0 w-10 h-10">
+                        <svg className="w-10 h-10 text-[#492c4a]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+                        </svg>
+                      </div>
+                      <div className="flex-1">
+                        <p className="text-base font-medium text-black font-[family-name:var(--font-eb-garamond)]">
+                          100% Natuurlijke stenen
+                        </p>
+                        <p className="text-sm text-black/70 font-medium mt-0.5 font-[family-name:var(--font-eb-garamond)]">
+                          Authentieke edelstenen met certificaat
+                        </p>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -929,5 +1427,86 @@ export default function CheckoutPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+// Order Summary Component (reused from previous)
+function OrderSummaryContent({ items, subtotal, discountAmount, shippingCost, total, appliedCoupon, shipping, countryNames, formDataCountry }: any) {
+  return (
+    <>
+      {/* Products list */}
+      <div className="space-y-3 mb-4 max-h-64 overflow-y-auto">
+        {items.map((item: any) => (
+          <div key={item.product.id} className="flex items-start gap-3 text-sm">
+            <div className="flex-shrink-0 w-16 h-16 bg-gray-50 rounded overflow-hidden">
+              {item.product.images?.[0]?.src ? (
+                <Image
+                  src={item.product.images[0].src}
+                  alt={item.product.name}
+                  width={64}
+                  height={64}
+                  className="w-full h-full object-cover"
+                />
+              ) : (
+                <div className="w-full h-full flex items-center justify-center text-gray-400">
+                  <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                  </svg>
+                </div>
+              )}
+            </div>
+
+            <div className="flex-1">
+              <p className="font-medium text-gray-900">{item.product.name}</p>
+              <p className="text-gray-600">Aantal: {item.quantity}</p>
+            </div>
+
+            <span className="font-medium text-gray-900 text-right">
+              €{(parseFloat(item.product.price) * item.quantity).toFixed(2)}
+            </span>
+          </div>
+        ))}
+      </div>
+
+      {/* Price breakdown */}
+      <div className="border-t pt-4 space-y-2">
+        <div className="flex justify-between text-sm">
+          <span className="text-gray-600">Subtotaal</span>
+          <span className="text-gray-900">€{subtotal.toFixed(2)}</span>
+        </div>
+
+        {appliedCoupon && (
+          <div className="flex justify-between text-sm text-green-600">
+            <span>
+              Korting
+              {appliedCoupon.discount_type === 'percent' && ` (${appliedCoupon.amount}%)`}
+            </span>
+            <span>-€{discountAmount.toFixed(2)}</span>
+          </div>
+        )}
+
+        <div className="my-3 py-3 border-y">
+          <CouponInput variant="compact" />
+        </div>
+
+        <div className="flex justify-between text-sm">
+          <span className="text-gray-600">
+            Verzending naar {countryNames[formDataCountry] || formDataCountry}
+          </span>
+          {shipping.loading ? (
+            <span className="text-gray-400">Berekenen...</span>
+          ) : (
+            <span className={shippingCost === 0 ? 'text-green-600 font-medium' : 'text-gray-900'}>
+              {shippingCost === 0 ? 'GRATIS' : `€${shippingCost.toFixed(2)}`}
+            </span>
+          )}
+        </div>
+
+        <div className="flex justify-between font-semibold text-lg pt-2 border-t">
+          <span className="text-[#492c4a] font-[family-name:var(--font-eb-garamond)]">Totaal</span>
+          <span className="text-[#492c4a] font-[family-name:var(--font-eb-garamond)]">€{total.toFixed(2)}</span>
+        </div>
+      </div>
+    </>
   );
 }
