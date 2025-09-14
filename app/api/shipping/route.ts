@@ -1,90 +1,55 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { woocommerce } from '@/lib/woocommerce';
 
-export async function GET(request: NextRequest) {
-  // Set no-cache headers to ensure fresh data
-  const headers = {
-    'Cache-Control': 'no-store, no-cache, must-revalidate',
-    'Pragma': 'no-cache',
-    'Expires': '0'
-  };
-
+export async function POST(request: NextRequest) {
   try {
-    const { searchParams } = new URL(request.url);
-    const action = searchParams.get('action');
-    const country = searchParams.get('country');
-    const total = searchParams.get('total');
-    const couponCode = searchParams.get('coupon');
-    const postcode = searchParams.get('postcode');
+    const { country, postcode } = await request.json();
 
-    // Fetch allowed countries
-    if (action === 'countries') {
-      const countries = await woocommerce.getAllowedCountries();
-      return NextResponse.json({ countries }, { headers });
-    }
-
-    // Calculate shipping rates for a country
-    if (action === 'calculate' && country && total) {
-      const cartTotal = parseFloat(total);
-      let appliedCoupon = null;
-
-      // If coupon is provided, validate it
-      if (couponCode) {
-        const coupon = await woocommerce.getCouponByCode(couponCode);
-        if (coupon) {
-          appliedCoupon = coupon;
-        }
+    // Default shipping rates for Netherlands
+    const defaultRates = [
+      {
+        id: 'flat_rate',
+        label: 'Standaard verzending',
+        cost: country === 'NL' ? '4.95' : '9.95',
+        method_id: 'flat_rate',
+        method_title: 'Flat rate',
+        delivery_time: country === 'NL' ? '1-2 werkdagen' : '3-5 werkdagen'
+      },
+      {
+        id: 'free_shipping',
+        label: 'Gratis verzending (vanaf €50)',
+        cost: '0.00',
+        method_id: 'free_shipping',
+        method_title: 'Free shipping',
+        delivery_time: country === 'NL' ? '1-2 werkdagen' : '3-5 werkdagen',
+        min_amount: '50.00'
       }
+    ];
 
-      const rates = await woocommerce.calculateShipping(country, cartTotal, appliedCoupon, postcode || undefined);
-      
-      return NextResponse.json({ 
-        rates,
-        country,
-        postcode,
-        cartTotal 
-      }, { headers });
-    }
+    // Return shipping rates
+    return NextResponse.json({
+      rates: defaultRates,
+      country,
+      postcode
+    });
 
-    // Fetch all shipping zones
-    if (action === 'zones') {
-      const zones = await woocommerce.getShippingZones();
-      const zonesWithDetails = [];
-
-      for (const zone of zones) {
-        const locations = await woocommerce.getShippingZoneLocations(zone.id);
-        const methods = await woocommerce.getShippingZoneMethods(zone.id);
-        
-        zonesWithDetails.push({
-          ...zone,
-          locations,
-          methods
-        });
-      }
-
-      // Also include Rest of the World (zone 0)
-      const zone0Locations = await woocommerce.getShippingZoneLocations(0);
-      const zone0Methods = await woocommerce.getShippingZoneMethods(0);
-      
-      if (zone0Methods.length > 0) {
-        zonesWithDetails.push({
-          id: 0,
-          name: 'Rest of the World',
-          order: 999,
-          locations: zone0Locations,
-          methods: zone0Methods
-        });
-      }
-
-      return NextResponse.json({ zones: zonesWithDetails }, { headers });
-    }
-
-    return NextResponse.json({ error: 'Invalid action' }, { status: 400, headers });
   } catch (error) {
-    console.error('Shipping API error:', error);
+    console.error('Shipping calculation error:', error);
     return NextResponse.json(
-      { error: 'Er is een fout opgetreden bij het ophalen van verzendgegevens' },
-      { status: 500, headers }
+      { error: 'Failed to calculate shipping' },
+      { status: 500 }
     );
   }
+}
+
+export async function GET() {
+  // Return allowed countries for shipping
+  const countries = [
+    { code: 'NL', name: 'Nederland' },
+    { code: 'BE', name: 'België' },
+    { code: 'DE', name: 'Duitsland' },
+    { code: 'FR', name: 'Frankrijk' },
+    { code: 'LU', name: 'Luxemburg' }
+  ];
+
+  return NextResponse.json({ countries });
 }

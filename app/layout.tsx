@@ -1,10 +1,9 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist, Geist_Mono, EB_Garamond } from "next/font/google";
 import "./globals.css";
 import { CartProvider } from "./contexts/CartContext";
 import { ToastProvider } from "./contexts/ToastContext";
 import ClientOnly from "./components/ClientOnly";
-import WebVitals from "./components/WebVitals";
 import LayoutContent from "./components/LayoutContent";
 
 const geistSans = Geist({
@@ -21,20 +20,20 @@ const geistMono = Geist_Mono({
   preload: true,
 });
 
+const ebGaramond = EB_Garamond({
+  variable: "--font-eb-garamond",
+  subsets: ["latin"],
+  display: "swap",
+  preload: true,
+});
+
 export const metadata: Metadata = {
-  title: "123noodklaar.nl - Emergency Preparedness Made Simple",
-  description: "Expertly curated emergency kits for families, solo travelers, and pets. Stay prepared with high-quality emergency supplies.",
-  metadataBase: new URL('https://123noodklaar.nl'),
-  icons: {
-    icon: [
-      { url: '/favicon.ico', sizes: '32x32' },
-    ],
-    shortcut: '/favicon.ico',
-    apple: '/favicon.ico',
-  },
+  title: "Stonesforhealth - Natuurlijke Kristallen & Edelstenen",
+  description: "Ontdek de helende kracht van natuurlijke kristallen en edelstenen. 100% authentiek, ethisch gewonnen, met liefde geselecteerd.",
+  metadataBase: new URL('https://stonesforhealth.nl'),
   openGraph: {
-    title: '123noodklaar.nl - Emergency Preparedness Made Simple',
-    description: 'Expertly curated emergency kits for families',
+    title: 'Stonesforhealth - Natuurlijke Kristallen & Edelstenen',
+    description: 'Ontdek de helende kracht van natuurlijke kristallen',
     type: 'website',
   },
   robots: {
@@ -62,14 +61,11 @@ export default function RootLayout({
         <meta name="theme-color" content="#ffffff" />
       </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-white`}
+        className={`${geistSans.variable} ${geistMono.variable} ${ebGaramond.variable} antialiased bg-white`}
         suppressHydrationWarning
       >
         <ToastProvider>
           <CartProvider>
-            <ClientOnly>
-              <WebVitals />
-            </ClientOnly>
             <LayoutContent>
               {children}
             </LayoutContent>

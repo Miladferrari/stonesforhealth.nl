@@ -1,29 +1,22 @@
 import Link from 'next/link';
-import Image from 'next/image';
 
 export default function NotFound() {
   return (
-    <div className="min-h-screen bg-white flex items-center justify-center px-4 py-16">
+    <div className="min-h-screen bg-gradient-to-br from-purple-50 to-pink-50 flex items-center justify-center px-4 py-16">
       <div className="max-w-2xl w-full text-center">
         {/* 404 Icon */}
         <div className="mb-8">
-          <div className="relative inline-block">
-            <div className="text-[180px] font-bold text-gray-200 select-none">404</div>
-            <div className="absolute inset-0 flex items-center justify-center">
-              <svg className="w-24 h-24 text-amber-orange" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-              </svg>
-            </div>
-          </div>
+          <div className="text-8xl">🔮</div>
+          <div className="text-6xl font-bold text-purple-200 mt-4">404</div>
         </div>
 
         {/* Message */}
-        <h1 className="text-3xl md:text-4xl font-bold text-navy-blue mb-4">
-          Oeps! Pagina niet gevonden
+        <h1 className="text-3xl md:text-4xl font-bold text-gray-800 mb-4">
+          Deze pagina bestaat niet
         </h1>
         
-        <p className="text-lg text-steel-gray mb-8 max-w-md mx-auto">
-          De pagina die je zoekt lijkt niet te bestaan. Misschien is deze verplaatst of bestaat deze niet meer.
+        <p className="text-lg text-gray-600 mb-8 max-w-md mx-auto">
+          De kristallen hebben ons verteld dat deze pagina niet bestaat. Laten we je terugbrengen naar onze collectie.
         </p>
 
         {/* Helpful Links */}
@@ -32,34 +25,22 @@ export default function NotFound() {
           <div>
             <Link 
               href="/"
-              className="inline-flex items-center gap-2 px-8 py-4 bg-medical-green text-white font-semibold rounded-lg hover:bg-medical-green/90 transition-all transform hover:scale-105 shadow-lg"
+              className="inline-flex items-center gap-2 px-8 py-4 bg-purple-600 text-white font-semibold rounded-full hover:bg-purple-700 transition-all transform hover:scale-105 shadow-lg"
             >
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
               </svg>
-              Terug naar de homepage
+              Terug naar home
             </Link>
           </div>
 
           {/* Secondary Links */}
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
             <Link 
-              href="/noodpakketten"
-              className="text-medical-green hover:text-medical-green/80 font-medium transition-colors flex items-center gap-1"
+              href="/cart"
+              className="text-purple-600 hover:text-purple-700 font-medium transition-colors flex items-center gap-1"
             >
-              Bekijk noodpakketten
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-              </svg>
-            </Link>
-            
-            <span className="text-gray-400 hidden sm:inline">•</span>
-            
-            <Link 
-              href="/contact"
-              className="text-medical-green hover:text-medical-green/80 font-medium transition-colors flex items-center gap-1"
-            >
-              Contact opnemen
+              Bekijk winkelwagen
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
               </svg>

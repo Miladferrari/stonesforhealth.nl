@@ -190,6 +190,15 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
           'Pragma': 'no-cache'
         }
       });
+      
+      // Check if response is JSON
+      const contentType = response.headers.get('content-type');
+      if (!contentType || !contentType.includes('application/json')) {
+        console.warn('Shipping API not available, using default countries');
+        setAllowedCountries(['NL', 'BE', 'LU', 'DE', 'FR']);
+        return;
+      }
+      
       const data = await response.json();
       if (data.countries) {
         console.log('[Cart] Loaded allowed countries:', data.countries);
@@ -197,6 +206,8 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       }
     } catch (error) {
       console.error('Failed to load allowed countries:', error);
+      // Default fallback countries
+      setAllowedCountries(['NL', 'BE', 'LU', 'DE', 'FR']);
     }
   };
 
@@ -219,6 +230,13 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
           'Cache-Control': 'no-cache'
         }
       });
+      
+      // Check if response is JSON
+      const contentType = response.headers.get('content-type');
+      if (!contentType || !contentType.includes('application/json')) {
+        throw new Error('Shipping API returned non-JSON response');
+      }
+      
       const data = await response.json();
       
       if (data.rates && data.rates.length > 0) {

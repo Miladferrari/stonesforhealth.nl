@@ -1,46 +1,34 @@
-import Link from 'next/link';
-
 export default function AnnouncementBar() {
   return (
-    <div className="announcement-bar bg-white text-steel-gray relative">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2 hidden lg:flex justify-between items-center">
-        {/* USP List */}
-        <div className="flex items-center gap-6">
-          <div className="flex items-center gap-2 text-sm">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" className="w-4 h-4 text-medical-green" fill="currentColor">
-              <path d="M10 20C4.48 20 0 15.52 0 10S4.48 0 10 0s10 4.48 10 10c-.01 5.52-4.48 9.99-10 10zM6.5 8.89a1.003 1.003 0 0 0-.79 1.62l2.43 3.11c.19.24.48.38.79.38h.01c.31 0 .6-.15.79-.4l4.57-6c.34-.43.27-1.06-.17-1.4s-1.06-.27-1.4.17c-.01.01-.02.02-.02.03l-3.78 4.97L7.3 9.28c-.2-.25-.49-.39-.8-.39z"/>
-            </svg>
-            <span>Verzending binnen <strong>2 dagen</strong></span>
-          </div>
-          
-          <div className="flex items-center gap-2 text-sm">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" className="w-4 h-4 text-medical-green" fill="currentColor">
-              <path d="M10 20C4.48 20 0 15.52 0 10S4.48 0 10 0s10 4.48 10 10c-.01 5.52-4.48 9.99-10 10zM6.5 8.89a1.003 1.003 0 0 0-.79 1.62l2.43 3.11c.19.24.48.38.79.38h.01c.31 0 .6-.15.79-.4l4.57-6c.34-.43.27-1.06-.17-1.4s-1.06-.27-1.4.17c-.01.01-.02.02-.02.03l-3.78 4.97L7.3 9.28c-.2-.25-.49-.39-.8-.39z"/>
-            </svg>
-            <span><strong>14 dagen</strong> bedenktijd</span>
-          </div>
-          
-          <div className="flex items-center gap-2 text-sm">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" className="w-4 h-4 text-medical-green" fill="currentColor">
-              <path d="M10 20C4.48 20 0 15.52 0 10S4.48 0 10 0s10 4.48 10 10c-.01 5.52-4.48 9.99-10 10zM6.5 8.89a1.003 1.003 0 0 0-.79 1.62l2.43 3.11c.19.24.48.38.79.38h.01c.31 0 .6-.15.79-.4l4.57-6c.34-.43.27-1.06-.17-1.4s-1.06-.27-1.4.17c-.01.01-.02.02-.02.03l-3.78 4.97L7.3 9.28c-.2-.25-.49-.39-.8-.39z"/>
-            </svg>
-            <span><strong>Wettelijke garantie</strong></span>
-          </div>
+    <div className="bg-gradient-to-r from-[#3b223b] to-[#4d2e4d] hidden md:block">
+      <div className="flex justify-center items-center space-x-8 text-white py-3 px-4 mx-auto">
+        {/* USP 1 */}
+        <div className="flex items-center space-x-2.5">
+          <svg className="w-4 h-4 text-white/90" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+          </svg>
+          <span className="text-sm font-light tracking-wide font-[family-name:var(--font-eb-garamond)]">Gratis verzending vanaf €50</span>
         </div>
         
-        {/* Header Links */}
-        <div className="flex items-center gap-4">
-          <Link href="/faq" className="text-sm hover:underline">
-            Help & Contact
-          </Link>
+        <span className="text-white/30">•</span>
+        
+        {/* USP 2 */}
+        <div className="flex items-center space-x-2.5">
+          <svg className="w-4 h-4 text-white/90" fill="currentColor" viewBox="0 0 20 20">
+            <path fillRule="evenodd" d="M10.868 2.884c-.321-.772-1.415-.772-1.736 0l-1.83 4.401-4.753.381c-.833.067-1.171 1.107-.536 1.651l3.62 3.102-1.106 4.637c-.194.813.691 1.456 1.405 1.02L10 15.591l4.069 2.485c.713.436 1.598-.207 1.404-1.02l-1.106-4.637 3.62-3.102c.635-.544.297-1.584-.536-1.65l-4.752-.382-1.831-4.401z" clipRule="evenodd" />
+          </svg>
+          <span className="text-sm font-light tracking-wide font-[family-name:var(--font-eb-garamond)]">Al 1000+ tevreden klanten</span>
         </div>
-      </div>
-      
-      {/* Mobile version - simplified */}
-      <div className="lg:hidden py-2 px-4">
-        <p className="text-center text-sm text-steel-gray">
-          Verzending binnen <strong>2 dagen</strong> | <strong>14 dagen</strong> bedenktijd
-        </p>
+        
+        <span className="text-white/30">•</span>
+        
+        {/* USP 3 */}
+        <div className="flex items-center space-x-2.5">
+          <svg className="w-4 h-4 text-white/90" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+          </svg>
+          <span className="text-sm font-light tracking-wide font-[family-name:var(--font-eb-garamond)]">Persoonlijk advies</span>
+        </div>
       </div>
     </div>
   );

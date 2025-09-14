@@ -6,471 +6,433 @@ import Link from 'next/link';
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
 
-// Get the base URL for API calls
-function getBaseUrl() {
-  if (process.env.VERCEL_URL) return `https://${process.env.VERCEL_URL}`;
-  if (process.env.NEXT_PUBLIC_SITE_URL) return process.env.NEXT_PUBLIC_SITE_URL;
-  return 'http://localhost:3000';
-}
-
-// Lazy load heavy components
-const ProductCard = dynamicImport(() => import('../components/ProductCard'), {
-  loading: () => <div className="animate-pulse bg-gray-200 h-96 rounded-lg" />,
-  ssr: true
-});
-
-const TestimonialsSection = dynamicImport(() => import('../components/TestimonialsSection'), {
-  loading: () => <div className="animate-pulse bg-gray-200 h-96 rounded-lg" />
-});
-
-const ComparisonSection = dynamicImport(() => import('../components/ComparisonSection'), {
-  loading: () => <div className="animate-pulse bg-gray-200 h-96 rounded-lg" />
-});
-
 export default async function Home() {
   let featuredProducts: any[] = [];
   let categories: Category[] = [];
   let categoryPrices: Record<number, number> = {};
   let apiError = false;
   
-  try {
-    const baseUrl = getBaseUrl();
-    
-    // Fetch featured products via API route
-    const productsRes = await fetch(`${baseUrl}/api/woocommerce/products?per_page=3&page=1&orderby=popularity&order=desc`, {
-      cache: 'no-store',
-      headers: {
-        'Content-Type': 'application/json',
-      }
-    });
-    
-    if (productsRes.ok) {
-      featuredProducts = await productsRes.json();
-    }
-    
-    // Fetch product categories via API route
-    const categoriesRes = await fetch(`${baseUrl}/api/woocommerce/categories?per_page=10&orderby=count&order=desc&hide_empty=true`, {
-      cache: 'no-store',
-      headers: {
-        'Content-Type': 'application/json',
-      }
-    });
-    
-    if (categoriesRes.ok) {
-      categories = await categoriesRes.json();
-    }
-    
-    // Fetch lowest price for each category
-    for (const category of categories.slice(0, 6)) {
-      try {
-        const categoryProductsRes = await fetch(`${baseUrl}/api/woocommerce/products?category=${category.id}&per_page=100&orderby=price&order=asc`, {
-          cache: 'no-store',
-          headers: {
-            'Content-Type': 'application/json',
-          }
-        });
-        
-        if (categoryProductsRes.ok) {
-          const products = await categoryProductsRes.json();
-          if (products.length > 0) {
-            // Find the lowest price among products
-            const lowestPrice = Math.min(...products.map((p: any) => parseFloat(p.price) || 0));
-            categoryPrices[category.id] = lowestPrice;
-          }
-        }
-      } catch (err) {
-        console.error(`Failed to fetch products for category ${category.id}:`, err);
-      }
-    }
-  } catch (err) {
-    console.error('Failed to load data:', err);
-    apiError = true;
-    // Use fallback data when API fails
-    featuredProducts = [];
-    categories = [
-      {
-        id: 15,
-        name: "Noodpakketten",
-        slug: "noodpakketten",
-        parent: 0,
-        description: "Essentiële noodpakketten voor uw veiligheid",
-        display: "default",
-        image: null,
-        count: 0
-      }
-    ];
-  }
+  // Use demo data for now
+  featuredProducts = [];
+  categories = [];
 
   return (
-    <div className="min-h-screen bg-white">
-      {/* Hero Section - Simplified */}
-      <section className="bg-gradient-to-b from-navy-blue to-navy-blue/95">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-20">
-          <div className="text-center max-w-3xl mx-auto">
-            {/* Trust Badge */}
-            <div className="inline-flex items-center gap-2 bg-medical-green/10 rounded-full px-4 py-2 text-medical-green text-sm font-medium mb-6">
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-              </svg>
-              <span>Officiële noodpakketten leverancier</span>
+    <div className="min-h-screen bg-[#F5F1E8]">
+      {/* Hero Section - Clean & Compact */}
+      <section className="relative bg-[#FAF8F5] overflow-hidden">
+        {/* Subtle gradient overlay */}
+        <div className="absolute inset-0 bg-gradient-to-br from-transparent via-[#F5F1E8]/30 to-[#E8DCC6]/20"></div>
+
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-24">
+          <div className="grid lg:grid-cols-[45%_55%] gap-8 lg:gap-12 items-center">
+            
+            {/* Left: Text Content */}
+            <div className="text-center lg:text-left">
+              {/* Reviews - Mobile/Tablet: above title, Desktop: below buttons */}
+              <div className="lg:hidden mb-6 flex justify-center">
+                <div className="inline-flex items-center justify-center gap-4 bg-white/60 backdrop-blur-sm rounded-full px-5 py-3 shadow-sm border border-gray-100">
+                  {/* Profile avatars */}
+                  <div className="flex -space-x-3">
+                    <img 
+                      src="https://i.pravatar.cc/150?img=1" 
+                      alt="Anna" 
+                      className="w-10 h-10 rounded-full border-2 border-white object-cover shadow-sm"
+                    />
+                    <img 
+                      src="https://i.pravatar.cc/150?img=5" 
+                      alt="Maria" 
+                      className="w-10 h-10 rounded-full border-2 border-white object-cover shadow-sm"
+                    />
+                    <img 
+                      src="https://i.pravatar.cc/150?img=9" 
+                      alt="Sophie" 
+                      className="w-10 h-10 rounded-full border-2 border-white object-cover shadow-sm"
+                    />
+                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#492c4a] to-[#6b4069] border-2 border-white flex items-center justify-center text-white text-xs font-bold shadow-sm">
+                      +3K
+                    </div>
+                  </div>
+                  
+                  {/* Divider */}
+                  <div className="h-8 w-px bg-gradient-to-b from-transparent via-gray-300 to-transparent"></div>
+                  
+                  {/* Stars and text */}
+                  <div className="flex flex-col">
+                    <div className="flex items-center gap-1">
+                      <div className="flex items-center">
+                        {[...Array(5)].map((_, i) => (
+                          <svg key={i} className="w-3.5 h-3.5 text-[#492c4a] fill-current" viewBox="0 0 20 20">
+                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                          </svg>
+                        ))}
+                      </div>
+                      <span className="text-xs bg-[#492c4a]/10 text-[#492c4a] px-1.5 py-0.5 rounded-md font-semibold">4.9/5</span>
+                    </div>
+                    <span className="text-[11px] text-gray-600 font-medium mt-1 font-[family-name:var(--font-eb-garamond)]">Vertrouwd door <span className="font-bold text-[#492c4a]">3000+</span> klanten</span>
+                  </div>
+                </div>
+              </div>
+
+              <h1 className="text-4xl lg:text-5xl xl:text-6xl font-bold text-[#492c4a] mb-6 leading-tight font-[family-name:var(--font-eb-garamond)]">
+                Ontdek de kracht van <span className="text-[#492c4a] font-bold">kristallen</span>
+              </h1>
+              
+              <p className="text-lg lg:text-xl font-bold text-[#492c4a] mb-8 max-w-xl mx-auto lg:mx-0 font-[family-name:var(--font-eb-garamond)]">
+                Verhoog je energie, vind innerlijke rust en versterk je spirituele reis met onze zorgvuldig geselecteerde edelsteen collectie
+              </p>
+              
+              <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start mb-8">
+                <Link 
+                  href="/alle-producten"
+                  className="inline-flex items-center justify-center gap-2 bg-[#3b223b] hover:bg-[#4d2e4d] text-white px-8 py-4 rounded-full text-lg font-medium transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-1 font-[family-name:var(--font-eb-garamond)]"
+                >
+                  <span>Shop kristallen</span>
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                  </svg>
+                </Link>
+                <Link 
+                  href="/quiz"
+                  className="inline-flex items-center justify-center gap-2 bg-white hover:bg-gray-50 text-[#3b223b] px-8 py-4 rounded-full text-lg font-medium transition-all duration-200 border border-[#3b223b]/20 font-[family-name:var(--font-eb-garamond)]"
+                >
+                  <span>Kristal quiz</span>
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                  </svg>
+                </Link>
+              </div>
+
+              {/* Reviews - Desktop only */}
+              <div className="hidden lg:inline-flex items-center justify-center lg:justify-start gap-4 bg-white/60 backdrop-blur-sm rounded-full px-5 py-3 shadow-sm border border-gray-100">
+                {/* Profile avatars */}
+                <div className="flex -space-x-3">
+                  <img 
+                    src="https://i.pravatar.cc/150?img=1" 
+                    alt="Anna" 
+                    className="w-10 h-10 rounded-full border-2 border-white object-cover shadow-sm"
+                  />
+                  <img 
+                    src="https://i.pravatar.cc/150?img=5" 
+                    alt="Maria" 
+                    className="w-10 h-10 rounded-full border-2 border-white object-cover shadow-sm"
+                  />
+                  <img 
+                    src="https://i.pravatar.cc/150?img=9" 
+                    alt="Sophie" 
+                    className="w-10 h-10 rounded-full border-2 border-white object-cover shadow-sm"
+                  />
+                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#492c4a] to-[#6b4069] border-2 border-white flex items-center justify-center text-white text-xs font-bold shadow-sm">
+                    +3K
+                  </div>
+                </div>
+                
+                {/* Divider */}
+                <div className="h-8 w-px bg-gradient-to-b from-transparent via-gray-300 to-transparent"></div>
+                
+                {/* Stars and text */}
+                <div className="flex flex-col">
+                  <div className="flex items-center gap-1">
+                    <div className="flex items-center">
+                      {[...Array(5)].map((_, i) => (
+                        <svg key={i} className="w-3.5 h-3.5 text-[#492c4a] fill-current" viewBox="0 0 20 20">
+                          <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                        </svg>
+                      ))}
+                    </div>
+                    <span className="text-xs bg-[#492c4a]/10 text-[#492c4a] px-1.5 py-0.5 rounded-md font-semibold">4.9/5</span>
+                  </div>
+                  <span className="text-[11px] text-gray-600 font-medium mt-1 font-[family-name:var(--font-eb-garamond)]">Vertrouwd door <span className="font-bold text-[#492c4a]">3000+</span> klanten</span>
+                </div>
+              </div>
             </div>
 
-            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4">
-              Noodpakketten voor <span className="text-medical-green">jouw veiligheid</span>
-            </h1>
-            <p className="text-lg text-gray-300 mb-8">
-              Professioneel samengestelde noodpakketten volgens overheidsrichtlijnen.
-            </p>
+            {/* Right: Video */}
+            <div className="relative">
+              <div className="relative rounded-2xl overflow-hidden shadow-xl">
+                <video 
+                  autoPlay 
+                  muted 
+                  loop 
+                  playsInline
+                  className="w-full h-full object-cover rounded-2xl"
+                  style={{ aspectRatio: '16/10' }}
+                >
+                  <source src="/banner.mp4" type="video/mp4" />
+                  Je browser ondersteunt geen video.
+                </video>
+                
+                {/* Video overlay for better text readability */}
+                <div className="absolute inset-0 bg-black/10 rounded-2xl"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
 
-            {/* CTA Buttons */}
-            <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
+      {/* Wave Transition */}
+      <div className="relative -mt-8 pointer-events-none">
+        <svg viewBox="0 0 1440 80" fill="none" className="w-full h-20">
+          <path d="M0,40 C320,10 420,70 720,40 C1020,10 1120,70 1440,40 L1440,80 L0,80 Z" fill="#3b223b"/>
+        </svg>
+      </div>
+
+      {/* Categories Section - Mystical & Professional */}
+      <section className="py-20 bg-[#3b223b] relative overflow-hidden">
+        {/* Mystical background elements */}
+        <div className="absolute inset-0 pointer-events-none">
+          <div className="absolute top-10 left-20 w-32 h-32 bg-white/5 rounded-full blur-2xl"></div>
+          <div className="absolute bottom-16 right-16 w-48 h-48 bg-white/3 rounded-full blur-3xl"></div>
+          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-white/2 rounded-full blur-3xl"></div>
+        </div>
+
+        {/* Floating stars */}
+        <div className="absolute inset-0 pointer-events-none">
+          <svg className="absolute top-20 left-12 w-4 h-4 text-white/20 animate-star-parallax-1" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 2l2.121 6.879L21 10.879l-6.879 2.121L12 22l-2.121-8.879L3 10.879l6.879-2.121z"/>
+          </svg>
+          <svg className="absolute top-32 right-20 w-3 h-3 text-white/15 animate-star-parallax-2" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 2l2.121 6.879L21 10.879l-6.879 2.121L12 22l-2.121-8.879L3 10.879l6.879-2.121z"/>
+          </svg>
+          <svg className="absolute bottom-24 left-1/4 w-5 h-5 text-white/25 animate-star-parallax-3" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 2l2.121 6.879L21 10.879l-6.879 2.121L12 22l-2.121-8.879L3 10.879l6.879-2.121z"/>
+          </svg>
+        </div>
+
+        <div className="relative max-w-4xl mx-auto px-6 lg:px-8 text-center">
+          <h2 className="text-3xl lg:text-4xl font-light text-white mb-4 font-[family-name:var(--font-eb-garamond)]">
+            Vind jouw perfecte <span className="font-normal">kristal</span>
+          </h2>
+          
+          <p className="text-white/80 mb-12 text-lg max-w-2xl mx-auto font-[family-name:var(--font-eb-garamond)]">
+            Kies een categorie die past bij jouw intentie
+          </p>
+          
+          {/* Clean category buttons */}
+          <div className="flex flex-wrap justify-center gap-3 mb-12">
+            <Link href="/alle-producten?category=chakra" className="group bg-white/10 backdrop-blur border border-white/20 px-8 py-4 rounded-lg hover:bg-white/20 transition-all">
+              <h3 className="font-medium text-white mb-1 font-[family-name:var(--font-eb-garamond)]">Chakra & Energie</h3>
+              <p className="text-xs text-white/70 font-[family-name:var(--font-eb-garamond)]">Herstel balans</p>
+            </Link>
+            
+            <Link href="/alle-producten?category=bescherming" className="group bg-white/10 backdrop-blur border border-white/20 px-8 py-4 rounded-lg hover:bg-white/20 transition-all">
+              <h3 className="font-medium text-white mb-1 font-[family-name:var(--font-eb-garamond)]">Bescherming</h3>
+              <p className="text-xs text-white/70 font-[family-name:var(--font-eb-garamond)]">Energetisch schild</p>
+            </Link>
+            
+            <Link href="/alle-producten?category=liefde" className="group bg-white/10 backdrop-blur border border-white/20 px-8 py-4 rounded-lg hover:bg-white/20 transition-all">
+              <h3 className="font-medium text-white mb-1 font-[family-name:var(--font-eb-garamond)]">Liefde & Relaties</h3>
+              <p className="text-xs text-white/70 font-[family-name:var(--font-eb-garamond)]">Open je hart</p>
+            </Link>
+            
+            <Link href="/alle-producten?category=meditatie" className="group bg-white/10 backdrop-blur border border-white/20 px-8 py-4 rounded-lg hover:bg-white/20 transition-all">
+              <h3 className="font-medium text-white mb-1 font-[family-name:var(--font-eb-garamond)]">Meditatie</h3>
+              <p className="text-xs text-white/70 font-[family-name:var(--font-eb-garamond)]">Innerlijke rust</p>
+            </Link>
+          </div>
+          
+          {/* Single CTA */}
+          <Link href="/alle-producten" className="inline-flex items-center gap-2 bg-white text-[#3b223b] px-8 py-3.5 rounded-full font-medium hover:bg-white/90 transition-all duration-200 shadow-lg">
+            <span className="font-[family-name:var(--font-eb-garamond)]">Bekijk alle kristallen</span>
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+            </svg>
+          </Link>
+        </div>
+      </section>
+
+      {/* Crystal Quiz Section - Interactive & Converting */}
+      <section className="py-20 bg-[#FAF8F5] relative overflow-hidden">
+        {/* Background decoration */}
+        <div className="absolute inset-0 pointer-events-none">
+          <div className="absolute top-20 left-10 w-64 h-64 bg-[#3b223b]/5 rounded-full blur-3xl"></div>
+          <div className="absolute bottom-20 right-10 w-96 h-96 bg-[#3b223b]/3 rounded-full blur-3xl"></div>
+        </div>
+
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          {/* Header */}
+          <div className="text-center mb-16">
+            <div className="inline-flex items-center gap-2 bg-[#3b223b]/10 rounded-full px-4 py-2 mb-6">
+              <svg className="w-4 h-4 text-[#3b223b]" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+              </svg>
+              <span className="text-sm font-medium text-[#3b223b] font-[family-name:var(--font-eb-garamond)]">Persoonlijke Kristal Quiz</span>
+            </div>
+            
+            <h2 className="text-3xl lg:text-4xl font-semibold text-[#2D2D2D] mb-4 font-[family-name:var(--font-eb-garamond)]">
+              Zo vind je jouw perfecte kristal
+            </h2>
+            <p className="text-lg text-gray-600 max-w-2xl mx-auto font-[family-name:var(--font-eb-garamond)]">
+              In 3 eenvoudige stappen naar jouw gepersonaliseerde kristal selectie
+            </p>
+          </div>
+
+          <div className="grid lg:grid-cols-2 gap-16 items-center">
+            {/* Left column - Step flow */}
+            <div className="space-y-8">
+              {/* Step 1 */}
+              <div className="flex items-start gap-6 group">
+                <div className="flex-shrink-0">
+                  <div className="w-12 h-12 bg-[#3b223b] text-white rounded-xl flex items-center justify-center font-semibold font-[family-name:var(--font-eb-garamond)]">
+                    1
+                  </div>
+                  <div className="w-0.5 h-16 bg-gradient-to-b from-[#3b223b] to-[#3b223b]/30 ml-6 mt-2"></div>
+                </div>
+                <div className="flex-1 pt-2">
+                  <h3 className="text-xl font-semibold text-[#2D2D2D] mb-2 font-[family-name:var(--font-eb-garamond)]">
+                    Vertel over jezelf
+                  </h3>
+                  <p className="text-gray-600 font-[family-name:var(--font-eb-garamond)]">
+                    Beantwoord vragen over je huidige gemoedstoestand en wat je wilt bereiken
+                  </p>
+                </div>
+              </div>
+
+              {/* Step 2 */}
+              <div className="flex items-start gap-6 group">
+                <div className="flex-shrink-0">
+                  <div className="w-12 h-12 bg-[#3b223b] text-white rounded-xl flex items-center justify-center font-semibold font-[family-name:var(--font-eb-garamond)]">
+                    2
+                  </div>
+                  <div className="w-0.5 h-16 bg-gradient-to-b from-[#3b223b] to-[#3b223b]/30 ml-6 mt-2"></div>
+                </div>
+                <div className="flex-1 pt-2">
+                  <h3 className="text-xl font-semibold text-[#2D2D2D] mb-2 font-[family-name:var(--font-eb-garamond)]">
+                    Analyseer je energie
+                  </h3>
+                  <p className="text-gray-600 font-[family-name:var(--font-eb-garamond)]">
+                    Onze algoritme matcht jouw antwoorden met de eigenschappen van kristallen
+                  </p>
+                </div>
+              </div>
+
+              {/* Step 3 */}
+              <div className="flex items-start gap-6 group">
+                <div className="flex-shrink-0">
+                  <div className="w-12 h-12 bg-[#3b223b] text-white rounded-xl flex items-center justify-center font-semibold font-[family-name:var(--font-eb-garamond)]">
+                    3
+                  </div>
+                </div>
+                <div className="flex-1 pt-2">
+                  <h3 className="text-xl font-semibold text-[#2D2D2D] mb-2 font-[family-name:var(--font-eb-garamond)]">
+                    Ontvang je selectie
+                  </h3>
+                  <p className="text-gray-600 font-[family-name:var(--font-eb-garamond)]">
+                    Krijg een gepersonaliseerd advies met uitleg over waarom deze kristallen bij je passen
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Right column - Benefits & CTA */}
+            <div className="bg-white rounded-3xl p-8 shadow-lg relative">
+              {/* Decorative element */}
+              <div className="absolute -top-4 -right-4 w-16 h-16 bg-[#3b223b]/10 rounded-2xl rotate-12"></div>
+              
+              <div className="text-center mb-8">
+                <div className="w-20 h-20 bg-gradient-to-br from-[#3b223b] to-[#4d2e4d] rounded-2xl mx-auto mb-6 flex items-center justify-center">
+                  <svg className="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
+                  </svg>
+                </div>
+                
+                <h3 className="text-2xl font-semibold text-[#2D2D2D] mb-4 font-[family-name:var(--font-eb-garamond)]">
+                  Start je kristalreis
+                </h3>
+                
+                <p className="text-gray-600 mb-8 font-[family-name:var(--font-eb-garamond)]">
+                  Ontdek waarom meer dan 12.000 mensen al hun perfecte kristal hebben gevonden
+                </p>
+              </div>
+
+              {/* Benefits list */}
+              <div className="space-y-4 mb-8">
+                <div className="flex items-center gap-3">
+                  <svg className="w-5 h-5 text-[#3b223b] flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                  </svg>
+                  <span className="text-sm text-gray-600 font-[family-name:var(--font-eb-garamond)]">Wetenschappelijk onderbouwde matching</span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <svg className="w-5 h-5 text-[#3b223b] flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                  </svg>
+                  <span className="text-sm text-gray-600 font-[family-name:var(--font-eb-garamond)]">5 minuten voor een levenslang resultaat</span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <svg className="w-5 h-5 text-[#3b223b] flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                  </svg>
+                  <span className="text-sm text-gray-600 font-[family-name:var(--font-eb-garamond)]">Gratis en zonder verplichtingen</span>
+                </div>
+              </div>
+
+              {/* CTA */}
               <Link 
-                href="/noodpakketten" 
-                className="inline-flex items-center justify-center gap-2 bg-medical-green text-white px-8 py-4 rounded-full font-bold hover:bg-medical-green/90 transition-all duration-200 shadow-lg"
+                href="/quiz"
+                className="w-full inline-flex items-center justify-center gap-3 bg-[#3b223b] hover:bg-[#4d2e4d] text-white px-8 py-4 rounded-xl font-medium text-lg transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-1 font-[family-name:var(--font-eb-garamond)]"
               >
-                <span>Bekijk alle pakketten</span>
+                <span>Start de gratis quiz</span>
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
                 </svg>
               </Link>
-              <Link 
-                href="/quiz" 
-                className="inline-flex items-center justify-center gap-2 bg-white text-navy-blue px-8 py-4 rounded-full font-bold hover:bg-gray-100 transition-all duration-200"
-              >
-                <span>Hulp bij kiezen</span>
-              </Link>
-            </div>
-
-            {/* USPs in one line */}
-            <div className="flex flex-wrap justify-center gap-8 text-white">
-              <div className="flex items-center gap-2">
-                <svg className="w-5 h-5 text-medical-green" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                </svg>
-                <span className="text-sm">Verzending binnen 2 dagen</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <svg className="w-5 h-5 text-medical-green" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                </svg>
-                <span className="text-sm">14 dagen bedenktijd</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <svg className="w-5 h-5 text-medical-green" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                </svg>
-                <span className="text-sm">Minimaal 5 jaar houdbaar</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <svg className="w-5 h-5 text-medical-green" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                </svg>
-                <span className="text-sm">3.000+ tevreden klanten</span>
-              </div>
+              
+              <p className="mt-4 text-xs text-center text-gray-400 font-[family-name:var(--font-eb-garamond)]">
+                12.847 mensen gingen je voor • Gemiddeld 4.9/5 sterren
+              </p>
             </div>
           </div>
+
         </div>
       </section>
 
-      {/* Trust Bar */}
-      <section className="bg-off-white border-b">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-8">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-8">
-            <div className="flex items-center justify-center md:justify-start gap-3">
-              <svg className="w-6 h-6 text-medical-green flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-              </svg>
-              <span className="text-sm text-steel-gray">Veilig betalen met iDEAL</span>
-            </div>
-            <div className="flex items-center justify-center md:justify-start gap-3">
-              <svg className="w-6 h-6 text-medical-green flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" />
-              </svg>
-              <span className="text-sm text-steel-gray">Verzending binnen 2 dagen</span>
-            </div>
-            <div className="flex items-center justify-center md:justify-start gap-3">
-              <svg className="w-6 h-6 text-medical-green flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6" />
-              </svg>
-              <span className="text-sm text-steel-gray">14 dagen bedenktijd</span>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Why Prepare Section */}
-      <section className="py-20">
+      {/* Benefits Section */}
+      <section className="py-16 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-navy-blue mb-4">
-              Waarom nu voorbereiden?
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-4 font-[family-name:var(--font-eb-garamond)]">
+              Waarom kiezen voor Stonesforhealth?
             </h2>
-            <p className="text-xl text-steel-gray max-w-3xl mx-auto">
-              De overheid adviseert elke burger om voorbereid te zijn op noodsituaties. 
-              Hier zijn de meest voorkomende scenario's:
+            <p className="text-lg text-gray-600 max-w-2xl mx-auto font-[family-name:var(--font-eb-garamond)]">
+              Wij bieden meer dan alleen kristallen - wij bieden een complete ervaring
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <div className="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-shadow">
-              <div className="w-14 h-14 bg-red-100 rounded-xl flex items-center justify-center mb-4">
-                <svg className="w-8 h-8 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                </svg>
+            <div className="text-center p-6">
+              <div className="w-16 h-16 mx-auto bg-purple-100 rounded-full flex items-center justify-center mb-4">
+                <span className="text-2xl">✨</span>
               </div>
-              <h3 className="text-lg font-bold text-navy-blue mb-2">Stroomuitval</h3>
-              <p className="text-steel-gray text-sm mb-4">
-                Gemiddeld 3x per jaar in Nederland. Kan dagen duren bij extreme weersomstandigheden.
-              </p>
-              <div className="text-xs text-amber-orange font-semibold">23% kans dit jaar</div>
+              <h3 className="font-bold text-gray-800 mb-2">Handgeselecteerd</h3>
+              <p className="text-sm text-gray-600">Elke steen wordt zorgvuldig uitgekozen op kwaliteit en energie</p>
             </div>
 
-            <div className="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-shadow">
-              <div className="w-14 h-14 bg-blue-100 rounded-xl flex items-center justify-center mb-4">
-                <svg className="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z" />
-                </svg>
+            <div className="text-center p-6">
+              <div className="w-16 h-16 mx-auto bg-pink-100 rounded-full flex items-center justify-center mb-4">
+                <span className="text-2xl">🌍</span>
               </div>
-              <h3 className="text-lg font-bold text-navy-blue mb-2">Extreme Weer</h3>
-              <p className="text-steel-gray text-sm mb-4">
-                Stormen, overstromingen en hittegolven nemen toe door klimaatverandering.
-              </p>
-              <div className="text-xs text-amber-orange font-semibold">41% kans dit jaar</div>
+              <h3 className="font-bold text-gray-800 mb-2">Ethisch gewonnen</h3>
+              <p className="text-sm text-gray-600">Direct van betrouwbare bronnen met respect voor mens en natuur</p>
             </div>
 
-            <div className="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-shadow">
-              <div className="w-14 h-14 bg-yellow-100 rounded-xl flex items-center justify-center mb-4">
-                <svg className="w-8 h-8 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                </svg>
+            <div className="text-center p-6">
+              <div className="w-16 h-16 mx-auto bg-blue-100 rounded-full flex items-center justify-center mb-4">
+                <span className="text-2xl">🔮</span>
               </div>
-              <h3 className="text-lg font-bold text-navy-blue mb-2">Cyberaanval</h3>
-              <p className="text-steel-gray text-sm mb-4">
-                Kritieke infrastructuur is kwetsbaar. Kan leiden tot uitval van diensten.
-              </p>
-              <div className="text-xs text-amber-orange font-semibold">15% kans dit jaar</div>
+              <h3 className="font-bold text-gray-800 mb-2">Energetisch gereinigd</h3>
+              <p className="text-sm text-gray-600">Professioneel gereinigd en opgeladen voor optimale werking</p>
             </div>
 
-            <div className="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-shadow">
-              <div className="w-14 h-14 bg-green-100 rounded-xl flex items-center justify-center mb-4">
-                <svg className="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z" />
-                </svg>
+            <div className="text-center p-6">
+              <div className="w-16 h-16 mx-auto bg-amber-100 rounded-full flex items-center justify-center mb-4">
+                <span className="text-2xl">📦</span>
               </div>
-              <h3 className="text-lg font-bold text-navy-blue mb-2">Pandemie</h3>
-              <p className="text-steel-gray text-sm mb-4">
-                COVID-19 toonde het belang van voorbereiding. Experts waarschuwen voor nieuwe uitbraken.
-              </p>
-              <div className="text-xs text-amber-orange font-semibold">8% kans dit jaar</div>
-            </div>
-          </div>
-
-          <div className="mt-12 bg-amber-orange/10 rounded-2xl p-6 border-2 border-amber-orange/30">
-            <div className="flex items-start gap-4">
-              <svg className="w-6 h-6 text-amber-orange flex-shrink-0 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-              <div>
-                <h4 className="font-bold text-navy-blue mb-1">Overheidsadvies</h4>
-                <p className="text-steel-gray">
-                  Het Rode Kruis en Rijksoverheid adviseren: "Zorg dat u minimaal 3 dagen zelfvoorzienend bent met water, voedsel, medicijnen en andere essentiële benodigdheden."
-                </p>
-              </div>
+              <h3 className="font-bold text-gray-800 mb-2">Snel verzonden</h3>
+              <p className="text-sm text-gray-600">Zorgvuldig verpakt en binnen 1-2 dagen bij je thuis</p>
             </div>
           </div>
         </div>
       </section>
-
-      {/* Product Categories - Redesigned */}
-      {categories.length > 0 && (
-        <section className="py-20 bg-gradient-to-b from-off-white to-white">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-bold text-navy-blue mb-4">
-                Onze Collecties
-              </h2>
-              <p className="text-xl text-steel-gray">
-                Kies uit onze zorgvuldig samengestelde productcategorieën
-              </p>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {categories.slice(0, 6).map((category, index) => {
-                // Get lowest price for category
-                const lowestPrice = categoryPrices[category.id];
-                const priceDisplay = lowestPrice ? `€${Math.floor(lowestPrice)}` : 'Bekijk';
-                
-                return (
-                  <Link 
-                    key={category.id}
-                    href={`/noodpakketten?category=${category.slug}`} 
-                    className="group bg-white rounded-xl border-2 border-gray-100 hover:border-medical-green hover:shadow-lg transition-all duration-300 p-6"
-                  >
-                    {/* Clean header */}
-                    <div className="flex items-start justify-between mb-4">
-                      <div className="w-12 h-12 bg-medical-green/10 rounded-lg flex items-center justify-center group-hover:bg-medical-green/20 transition-colors">
-                        <svg className="w-6 h-6 text-medical-green" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
-                        </svg>
-                      </div>
-                      {index === 0 && (
-                        <span className="text-xs font-semibold text-amber-orange bg-amber-orange/10 px-2 py-1 rounded-full">
-                          POPULAIR
-                        </span>
-                      )}
-                    </div>
-                    
-                    {/* Content */}
-                    <h3 className="text-xl font-bold text-navy-blue mb-2 group-hover:text-medical-green transition-colors">
-                      {category.name}
-                    </h3>
-                    <p className="text-sm text-steel-gray mb-4 line-clamp-2">
-                      {category.description || 'Professioneel samengestelde noodvoorzieningen'}
-                    </p>
-                    
-                    {/* Product count */}
-                    <p className="text-xs text-steel-gray mb-4">
-                      {category.count} {category.count === 1 ? 'product' : 'producten'} beschikbaar
-                    </p>
-                    
-                    {/* Footer with price and arrow */}
-                    <div className="flex items-center justify-between pt-4 border-t border-gray-100">
-                      <div>
-                        <p className="text-xs text-steel-gray mb-1">Vanaf</p>
-                        <p className="text-2xl font-bold text-medical-green">{priceDisplay}</p>
-                      </div>
-                      <div className="flex items-center gap-2 text-navy-blue group-hover:gap-3 transition-all">
-                        <span className="text-sm font-medium">Bekijk</span>
-                        <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                        </svg>
-                      </div>
-                    </div>
-                  </Link>
-                );
-              })}
-            </div>
-
-            {categories.length > 6 && (
-              <div className="text-center mt-12">
-                <Link 
-                  href="/noodpakketten" 
-                  className="inline-flex items-center gap-2 bg-white text-medical-green border-2 border-medical-green px-8 py-3 rounded-full font-semibold hover:bg-medical-green hover:text-white transition-all duration-200"
-                >
-                  <span>Bekijk alle collecties</span>
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                  </svg>
-                </Link>
-              </div>
-            )}
-          </div>
-        </section>
-      )}
-
-      {/* Comparison Section - Simplified */}
-      <ComparisonSection />
-
-      {/* Best-selling Products */}
-      {featuredProducts.length > 0 && (
-        <section className="py-20 bg-off-white">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-bold text-navy-blue mb-4">
-                Bestsellers deze maand
-              </h2>
-              <p className="text-xl text-steel-gray">
-                De meest gekozen pakketten door onze klanten
-              </p>
-            </div>
-            <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 lg:gap-6">
-              {featuredProducts.map((product) => (
-                <ProductCard key={product.id} product={product} />
-              ))}
-            </div>
-            <div className="text-center mt-12">
-              <Link 
-                href="/noodpakketten" 
-                className="inline-flex items-center gap-2 bg-white text-medical-green border-2 border-medical-green px-8 py-3 rounded-full font-semibold hover:bg-medical-green hover:text-white transition-all duration-200"
-              >
-                <span>Alle pakketten bekijken</span>
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                </svg>
-              </Link>
-            </div>
-          </div>
-        </section>
-      )}
-
-      {/* Testimonials - Enhanced */}
-      <TestimonialsSection />
-
-      {/* CTA Section */}
-      <section className="py-20">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="bg-navy-blue rounded-3xl p-12 text-center relative overflow-hidden">
-            {/* Background decoration */}
-            <div className="absolute inset-0 opacity-10">
-              <div className="absolute -top-24 -right-24 w-48 h-48 bg-medical-green rounded-full"></div>
-              <div className="absolute -bottom-24 -left-24 w-64 h-64 bg-amber-orange rounded-full"></div>
-            </div>
-            
-            <div className="relative z-10">
-              <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
-                Start vandaag met je voorbereiding
-              </h2>
-              <p className="text-xl text-gray-300 mb-8 max-w-2xl mx-auto">
-                Meer dan 3.000 Nederlandse huishoudens vertrouwen op onze pakketten. 
-                Wacht niet tot het te laat is.
-              </p>
-              
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Link 
-                  href="/noodpakketten" 
-                  className="inline-flex items-center justify-center gap-2 bg-medical-green text-white px-8 py-4 rounded-full font-bold hover:bg-medical-green/90 transition-all duration-200 shadow-xl hover:shadow-2xl"
-                >
-                  <span>Bekijk alle pakketten</span>
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                  </svg>
-                </Link>
-                <Link 
-                  href="/contact" 
-                  className="inline-flex items-center justify-center gap-2 bg-transparent border-2 border-white text-white px-8 py-4 rounded-full font-bold hover:bg-white hover:text-navy-blue transition-all duration-200"
-                >
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-                  </svg>
-                  <span>Advies nodig?</span>
-                </Link>
-              </div>
-              
-              <div className="mt-8 flex items-center justify-center gap-8 text-white/80">
-                <div className="flex items-center gap-2">
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                  </svg>
-                  <span className="text-sm">Geen abonnement</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                  </svg>
-                  <span className="text-sm">Eenmalige aankoop</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                  </svg>
-                  <span className="text-sm">Direct compleet</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
     </div>
   );
 }

@@ -12,6 +12,8 @@ module.exports = {
         'amber-orange': '#ff6b35',
         'steel-gray': '#4a5568',
         'off-white': '#f9f9f9',
+        'accent-light': '#f3f4f6', // Light gray background for announcement bar
+        'primary': '#111827', // Dark gray text color
       },
       animation: {
         'pulse': 'pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',

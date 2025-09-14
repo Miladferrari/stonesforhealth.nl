@@ -5,26 +5,18 @@ const nextConfig: NextConfig = {
   images: {
     remotePatterns: [
       {
-        protocol: 'https',
-        hostname: 'wordpress.restaurantmahzen.nl',
-        pathname: '/**',
-      },
-      {
-        protocol: 'https',
-        hostname: '123noodklaar.nl',
-        pathname: '/**',
-      },
-      {
-        protocol: 'https',
-        hostname: 'wordpress.123noodklaar.nl',
-        pathname: '/**',
-      },
-      {
         protocol: 'http',
-        hostname: 'wordpress.overlevingstotaal.com',
+        hostname: 'wordpress.123noodboxen.nl',
         pathname: '/**',
       },
-      // Add other image domains if needed
+      // Add your WordPress/WooCommerce domain here
+      // Example for HTTPS:
+      // {
+      //   protocol: 'https',
+      //   hostname: 'your-wordpress-site.com',
+      //   pathname: '/**',
+      // },
+      // Add other image domains as needed
     ],
     formats: ['image/avif', 'image/webp'],
     deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
