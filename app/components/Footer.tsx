@@ -33,7 +33,7 @@ const Footer = memo(function Footer() {
                 />
               </div>
             </Link>
-            <p className="text-base leading-6 text-gray-700 max-w-xs text-center md:text-left font-[family-name:var(--font-eb-garamond)]">
+            <p className="text-base leading-6 text-gray-800 font-medium max-w-xs text-center md:text-left font-[family-name:var(--font-eb-garamond)]">
               Jouw bron voor authentieke kristallen en edelstenen. Ontdek de natuurlijke kracht en schoonheid.
             </p>
 
@@ -43,13 +43,13 @@ const Footer = memo(function Footer() {
                 <svg className="w-5 h-5 text-green-600" fill="currentColor" viewBox="0 0 20 20">
                   <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                 </svg>
-                <span className="text-sm text-gray-600 font-[family-name:var(--font-eb-garamond)]">100% Authentiek</span>
+                <span className="text-sm text-gray-700 font-medium font-[family-name:var(--font-eb-garamond)]">100% Authentiek</span>
               </div>
               <div className="flex items-center gap-2">
                 <svg className="w-5 h-5 text-green-600" fill="currentColor" viewBox="0 0 20 20">
                   <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                 </svg>
-                <span className="text-sm text-gray-600 font-[family-name:var(--font-eb-garamond)]">Gratis verzending €50+</span>
+                <span className="text-sm text-gray-700 font-medium font-[family-name:var(--font-eb-garamond)]">Gratis verzending €50+</span>
               </div>
             </div>
 
@@ -92,7 +92,7 @@ const Footer = memo(function Footer() {
                   </div>
                   <span className="text-sm bg-[#492c4a]/10 text-[#492c4a] px-1.5 py-0.5 rounded-md font-semibold">4.9/5</span>
                 </div>
-                <span className="text-sm text-gray-600 font-medium mt-0.5 font-[family-name:var(--font-eb-garamond)]">
+                <span className="text-sm text-gray-700 font-semibold mt-0.5 font-[family-name:var(--font-eb-garamond)]">
                   Vertrouwd door <span className="font-bold text-[#492c4a]">3000+</span> klanten
                 </span>
               </div>
@@ -106,27 +106,27 @@ const Footer = memo(function Footer() {
                 <h3 className="text-base font-semibold text-gray-900 font-[family-name:var(--font-eb-garamond)]">Service</h3>
                 <ul role="list" className="mt-6 space-y-4">
                   <li>
-                    <Link href="/account" className="text-base text-gray-700 hover:text-[#492c4a] transition-colors font-[family-name:var(--font-eb-garamond)]">
+                    <Link href="/account" className="text-base text-gray-800 font-medium hover:text-[#492c4a] transition-colors font-[family-name:var(--font-eb-garamond)]">
                       Mijn Account
                     </Link>
                   </li>
                   <li>
-                    <Link href="/orders" className="text-base text-gray-700 hover:text-[#492c4a] transition-colors font-[family-name:var(--font-eb-garamond)]">
+                    <Link href="/orders" className="text-base text-gray-800 font-medium hover:text-[#492c4a] transition-colors font-[family-name:var(--font-eb-garamond)]">
                       Bestellingen
                     </Link>
                   </li>
                   <li>
-                    <Link href="/contact" className="text-base text-gray-700 hover:text-[#492c4a] transition-colors font-[family-name:var(--font-eb-garamond)]">
+                    <Link href="/contact" className="text-base text-gray-800 font-medium hover:text-[#492c4a] transition-colors font-[family-name:var(--font-eb-garamond)]">
                       Contact
                     </Link>
                   </li>
                   <li>
-                    <Link href="/faq" className="text-base text-gray-700 hover:text-[#492c4a] transition-colors font-[family-name:var(--font-eb-garamond)]">
+                    <Link href="/faq" className="text-base text-gray-800 font-medium hover:text-[#492c4a] transition-colors font-[family-name:var(--font-eb-garamond)]">
                       Veelgestelde vragen
                     </Link>
                   </li>
                   <li>
-                    <Link href="/verzending" className="text-base text-gray-700 hover:text-[#492c4a] transition-colors font-[family-name:var(--font-eb-garamond)]">
+                    <Link href="/verzending" className="text-base text-gray-800 font-medium hover:text-[#492c4a] transition-colors font-[family-name:var(--font-eb-garamond)]">
                       Verzending & Retour
                     </Link>
                   </li>
@@ -136,22 +136,22 @@ const Footer = memo(function Footer() {
                 <h3 className="text-base font-semibold text-gray-900 font-[family-name:var(--font-eb-garamond)]">Informatie</h3>
                 <ul role="list" className="mt-6 space-y-4">
                   <li>
-                    <Link href="/over-ons" className="text-base text-gray-700 hover:text-[#492c4a] transition-colors font-[family-name:var(--font-eb-garamond)]">
+                    <Link href="/over-ons" className="text-base text-gray-800 font-medium hover:text-[#492c4a] transition-colors font-[family-name:var(--font-eb-garamond)]">
                       Over ons
                     </Link>
                   </li>
                   <li>
-                    <Link href="/kristal-gids" className="text-base text-gray-700 hover:text-[#492c4a] transition-colors font-[family-name:var(--font-eb-garamond)]">
+                    <Link href="/kristal-gids" className="text-base text-gray-800 font-medium hover:text-[#492c4a] transition-colors font-[family-name:var(--font-eb-garamond)]">
                       Kristal Gids
                     </Link>
                   </li>
                   <li>
-                    <Link href="/privacy" className="text-base text-gray-700 hover:text-[#492c4a] transition-colors font-[family-name:var(--font-eb-garamond)]">
+                    <Link href="/privacy" className="text-base text-gray-800 font-medium hover:text-[#492c4a] transition-colors font-[family-name:var(--font-eb-garamond)]">
                       Privacy
                     </Link>
                   </li>
                   <li>
-                    <Link href="/voorwaarden" className="text-base text-gray-700 hover:text-[#492c4a] transition-colors font-[family-name:var(--font-eb-garamond)]">
+                    <Link href="/voorwaarden" className="text-base text-gray-800 font-medium hover:text-[#492c4a] transition-colors font-[family-name:var(--font-eb-garamond)]">
                       Algemene Voorwaarden
                     </Link>
                   </li>
@@ -163,45 +163,45 @@ const Footer = memo(function Footer() {
                 <h3 className="text-base font-semibold text-gray-900 font-[family-name:var(--font-eb-garamond)]">Collecties</h3>
                 <ul role="list" className="mt-6 space-y-4">
                   <li>
-                    <Link href="/alle-producten?category=chakra" className="text-base text-gray-700 hover:text-[#492c4a] transition-colors font-[family-name:var(--font-eb-garamond)]">
+                    <Link href="/alle-producten?category=chakra" className="text-base text-gray-800 font-medium hover:text-[#492c4a] transition-colors font-[family-name:var(--font-eb-garamond)]">
                       Chakra Kristallen
                     </Link>
                   </li>
                   <li>
-                    <Link href="/alle-producten?category=bescherming" className="text-base text-gray-700 hover:text-[#492c4a] transition-colors font-[family-name:var(--font-eb-garamond)]">
+                    <Link href="/alle-producten?category=bescherming" className="text-base text-gray-800 font-medium hover:text-[#492c4a] transition-colors font-[family-name:var(--font-eb-garamond)]">
                       Bescherming
                     </Link>
                   </li>
                   <li>
-                    <Link href="/alle-producten?category=liefde" className="text-base text-gray-700 hover:text-[#492c4a] transition-colors font-[family-name:var(--font-eb-garamond)]">
+                    <Link href="/alle-producten?category=liefde" className="text-base text-gray-800 font-medium hover:text-[#492c4a] transition-colors font-[family-name:var(--font-eb-garamond)]">
                       Liefde & Relaties
                     </Link>
                   </li>
                   <li>
-                    <Link href="/bestsellers" className="text-base text-gray-700 hover:text-[#492c4a] transition-colors font-[family-name:var(--font-eb-garamond)]">
+                    <Link href="/bestsellers" className="text-base text-gray-800 font-medium hover:text-[#492c4a] transition-colors font-[family-name:var(--font-eb-garamond)]">
                       Bestsellers
                     </Link>
                   </li>
                 </ul>
               </div>
               <div className="mt-10 md:mt-0">
-                <h3 className="text-base font-semibold text-gray-900 font-[family-name:var(--font-eb-garamond)]">Blijf op de hoogte</h3>
-                <p className="mt-4 text-base text-gray-700 font-[family-name:var(--font-eb-garamond)]">
-                  Ontvang exclusieve aanbiedingen en kristalkennis
-                </p>
-                <form className="mt-6">
-                  <input
-                    type="email"
-                    placeholder="Je e-mailadres"
-                    className="w-full px-4 py-2 text-base border border-gray-300 rounded-lg focus:outline-none focus:border-[#492c4a] focus:ring-1 focus:ring-[#492c4a]"
-                  />
-                  <button
-                    type="submit"
-                    className="mt-3 w-full bg-[#492c4a] text-white px-4 py-2 rounded-lg text-base font-medium hover:bg-[#6b4069] transition-colors font-[family-name:var(--font-eb-garamond)]"
-                  >
-                    Aanmelden
-                  </button>
-                </form>
+                <h3 className="text-base font-semibold text-gray-900 font-[family-name:var(--font-eb-garamond)]">Winkel informatie</h3>
+                <div className="mt-6 space-y-2 text-base text-gray-800 font-medium font-[family-name:var(--font-eb-garamond)]">
+                  <p className="font-semibold">Stones for Health</p>
+                  <p>Koperhoek 54</p>
+                  <p>3162 LA Rhoon</p>
+                  <p>Nederland</p>
+                  <p className="pt-2">KvK: 95898476</p>
+                  <div className="pt-2">
+                    <p className="text-sm text-gray-700 font-medium mb-1">E-mail:</p>
+                    <a
+                      href="mailto:info@stonesforhealth.nl"
+                      className="text-[#492c4a] hover:text-[#6b4069] transition-colors"
+                    >
+                      info@stonesforhealth.nl
+                    </a>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -214,25 +214,25 @@ const Footer = memo(function Footer() {
               <svg className="w-6 h-6 text-[#492c4a] mb-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M5 13l4 4L19 7" />
               </svg>
-              <span className="text-sm text-gray-600 font-medium font-[family-name:var(--font-eb-garamond)]">100% Authentiek</span>
+              <span className="text-sm text-gray-700 font-semibold font-[family-name:var(--font-eb-garamond)]">100% Authentiek</span>
             </div>
             <div className="flex flex-col items-center">
               <svg className="w-6 h-6 text-[#492c4a] mb-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
               </svg>
-              <span className="text-sm text-gray-600 font-medium font-[family-name:var(--font-eb-garamond)]">Gratis verzending €50+</span>
+              <span className="text-sm text-gray-700 font-semibold font-[family-name:var(--font-eb-garamond)]">Gratis verzending €50+</span>
             </div>
             <div className="flex flex-col items-center">
               <svg className="w-6 h-6 text-[#492c4a] mb-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
-              <span className="text-sm text-gray-600 font-medium font-[family-name:var(--font-eb-garamond)]">30 dagen retour</span>
+              <span className="text-sm text-gray-700 font-semibold font-[family-name:var(--font-eb-garamond)]">30 dagen retour</span>
             </div>
             <div className="flex flex-col items-center">
               <svg className="w-6 h-6 text-[#492c4a] mb-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
               </svg>
-              <span className="text-sm text-gray-600 font-medium font-[family-name:var(--font-eb-garamond)]">Veilig betalen</span>
+              <span className="text-sm text-gray-700 font-semibold font-[family-name:var(--font-eb-garamond)]">Veilig betalen</span>
             </div>
           </div>
         </div>
@@ -263,19 +263,19 @@ const Footer = memo(function Footer() {
 
           {/* Copyright and Payment Methods */}
           <div className="mt-8 md:order-1 md:mt-0 text-center md:text-left">
-            <p className="text-base text-gray-600 font-[family-name:var(--font-eb-garamond)]">
+            <p className="text-base text-gray-700 font-medium font-[family-name:var(--font-eb-garamond)]">
               © 2025 Stonesforhealth. Alle rechten voorbehouden.
             </p>
             <div className="mt-4 flex flex-col sm:flex-row items-center gap-2 sm:gap-4 justify-center md:justify-start">
-              <span className="text-sm text-gray-500 font-[family-name:var(--font-eb-garamond)]">Veilig betalen:</span>
+              <span className="text-sm text-gray-600 font-medium font-[family-name:var(--font-eb-garamond)]">Veilig betalen:</span>
               <div className="flex items-center gap-2 flex-wrap justify-center md:justify-start">
-                <span className="text-sm text-gray-600 font-medium font-[family-name:var(--font-eb-garamond)]">iDEAL</span>
+                <span className="text-sm text-gray-700 font-semibold font-[family-name:var(--font-eb-garamond)]">iDEAL</span>
                 <span className="text-sm text-gray-400">•</span>
-                <span className="text-sm text-gray-600 font-medium font-[family-name:var(--font-eb-garamond)]">Visa</span>
+                <span className="text-sm text-gray-700 font-semibold font-[family-name:var(--font-eb-garamond)]">Visa</span>
                 <span className="text-sm text-gray-400">•</span>
-                <span className="text-sm text-gray-600 font-medium font-[family-name:var(--font-eb-garamond)]">Mastercard</span>
+                <span className="text-sm text-gray-700 font-semibold font-[family-name:var(--font-eb-garamond)]">Mastercard</span>
                 <span className="text-sm text-gray-400">•</span>
-                <span className="text-sm text-gray-600 font-medium font-[family-name:var(--font-eb-garamond)]">PayPal</span>
+                <span className="text-sm text-gray-700 font-semibold font-[family-name:var(--font-eb-garamond)]">PayPal</span>
               </div>
             </div>
           </div>

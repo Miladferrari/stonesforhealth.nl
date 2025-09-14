@@ -40,6 +40,7 @@ interface CartContextType {
   getFinalTotal: () => number;
   allowedCountries: string[];
   loadAllowedCountries: () => Promise<void>;
+  isHydrated: boolean;
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
@@ -325,7 +326,8 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       getShippingCost,
       getFinalTotal,
       allowedCountries,
-      loadAllowedCountries
+      loadAllowedCountries,
+      isHydrated
     }}>
       {children}
     </CartContext.Provider>

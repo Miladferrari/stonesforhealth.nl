@@ -2,9 +2,11 @@
 
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 import { useCartWithToast } from '../hooks/useCartWithToast';
 
 export default function SlideInCart() {
+  const router = useRouter();
   const {
     items,
     removeFromCart,
@@ -275,7 +277,8 @@ export default function SlideInCart() {
                 <button
                   type="button"
                   onClick={() => {
-                    window.location.href = '/checkout';
+                    setIsCartOpen(false);
+                    router.push('/checkout');
                   }}
                   className="block w-full bg-[#492c4a] text-white text-center py-4 rounded-lg font-medium hover:bg-[#492c4a]/90 transition-all shadow-sm hover:shadow-md font-[family-name:var(--font-eb-garamond)]"
                 >

@@ -1,14 +1,17 @@
 import type { Metadata } from 'next';
-import { Inter } from 'next/font/google';
+import { EB_Garamond } from 'next/font/google';
 import '../../globals.css';
 import CheckoutHeader from '../../components/CheckoutHeader';
 import { CartProvider } from '../../contexts/CartContext';
 
-const inter = Inter({ subsets: ['latin'] });
+const ebGaramond = EB_Garamond({
+  subsets: ['latin'],
+  variable: '--font-eb-garamond'
+});
 
 export const metadata: Metadata = {
-  title: 'Afrekenen - 123noodklaar.nl',
-  description: 'Veilig afrekenen bij 123noodklaar.nl',
+  title: 'Veilig Afrekenen - Stonesforhealth',
+  description: 'Veilig afrekenen bij Stonesforhealth - Premium kristallen voor jouw welzijn',
 };
 
 export default function CheckoutLayout({
@@ -17,7 +20,7 @@ export default function CheckoutLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className={`${inter.className} min-h-screen bg-off-white`}>
+    <div className={`${ebGaramond.variable} min-h-screen bg-[#F5F1E8]`}>
       <CartProvider>
         <CheckoutHeader />
         <main className="flex-grow">

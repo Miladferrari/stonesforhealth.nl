@@ -8,12 +8,12 @@ import CouponInput from '../../components/CouponInput';
 
 export default function CheckoutPage() {
   const router = useRouter();
-  const { 
-    items, 
-    getTotalPrice, 
-    getTotalPriceAfterDiscount, 
-    getDiscountAmount, 
-    appliedCoupon, 
+  const {
+    items,
+    getTotalPrice,
+    getTotalPriceAfterDiscount,
+    getDiscountAmount,
+    appliedCoupon,
     clearCart,
     shipping,
     setShippingCountry,
@@ -21,7 +21,8 @@ export default function CheckoutPage() {
     setSelectedShippingRate,
     getShippingCost,
     getFinalTotal,
-    allowedCountries
+    allowedCountries,
+    isHydrated
   } = useCart();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -293,15 +294,30 @@ export default function CheckoutPage() {
     }
   };
 
-  if (items.length === 0) {
+  // Show loading state while cart is being hydrated from localStorage
+  if (!isHydrated) {
     return (
-      <div className="min-h-screen bg-off-white">
+      <div className="min-h-screen bg-[#F5F1E8]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+          <div className="flex flex-col items-center justify-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#492c4a] mb-4"></div>
+            <p className="text-[#2D2D2D] font-[family-name:var(--font-eb-garamond)]">Even geduld...</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Only show empty cart message after hydration is complete
+  if (isHydrated && items.length === 0) {
+    return (
+      <div className="min-h-screen bg-[#F5F1E8]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
           <div className="text-center">
-            <h1 className="text-3xl font-bold text-gray-900 mb-4">Je winkelwagen is leeg</h1>
-            <p className="text-steel-gray mb-8">Voeg enkele producten toe voordat je afrekent.</p>
-            <a href="/producten" className="inline-block bg-amber-orange text-white px-6 py-3 rounded-md hover:bg-amber-orange/90 transition-colors">
-              Bekijk Producten
+            <h1 className="text-3xl font-bold text-[#492c4a] mb-4 font-[family-name:var(--font-eb-garamond)]">Je winkelwagen is leeg</h1>
+            <p className="text-[#2D2D2D] mb-8 font-[family-name:var(--font-eb-garamond)]">Voeg enkele kristallen toe voordat je afrekent.</p>
+            <a href="/alle-producten" className="inline-block bg-[#492c4a] text-white px-8 py-3 rounded-full hover:bg-[#6b4069] transition-all transform hover:scale-[1.02] font-[family-name:var(--font-eb-garamond)]">
+              Ontdek onze kristallen
             </a>
           </div>
         </div>
@@ -310,12 +326,12 @@ export default function CheckoutPage() {
   }
 
   return (
-    <div className="min-h-screen bg-off-white">
+    <div className="min-h-screen bg-[#F5F1E8]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Mobile order summary toggle */}
         <button
           type="button"
-          className="w-full bg-gray-50 p-4 flex items-center justify-center font-medium text-base text-gray-900 mb-4 lg:hidden rounded-lg"
+          className="w-full bg-white/60 backdrop-blur-sm border border-[#E8DCC6] p-4 flex items-center justify-center font-medium text-base text-[#492c4a] mb-4 lg:hidden rounded-lg font-[family-name:var(--font-eb-garamond)]"
           onClick={() => setShowOrderSummary(!showOrderSummary)}
         >
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 19.38 18" className="mr-2" width="27" height="25" role="img">
@@ -323,7 +339,7 @@ export default function CheckoutPage() {
             <title>cart-filled</title>
           </svg>
           <span>Toon besteloverzicht</span>
-          <span className="ml-2 font-semibold text-amber-orange">€{total.toFixed(2)}</span>
+          <span className="ml-2 font-semibold text-[#492c4a]">€{total.toFixed(2)}</span>
           <svg 
             xmlns="http://www.w3.org/2000/svg" 
             viewBox="0 0 10 6" 
@@ -465,7 +481,7 @@ export default function CheckoutPage() {
                 
                 <div className="flex justify-between font-semibold text-lg pt-2 border-t">
                   <span className="text-gray-900">Totaal</span>
-                  <span className="text-amber-orange">€{total.toFixed(2)}</span>
+                  <span className="text-[#492c4a] font-[family-name:var(--font-eb-garamond)]">€{total.toFixed(2)}</span>
                 </div>
               </div>
 
@@ -482,25 +498,25 @@ export default function CheckoutPage() {
           <div className="flex items-start justify-evenly">
             {/* Step 1: Winkelwagen - Completed */}
             <a href="/cart" className="relative flex flex-col items-center justify-start flex-1 group">
-              <span className="absolute w-full h-1 lg:h-[7px] bg-green-600 rounded-l-full top-4"></span>
-              <span className="w-[38px] h-[38px] shrink-0 rounded-full bg-white border-[5px] lg:border-[7px] border-green-600 flex items-center justify-center relative z-10">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12.01 9.5" className="text-green-600" width="16" height="13" role="img">
+              <span className="absolute w-full h-1 lg:h-[7px] bg-[#93c84a] rounded-l-full top-4"></span>
+              <span className="w-[38px] h-[38px] shrink-0 rounded-full bg-white border-[5px] lg:border-[7px] border-[#93c84a] flex items-center justify-center relative z-10">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12.01 9.5" className="text-[#93c84a]" width="16" height="13" role="img">
                   <path d="M10.15 0 4.5 5.78l-2.64-2.5L0 5.14 4.5 9.5l7.51-7.64L10.15 0z" fill="currentColor"/>
                   <title>check</title>
                 </svg>
               </span>
-              <span className="block text-center relative pt-2 leading-5 text-xs sm:text-sm text-steel-gray group-hover:text-medical-green transition-colors">
+              <span className="block text-center relative pt-2 leading-5 text-xs sm:text-sm text-[#2D2D2D] group-hover:text-[#93c84a] transition-colors font-[family-name:var(--font-eb-garamond)]">
                 Jouw winkelwagen
               </span>
             </a>
             
             {/* Step 2: Bezorging - Active */}
             <div className="relative flex flex-col items-center justify-start flex-1">
-              <span className="absolute w-full h-1 lg:h-[7px] bg-amber-orange top-4"></span>
-              <span className="w-[38px] h-[38px] shrink-0 rounded-full bg-white border-[5px] lg:border-[7px] border-amber-orange flex items-center justify-center relative z-10">
-                <span className="font-bold text-lg lg:text-base text-amber-orange">2</span>
+              <span className="absolute w-full h-1 lg:h-[7px] bg-[#492c4a] top-4"></span>
+              <span className="w-[38px] h-[38px] shrink-0 rounded-full bg-white border-[5px] lg:border-[7px] border-[#492c4a] flex items-center justify-center relative z-10">
+                <span className="font-bold text-lg lg:text-base text-[#492c4a]">2</span>
               </span>
-              <span className="block text-center relative pt-2 leading-5 text-xs sm:text-sm font-semibold text-navy-blue">
+              <span className="block text-center relative pt-2 leading-5 text-xs sm:text-sm font-semibold text-[#492c4a] font-[family-name:var(--font-eb-garamond)]">
                 Bezorging
               </span>
             </div>
@@ -511,27 +527,27 @@ export default function CheckoutPage() {
               <span className="w-[38px] h-[38px] shrink-0 rounded-full bg-white border-[5px] lg:border-[7px] border-gray-300 flex items-center justify-center relative z-10">
                 <span className="font-bold text-lg lg:text-base text-gray-400">3</span>
               </span>
-              <span className="block text-center relative pt-2 leading-5 text-xs sm:text-sm text-gray-400">
+              <span className="block text-center relative pt-2 leading-5 text-xs sm:text-sm text-gray-400 font-[family-name:var(--font-eb-garamond)]">
                 Controleren en Betalen
               </span>
             </div>
           </div>
         </nav>
 
-        <h1 className="text-3xl font-bold text-gray-900 mb-2 text-center">Veilig Afrekenen</h1>
-        <p className="text-center text-steel-gray mb-8">Je gegevens zijn veilig en versleuteld</p>
+        <h1 className="text-4xl font-bold text-[#492c4a] mb-2 text-center font-[family-name:var(--font-eb-garamond)]">Veilig Afrekenen</h1>
+        <p className="text-center text-[#2D2D2D] mb-8 font-[family-name:var(--font-eb-garamond)]">Je gegevens zijn veilig en versleuteld</p>
         
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Checkout form */}
           <div className="lg:col-span-2">
-            <form onSubmit={handleSubmit} className="bg-white rounded-lg shadow-sm p-6">
+            <form onSubmit={handleSubmit} className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-sm border border-[#E8DCC6]/40 p-6">
               <div className="flex items-center mb-6">
-                <h2 className="text-xl font-semibold text-gray-900">Factuurgegevens</h2>
-                <div className="ml-auto flex items-center text-sm text-steel-gray">
-                  <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <h2 className="text-xl font-semibold text-[#492c4a] font-[family-name:var(--font-eb-garamond)]">Factuurgegevens</h2>
+                <div className="ml-auto flex items-center text-sm text-[#2D2D2D]">
+                  <svg className="w-4 h-4 mr-1 text-[#93c84a]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
                   </svg>
-                  SSL Versleuteld
+                  <span className="font-[family-name:var(--font-eb-garamond)]">SSL Versleuteld</span>
                 </div>
               </div>
               
@@ -546,7 +562,7 @@ export default function CheckoutPage() {
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-steel-gray mb-1">
+                  <label className="block text-sm font-medium text-[#2D2D2D] mb-1 font-[family-name:var(--font-eb-garamond)]">
                     Voornaam *
                   </label>
                   <input
@@ -555,12 +571,12 @@ export default function CheckoutPage() {
                     value={formData.firstName}
                     onChange={handleInputChange}
                     required
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary text-gray-900"
+                    className="w-full px-3 py-2 border border-[#E8DCC6] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#492c4a]/20 focus:border-[#492c4a] text-gray-900 bg-white/50 font-[family-name:var(--font-eb-garamond)]"
                   />
                 </div>
                 
                 <div>
-                  <label className="block text-sm font-medium text-steel-gray mb-1">
+                  <label className="block text-sm font-medium text-[#2D2D2D] mb-1 font-[family-name:var(--font-eb-garamond)]">
                     Achternaam *
                   </label>
                   <input
@@ -569,12 +585,12 @@ export default function CheckoutPage() {
                     value={formData.lastName}
                     onChange={handleInputChange}
                     required
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary text-gray-900"
+                    className="w-full px-3 py-2 border border-[#E8DCC6] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#492c4a]/20 focus:border-[#492c4a] text-gray-900 bg-white/50 font-[family-name:var(--font-eb-garamond)]"
                   />
                 </div>
                 
                 <div>
-                  <label className="block text-sm font-medium text-steel-gray mb-1">
+                  <label className="block text-sm font-medium text-[#2D2D2D] mb-1 font-[family-name:var(--font-eb-garamond)]">
                     E-mailadres *
                   </label>
                   <input
@@ -583,12 +599,12 @@ export default function CheckoutPage() {
                     value={formData.email}
                     onChange={handleInputChange}
                     required
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary text-gray-900"
+                    className="w-full px-3 py-2 border border-[#E8DCC6] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#492c4a]/20 focus:border-[#492c4a] text-gray-900 bg-white/50 font-[family-name:var(--font-eb-garamond)]"
                   />
                 </div>
                 
                 <div>
-                  <label className="block text-sm font-medium text-steel-gray mb-1">
+                  <label className="block text-sm font-medium text-[#2D2D2D] mb-1 font-[family-name:var(--font-eb-garamond)]">
                     Telefoonnummer
                   </label>
                   <input
@@ -596,12 +612,12 @@ export default function CheckoutPage() {
                     name="phone"
                     value={formData.phone}
                     onChange={handleInputChange}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary text-gray-900"
+                    className="w-full px-3 py-2 border border-[#E8DCC6] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#492c4a]/20 focus:border-[#492c4a] text-gray-900 bg-white/50 font-[family-name:var(--font-eb-garamond)]"
                   />
                 </div>
                 
                 <div className="md:col-span-2">
-                  <label className="block text-sm font-medium text-steel-gray mb-1">
+                  <label className="block text-sm font-medium text-[#2D2D2D] mb-1 font-[family-name:var(--font-eb-garamond)]">
                     Straatnaam en huisnummer *
                   </label>
                   <input
@@ -611,12 +627,12 @@ export default function CheckoutPage() {
                     onChange={handleInputChange}
                     required
                     placeholder="Huisnummer en straatnaam"
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary text-gray-900"
+                    className="w-full px-3 py-2 border border-[#E8DCC6] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#492c4a]/20 focus:border-[#492c4a] text-gray-900 bg-white/50 font-[family-name:var(--font-eb-garamond)]"
                   />
                 </div>
                 
                 <div className="md:col-span-2">
-                  <label className="block text-sm font-medium text-steel-gray mb-1">
+                  <label className="block text-sm font-medium text-[#2D2D2D] mb-1 font-[family-name:var(--font-eb-garamond)]">
                     Appartement, suite, etc. (optioneel)
                   </label>
                   <input
@@ -624,12 +640,12 @@ export default function CheckoutPage() {
                     name="address2"
                     value={formData.address2}
                     onChange={handleInputChange}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary text-gray-900"
+                    className="w-full px-3 py-2 border border-[#E8DCC6] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#492c4a]/20 focus:border-[#492c4a] text-gray-900 bg-white/50 font-[family-name:var(--font-eb-garamond)]"
                   />
                 </div>
                 
                 <div>
-                  <label className="block text-sm font-medium text-steel-gray mb-1">
+                  <label className="block text-sm font-medium text-[#2D2D2D] mb-1 font-[family-name:var(--font-eb-garamond)]">
                     Stad *
                   </label>
                   <input
@@ -638,12 +654,12 @@ export default function CheckoutPage() {
                     value={formData.city}
                     onChange={handleInputChange}
                     required
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary text-gray-900"
+                    className="w-full px-3 py-2 border border-[#E8DCC6] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#492c4a]/20 focus:border-[#492c4a] text-gray-900 bg-white/50 font-[family-name:var(--font-eb-garamond)]"
                   />
                 </div>
                 
                 <div>
-                  <label className="block text-sm font-medium text-steel-gray mb-1">
+                  <label className="block text-sm font-medium text-[#2D2D2D] mb-1 font-[family-name:var(--font-eb-garamond)]">
                     Postcode *
                   </label>
                   <input
@@ -652,12 +668,12 @@ export default function CheckoutPage() {
                     value={formData.postcode}
                     onChange={handleInputChange}
                     required
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary text-gray-900"
+                    className="w-full px-3 py-2 border border-[#E8DCC6] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#492c4a]/20 focus:border-[#492c4a] text-gray-900 bg-white/50 font-[family-name:var(--font-eb-garamond)]"
                   />
                 </div>
                 
                 <div className="md:col-span-2">
-                  <label className="block text-sm font-medium text-steel-gray mb-1">
+                  <label className="block text-sm font-medium text-[#2D2D2D] mb-1 font-[family-name:var(--font-eb-garamond)]">
                     Land *
                   </label>
                   <select
@@ -665,7 +681,7 @@ export default function CheckoutPage() {
                     value={formData.country}
                     onChange={handleInputChange}
                     required
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary text-gray-900"
+                    className="w-full px-3 py-2 border border-[#E8DCC6] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#492c4a]/20 focus:border-[#492c4a] text-gray-900 bg-white/50 font-[family-name:var(--font-eb-garamond)]"
                   >
                     {allowedCountries.length === 0 ? (
                       // Fallback to common countries if API hasn't loaded
@@ -705,7 +721,7 @@ export default function CheckoutPage() {
               <button
                 type="submit"
                 disabled={loading || !!shipping.error}
-                className="w-full mt-6 bg-amber-orange text-white py-4 px-6 rounded-md font-semibold hover:bg-amber-orange/90 transition-all transform hover:scale-[1.02] disabled:bg-gray-300 disabled:transform-none flex items-center justify-center"
+                className="w-full mt-6 bg-[#492c4a] text-white py-4 px-6 rounded-full font-semibold hover:bg-[#6b4069] transition-all transform hover:scale-[1.02] disabled:bg-gray-300 disabled:transform-none flex items-center justify-center font-[family-name:var(--font-eb-garamond)]"
               >
                 {loading ? (
                   <>
@@ -905,7 +921,7 @@ export default function CheckoutPage() {
                 })()}
                 <div className="flex justify-between font-semibold text-lg pt-2 border-t">
                   <span className="text-gray-900">Totaal</span>
-                  <span className="text-amber-orange">€{total.toFixed(2)}</span>
+                  <span className="text-[#492c4a] font-[family-name:var(--font-eb-garamond)]">€{total.toFixed(2)}</span>
                 </div>
               </div>
             </div>
