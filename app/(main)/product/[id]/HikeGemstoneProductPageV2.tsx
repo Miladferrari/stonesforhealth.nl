@@ -193,7 +193,7 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
       {/* STICKY ADD TO CART */}
       <div
         id="stickyAddToCart"
-        className={`fixed top-[120px] left-0 right-0 bg-white shadow-lg z-40 transition-transform duration-300 ${
+        className={`fixed top-[120px] lg:top-[130px] xl:top-[130px] 2xl:top-[130px] left-0 right-0 bg-white shadow-lg z-40 transition-transform duration-300 ${
           showStickyHeader ? 'translate-y-0' : '-translate-y-full'
         }`}
       >
