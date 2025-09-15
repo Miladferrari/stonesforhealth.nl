@@ -22,9 +22,6 @@ export default function CouponInput({ variant = 'default', onSuccess }: CouponIn
     setIsValidating(true);
 
     try {
-      // Clear any previous error state
-      console.log('Applying coupon:', couponCode.trim());
-      
       const response = await fetch('/api/coupons/validate', {
         method: 'POST',
         headers: {
@@ -39,7 +36,6 @@ export default function CouponInput({ variant = 'default', onSuccess }: CouponIn
       });
 
       const data = await response.json();
-      console.log('Coupon validation response:', data);
 
       if (data.valid && data.coupon) {
         applyDiscount(data.coupon);
@@ -47,11 +43,12 @@ export default function CouponInput({ variant = 'default', onSuccess }: CouponIn
         setShowInput(false);
         onSuccess?.();
       } else {
-        console.error('Coupon validation failed:', data.error);
+        // Don't log as error for invalid coupon codes - this is expected behavior
         setError(data.error || 'Ongeldige kortingscode');
       }
     } catch (error) {
-      console.error('Error applying coupon:', error);
+      // Only log actual network/server errors
+      console.error('Network error applying coupon:', error);
       setError('Er is een fout opgetreden bij het valideren van de kortingscode');
     } finally {
       setIsValidating(false);
@@ -68,12 +65,12 @@ export default function CouponInput({ variant = 'default', onSuccess }: CouponIn
     return (
       <div className="space-y-3">
         {appliedCoupon ? (
-          <div className="flex items-center justify-between p-3 bg-medical-green/10 rounded-lg">
+          <div className="flex items-center justify-between p-3 bg-[#492c4a]/10 rounded-lg">
             <div className="flex items-center gap-2">
-              <svg className="w-5 h-5 text-medical-green" fill="currentColor" viewBox="0 0 20 20">
+              <svg className="w-5 h-5 text-[#492c4a]" fill="currentColor" viewBox="0 0 20 20">
                 <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
               </svg>
-              <span className="text-sm font-medium text-medical-green">
+              <span className="text-sm font-medium font-[family-name:var(--font-eb-garamond)] text-[#492c4a]">
                 Kortingscode "{appliedCoupon.code}" toegepast
               </span>
             </div>
@@ -92,7 +89,7 @@ export default function CouponInput({ variant = 'default', onSuccess }: CouponIn
             {!showInput ? (
               <button
                 onClick={() => setShowInput(true)}
-                className="text-steel-gray hover:text-medical-green underline text-sm w-full text-left"
+                className="text-[#6b7280] hover:text-[#492c4a] underline text-sm font-[family-name:var(--font-eb-garamond)] w-full text-left"
                 type="button"
               >
                 Kortingscode toepassen?
@@ -140,20 +137,20 @@ export default function CouponInput({ variant = 'default', onSuccess }: CouponIn
 
   // Default variant
   return (
-    <div className="bg-white rounded-xl shadow-sm p-6">
-      <div 
-        className="flex items-center justify-between cursor-pointer" 
+    <div className="bg-white rounded-lg border border-[#e5e7eb] p-6">
+      <div
+        className="flex items-center justify-between cursor-pointer"
         onClick={() => !appliedCoupon && setShowInput(!showInput)}
       >
         <div className="flex items-center gap-2">
-          <svg className="w-5 h-5 text-medical-green" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg className="w-5 h-5 text-[#492c4a]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
           </svg>
-          <span className="font-medium text-navy-blue">Kortingscode toevoegen</span>
+          <span className="font-medium font-[family-name:var(--font-eb-garamond)] text-[#2D2D2D]">Kortingscode toevoegen</span>
         </div>
         {!appliedCoupon && (
           <svg 
-            className={`w-5 h-5 text-steel-gray transform transition-transform ${showInput ? 'rotate-180' : ''}`} 
+            className={`w-5 h-5 text-[#6b7280] transform transition-transform ${showInput ? 'rotate-180' : ''}`} 
             fill="none" 
             stroke="currentColor" 
             viewBox="0 0 24 24"
@@ -171,7 +168,7 @@ export default function CouponInput({ variant = 'default', onSuccess }: CouponIn
                 <svg className="w-5 h-5 text-medical-green" fill="currentColor" viewBox="0 0 20 20">
                   <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                 </svg>
-                <span className="text-medical-green font-medium">
+                <span className="text-[#492c4a] font-medium font-[family-name:var(--font-eb-garamond)]">
                   Code "{appliedCoupon.code}" toegepast
                   {appliedCoupon.discount_type === 'percent' && `: ${appliedCoupon.amount}% korting`}
                   {appliedCoupon.discount_type === 'fixed_cart' && `: €${appliedCoupon.amount} korting`}
@@ -195,14 +192,14 @@ export default function CouponInput({ variant = 'default', onSuccess }: CouponIn
                   value={couponCode}
                   onChange={(e) => setCouponCode(e.target.value)}
                   placeholder="Voer kortingscode in"
-                  className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-medical-green focus:border-transparent text-black placeholder-gray-500"
+                  className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#492c4a] focus:border-transparent text-black placeholder-gray-500 font-[family-name:var(--font-eb-garamond)]"
                   onKeyPress={(e) => e.key === 'Enter' && handleApplyCoupon()}
                   disabled={isValidating}
                 />
                 <button
                   onClick={handleApplyCoupon}
                   disabled={isValidating || !couponCode.trim()}
-                  className="px-6 py-2 bg-medical-green text-white rounded-lg font-medium hover:bg-medical-green/90 transition-colors disabled:bg-gray-300 disabled:cursor-not-allowed"
+                  className="px-6 py-2 bg-amber-orange text-black rounded-lg font-medium font-[family-name:var(--font-eb-garamond)] hover:bg-amber-orange/90 transition-colors disabled:bg-gray-300 disabled:cursor-not-allowed"
                   type="button"
                 >
                   {isValidating ? 'Valideren...' : 'Toepassen'}
