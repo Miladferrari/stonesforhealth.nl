@@ -24,6 +24,7 @@ interface OrderData {
     name: string;
     quantity: number;
     price: string;
+    images?: Array<{ src: string }>;
   }>;
 }
 
@@ -175,22 +176,22 @@ function ThankYouContent() {
         <div className="bg-white rounded-lg shadow-sm p-8 mb-8">
           <div className="border-b pb-6 mb-6">
             <h2 className="text-xl font-[family-name:var(--font-eb-garamond)] font-semibold text-gray-900 mb-4">Bestelgegevens</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <p className="font-[family-name:var(--font-eb-garamond)] text-gray-600">Bestelnummer</p>
-                <p className="font-[family-name:var(--font-eb-garamond)] font-medium text-gray-900">#{orderData.id}</p>
+                <p className="font-[family-name:var(--font-eb-garamond)] text-gray-600 text-base">Bestelnummer</p>
+                <p className="font-[family-name:var(--font-eb-garamond)] font-medium text-gray-900 text-lg">#{orderData.id}</p>
               </div>
               <div>
-                <p className="font-[family-name:var(--font-eb-garamond)] text-gray-600">Status</p>
-                <p className="font-[family-name:var(--font-eb-garamond)] font-medium text-green-600">Betaald</p>
+                <p className="font-[family-name:var(--font-eb-garamond)] text-gray-600 text-base">Status</p>
+                <p className="font-[family-name:var(--font-eb-garamond)] font-medium text-green-600 text-lg">Betaald</p>
               </div>
               <div>
-                <p className="font-[family-name:var(--font-eb-garamond)] text-gray-600">E-mailadres</p>
-                <p className="font-[family-name:var(--font-eb-garamond)] font-medium text-gray-900">{orderData.customer.email}</p>
+                <p className="font-[family-name:var(--font-eb-garamond)] text-gray-600 text-base">E-mailadres</p>
+                <p className="font-[family-name:var(--font-eb-garamond)] font-medium text-gray-900 text-lg">{orderData.customer.email}</p>
               </div>
               <div>
-                <p className="font-[family-name:var(--font-eb-garamond)] text-gray-600">Totaalbedrag</p>
-                <p className="font-[family-name:var(--font-eb-garamond)] font-medium text-gray-900">€{parseFloat(orderData.total).toFixed(2)}</p>
+                <p className="font-[family-name:var(--font-eb-garamond)] text-gray-600 text-base">Totaalbedrag</p>
+                <p className="font-[family-name:var(--font-eb-garamond)] font-medium text-gray-900 text-lg">€{parseFloat(orderData.total).toFixed(2)}</p>
               </div>
             </div>
           </div>
@@ -198,25 +199,63 @@ function ThankYouContent() {
           {/* Delivery Address */}
           <div className="border-b pb-6 mb-6">
             <h3 className="text-lg font-[family-name:var(--font-eb-garamond)] font-semibold text-gray-900 mb-3">Bezorgadres</h3>
-            <div className="text-sm text-gray-600">
-              <p className="font-[family-name:var(--font-eb-garamond)] font-medium text-gray-900">{orderData.customer.first_name} {orderData.customer.last_name}</p>
-              <p className="font-[family-name:var(--font-eb-garamond)]">{orderData.customer.address_1}</p>
-              <p className="font-[family-name:var(--font-eb-garamond)]">{orderData.customer.postcode} {orderData.customer.city}</p>
+            <div className="text-gray-600">
+              <p className="font-[family-name:var(--font-eb-garamond)] font-medium text-gray-900 text-lg">{orderData.customer.first_name} {orderData.customer.last_name}</p>
+              <p className="font-[family-name:var(--font-eb-garamond)] text-base">{orderData.customer.address_1}</p>
+              <p className="font-[family-name:var(--font-eb-garamond)] text-base">{orderData.customer.postcode} {orderData.customer.city}</p>
             </div>
           </div>
 
           {/* Order Items */}
           <div>
-            <h3 className="text-lg font-[family-name:var(--font-eb-garamond)] font-semibold text-gray-900 mb-3">Bestelde producten</h3>
-            <div className="space-y-3">
+            <h3 className="text-lg font-[family-name:var(--font-eb-garamond)] font-semibold text-gray-900 mb-4">Bestelde producten</h3>
+            <div className="space-y-4">
               {orderData.items.map((item, index) => (
-                <div key={index} className="flex justify-between text-sm">
-                  <span className="font-[family-name:var(--font-eb-garamond)] text-gray-600">
-                    {item.name} {item.quantity > 1 && `(${item.quantity}x)`}
-                  </span>
-                  <span className="font-[family-name:var(--font-eb-garamond)] font-medium text-gray-900">
-                    €{(parseFloat(item.price) * item.quantity).toFixed(2)}
-                  </span>
+                <div key={index} className="flex items-center gap-5 p-5 bg-white border border-gray-100 rounded-xl shadow-sm hover:shadow-md transition-shadow">
+                  {/* Product Image */}
+                  <div className="flex-shrink-0">
+                    {item.images && item.images[0]?.src ? (
+                      <div className="w-[90px] h-[90px] relative overflow-hidden rounded-xl border border-gray-100">
+                        <Image
+                          src={item.images[0].src}
+                          alt={item.name}
+                          fill
+                          className="object-cover"
+                          sizes="90px"
+                        />
+                      </div>
+                    ) : (
+                      <div className="w-[90px] h-[90px] bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl flex items-center justify-center border border-gray-100">
+                        <svg className="w-10 h-10 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                        </svg>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Product Details */}
+                  <div className="flex-1 min-w-0">
+                    <h4 className="font-[family-name:var(--font-eb-garamond)] font-semibold text-gray-900 text-base truncate">
+                      {item.name}
+                    </h4>
+                    {item.quantity > 1 && (
+                      <div className="flex items-center gap-2 mt-1">
+                        <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-[family-name:var(--font-eb-garamond)] bg-amber-orange/10 text-amber-orange">
+                          {item.quantity}x
+                        </span>
+                        <span className="font-[family-name:var(--font-eb-garamond)] text-sm text-gray-500">
+                          €{parseFloat(item.price).toFixed(2)} per stuk
+                        </span>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Price */}
+                  <div className="flex flex-col items-end">
+                    <p className="font-[family-name:var(--font-eb-garamond)] font-bold text-xl text-gray-900">
+                      €{(parseFloat(item.price) * item.quantity).toFixed(2)}
+                    </p>
+                  </div>
                 </div>
               ))}
             </div>
@@ -226,30 +265,30 @@ function ThankYouContent() {
         {/* Next Steps */}
         <div className="bg-gray-50 border border-gray-200 rounded-lg p-6 mb-8">
           <h3 className="text-lg font-[family-name:var(--font-eb-garamond)] font-semibold text-gray-900 mb-3">Wat gebeurt er nu?</h3>
-          <ul className="space-y-2 text-sm text-gray-700">
+          <ul className="space-y-3 text-gray-700">
             <li className="flex items-start">
-              <svg className="w-5 h-5 text-green-600 mr-2 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-5 h-5 text-green-600 mr-2 mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
-              <span className="font-[family-name:var(--font-eb-garamond)]">Je ontvangt binnen enkele minuten een bevestigingsmail</span>
+              <span className="font-[family-name:var(--font-eb-garamond)] text-base">Je ontvangt binnen enkele minuten een bevestigingsmail</span>
             </li>
             <li className="flex items-start">
-              <svg className="w-5 h-5 text-green-600 mr-2 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-5 h-5 text-green-600 mr-2 mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
-              <span className="font-[family-name:var(--font-eb-garamond)]">We pakken je bestelling zorgvuldig in</span>
+              <span className="font-[family-name:var(--font-eb-garamond)] text-base">We pakken je bestelling zorgvuldig in</span>
             </li>
             <li className="flex items-start">
-              <svg className="w-5 h-5 text-green-600 mr-2 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-5 h-5 text-green-600 mr-2 mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
-              <span className="font-[family-name:var(--font-eb-garamond)]">Zodra je pakket onderweg is, ontvang je een track & trace code</span>
+              <span className="font-[family-name:var(--font-eb-garamond)] text-base">Zodra je pakket onderweg is, ontvang je een track & trace code</span>
             </li>
             <li className="flex items-start">
-              <svg className="w-5 h-5 text-green-600 mr-2 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-5 h-5 text-green-600 mr-2 mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
-              <span className="font-[family-name:var(--font-eb-garamond)]">Binnen 2-3 werkdagen wordt je bestelling bezorgd</span>
+              <span className="font-[family-name:var(--font-eb-garamond)] text-base">Binnen 2-3 werkdagen wordt je bestelling bezorgd</span>
             </li>
           </ul>
         </div>
@@ -271,9 +310,9 @@ function ThankYouContent() {
         </div>
 
         {/* Contact Info */}
-        <div className="mt-12 text-center text-sm text-gray-600">
-          <p className="font-[family-name:var(--font-eb-garamond)]">Heb je vragen over je bestelling?</p>
-          <p className="font-[family-name:var(--font-eb-garamond)]">Neem contact op via <a href="mailto:info@stonesforhealth.nl" className="text-green-600 hover:underline">info@stonesforhealth.nl</a></p>
+        <div className="mt-12 text-center text-gray-600">
+          <p className="font-[family-name:var(--font-eb-garamond)] text-base">Heb je vragen over je bestelling?</p>
+          <p className="font-[family-name:var(--font-eb-garamond)] text-base">Neem contact op via <a href="mailto:info@stonesforhealth.nl" className="text-green-600 hover:underline">info@stonesforhealth.nl</a></p>
         </div>
       </div>
     </div>
