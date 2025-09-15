@@ -280,7 +280,7 @@ export default function SlideInCart() {
                     setIsCartOpen(false);
                     router.push('/checkout');
                   }}
-                  className="block w-full bg-[#492c4a] text-white text-center py-4 rounded-lg font-medium hover:bg-[#492c4a]/90 transition-all shadow-sm hover:shadow-md font-[family-name:var(--font-eb-garamond)]"
+                  className="block w-full bg-[#fbe022] text-black text-center py-4 rounded-lg font-medium hover:bg-[#e6cc1f] transition-all shadow-sm hover:shadow-md font-[family-name:var(--font-eb-garamond)]"
                 >
                   <span className="flex items-center justify-center gap-2 text-2xl">
                     Veilig afrekenen

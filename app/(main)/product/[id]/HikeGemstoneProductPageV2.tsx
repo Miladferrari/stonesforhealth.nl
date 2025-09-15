@@ -502,7 +502,7 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
               </div>
 
               {/* Price with strikethrough */}
-              <div className="flex items-center gap-3 mb-6">
+              <div className="flex items-center gap-3 mb-2">
                 <span className="text-xl font-light text-[#492c4a]">
                   €{price.toFixed(2).replace('.', ',')}
                 </span>
@@ -532,17 +532,23 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
               </div>
 
               {/* Spring sale info */}
-              <div className="custom-spring-sale-info mb-4">
-                <span style={{ padding: '6px', paddingLeft: '2px', color: '#000000' }}>
-                  <div className="metafield-rich_text_field">
-                    <p>Vanwege onze <strong>najaarssale</strong> zijn er nog maar enkele exemplaren op voorraad!</p>
+              <div className="custom-spring-sale-info bg-amber-50 border border-amber-200 rounded-md p-3 mt-4 mb-3">
+                <div className="metafield-rich_text_field flex items-center gap-3">
+                  <div className="flex-shrink-0">
+                    <span className="relative flex h-3 w-3">
+                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
+                      <span className="relative inline-flex rounded-full h-3 w-3 bg-amber-500"></span>
+                    </span>
                   </div>
-                </span>
+                  <p className="text-sm text-gray-800 m-0">
+                    Vanwege onze <span className="font-semibold text-amber-700">najaarssale</span> zijn er nog maar enkele exemplaren op voorraad!
+                  </p>
+                </div>
               </div>
             </div>
 
             {/* Bundle options - Hike style */}
-            <div className="kaching-bundles__block-title text-center text-sm font-medium text-black mb-3 flex items-center justify-center">
+            <div className="kaching-bundles__block-title text-center text-sm font-medium text-black mt-3 mb-3 flex items-center justify-center">
               <span className="flex-1 h-0.5 mr-3" style={{ backgroundColor: '#d1d5db' }}></span>
               <span className="font-semibold">Bundelpromotie is geldig tot 23.59 uur</span>
               <span className="flex-1 h-0.5 ml-3" style={{ backgroundColor: '#d1d5db' }}></span>
@@ -610,7 +616,7 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
                   onClick={() => setSelectedBundle('duo')}
                 >
                   <div className="kaching-bundles__bar-most-popular kaching-bundles__bar-most-popular--simple absolute -top-3 right-2">
-                    <div className="kaching-bundles__bar-most-popular__content text-white text-xs font-bold px-3 py-1 rounded uppercase" style={{ backgroundColor: '#538125' }}>
+                    <div className="kaching-bundles__bar-most-popular__content text-black text-xs font-bold px-3 py-1 rounded uppercase" style={{ backgroundColor: '#fbe022' }}>
                       MEEST POPULAIR!
                     </div>
                   </div>
@@ -702,7 +708,7 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
             <button
               onClick={handleAddToCart}
               disabled={isAddingToCart}
-              className="w-full py-4 bg-[#4A5D23] text-white text-lg font-bold rounded-lg hover:bg-[#3A4D13] transition-all transform hover:scale-[1.02] disabled:opacity-50 disabled:transform-none"
+              className="w-full py-4 bg-[#fbe022] text-black text-lg font-bold rounded-lg hover:bg-[#e6cc1f] transition-all transform hover:scale-[1.02] disabled:opacity-50 disabled:transform-none"
             >
               {isAddingToCart ? (
                 <span className="flex items-center justify-center gap-2">
@@ -1316,28 +1322,6 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
         </div>
       </section>
 
-      {/* FINAL CTA SECTION */}
-      <section className="py-16 bg-gradient-to-r from-[#492c4a] to-purple-800 text-white">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl font-bold mb-4">
-            Begin Je Spirituele Reis Vandaag
-          </h2>
-          <p className="text-xl mb-8">
-            Sluit je aan bij duizenden anderen die de kracht van {product.name} hebben ontdekt
-          </p>
-
-          <button
-            onClick={handleAddToCart}
-            className="bg-white text-[#492c4a] px-8 py-4 rounded-lg font-bold text-lg hover:bg-gray-100 transition-all transform hover:scale-[1.05]"
-          >
-            Bestel Nu - €{price.toFixed(2)}
-          </button>
-
-          <p className="mt-4 text-sm opacity-90">
-            ✓ Gratis verzending vanaf €50 ✓ 30 dagen retourrecht ✓ 100% tevredenheidsgarantie
-          </p>
-        </div>
-      </section>
 
     </div>
   );
