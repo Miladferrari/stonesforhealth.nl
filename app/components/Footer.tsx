@@ -176,8 +176,8 @@ const Footer = memo(function Footer() {
                     </Link>
                   </li>
                   <li>
-                    <Link href="/kristal-gids" className="text-base text-gray-800 font-medium hover:text-[#492c4a] transition-colors font-[family-name:var(--font-eb-garamond)]">
-                      Kristal Gids
+                    <Link href="/verzending" className="text-base text-gray-800 font-medium hover:text-[#492c4a] transition-colors font-[family-name:var(--font-eb-garamond)]">
+                      Verzending & Retour
                     </Link>
                   </li>
                   <li>

@@ -2,16 +2,47 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import { useState, memo } from 'react';
+import { useState, memo, useEffect } from 'react';
 import { useCart } from '../contexts/CartContext';
 
 const Header = memo(function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [helpDropdownOpen, setHelpDropdownOpen] = useState(false);
+  const [shopDropdownOpen, setShopDropdownOpen] = useState(false);
+  const [categories, setCategories] = useState([]);
   const { setIsCartOpen, getTotalItems } = useCart();
 
   const toggleCart = () => {
     setIsCartOpen(true);
   };
+
+  // Fetch categories for Shop dropdown
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await fetch('/api/categories');
+        if (response.ok) {
+          const data = await response.json();
+          const topCategories = data
+            .filter((cat) => cat.parent === 0 && cat.slug !== 'uncategorized')
+            .sort((a, b) => (b.count || 0) - (a.count || 0))
+            .slice(0, 6); // Show top 6 categories in dropdown
+          setCategories(topCategories);
+        }
+      } catch (error) {
+        console.error('Failed to fetch categories for header:', error);
+        // Fallback categories
+        setCategories([
+          { id: 1, name: 'Chakra Kristallen', slug: 'chakra' },
+          { id: 2, name: 'Bescherming', slug: 'bescherming' },
+          { id: 3, name: 'Liefde & Relaties', slug: 'liefde' },
+          { id: 4, name: 'Bestsellers', slug: 'bestsellers' }
+        ]);
+      }
+    };
+
+    fetchCategories();
+  }, []);
 
   return (
     <nav className="relative bg-white shadow-sm border-b border-gray-100 z-50 transition-all duration-300 ease-in-out">
@@ -35,17 +66,91 @@ const Header = memo(function Header() {
 
           {/* Desktop Navigation */}
           <div className="hidden lg:flex items-center space-x-8">
-            <Link href="/alle-producten" className="text-lg text-[#2D2D2D] hover:text-[#3b223b] font-normal transition-colors font-[family-name:var(--font-eb-garamond)]">
-              Kristallen
+            {/* Shop Dropdown */}
+            <div className="relative">
+              <button
+                onClick={() => setShopDropdownOpen(!shopDropdownOpen)}
+                onMouseEnter={() => setShopDropdownOpen(true)}
+                onMouseLeave={() => setShopDropdownOpen(false)}
+                className="flex items-center text-lg text-[#2D2D2D] hover:text-[#3b223b] font-normal transition-colors font-[family-name:var(--font-eb-garamond)]"
+              >
+                Shop
+                <svg className="ml-1 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                </svg>
+              </button>
+
+              {shopDropdownOpen && (
+                <div
+                  className="absolute top-full left-0 mt-2 w-64 bg-white rounded-lg shadow-lg border border-gray-100 py-2 z-50"
+                  onMouseEnter={() => setShopDropdownOpen(true)}
+                  onMouseLeave={() => setShopDropdownOpen(false)}
+                >
+                  <Link
+                    href="/alle-producten"
+                    className="block px-4 py-2 text-lg text-[#2D2D2D] hover:bg-gray-50 hover:text-[#3b223b] transition-colors font-[family-name:var(--font-eb-garamond)] border-b border-gray-100"
+                    onClick={() => setShopDropdownOpen(false)}
+                  >
+                    Alle Producten
+                  </Link>
+                  {categories.map((category) => (
+                    <Link
+                      key={category.id}
+                      href={category.slug === 'bestsellers' ? '/bestsellers' : `/alle-producten?category=${category.slug}`}
+                      className="block px-4 py-2 text-lg text-[#2D2D2D] hover:bg-gray-50 hover:text-[#3b223b] transition-colors font-[family-name:var(--font-eb-garamond)]"
+                      onClick={() => setShopDropdownOpen(false)}
+                    >
+                      {category.name}
+                    </Link>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            <Link href="/bestsellers" className="text-lg text-[#2D2D2D] hover:text-[#3b223b] font-normal transition-colors font-[family-name:var(--font-eb-garamond)]">
+              Bestsellers
             </Link>
-            <Link href="/alle-producten?category=chakra" className="text-lg text-[#2D2D2D] hover:text-[#3b223b] font-normal transition-colors font-[family-name:var(--font-eb-garamond)]">
-              Chakra
-            </Link>
-            <Link href="/alle-producten?category=healing" className="text-lg text-[#2D2D2D] hover:text-[#3b223b] font-normal transition-colors font-[family-name:var(--font-eb-garamond)]">
-              Healing
-            </Link>
-            <Link href="/alle-producten" className="text-lg text-[#2D2D2D] hover:text-[#3b223b] font-normal transition-colors font-[family-name:var(--font-eb-garamond)]">
-              Shop
+
+            {/* Helpcentrum Dropdown */}
+            <div className="relative">
+              <button
+                onClick={() => setHelpDropdownOpen(!helpDropdownOpen)}
+                onMouseEnter={() => setHelpDropdownOpen(true)}
+                onMouseLeave={() => setHelpDropdownOpen(false)}
+                className="flex items-center text-lg text-[#2D2D2D] hover:text-[#3b223b] font-normal transition-colors font-[family-name:var(--font-eb-garamond)]"
+              >
+                Helpcentrum
+                <svg className="ml-1 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                </svg>
+              </button>
+
+              {helpDropdownOpen && (
+                <div
+                  className="absolute top-full left-0 mt-2 w-56 bg-white rounded-lg shadow-lg border border-gray-100 py-2 z-50"
+                  onMouseEnter={() => setHelpDropdownOpen(true)}
+                  onMouseLeave={() => setHelpDropdownOpen(false)}
+                >
+                  <Link
+                    href="/contact"
+                    className="block px-4 py-2 text-lg text-[#2D2D2D] hover:bg-gray-50 hover:text-[#3b223b] transition-colors font-[family-name:var(--font-eb-garamond)]"
+                    onClick={() => setHelpDropdownOpen(false)}
+                  >
+                    Contact
+                  </Link>
+                  <Link
+                    href="/volg-je-bestelling"
+                    className="block px-4 py-2 text-lg text-[#2D2D2D] hover:bg-gray-50 hover:text-[#3b223b] transition-colors font-[family-name:var(--font-eb-garamond)]"
+                    onClick={() => setHelpDropdownOpen(false)}
+                  >
+                    Volg je bestelling
+                  </Link>
+                </div>
+              )}
+            </div>
+
+            <Link href="/over-ons" className="text-lg text-[#2D2D2D] hover:text-[#3b223b] font-normal transition-colors font-[family-name:var(--font-eb-garamond)]">
+              Over ons
             </Link>
           </div>
 
@@ -101,28 +206,44 @@ const Header = memo(function Header() {
               className="block px-3 py-2 text-base font-light text-[#2D2D2D] hover:text-[#8B7355] transition-colors font-[family-name:var(--font-eb-garamond)]"
               onClick={() => setMobileMenuOpen(false)}
             >
-              Kristallen
-            </Link>
-            <Link
-              href="/alle-producten?category=chakra"
-              className="block px-3 py-2 text-base font-light text-[#2D2D2D] hover:text-[#8B7355] transition-colors font-[family-name:var(--font-eb-garamond)]"
-              onClick={() => setMobileMenuOpen(false)}
-            >
-              Chakra
-            </Link>
-            <Link
-              href="/alle-producten?category=healing"
-              className="block px-3 py-2 text-base font-light text-[#2D2D2D] hover:text-[#8B7355] transition-colors font-[family-name:var(--font-eb-garamond)]"
-              onClick={() => setMobileMenuOpen(false)}
-            >
-              Healing
-            </Link>
-            <Link
-              href="/alle-producten"
-              className="block px-3 py-2 text-base font-light text-[#2D2D2D] hover:text-[#8B7355] transition-colors font-[family-name:var(--font-eb-garamond)]"
-              onClick={() => setMobileMenuOpen(false)}
-            >
               Shop
+            </Link>
+            <Link
+              href="/bestsellers"
+              className="block px-3 py-2 text-base font-light text-[#2D2D2D] hover:text-[#8B7355] transition-colors font-[family-name:var(--font-eb-garamond)]"
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              Bestsellers
+            </Link>
+            {/* Helpcentrum items for mobile */}
+            <div className="px-3 py-2">
+              <div className="text-base font-medium text-[#2D2D2D] mb-2 font-[family-name:var(--font-eb-garamond)]">
+                Helpcentrum
+              </div>
+              <div className="pl-4 space-y-1">
+                <Link
+                  href="/contact"
+                  className="block px-3 py-1 text-sm font-light text-[#2D2D2D] hover:text-[#8B7355] transition-colors font-[family-name:var(--font-eb-garamond)]"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  Contact
+                </Link>
+                <Link
+                  href="/volg-je-bestelling"
+                  className="block px-3 py-1 text-sm font-light text-[#2D2D2D] hover:text-[#8B7355] transition-colors font-[family-name:var(--font-eb-garamond)]"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  Volg je bestelling
+                </Link>
+              </div>
+            </div>
+
+            <Link
+              href="/over-ons"
+              className="block px-3 py-2 text-base font-light text-[#2D2D2D] hover:text-[#8B7355] transition-colors font-[family-name:var(--font-eb-garamond)]"
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              Over ons
             </Link>
           </div>
         </div>
