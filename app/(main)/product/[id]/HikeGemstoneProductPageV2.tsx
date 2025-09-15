@@ -1195,62 +1195,131 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
         </div>
       </section>
 
-      {/* 7. REVIEWS SECTION */}
-      <section className="py-16 bg-white">
+      {/* 7. REVIEWS SECTION - Clean Grid Style */}
+      <section className="py-10 md:py-16 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-8">
-            <div className="flex justify-center items-center gap-2 mb-4">
-              <div className="flex">
+            <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4">
+              Wat Onze Klanten Zeggen
+            </h2>
+            <div className="flex justify-center items-center gap-2 mb-2">
+              <div className="flex gap-0.5">
                 {[1,2,3,4,5].map(star => (
-                  <svg key={star} className="w-8 h-8 text-yellow-400 fill-current" viewBox="0 0 20 20">
+                  <svg key={star} className="w-5 h-5 text-[#FAD14C] fill-current" viewBox="0 0 20 20">
                     <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z" />
                   </svg>
                 ))}
               </div>
-              <span className="text-2xl font-bold">4.9/5</span>
+              <span className="text-base font-semibold text-gray-700">5.0 • 4,237 Reviews</span>
             </div>
-            <h2 className="text-3xl font-bold text-gray-900 mb-2">
-              Wat Onze Klanten Zeggen
-            </h2>
-            <p className="text-gray-600">Gebaseerd op 127 geverifieerde beoordelingen</p>
           </div>
 
-          {/* Horizontal scroll of review cards */}
-          <div className="overflow-x-auto pb-4">
-            <div className="flex gap-4" style={{ minWidth: 'max-content' }}>
-              {customerReviews.map(review => (
-                <div key={review.id} className="w-80 bg-white rounded-lg shadow-lg p-6 flex-shrink-0">
-                  <div className="flex items-center gap-3 mb-4">
-                    <div className="w-12 h-12 bg-gray-200 rounded-full flex items-center justify-center">
-                      <span className="font-semibold text-gray-600">
+          {/* Masonry Grid of Review Cards */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+            {customerReviews.map(review => (
+              <div key={review.id} className="bg-white rounded-lg shadow-sm border border-gray-200 p-5 hover:shadow-md transition-shadow">
+                {/* Header */}
+                <div className="flex items-start justify-between mb-3">
+                  <div className="flex items-center gap-2">
+                    <div className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center flex-shrink-0">
+                      <span className="text-sm font-semibold text-gray-600">
                         {review.name.split(' ').map(n => n[0]).join('')}
                       </span>
                     </div>
                     <div>
-                      <p className="font-semibold text-gray-900">{review.name}</p>
-                      <p className="text-sm text-gray-500">{review.location}</p>
+                      <p className="text-sm font-semibold text-gray-900 leading-tight">{review.name.split(' ')[0]} {review.name.split(' ')[1]?.[0]}.</p>
+                      {review.verified && (
+                        <div className="flex items-center gap-1 mt-0.5">
+                          <svg viewBox="0 0 24 24" aria-label="Geverifieerd" className="w-3.5 h-3.5 text-green-600 fill-current">
+                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                          </svg>
+                          <span className="text-xs text-green-600">Geverifieerd</span>
+                        </div>
+                      )}
                     </div>
                   </div>
+                </div>
 
-                  <div className="flex mb-3">
-                    {[1,2,3,4,5].map(star => (
-                      <svg key={star} className="w-4 h-4 text-yellow-400 fill-current" viewBox="0 0 20 20">
-                        <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z" />
-                      </svg>
-                    ))}
+                {/* Stars */}
+                <div className="flex gap-0.5 mb-2">
+                  {[1,2,3,4,5].map(star => (
+                    <svg key={star} className="w-4 h-4 text-[#FAD14C] fill-current" viewBox="0 0 20 20">
+                      <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z" />
+                    </svg>
+                  ))}
+                </div>
+
+                {/* Review Text */}
+                <p className="text-sm text-gray-700 leading-relaxed mb-3">{review.text}</p>
+
+                {/* Date */}
+                <p className="text-xs text-gray-500">{review.date}</p>
+              </div>
+            ))}
+
+            {/* Add more review placeholders for masonry effect */}
+            <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-5 hover:shadow-md transition-shadow">
+              <div className="flex items-start justify-between mb-3">
+                <div className="flex items-center gap-2">
+                  <div className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center flex-shrink-0">
+                    <span className="text-sm font-semibold text-gray-600">JB</span>
                   </div>
-
-                  <p className="text-gray-700 mb-3">{review.text}</p>
-
-                  <div className="flex items-center justify-between text-sm">
-                    <span className="text-gray-500">{review.date}</span>
-                    {review.verified && (
-                      <span className="text-green-600 font-medium">✓ Geverifieerd</span>
-                    )}
+                  <div>
+                    <p className="text-sm font-semibold text-gray-900 leading-tight">Johan B.</p>
+                    <div className="flex items-center gap-1 mt-0.5">
+                      <svg viewBox="0 0 24 24" aria-label="Geverifieerd" className="w-3.5 h-3.5 text-green-600 fill-current">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                      </svg>
+                      <span className="text-xs text-green-600">Geverifieerd</span>
+                    </div>
                   </div>
                 </div>
-              ))}
+              </div>
+              <div className="flex gap-0.5 mb-2">
+                {[1,2,3,4,5].map(star => (
+                  <svg key={star} className="w-4 h-4 text-[#FAD14C] fill-current" viewBox="0 0 20 20">
+                    <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z" />
+                  </svg>
+                ))}
+              </div>
+              <p className="text-sm text-gray-700 leading-relaxed mb-3">Fantastische kwaliteit! De energie is direct voelbaar.</p>
+              <p className="text-xs text-gray-500">5 dagen geleden</p>
             </div>
+
+            <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-5 hover:shadow-md transition-shadow">
+              <div className="flex items-start justify-between mb-3">
+                <div className="flex items-center gap-2">
+                  <div className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center flex-shrink-0">
+                    <span className="text-sm font-semibold text-gray-600">AV</span>
+                  </div>
+                  <div>
+                    <p className="text-sm font-semibold text-gray-900 leading-tight">Anna V.</p>
+                    <div className="flex items-center gap-1 mt-0.5">
+                      <svg viewBox="0 0 24 24" aria-label="Geverifieerd" className="w-3.5 h-3.5 text-green-600 fill-current">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                      </svg>
+                      <span className="text-xs text-green-600">Geverifieerd</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="flex gap-0.5 mb-2">
+                {[1,2,3,4,5].map(star => (
+                  <svg key={star} className="w-4 h-4 text-[#FAD14C] fill-current" viewBox="0 0 20 20">
+                    <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z" />
+                  </svg>
+                ))}
+              </div>
+              <p className="text-sm text-gray-700 leading-relaxed mb-3">Eindelijk weer goed slapen! Deze amethist heeft mijn nachtrust enorm verbeterd. Ik word uitgerust wakker.</p>
+              <p className="text-xs text-gray-500">1 week geleden</p>
+            </div>
+          </div>
+
+          {/* Load More Button */}
+          <div className="text-center mt-8">
+            <button className="px-6 py-2.5 bg-black text-white font-semibold rounded-lg hover:bg-gray-800 transition-colors">
+              Meer reviews laden
+            </button>
           </div>
         </div>
       </section>
