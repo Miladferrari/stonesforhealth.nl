@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import { useState, memo, useEffect } from 'react';
+import { useState, memo, useEffect, useRef } from 'react';
 import { useCart } from '../contexts/CartContext';
 
 const Header = memo(function Header() {
@@ -11,6 +11,10 @@ const Header = memo(function Header() {
   const [shopDropdownOpen, setShopDropdownOpen] = useState(false);
   const [categories, setCategories] = useState([]);
   const { setIsCartOpen, getTotalItems } = useCart();
+
+  // Timeout refs for dropdown delays
+  const shopDropdownTimeout = useRef<NodeJS.Timeout | null>(null);
+  const helpDropdownTimeout = useRef<NodeJS.Timeout | null>(null);
 
   const toggleCart = () => {
     setIsCartOpen(true);
@@ -70,8 +74,17 @@ const Header = memo(function Header() {
             <div className="relative">
               <button
                 onClick={() => setShopDropdownOpen(!shopDropdownOpen)}
-                onMouseEnter={() => setShopDropdownOpen(true)}
-                onMouseLeave={() => setShopDropdownOpen(false)}
+                onMouseEnter={() => {
+                  if (shopDropdownTimeout.current) {
+                    clearTimeout(shopDropdownTimeout.current);
+                  }
+                  setShopDropdownOpen(true);
+                }}
+                onMouseLeave={() => {
+                  shopDropdownTimeout.current = setTimeout(() => {
+                    setShopDropdownOpen(false);
+                  }, 300); // 300ms delay before closing
+                }}
                 className="flex items-center text-lg text-[#2D2D2D] hover:text-[#3b223b] font-normal transition-colors font-[family-name:var(--font-eb-garamond)]"
               >
                 Shop
@@ -82,9 +95,18 @@ const Header = memo(function Header() {
 
               {shopDropdownOpen && (
                 <div
-                  className="absolute top-full left-0 mt-2 w-64 bg-white rounded-lg shadow-lg border border-gray-100 py-2 z-50"
-                  onMouseEnter={() => setShopDropdownOpen(true)}
-                  onMouseLeave={() => setShopDropdownOpen(false)}
+                  className="absolute top-full left-0 mt-1 w-64 bg-white rounded-lg shadow-lg border border-gray-100 py-2 z-50"
+                  onMouseEnter={() => {
+                    if (shopDropdownTimeout.current) {
+                      clearTimeout(shopDropdownTimeout.current);
+                    }
+                    setShopDropdownOpen(true);
+                  }}
+                  onMouseLeave={() => {
+                    shopDropdownTimeout.current = setTimeout(() => {
+                      setShopDropdownOpen(false);
+                    }, 300);
+                  }}
                 >
                   <Link
                     href="/alle-producten"
@@ -115,8 +137,17 @@ const Header = memo(function Header() {
             <div className="relative">
               <button
                 onClick={() => setHelpDropdownOpen(!helpDropdownOpen)}
-                onMouseEnter={() => setHelpDropdownOpen(true)}
-                onMouseLeave={() => setHelpDropdownOpen(false)}
+                onMouseEnter={() => {
+                  if (helpDropdownTimeout.current) {
+                    clearTimeout(helpDropdownTimeout.current);
+                  }
+                  setHelpDropdownOpen(true);
+                }}
+                onMouseLeave={() => {
+                  helpDropdownTimeout.current = setTimeout(() => {
+                    setHelpDropdownOpen(false);
+                  }, 300); // 300ms delay before closing
+                }}
                 className="flex items-center text-lg text-[#2D2D2D] hover:text-[#3b223b] font-normal transition-colors font-[family-name:var(--font-eb-garamond)]"
               >
                 Helpcentrum
@@ -127,9 +158,18 @@ const Header = memo(function Header() {
 
               {helpDropdownOpen && (
                 <div
-                  className="absolute top-full left-0 mt-2 w-56 bg-white rounded-lg shadow-lg border border-gray-100 py-2 z-50"
-                  onMouseEnter={() => setHelpDropdownOpen(true)}
-                  onMouseLeave={() => setHelpDropdownOpen(false)}
+                  className="absolute top-full left-0 mt-1 w-56 bg-white rounded-lg shadow-lg border border-gray-100 py-2 z-50"
+                  onMouseEnter={() => {
+                    if (helpDropdownTimeout.current) {
+                      clearTimeout(helpDropdownTimeout.current);
+                    }
+                    setHelpDropdownOpen(true);
+                  }}
+                  onMouseLeave={() => {
+                    helpDropdownTimeout.current = setTimeout(() => {
+                      setHelpDropdownOpen(false);
+                    }, 300);
+                  }}
                 >
                   <Link
                     href="/contact"
