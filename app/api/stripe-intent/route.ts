@@ -6,9 +6,17 @@ import { woocommerce } from '@/lib/woocommerce';
  * Initialize Stripe with the secret key from environment variables
  * Using the latest stable API version for consistency
  */
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || '', {
+const stripeSecretKey = process.env.STRIPE_SECRET_KEY || '';
+
+
+// Check if Stripe key is valid (not truncated or placeholder)
+const isValidStripeKey = stripeSecretKey &&
+  stripeSecretKey.startsWith('sk_') &&
+  stripeSecretKey.length > 50;  // Real keys are typically 100+ chars
+
+const stripe = isValidStripeKey ? new Stripe(stripeSecretKey, {
   apiVersion: '2022-11-15' as Stripe.LatestApiVersion,
-});
+}) : null;
 
 /**
  * Type definition for WooCommerce order response
@@ -102,6 +110,24 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Check if Stripe is properly configured
+    if (!stripe) {
+      console.error('Stripe is not configured. Invalid or missing API key.');
+      console.error('Current key status:', {
+        hasKey: !!stripeSecretKey,
+        keyStart: stripeSecretKey ? stripeSecretKey.substring(0, 7) : 'none',
+        keyLength: stripeSecretKey ? stripeSecretKey.length : 0
+      });
+
+      return NextResponse.json(
+        {
+          message: 'Payment processing is not configured. Please contact support.',
+          error: 'Invalid Stripe API key'
+        },
+        { status: 500 }
+      );
+    }
+
     // Log the orderId we're processing
     console.log(`Processing payment intent for order ID: ${orderId}`);
     
@@ -150,7 +176,7 @@ export async function POST(request: NextRequest) {
 
     // Create Stripe PaymentIntent
     console.log('Creating Stripe PaymentIntent...');
-    const paymentIntent = await stripe.paymentIntents.create({
+    const paymentIntent = await stripe!.paymentIntents.create({
       amount: orderTotalInCents,
       currency: 'eur',
       payment_method_types: ['card', 'ideal', 'bancontact'],

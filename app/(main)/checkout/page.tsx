@@ -1,15 +1,18 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback, useRef, useImperativeHandle } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import dynamic from 'next/dynamic';
 import { useCart } from '../../contexts/CartContext';
 import CouponInput from '../../components/CouponInput';
 
-// Dynamically import Stripe component to avoid SSR issues
+// Import type for the ref handle
+import type { StripePaymentFormHandle } from '@/app/components/StripePaymentForm';
+
+// Dynamically import Stripe component to avoid SSR issues with forwardRef support
 const StripePaymentForm = dynamic(
-  () => import('./payment/StripePaymentForm'),
+  () => import('@/app/components/StripePaymentForm'),
   {
     ssr: false,
     loading: () => (
@@ -19,7 +22,7 @@ const StripePaymentForm = dynamic(
       </div>
     )
   }
-);
+) as React.ForwardRefExoticComponent<any & React.RefAttributes<StripePaymentFormHandle>>;
 
 export default function UnifiedCheckoutPage() {
   const router = useRouter();
@@ -37,6 +40,7 @@ export default function UnifiedCheckoutPage() {
     getShippingCost,
     getFinalTotal,
     allowedCountries,
+    loadAllowedCountries,
     isHydrated
   } = useCart();
 
@@ -66,11 +70,16 @@ export default function UnifiedCheckoutPage() {
   const [error, setError] = useState('');
   const [showOrderSummary, setShowOrderSummary] = useState(true);
   const [countryNames, setCountryNames] = useState<{ [key: string]: string }>({});
-  const [orderId, setOrderId] = useState<number | null>(null);
-  const [orderCreated, setOrderCreated] = useState(false);
+
+  // Payment flow states
+  const [createdOrderId, setCreatedOrderId] = useState<number | null>(null);
 
   // Field validation states
   const [fieldErrors, setFieldErrors] = useState<{ [key: string]: string }>({});
+
+  // Debounce timers for shipping calculations
+  const debounceTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const stripeFormRef = useRef<StripePaymentFormHandle>(null);
 
   // Auto-save to sessionStorage
   useEffect(() => {
@@ -113,52 +122,60 @@ export default function UnifiedCheckoutPage() {
     }
   }, [shipping.selectedRate]);
 
-  // Country names mapping
+  // Load country names from API
   useEffect(() => {
-    const names: { [key: string]: string } = {
-      'NL': 'Nederland',
-      'BE': 'België',
-      'DE': 'Duitsland',
-      'FR': 'Frankrijk',
-      'LU': 'Luxemburg',
-      'AT': 'Oostenrijk',
-      'ES': 'Spanje',
-      'IT': 'Italië',
-      'GB': 'Verenigd Koninkrijk',
-      'US': 'Verenigde Staten',
-      'PL': 'Polen',
-      'CZ': 'Tsjechië',
-      'SK': 'Slowakije',
-      'HU': 'Hongarije',
-      'RO': 'Roemenië',
-      'BG': 'Bulgarije',
-      'GR': 'Griekenland',
-      'PT': 'Portugal',
-      'SE': 'Zweden',
-      'DK': 'Denemarken',
-      'NO': 'Noorwegen',
-      'FI': 'Finland',
-      'IE': 'Ierland',
-      'CH': 'Zwitserland',
-      'CA': 'Canada',
-      'AU': 'Australië',
-      'NZ': 'Nieuw-Zeeland',
+    const loadCountryNames = async () => {
+      try {
+        const response = await fetch('/api/shipping?action=countries');
+        if (response.ok) {
+          const data = await response.json();
+          if (data.countriesWithNames) {
+            setCountryNames(data.countriesWithNames);
+          }
+        }
+      } catch (error) {
+        console.error('Failed to load country names:', error);
+        // Fallback to minimal set
+        setCountryNames({
+          'BE': 'België',
+          'NL': 'Nederland'
+        });
+      }
     };
-    setCountryNames(names);
+
+    loadCountryNames();
   }, []);
 
   // Update shipping when address changes
+  // Initialize shipping with default country on mount
   useEffect(() => {
-    if (formData.country && formData.country !== shipping.country) {
-      setShippingCountry(formData.country);
-    }
-  }, [formData.country]);
+    if (!isHydrated) return;
 
-  useEffect(() => {
-    if (formData.postcode && formData.postcode !== shipping.postcode) {
-      setShippingPostcode(formData.postcode);
+    // Check if cart has items
+    if (items.length === 0) {
+      router.push('/cart');
+      return;
     }
-  }, [formData.postcode]);
+
+    // Load allowed countries
+    loadAllowedCountries();
+
+    // Set default country if not set
+    if (!shipping.country && !formData.country) {
+      const defaultCountry = 'NL';
+      setFormData(prev => ({ ...prev, country: defaultCountry }));
+      setShippingCountry(defaultCountry);
+    } else if (formData.country && !shipping.country) {
+      // Sync shipping country with form data on mount
+      setShippingCountry(formData.country);
+      if (formData.postcode) {
+        setShippingPostcode(formData.postcode);
+      }
+    } else if (shipping.country && !shipping.rates.length) {
+      // If country is set but no rates, trigger calculation
+      setShippingCountry(shipping.country);
+    }
+  }, [isHydrated]);
 
   // Calculate pricing
   const subtotal = getTotalPrice();
@@ -166,6 +183,33 @@ export default function UnifiedCheckoutPage() {
   const subtotalAfterDiscount = getTotalPriceAfterDiscount();
   const shippingCost = getShippingCost();
   const total = getFinalTotal();
+
+  // Debounced shipping calculation
+  const debouncedShippingUpdate = useCallback((country: string, postcode: string) => {
+    // Clear existing timer
+    if (debounceTimerRef.current) {
+      clearTimeout(debounceTimerRef.current);
+    }
+
+    // Set new timer for shipping calculation
+    debounceTimerRef.current = setTimeout(async () => {
+      if (country) {
+        await setShippingCountry(country);
+      }
+      if (postcode) {
+        await setShippingPostcode(postcode);
+      }
+    }, 500); // Wait 500ms after user stops typing
+  }, [setShippingCountry, setShippingPostcode]);
+
+  // Cleanup debounce timer on unmount
+  useEffect(() => {
+    return () => {
+      if (debounceTimerRef.current) {
+        clearTimeout(debounceTimerRef.current);
+      }
+    };
+  }, []);
 
   // Input handlers
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -184,6 +228,15 @@ export default function UnifiedCheckoutPage() {
         delete newErrors[name];
         return newErrors;
       });
+    }
+
+    // Update shipping with debouncing for postcode, immediate for country
+    if (name === 'country') {
+      // Country changes should be immediate as they affect available options
+      setShippingCountry(value);
+    } else if (name === 'postcode') {
+      // Debounce postcode changes to reduce API calls while typing
+      debouncedShippingUpdate(formData.country, value);
     }
   };
 
@@ -234,9 +287,9 @@ export default function UnifiedCheckoutPage() {
     return Object.keys(errors).length === 0;
   };
 
-  // Create order and process payment
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+
+  // Create order and initiate payment
+  const handlePayNow = async () => {
 
     if (!validateForm()) {
       // Scroll to first error
@@ -348,19 +401,72 @@ export default function UnifiedCheckoutPage() {
         coupon: appliedCoupon
       }));
 
-      setOrderId(result.order.id);
-      setOrderCreated(true);
+      // Immediately redirect to Stripe payment based on selected method
+      try {
+        const stripeResponse = await fetch('/api/stripe-intent', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ orderId: result.order.id }),
+        });
 
-      // Scroll to payment section
-      const paymentSection = document.getElementById('payment-section');
-      if (paymentSection) {
-        paymentSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        if (!stripeResponse.ok) {
+          throw new Error('Failed to create payment intent');
+        }
+
+        const { clientSecret, publishableKey } = await stripeResponse.json();
+
+        // Store order data for payment processing
+        sessionStorage.setItem('orderData', JSON.stringify({
+          id: result.order.id,
+          order_key: result.order.order_key,
+          status: result.order.status,
+          total: result.order.total,
+          currency: result.order.currency,
+          customer: {
+            first_name: formData.firstName,
+            last_name: formData.lastName,
+            email: formData.email,
+            phone: formData.phone,
+            address_1: formData.address,
+            address_2: formData.address2,
+            city: formData.city,
+            postcode: formData.postcode,
+            country: formData.country
+          },
+          shipping_method: shipping.selectedRate?.method_title || 'Verzekerde verzending',
+          shipping_total: getShippingCost().toFixed(2),
+          items: items.map(item => ({
+            id: item.product.id,
+            name: item.product.name,
+            price: item.product.price,
+            quantity: item.quantity,
+            images: item.product.images
+          })),
+          coupon: appliedCoupon
+        }));
+
+        sessionStorage.setItem('pendingOrderId', result.order.id.toString());
+
+        // Set order ID and show payment form inline
+        setCreatedOrderId(result.order.id);
+        setLoading(false);
+
+        // Wait for StripePaymentForm to mount and then trigger payment
+        setTimeout(() => {
+          if (stripeFormRef.current?.submit) {
+            stripeFormRef.current.submit();
+          }
+        }, 1000);
+
+      } catch (paymentError) {
+        console.error('Payment setup error:', paymentError);
+        setError('Er is een probleem opgetreden bij het opzetten van de betaling. Probeer het opnieuw.');
+        setLoading(false);
       }
     } catch (err: any) {
       console.error('Order error:', err);
       setError('Er is een fout opgetreden bij het verwerken van je bestelling.');
       window.scrollTo({ top: 0, behavior: 'smooth' });
-    } finally {
       setLoading(false);
     }
   };
@@ -625,7 +731,7 @@ export default function UnifiedCheckoutPage() {
             )}
 
             {/* Single unified checkout form */}
-            <form onSubmit={handleSubmit} className="space-y-8">
+            <div className="space-y-8">
               {/* Contact Information */}
               <div className="mb-8">
                 <h2 className="text-2xl font-bold text-[#492c4a] mb-6 font-[family-name:var(--font-eb-garamond)]">
@@ -868,72 +974,6 @@ export default function UnifiedCheckoutPage() {
 
               {/* Payment */}
               <div className="mb-8">
-                <h2 className="text-2xl font-bold text-[#492c4a] mb-3 font-[family-name:var(--font-eb-garamond)]">
-                  Betaling
-                </h2>
-                <p className="text-base text-[#6b7280] mb-5 font-[family-name:var(--font-eb-garamond)]">
-                  Alle transacties zijn beveiligd en versleuteld.
-                </p>
-
-                {/* Payment Methods */}
-                <div className="space-y-3 mb-6">
-                  {/* iDEAL */}
-                  <label className="block border border-[#d1d5db] rounded-lg p-4 cursor-pointer hover:border-[#492c4a]/50 transition-all">
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center">
-                        <input
-                          type="radio"
-                          name="paymentMethod"
-                          value="ideal"
-                          defaultChecked
-                          className="mr-3 text-[#492c4a] focus:ring-[#492c4a]"
-                        />
-                        <img src="https://cdn.shopify.com/shopifycloud/checkout-web/assets/c1/assets/ideal.Dvz0zDwq.svg" alt="iDEAL" className="h-6" />
-                      </div>
-                    </div>
-                  </label>
-
-                  {/* Credit Card */}
-                  <label className="block border border-[#d1d5db] rounded-lg p-4 cursor-pointer hover:border-[#492c4a]/50 transition-all">
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center">
-                        <input
-                          type="radio"
-                          name="paymentMethod"
-                          value="creditcard"
-                          className="mr-3 text-[#492c4a] focus:ring-[#492c4a]"
-                        />
-                        <span className="font-[family-name:var(--font-eb-garamond)] text-[#1a1a1a]">Creditcard</span>
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <img src="https://cdn.shopify.com/shopifycloud/checkout-web/assets/c1/assets/visa.sxIq5Dot.svg" alt="VISA" className="h-6" />
-                        <img src="https://cdn.shopify.com/shopifycloud/checkout-web/assets/c1/assets/mastercard.1c4_lyMp.svg" alt="Mastercard" className="h-6" />
-                        <img src="https://cdn.shopify.com/shopifycloud/checkout-web/assets/c1/assets/amex.Csr7hRoy.svg" alt="Amex" className="h-6" />
-                      </div>
-                    </div>
-                  </label>
-
-                  {/* PayPal */}
-                  <label className="block border border-[#d1d5db] rounded-lg p-4 cursor-pointer hover:border-[#492c4a]/50 transition-all">
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center">
-                        <input
-                          type="radio"
-                          name="paymentMethod"
-                          value="paypal"
-                          className="mr-3 text-[#492c4a] focus:ring-[#492c4a]"
-                        />
-                        <span className="font-[family-name:var(--font-eb-garamond)] text-[#1a1a1a]">PayPal</span>
-                      </div>
-                      <div className="flex items-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 38 11" className="h-4" style={{ width: 'auto' }}>
-                          <path fill="#253B80" d="M4.54.022c.973 0 1.706.269 2.12.777.376.463.5 1.124.37 1.966-.288 1.923-1.393 2.894-3.308 2.894h-.92a.41.41 0 0 0-.4.358l-.317 2.106a.41.41 0 0 1-.398.358H.299a.25.25 0 0 1-.24-.293L1.235.379a.41.41 0 0 1 .4-.357zm-1.282 1.69c-.119 0-.22.09-.24.213L2.71 3.966h.44c.77 0 1.567 0 1.726-1.093.058-.383.011-.661-.141-.848-.256-.314-.752-.314-1.277-.314zm6.539.989c.67 0 1.343.153 1.645.612l.096.147.063-.407a.25.25 0 0 1 .24-.215h1.39c.15 0 .262.14.239.293l-.752 4.992a.41.41 0 0 1-.4.358h-1.253c-.149 0-.263-.14-.24-.294l.063-.406c-.01.013-.697.835-1.927.835-.722 0-1.329-.218-1.753-.742-.462-.57-.651-1.386-.518-2.24C6.946 3.922 8.259 2.7 9.797 2.7Zm.33 1.546c-.793 0-1.435.578-1.56 1.403-.066.406.012.77.217 1.026.208.257.531.392.935.392.805 0 1.437-.559 1.571-1.392.06-.403-.023-.77-.235-1.031s-.534-.398-.929-.398Zm10.516-1.408h-1.399a.4.4 0 0 0-.334.186l-1.93 2.977-.817-2.861a.41.41 0 0 0-.388-.302H14.4c-.167 0-.283.171-.23.336l1.541 4.737-1.448 2.142c-.114.169 0 .4.197.4h1.397a.4.4 0 0 0 .332-.18l4.653-7.036c.111-.169-.003-.399-.199-.399"></path>
-                          <path fill="#179BD7" d="M25.275.022c.973 0 1.706.269 2.118.777.376.463.502 1.124.371 1.966-.289 1.923-1.393 2.894-3.308 2.894h-.92a.41.41 0 0 0-.399.358l-.334 2.214a.29.29 0 0 1-.279.25h-1.491c-.148 0-.263-.14-.24-.293L21.97.379a.41.41 0 0 1 .398-.357zm-1.283 1.69c-.12 0-.22.09-.24.213l-.308 2.041h.439c.77 0 1.568 0 1.726-1.093.058-.383.012-.661-.14-.848-.256-.314-.752-.314-1.277-.314zm6.54.989c.671 0 1.343.153 1.644.612l.098.147.061-.407a.246.246 0 0 1 .24-.215h1.39c.15 0 .263.14.24.293l-.753 4.992a.41.41 0 0 1-.398.358H31.8c-.149 0-.262-.14-.24-.294l.062-.406a2.62 2.62 0 0 1-1.927.835c-.721 0-1.328-.218-1.752-.742-.463-.57-.65-1.386-.518-2.24.256-1.712 1.57-2.933 3.107-2.933m.33 1.546c-.793 0-1.435.578-1.561 1.403-.065.406.013.77.219 1.026.207.257.531.392.934.392.805 0 1.437-.559 1.57-1.392.062-.403-.022-.77-.235-1.031-.211-.26-.532-.398-.928-.398ZM35.606.236l-1.193 7.952c-.023.154.09.293.239.293h1.2a.41.41 0 0 0 .398-.357L37.427.315c.023-.154-.09-.293-.239-.293h-1.343a.25.25 0 0 0-.24.214Z"></path>
-                        </svg>
-                      </div>
-                    </div>
-                  </label>
-                </div>
 
                 {/* Billing Address Section */}
                 <div className="border-t border-[#e5e7eb] pt-6">
@@ -1106,58 +1146,68 @@ export default function UnifiedCheckoutPage() {
                   </div>
                 </div>
 
-                {/* Security Note */}
-                <div className="flex items-center space-x-2 mt-6 pt-6 border-t border-[#e5e7eb]">
-                  <svg className="w-4 h-4 text-[#6b7280]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                  </svg>
-                  <span className="text-base text-[#6b7280] font-[family-name:var(--font-eb-garamond)]">
-                    Veilig en versleuteld
-                  </span>
-                </div>
               </div>
 
-              {/* Submit button - creates order */}
-              {!orderCreated ? (
-                <button
-                  type="submit"
-                  disabled={loading || !!shipping.error}
-                  className="w-full bg-[#fbe022] text-black py-4 px-6 rounded-full font-semibold hover:bg-[#e6cc1f] transition-all transform hover:scale-[1.02] disabled:bg-gray-300 disabled:text-gray-500 disabled:transform-none flex items-center justify-center font-[family-name:var(--font-eb-garamond)]"
-                >
-                  {loading ? (
-                    <>
-                      <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-black" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                      </svg>
-                      Order wordt aangemaakt...
-                    </>
-                  ) : (
-                    'Ga verder naar betaling'
-                  )}
-                </button>
-              ) : (
-                <div className="bg-green-50 border border-green-200 p-4 rounded-lg">
-                  <p className="text-green-800 font-medium mb-2">✓ Order succesvol aangemaakt</p>
-                  <p className="text-base text-green-700">Vul hieronder je betaalgegevens in om de bestelling af te ronden.</p>
-                </div>
-              )}
-            </form>
-
-            {/* Payment Section - appears after order creation */}
-            {orderCreated && orderId && (
-              <div id="payment-section" className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-sm border border-[#E8DCC6]/40 p-6 mt-6">
-                <h2 className="text-xl font-semibold text-[#492c4a] mb-4 font-[family-name:var(--font-eb-garamond)]">
+              {/* Stripe Payment Form - always visible */}
+              <div className="pb-6 mb-6">
+                <h2 className="text-2xl font-semibold text-[#492c4a] mb-2 font-[family-name:var(--font-eb-garamond)]">
                   Betaling
                 </h2>
+                <p className="text-base text-[#6b7280] mb-4 font-[family-name:var(--font-eb-garamond)]">
+                  Alle transacties zijn beveiligd en versleuteld.
+                </p>
                 <StripePaymentForm
-                  orderId={orderId}
-                  total={total}
+                  ref={stripeFormRef}
+                  orderId={createdOrderId || 0}
+                  total={getFinalTotal()}
                   onSuccess={handlePaymentSuccess}
                   onError={(error) => setError(error)}
                 />
               </div>
-            )}
+
+              {/* Submit button - create order and proceed to payment */}
+              <button
+                type="submit"
+                onClick={() => {
+                  if (createdOrderId && stripeFormRef.current?.submit) {
+                    // If order already created, directly submit the payment form
+                    stripeFormRef.current.submit();
+                  } else {
+                    // First click: create order
+                    handlePayNow();
+                  }
+                }}
+                disabled={loading || !!shipping.error}
+                className="w-full bg-amber-orange text-black py-4 px-6 rounded-md font-semibold hover:bg-amber-orange/90 transition-all transform hover:scale-[1.02] disabled:bg-gray-300 disabled:transform-none flex items-center justify-center font-[family-name:var(--font-eb-garamond)] text-2xl mt-6"
+              >
+                {loading ? (
+                  <>
+                    <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-black" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    Bestelling wordt verwerkt...
+                  </>
+                ) : (
+                  <>
+                    <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+                    </svg>
+                    Betaal nu - €{total.toFixed(2)}
+                  </>
+                )}
+              </button>
+
+              {/* Security trust element */}
+              <div className="flex items-center space-x-2 mt-6 pt-6 border-t border-[#e5e7eb]">
+                <svg className="w-4 h-4 text-[#6b7280]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+                </svg>
+                <span className="text-base text-[#6b7280] font-[family-name:var(--font-eb-garamond)]">
+                  Veilig en versleuteld
+                </span>
+              </div>
+            </div>
           </div>
 
           {/* Order summary - right side (desktop) */}

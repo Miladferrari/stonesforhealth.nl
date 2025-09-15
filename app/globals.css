@@ -95,7 +95,7 @@ html {
   --color-navy-blue: #1F2A44;
   --color-off-white: #F5F6F8;
   --color-medical-green: #93c84a;
-  --color-amber-orange: #ff8101;
+  --color-amber-orange: #fbe022;
   --color-steel-gray: #333333;
 }
 
@@ -179,7 +179,7 @@ html {
   --navy-blue: #1F2A44;
   --off-white: #F5F6F8;
   --medical-green: #93c84a;
-  --amber-orange: #ff8101;
+  --amber-orange: #fbe022;
   --steel-gray: #333333;
   
   /* Legacy mappings for smooth transition */
@@ -265,9 +265,9 @@ main {
 .bg-off-white { background-color: var(--off-white); }
 .bg-medical-green { background-color: var(--medical-green); }
 .bg-amber-orange { background-color: var(--amber-orange); }
-.hover\:bg-amber-orange\/90:hover { background-color: rgba(255, 129, 1, 0.9); }
-.bg-amber-orange\/10 { background-color: rgba(255, 129, 1, 0.1); }
-.hover\:bg-amber-orange\/10:hover { background-color: rgba(255, 129, 1, 0.1); }
+.hover\:bg-amber-orange\/90:hover { background-color: rgba(251, 224, 34, 0.9); }
+.bg-amber-orange\/10 { background-color: rgba(251, 224, 34, 0.1); }
+.hover\:bg-amber-orange\/10:hover { background-color: rgba(251, 224, 34, 0.1); }
 .text-navy-blue { color: var(--navy-blue); }
 .text-off-white { color: var(--off-white); }
 .text-medical-green { color: var(--medical-green); }
