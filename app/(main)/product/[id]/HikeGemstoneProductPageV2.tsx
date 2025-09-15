@@ -240,7 +240,7 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
                             selectedBundle === 'duo' ? (regularPrice * 2).toFixed(2).replace('.', ',') :
                             (regularPrice * 3).toFixed(2).replace('.', ',')}
                         </span>
-                        <span className="badge inline-flex items-center gap-1 text-black text-[10px] sm:text-xs font-bold px-1.5 sm:px-2 py-0.5 sm:py-1 rounded hidden lg:inline-flex" style={{ backgroundColor: '#fbe022' }}>
+                        <span className="badge inline-flex max-[425px]:inline-flex items-center gap-1 text-black text-[10px] sm:text-xs font-bold px-1.5 sm:px-2 py-0.5 sm:py-1 rounded hidden lg:inline-flex" style={{ backgroundColor: '#fbe022' }}>
                           <span className="material-icons-outlined text-xs sm:text-sm">local_offer</span>
                           <span>JE BESPAART {selectedBundle === 'duo' ? '10' : selectedBundle === 'family' ? '17' : discount}%</span>
                         </span>
@@ -313,7 +313,7 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
           {/* Left: Large product image gallery */}
           <div className="space-y-4">
             {/* Main product image */}
-            <div className="aspect-square bg-gray-50 rounded-lg overflow-hidden">
+            <div className="aspect-square bg-white rounded-lg overflow-hidden">
               {images[selectedImage] && (
                 <div className="relative w-full h-full group">
                   <Image
@@ -470,7 +470,7 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
                           {/* Navigation arrows */}
                           <button
                             onClick={() => setCurrentReviewIndex(currentReviewIndex === 0 ? customerReviews.length - 1 : currentReviewIndex - 1)}
-                            className="absolute left-0 top-1/2 -translate-y-1/2 -ml-2 w-6 h-6 bg-white border border-gray-300 rounded-full flex items-center justify-center hover:bg-gray-50 z-10"
+                            className="absolute left-0 top-1/2 -translate-y-1/2 -ml-2 w-6 h-6 bg-white border border-gray-300 rounded-full flex items-center justify-center hover:bg-gray-100 z-10"
                           >
                             <svg width="8" height="8" viewBox="0 0 8 8" fill="none">
                               <path d="M5 1L2 4L5 7" stroke="#333" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
@@ -478,7 +478,7 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
                           </button>
                           <button
                             onClick={() => setCurrentReviewIndex((currentReviewIndex + 1) % customerReviews.length)}
-                            className="absolute right-0 top-1/2 -translate-y-1/2 -mr-2 w-6 h-6 bg-white border border-gray-300 rounded-full flex items-center justify-center hover:bg-gray-50 z-10"
+                            className="absolute right-0 top-1/2 -translate-y-1/2 -mr-2 w-6 h-6 bg-white border border-gray-300 rounded-full flex items-center justify-center hover:bg-gray-100 z-10"
                           >
                             <svg width="8" height="8" viewBox="0 0 8 8" fill="none">
                               <path d="M3 1L6 4L3 7" stroke="#333" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
@@ -490,7 +490,7 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
                             <div className="flex transition-transform duration-300" style={{ transform: `translateX(-${currentReviewIndex * 100}%)` }}>
                               {customerReviews.map((review) => (
                                 <div key={review.id} className="w-full flex-shrink-0">
-                                  <div className="bg-gray-50 rounded-lg p-3">
+                                  <div className="bg-white border border-gray-200 rounded-lg p-3">
                                     <div className="flex items-start gap-2.5">
                                       <img
                                         src={`https://ui-avatars.com/api/?name=${review.name}&background=492c4a&color=fff&size=40`}
@@ -629,7 +629,7 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
                   tabIndex={0}
                   className={`kaching-bundles__bar-main relative block p-4 border rounded-lg cursor-pointer transition-all ${
                     selectedBundle === 'single'
-                      ? 'border-black bg-gray-50'
+                      ? 'border-black bg-white'
                       : 'border-gray-300 hover:border-gray-400 bg-white'
                   }`}
                   onClick={() => setSelectedBundle('single')}
@@ -677,7 +677,7 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
                   tabIndex={0}
                   className={`kaching-bundles__bar-main relative block p-4 border rounded-lg cursor-pointer transition-all ${
                     selectedBundle === 'duo'
-                      ? 'border-black bg-gray-50'
+                      ? 'border-black bg-white'
                       : 'border-gray-300 hover:border-gray-400 bg-white'
                   }`}
                   onClick={() => setSelectedBundle('duo')}
@@ -728,7 +728,7 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
                   tabIndex={0}
                   className={`kaching-bundles__bar-main relative block p-4 border rounded-lg cursor-pointer transition-all ${
                     selectedBundle === 'family'
-                      ? 'border-black bg-gray-50'
+                      ? 'border-black bg-white'
                       : 'border-gray-300 hover:border-gray-400 bg-white'
                   }`}
                   onClick={() => setSelectedBundle('family')}
@@ -798,222 +798,230 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
         </div>
       </section>
 
-      {/* 3. 4-FEATURE ICONS SECTION - Enhanced with better styling */}
-      <section className="bg-gradient-to-b from-white to-gray-50 py-20">
+      {/* 3. FEATURES SECTION - Clean Design like Hike Footwear */}
+      <section className="bg-white py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-bold text-center text-gray-900 mb-4">
-            Waarom Kiezen Voor Stonesforhealth?
-          </h2>
-          <p className="text-center text-gray-600 mb-12 max-w-3xl mx-auto">
-            Ontdek de unieke eigenschappen die onze edelstenen onderscheiden van de rest
-          </p>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
 
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
-
-            {/* Feature 1 - Authentic Natural Stone */}
-            <div className="text-center group">
-              <div className="relative">
-                <div className="w-24 h-24 mx-auto mb-4 bg-gradient-to-br from-[#8B7355] to-[#6B5645] rounded-full flex items-center justify-center shadow-lg group-hover:shadow-xl transition-shadow">
-                  <svg className="w-12 h-12 text-white" fill="currentColor" viewBox="0 0 20 20">
-                    <path d="M10 2a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0v-1.5A.75.75 0 0110 2zM10 15a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0v-1.5A.75.75 0 0110 15zM10 7a3 3 0 100 6 3 3 0 000-6zM15.657 5.404a.75.75 0 10-1.06-1.06l-1.061 1.06a.75.75 0 001.06 1.06l1.06-1.06zM6.464 14.596a.75.75 0 10-1.06-1.06l-1.06 1.06a.75.75 0 001.06 1.06l1.06-1.06zM18 10a.75.75 0 01-.75.75h-1.5a.75.75 0 010-1.5h1.5A.75.75 0 0118 10zM5 10a.75.75 0 01-.75.75h-1.5a.75.75 0 010-1.5h1.5A.75.75 0 015 10zM14.596 15.657a.75.75 0 001.06-1.06l-1.06-1.061a.75.75 0 10-1.06 1.06l1.06 1.06zM5.404 6.464a.75.75 0 001.06-1.06l-1.06-1.06a.75.75 0 10-1.061 1.06l1.06 1.06z"/>
+            {/* Feature 1 - Authentic Stone */}
+            <div className="flex flex-col">
+              <div className="aspect-square mb-4 overflow-hidden rounded-lg bg-[#faf8f4]">
+                <div className="w-full h-full flex items-center justify-center p-8">
+                  <svg className="w-32 h-32 text-[#492c4a]" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 2L2 7v10c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V7l-10-5zm0 2.18l7 3.5V17c0 4.52-2.98 8.69-7 9.93-4.02-1.24-7-5.41-7-9.93V7.68l7-3.5zM10 12l-3 3 1.41 1.41L10 14.83l3.59 3.58L15 17l-5-5z"/>
+                    <circle cx="12" cy="10" r="1.5"/>
                   </svg>
                 </div>
-                <div className="absolute -top-1 -right-1">
-                  <span className="flex h-3 w-3">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-                    <span className="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
-                  </span>
-                </div>
               </div>
-              <h3 className="font-bold text-lg text-gray-900 mb-2">Authentieke Natuursteen</h3>
-              <p className="text-sm text-gray-600 leading-relaxed">100% natuurlijke edelstenen, gecertificeerd authentiek</p>
+              <div className="text-center px-2">
+                <h3 className="text-lg font-bold text-gray-900 mb-2 font-[family-name:var(--font-eb-garamond)]">Authentieke Natuursteen</h3>
+                <p className="text-sm text-gray-600 leading-relaxed">100% natuurlijke edelstenen, gecertificeerd authentiek en onbehandeld.</p>
+              </div>
             </div>
 
             {/* Feature 2 - Energetic Power */}
-            <div className="text-center group">
-              <div className="relative">
-                <div className="w-24 h-24 mx-auto mb-4 bg-gradient-to-br from-[#8B7355] to-[#6B5645] rounded-full flex items-center justify-center shadow-lg group-hover:shadow-xl transition-shadow">
-                  <svg className="w-12 h-12 text-white" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+            <div className="flex flex-col">
+              <div className="aspect-square mb-4 overflow-hidden rounded-lg bg-[#faf8f4]">
+                <div className="w-full h-full flex items-center justify-center p-8">
+                  <svg className="w-32 h-32 text-[#492c4a]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                    <circle cx="12" cy="12" r="10" strokeWidth="1" opacity="0.3"/>
+                    <circle cx="12" cy="12" r="7" strokeWidth="1" opacity="0.5"/>
                   </svg>
                 </div>
-                <div className="absolute -top-1 -right-1">
-                  <span className="flex h-3 w-3">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-yellow-400 opacity-75"></span>
-                    <span className="relative inline-flex rounded-full h-3 w-3 bg-yellow-500"></span>
-                  </span>
-                </div>
               </div>
-              <h3 className="font-bold text-lg text-gray-900 mb-2">Energetische Kracht</h3>
-              <p className="text-sm text-gray-600 leading-relaxed">Voorgeladen met positieve energie voor maximaal effect</p>
+              <div className="text-center px-2">
+                <h3 className="text-lg font-bold text-gray-900 mb-2 font-[family-name:var(--font-eb-garamond)]">Energetische Kracht</h3>
+                <p className="text-sm text-gray-600 leading-relaxed">Voorgeladen met positieve energie voor maximaal effect en directe werking.</p>
+              </div>
             </div>
 
             {/* Feature 3 - Spiritual Healing */}
-            <div className="text-center group">
-              <div className="relative">
-                <div className="w-24 h-24 mx-auto mb-4 bg-gradient-to-br from-[#8B7355] to-[#6B5645] rounded-full flex items-center justify-center shadow-lg group-hover:shadow-xl transition-shadow">
-                  <svg className="w-12 h-12 text-white" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clipRule="evenodd" />
+            <div className="flex flex-col">
+              <div className="aspect-square mb-4 overflow-hidden rounded-lg bg-[#faf8f4]">
+                <div className="w-full h-full flex items-center justify-center p-8">
+                  <svg className="w-32 h-32 text-[#492c4a]" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                    <path d="M12 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z" opacity="0.5"/>
+                    <path d="M12 11c-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4-1.79-4-4-4z" opacity="0.3"/>
                   </svg>
                 </div>
-                <div className="absolute -top-1 -right-1">
-                  <span className="flex h-3 w-3">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-pink-400 opacity-75"></span>
-                    <span className="relative inline-flex rounded-full h-3 w-3 bg-pink-500"></span>
-                  </span>
-                </div>
               </div>
-              <h3 className="font-bold text-lg text-gray-900 mb-2">Spirituele Helende Kracht</h3>
-              <p className="text-sm text-gray-600 leading-relaxed">Ondersteunt emotionele balans en spirituele groei</p>
+              <div className="text-center px-2">
+                <h3 className="text-lg font-bold text-gray-900 mb-2 font-[family-name:var(--font-eb-garamond)]">Spirituele Helende Kracht</h3>
+                <p className="text-sm text-gray-600 leading-relaxed">Ondersteunt emotionele balans en spirituele groei voor innerlijke rust.</p>
+              </div>
             </div>
 
             {/* Feature 4 - Ethically Sourced */}
-            <div className="text-center group">
-              <div className="relative">
-                <div className="w-24 h-24 mx-auto mb-4 bg-gradient-to-br from-[#8B7355] to-[#6B5645] rounded-full flex items-center justify-center shadow-lg group-hover:shadow-xl transition-shadow">
-                  <svg className="w-12 h-12 text-white" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+            <div className="flex flex-col">
+              <div className="aspect-square mb-4 overflow-hidden rounded-lg bg-[#faf8f4]">
+                <div className="w-full h-full flex items-center justify-center p-8">
+                  <svg className="w-32 h-32 text-[#492c4a]" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z" opacity="0.3"/>
                   </svg>
                 </div>
-                <div className="absolute -top-1 -right-1">
-                  <span className="flex h-3 w-3">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
-                    <span className="relative inline-flex rounded-full h-3 w-3 bg-blue-500"></span>
-                  </span>
-                </div>
               </div>
-              <h3 className="font-bold text-lg text-gray-900 mb-2">Ethisch Gewonnen</h3>
-              <p className="text-sm text-gray-600 leading-relaxed">Met respect voor mens, natuur en milieu</p>
+              <div className="text-center px-2">
+                <h3 className="text-lg font-bold text-gray-900 mb-2 font-[family-name:var(--font-eb-garamond)]">Ethisch Gewonnen</h3>
+                <p className="text-sm text-gray-600 leading-relaxed">Met respect voor mens, natuur en milieu, duurzaam en verantwoord.</p>
+              </div>
             </div>
+
           </div>
         </div>
       </section>
 
-      {/* 4. SOCIAL PROOF SECTION - Enhanced with testimonials */}
-      <section className="py-20">
+      {/* 4. CUSTOMER IMAGE SLIDER - Auto-scrolling like Hike Footwear */}
+      <section className="py-16 bg-white overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">
-              Klanten Ervaren Transformatie Met Onze Edelstenen!
+          <div className="text-center mb-8">
+            <h2 className="text-3xl font-bold text-gray-900 font-[family-name:var(--font-eb-garamond)]">
+              Klanten zijn dol op onze edelstenen!
             </h2>
-            <p className="text-lg text-gray-600">
-              Meer dan 5.000+ tevreden klanten wereldwijd
-            </p>
           </div>
 
-          {/* Testimonials Grid */}
-          <div className="grid md:grid-cols-3 gap-8 mb-12">
-            {/* Testimonial 1 */}
-            <div className="bg-white rounded-xl shadow-lg p-6 relative">
-              <div className="absolute -top-3 left-6">
-                <div className="flex gap-1">
-                  {[1,2,3,4,5].map(star => (
-                    <svg key={star} className="w-5 h-5 text-yellow-400 fill-current" viewBox="0 0 20 20">
-                      <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z" />
-                    </svg>
-                  ))}
-                </div>
+          {/* Auto-scrolling Image Slider */}
+          <div className="relative overflow-hidden">
+            <div className="flex gap-4 animate-scroll">
+              {/* First set of images - all using your 1.jpeg image */}
+              <div className="w-56 h-80 flex-shrink-0">
+                <img
+                  src="/1.jpeg"
+                  alt="Klant met edelsteen"
+                  className="w-full h-full object-cover rounded-lg"
+                />
               </div>
-              <blockquote className="mt-4">
-                <p className="text-gray-700 italic mb-4">
-                  "Sinds ik mijn amethist draag, voel ik me veel rustiger en gebalanceerd.
-                  De kwaliteit is werkelijk uitzonderlijk!"
-                </p>
-                <footer className="flex items-center gap-3">
-                  <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center">
-                    <span className="text-purple-600 font-bold">SB</span>
-                  </div>
-                  <div>
-                    <div className="font-semibold text-gray-900">Sarah B.</div>
-                    <div className="text-sm text-gray-500">Amsterdam</div>
-                  </div>
-                </footer>
-              </blockquote>
-            </div>
-
-            {/* Testimonial 2 */}
-            <div className="bg-white rounded-xl shadow-lg p-6 relative">
-              <div className="absolute -top-3 left-6">
-                <div className="flex gap-1">
-                  {[1,2,3,4,5].map(star => (
-                    <svg key={star} className="w-5 h-5 text-yellow-400 fill-current" viewBox="0 0 20 20">
-                      <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z" />
-                    </svg>
-                  ))}
-                </div>
+              <div className="w-56 h-80 flex-shrink-0">
+                <img
+                  src="/1.jpeg"
+                  alt="Kristallen collectie"
+                  className="w-full h-full object-cover rounded-lg"
+                />
               </div>
-              <blockquote className="mt-4">
-                <p className="text-gray-700 italic mb-4">
-                  "De rozenkwarts heeft mijn leven veranderd. Ik voel meer liefde en
-                  compassie, zowel voor mezelf als anderen."
-                </p>
-                <footer className="flex items-center gap-3">
-                  <div className="w-12 h-12 bg-pink-100 rounded-full flex items-center justify-center">
-                    <span className="text-pink-600 font-bold">MJ</span>
-                  </div>
-                  <div>
-                    <div className="font-semibold text-gray-900">Maria J.</div>
-                    <div className="text-sm text-gray-500">Rotterdam</div>
-                  </div>
-                </footer>
-              </blockquote>
-            </div>
-
-            {/* Testimonial 3 */}
-            <div className="bg-white rounded-xl shadow-lg p-6 relative">
-              <div className="absolute -top-3 left-6">
-                <div className="flex gap-1">
-                  {[1,2,3,4,5].map(star => (
-                    <svg key={star} className="w-5 h-5 text-yellow-400 fill-current" viewBox="0 0 20 20">
-                      <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z" />
-                    </svg>
-                  ))}
-                </div>
+              <div className="w-56 h-80 flex-shrink-0">
+                <img
+                  src="/1.jpeg"
+                  alt="Healing stenen"
+                  className="w-full h-full object-cover rounded-lg"
+                />
               </div>
-              <blockquote className="mt-4">
-                <p className="text-gray-700 italic mb-4">
-                  "Fantastische service en prachtige stenen! De energie is direct
-                  voelbaar. Absolute aanrader!"
-                </p>
-                <footer className="flex items-center gap-3">
-                  <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
-                    <span className="text-blue-600 font-bold">PV</span>
-                  </div>
-                  <div>
-                    <div className="font-semibold text-gray-900">Peter V.</div>
-                    <div className="text-sm text-gray-500">Utrecht</div>
-                  </div>
-                </footer>
-              </blockquote>
-            </div>
-          </div>
+              <div className="w-56 h-80 flex-shrink-0">
+                <img
+                  src="/1.jpeg"
+                  alt="Meditatie met kristallen"
+                  className="w-full h-full object-cover rounded-lg"
+                />
+              </div>
+              <div className="w-56 h-80 flex-shrink-0">
+                <img
+                  src="/1.jpeg"
+                  alt="Chakra stenen"
+                  className="w-full h-full object-cover rounded-lg"
+                />
+              </div>
+              <div className="w-56 h-80 flex-shrink-0">
+                <img
+                  src="/1.jpeg"
+                  alt="Edelsteen sieraden"
+                  className="w-full h-full object-cover rounded-lg"
+                />
+              </div>
+              <div className="w-56 h-80 flex-shrink-0">
+                <img
+                  src="/1.jpeg"
+                  alt="Kristallen energie"
+                  className="w-full h-full object-cover rounded-lg"
+                />
+              </div>
+              <div className="w-56 h-80 flex-shrink-0">
+                <img
+                  src="/1.jpeg"
+                  alt="Healing kristallen"
+                  className="w-full h-full object-cover rounded-lg"
+                />
+              </div>
 
-          {/* Trust badges */}
-          <div className="flex flex-wrap justify-center items-center gap-8 pt-8 border-t">
-            <div className="flex items-center gap-2">
-              <svg className="w-6 h-6 text-green-600" fill="currentColor" viewBox="0 0 20 20">
-                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-              </svg>
-              <span className="font-semibold text-gray-700">5000+ Tevreden Klanten</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <svg className="w-6 h-6 text-green-600" fill="currentColor" viewBox="0 0 20 20">
-                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-              </svg>
-              <span className="font-semibold text-gray-700">4.9/5 Gemiddelde Beoordeling</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <svg className="w-6 h-6 text-green-600" fill="currentColor" viewBox="0 0 20 20">
-                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-              </svg>
-              <span className="font-semibold text-gray-700">100% Authentiek Gecertificeerd</span>
+              {/* Duplicate set for seamless loop */}
+              <div className="w-56 h-80 flex-shrink-0">
+                <img
+                  src="/1.jpeg"
+                  alt="Klant met edelsteen"
+                  className="w-full h-full object-cover rounded-lg"
+                />
+              </div>
+              <div className="w-56 h-80 flex-shrink-0">
+                <img
+                  src="/1.jpeg"
+                  alt="Kristallen collectie"
+                  className="w-full h-full object-cover rounded-lg"
+                />
+              </div>
+              <div className="w-56 h-80 flex-shrink-0">
+                <img
+                  src="/1.jpeg"
+                  alt="Healing stenen"
+                  className="w-full h-full object-cover rounded-lg"
+                />
+              </div>
+              <div className="w-56 h-80 flex-shrink-0">
+                <img
+                  src="/1.jpeg"
+                  alt="Meditatie met kristallen"
+                  className="w-full h-full object-cover rounded-lg"
+                />
+              </div>
+              <div className="w-56 h-80 flex-shrink-0">
+                <img
+                  src="/1.jpeg"
+                  alt="Chakra stenen"
+                  className="w-full h-full object-cover rounded-lg"
+                />
+              </div>
+              <div className="w-56 h-80 flex-shrink-0">
+                <img
+                  src="/1.jpeg"
+                  alt="Edelsteen sieraden"
+                  className="w-full h-full object-cover rounded-lg"
+                />
+              </div>
+              <div className="w-56 h-80 flex-shrink-0">
+                <img
+                  src="/1.jpeg"
+                  alt="Kristallen energie"
+                  className="w-full h-full object-cover rounded-lg"
+                />
+              </div>
+              <div className="w-56 h-80 flex-shrink-0">
+                <img
+                  src="/1.jpeg"
+                  alt="Healing kristallen"
+                  className="w-full h-full object-cover rounded-lg"
+                />
+              </div>
             </div>
           </div>
         </div>
+
+        <style jsx>{`
+          @keyframes scroll {
+            0% {
+              transform: translateX(0);
+            }
+            100% {
+              transform: translateX(-50%);
+            }
+          }
+
+          .animate-scroll {
+            animation: scroll 30s linear infinite;
+          }
+        `}</style>
       </section>
 
       {/* 5A. MAIN CONTENT SECTION - Large Text + Image */}
-      <section className="py-16 bg-gray-50">
+      <section className="py-16 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
 
@@ -1163,7 +1171,7 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
       </section>
 
       {/* 5C. EXPERT ENDORSEMENT SECTION */}
-      <section className="py-16 bg-gray-50">
+      <section className="py-16 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
 
@@ -1331,7 +1339,7 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
       </section>
 
       {/* 7. REVIEWS SECTION */}
-      <section className="py-16 bg-gray-50">
+      <section className="py-16 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-8">
             <div className="flex justify-center items-center gap-2 mb-4">
