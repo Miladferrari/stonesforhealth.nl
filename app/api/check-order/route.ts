@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { fetchFromWooCommerce } from '@/lib/woocommerce';
+import { woocommerce } from '@/lib/woocommerce';
 
 export async function GET(request: NextRequest) {
   try {
@@ -14,7 +14,7 @@ export async function GET(request: NextRequest) {
     }
 
     // Fetch order from WooCommerce
-    const order = await fetchFromWooCommerce(`orders/${orderId}`);
+    const order = await woocommerce.getOrder(orderId);
 
     if (!order || order.code === 'woocommerce_rest_shop_order_invalid_id') {
       return NextResponse.json(
@@ -88,7 +88,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Fetch order from WooCommerce
-    const order = await fetchFromWooCommerce(`orders/${orderId}`);
+    const order = await woocommerce.getOrder(orderId);
 
     if (!order || order.code === 'woocommerce_rest_shop_order_invalid_id') {
       return NextResponse.json(

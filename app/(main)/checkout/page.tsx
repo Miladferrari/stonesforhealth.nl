@@ -148,6 +148,8 @@ export default function UnifiedCheckoutPage() {
 
   // Update shipping when address changes
   // Initialize shipping with default country on mount
+  const [countriesLoaded, setCountriesLoaded] = useState(false);
+
   useEffect(() => {
     if (!isHydrated) return;
 
@@ -157,25 +159,24 @@ export default function UnifiedCheckoutPage() {
       return;
     }
 
-    // Load allowed countries
-    loadAllowedCountries();
+    // Load allowed countries only once
+    if (!countriesLoaded) {
+      loadAllowedCountries();
+      setCountriesLoaded(true);
+    }
+  }, [isHydrated, items.length, router, countriesLoaded, loadAllowedCountries]);
+
+  // Set default country separately to avoid loops
+  useEffect(() => {
+    if (!isHydrated) return;
 
     // Set default country if not set
     if (!shipping.country && !formData.country) {
       const defaultCountry = 'NL';
       setFormData(prev => ({ ...prev, country: defaultCountry }));
       setShippingCountry(defaultCountry);
-    } else if (formData.country && !shipping.country) {
-      // Sync shipping country with form data on mount
-      setShippingCountry(formData.country);
-      if (formData.postcode) {
-        setShippingPostcode(formData.postcode);
-      }
-    } else if (shipping.country && !shipping.rates.length) {
-      // If country is set but no rates, trigger calculation
-      setShippingCountry(shipping.country);
     }
-  }, [isHydrated]);
+  }, [isHydrated]); // Only run once when hydrated
 
   // Calculate pricing
   const subtotal = getTotalPrice();

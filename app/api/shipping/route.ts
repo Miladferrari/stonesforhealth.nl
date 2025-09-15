@@ -1,35 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { woocommerce } from '@/lib/woocommerce';
 
-// Cache for shipping zones and methods to reduce API calls
-let shippingCache: {
-  zones: any[] | null;
-  methods: { [zoneId: string]: any[] };
-  timestamp: number;
-} = {
-  zones: null,
-  methods: {},
-  timestamp: 0
-};
-
-const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes cache
-
-// Fetch shipping zones from WooCommerce
+// Fetch shipping zones from WooCommerce (no caching for real-time updates)
 async function fetchShippingZones() {
-  const now = Date.now();
-
-  // Return cached data if still valid
-  if (shippingCache.zones && (now - shippingCache.timestamp) < CACHE_DURATION) {
-    return shippingCache.zones;
-  }
-
   try {
     console.log('[Shipping API] Fetching zones from WooCommerce');
     const zones = await woocommerce.getShippingZones();
 
     if (zones && Array.isArray(zones)) {
-      shippingCache.zones = zones;
-      shippingCache.timestamp = now;
       console.log('[Shipping API] Found zones:', zones.map((z: any) => ({ id: z.id, name: z.name })));
       return zones;
     }
@@ -41,21 +19,13 @@ async function fetchShippingZones() {
   }
 }
 
-// Fetch shipping methods for a specific zone
+// Fetch shipping methods for a specific zone (no caching for real-time updates)
 async function fetchZoneMethods(zoneId: number) {
-  const now = Date.now();
-
-  // Return cached methods if still valid
-  if (shippingCache.methods[zoneId] && (now - shippingCache.timestamp) < CACHE_DURATION) {
-    return shippingCache.methods[zoneId];
-  }
-
   try {
     console.log(`[Shipping API] Fetching methods for zone ${zoneId}`);
     const methods = await woocommerce.getShippingZoneMethods(zoneId);
 
     if (methods && Array.isArray(methods)) {
-      shippingCache.methods[zoneId] = methods;
       console.log(`[Shipping API] Zone ${zoneId} methods:`, methods.map((m: any) => ({
         id: m.id,
         title: m.title,
@@ -132,13 +102,17 @@ async function calculateShippingRates(country: string, total: number, postcode?:
   const zones = await fetchShippingZones();
   const rates: any[] = [];
 
-  // Find the zone for this country
-  let applicableZone = null;
+  // Check ALL zones for shipping methods
+  const applicableZones: any[] = [];
 
   for (const zone of zones) {
-    if (zone.id === 0) continue; // Skip rest of world zone initially
-
     try {
+      // For zone 0 (rest of world), always include it as a fallback
+      if (zone.id === 0) {
+        applicableZones.push(zone);
+        continue;
+      }
+
       const locations = await woocommerce.getShippingZoneLocations(zone.id);
 
       if (locations && Array.isArray(locations)) {
@@ -147,8 +121,7 @@ async function calculateShippingRates(country: string, total: number, postcode?:
         );
 
         if (hasCountry) {
-          applicableZone = zone;
-          break;
+          applicableZones.push(zone);
         }
       }
     } catch (error) {
@@ -156,23 +129,34 @@ async function calculateShippingRates(country: string, total: number, postcode?:
     }
   }
 
-  // If no specific zone found, check for "rest of world" zone
-  if (!applicableZone) {
-    applicableZone = zones.find(z => z.id === 0);
-  }
-
-  if (!applicableZone) {
-    console.log(`[Shipping API] No shipping zone found for country: ${country}`);
+  if (applicableZones.length === 0) {
+    console.log(`[Shipping API] No shipping zones found for country: ${country}`);
     return [];
   }
 
-  console.log(`[Shipping API] Using zone: ${applicableZone.name} (ID: ${applicableZone.id}) for country: ${country}`);
+  console.log(`[Shipping API] Found ${applicableZones.length} applicable zones for country: ${country}`);
 
-  // Get methods for this zone
-  const methods = await fetchZoneMethods(applicableZone.id);
+  // Process methods from ALL applicable zones
+  for (const zone of applicableZones) {
+    console.log(`[Shipping API] Processing zone: ${zone.name} (ID: ${zone.id})`);
 
-  for (const method of methods) {
-    if (!method.enabled) continue;
+    // Get methods for this zone
+    const methods = await fetchZoneMethods(zone.id);
+
+    for (const method of methods) {
+    console.log(`[Shipping API] Processing method:`, {
+      id: method.id,
+      method_id: method.method_id,
+      instance_id: method.instance_id,
+      title: method.title,
+      enabled: method.enabled,
+      settings: method.settings
+    });
+
+    if (!method.enabled) {
+      console.log(`[Shipping API] Skipping disabled method: ${method.title}`);
+      continue;
+    }
 
     // Parse method settings
     const settings = method.settings || {};
@@ -199,34 +183,46 @@ async function calculateShippingRates(country: string, total: number, postcode?:
         cost = 2.95;
       }
 
-      rates.push({
+      const flatRate = {
         method_id: `${method.method_id}:${method.instance_id}`,
         method_title: method.title || method.method_title || 'Verzending',
         cost: cost,
         free: false,
         delivery_time: country === 'NL' ? '1-2 werkdagen' : '2-3 werkdagen'
-      });
+      };
+      console.log(`[Shipping API] Adding flat_rate:`, flatRate);
+      rates.push(flatRate);
     } else if (method.method_id === 'free_shipping') {
       // Check if free shipping conditions are met
       const minAmount = parseFloat(settings.min_amount?.value || '0');
+      console.log(`[Shipping API] Free shipping min amount: ${minAmount}, cart total: ${total}`);
 
       if (total >= minAmount) {
-        rates.push({
+        const freeShipping = {
           method_id: `${method.method_id}:${method.instance_id}`,
           method_title: method.title || 'Gratis verzending',
           cost: 0,
           free: true,
           delivery_time: country === 'NL' ? '1-2 werkdagen' : '2-3 werkdagen'
-        });
+        };
+        console.log(`[Shipping API] Adding free_shipping:`, freeShipping);
+        rates.push(freeShipping);
+      } else {
+        console.log(`[Shipping API] Free shipping not met: total ${total} < min ${minAmount}`);
       }
     } else if (method.method_id === 'local_pickup') {
-      rates.push({
+      const pickup = {
         method_id: `${method.method_id}:${method.instance_id}`,
         method_title: method.title || 'Afhalen',
         cost: 0,
         free: true,
         delivery_time: 'Direct beschikbaar'
-      });
+      };
+      console.log(`[Shipping API] Adding local_pickup:`, pickup);
+      rates.push(pickup);
+    } else {
+      console.log(`[Shipping API] Unknown method type: ${method.method_id}`);
+    }
     }
   }
 

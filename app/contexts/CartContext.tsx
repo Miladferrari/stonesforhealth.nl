@@ -184,7 +184,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   // Load allowed countries
   const loadAllowedCountries = async () => {
     try {
-      const response = await fetch('/api/shipping?action=countries', {
+      const response = await fetch(`/api/shipping?action=countries&t=${Date.now()}`, {
         cache: 'no-store',
         headers: {
           'Cache-Control': 'no-cache',
@@ -229,7 +229,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       const total = getTotalPriceAfterDiscount();
       const couponParam = appliedCoupon ? `&coupon=${encodeURIComponent(appliedCoupon.code)}` : '';
       const postcodeParam = postcode ? `&postcode=${encodeURIComponent(postcode)}` : '';
-      const response = await fetch(`/api/shipping?action=calculate&country=${country}&total=${total}${couponParam}${postcodeParam}`, {
+      const response = await fetch(`/api/shipping?action=calculate&country=${country}&total=${total}${couponParam}${postcodeParam}&t=${Date.now()}`, {
         cache: 'no-store',
         headers: {
           'Cache-Control': 'no-cache'
