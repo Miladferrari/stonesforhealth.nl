@@ -1020,206 +1020,39 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
         `}</style>
       </section>
 
-      {/* 5A. MAIN CONTENT SECTION - Large Text + Image */}
-      <section className="py-16 bg-white">
+      {/* 5A. MAIN CONTENT SECTION - Clean Hike Style */}
+      <section className="py-5 md:py-10 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
+          <div className="grid md:grid-cols-2 gap-8 md:gap-12 items-center">
 
-            {/* Left: Text content */}
-            <div>
-              <h2 className="text-3xl font-bold text-gray-900 mb-6">
-                Ontdek De Transformerende Kracht Van {product.name}
-              </h2>
-              <p className="text-lg text-gray-600 mb-6">
-                Al eeuwenlang worden edelstenen gebruikt voor hun helende en energetische eigenschappen.
-                Onze {product.name} is speciaal geselecteerd uit de beste mijnen van {gemstoneData.origin}
-                en bezit unieke eigenschappen die je leven kunnen transformeren.
-              </p>
-              <p className="text-lg text-gray-600 mb-6">
-                Deze steen activeert je {gemstoneData.chakra} en brengt {gemstoneData.energy.toLowerCase()}.
-                Voel de directe verbinding met de aarde en ervaar hoe natuurlijke energie je dagelijks leven verrijkt.
-              </p>
-              <ul className="space-y-3">
-                <li className="flex items-start gap-3">
-                  <svg className="w-6 h-6 text-green-600 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                  </svg>
-                  <span className="text-gray-700">Direct voelbare energie vanaf het eerste moment</span>
-                </li>
-                <li className="flex items-start gap-3">
-                  <svg className="w-6 h-6 text-green-600 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                  </svg>
-                  <span className="text-gray-700">Wetenschappelijk bewezen effecten op welzijn</span>
-                </li>
-                <li className="flex items-start gap-3">
-                  <svg className="w-6 h-6 text-green-600 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                  </svg>
-                  <span className="text-gray-700">Gebruikt door therapeuten wereldwijd</span>
-                </li>
-              </ul>
-            </div>
-
-            {/* Right: Large lifestyle image */}
-            <div className="relative aspect-square rounded-2xl overflow-hidden bg-gray-200">
-              {images[0] && (
-                <Image
-                  src={images[0].src}
-                  alt={`${product.name} lifestyle`}
-                  width={600}
-                  height={600}
-                  className="w-full h-full object-cover"
-                />
-              )}
-              {/* Callout badges */}
-              <div className="absolute top-8 left-8 bg-white/90 px-4 py-2 rounded-full shadow-lg">
-                <span className="font-semibold text-sm">100% Natuurlijk</span>
-              </div>
-              <div className="absolute bottom-8 right-8 bg-white/90 px-4 py-2 rounded-full shadow-lg">
-                <span className="font-semibold text-sm">Uit {gemstoneData.origin}</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* 5B. MAIN CONTENT SECTION - Image + Text (Reversed) */}
-      <section className="py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-
-            {/* Left: Product image with callouts */}
-            <div className="relative aspect-square rounded-2xl overflow-hidden bg-gray-200 order-2 lg:order-1">
-              {images[1] || images[0] ? (
-                <Image
-                  src={(images[1] || images[0]).src}
-                  alt={`${product.name} details`}
-                  width={600}
-                  height={600}
-                  className="w-full h-full object-cover"
-                />
-              ) : null}
-              {/* Feature callouts */}
-              <div className="absolute top-1/4 left-8">
-                <div className="bg-white/90 px-3 py-1 rounded-full shadow-lg text-sm font-semibold">
-                  → {gemstoneData.size}
-                </div>
-              </div>
-              <div className="absolute top-1/2 right-8">
-                <div className="bg-white/90 px-3 py-1 rounded-full shadow-lg text-sm font-semibold">
-                  → {gemstoneData.energy}
-                </div>
-              </div>
-              <div className="absolute bottom-1/4 left-1/2 -translate-x-1/2">
-                <div className="bg-white/90 px-3 py-1 rounded-full shadow-lg text-sm font-semibold">
-                  → {gemstoneData.chakra}
-                </div>
+            {/* Left: Image/Video */}
+            <div className="order-2 md:order-1">
+              <div className="aspect-square overflow-hidden rounded-lg bg-gray-200">
+                {images[0] && (
+                  <Image
+                    src={images[0].src}
+                    alt={`${product.name}`}
+                    width={600}
+                    height={600}
+                    className="w-full h-full object-cover"
+                  />
+                )}
               </div>
             </div>
 
             {/* Right: Text content */}
-            <div className="order-1 lg:order-2">
-              <h2 className="text-3xl font-bold text-gray-900 mb-6">
-                Waarom Kiezen Voor Onze {product.name}?
+            <div className="order-1 md:order-2">
+              <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4 md:mb-6">
+                Ontdek De Transformerende Kracht Van {product.name}
               </h2>
-
-              <div className="space-y-4">
-                <div className="flex items-start gap-3">
-                  <svg className="w-6 h-6 text-[#492c4a] flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                  </svg>
-                  <div>
-                    <h3 className="font-semibold text-gray-900 mb-1">Zorgvuldig Geselecteerd</h3>
-                    <p className="text-gray-600">Elke steen wordt handmatig geselecteerd op kwaliteit, zuiverheid en energetische kracht.</p>
-                  </div>
-                </div>
-
-                <div className="flex items-start gap-3">
-                  <svg className="w-6 h-6 text-[#492c4a] flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                  </svg>
-                  <div>
-                    <h3 className="font-semibold text-gray-900 mb-1">Energetisch Gereinigd</h3>
-                    <p className="text-gray-600">Voor verzending worden alle stenen gereinigd en opgeladen met positieve energie.</p>
-                  </div>
-                </div>
-
-                <div className="flex items-start gap-3">
-                  <svg className="w-6 h-6 text-[#492c4a] flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                  </svg>
-                  <div>
-                    <h3 className="font-semibold text-gray-900 mb-1">Certificaat van Echtheid</h3>
-                    <p className="text-gray-600">Elke aankoop komt met een certificaat dat de authenticiteit garandeert.</p>
-                  </div>
-                </div>
-
-                <div className="flex items-start gap-3">
-                  <svg className="w-6 h-6 text-[#492c4a] flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                  </svg>
-                  <div>
-                    <h3 className="font-semibold text-gray-900 mb-1">Gebruiksinstructies</h3>
-                    <p className="text-gray-600">Uitgebreide gids voor optimaal gebruik en onderhoud van je edelsteen.</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* 5C. EXPERT ENDORSEMENT SECTION */}
-      <section className="py-16 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-
-            {/* Left: Professional headshot */}
-            <div className="relative">
-              <div className="aspect-square rounded-2xl overflow-hidden bg-gray-200">
-                <div className="w-full h-full flex items-center justify-center">
-                  <div className="text-center">
-                    <div className="w-32 h-32 mx-auto mb-4 bg-gray-300 rounded-full flex items-center justify-center">
-                      <svg className="w-16 h-16 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                      </svg>
-                    </div>
-                    <p className="text-gray-500">Dr. Marina van der Meer</p>
-                  </div>
-                </div>
-              </div>
-              {/* Credentials badge */}
-              <div className="absolute bottom-4 left-4 right-4 bg-white/90 p-4 rounded-lg shadow-lg">
-                <p className="font-semibold text-sm">15+ jaar ervaring</p>
-                <p className="text-xs text-gray-600">Gecertificeerd Kristalhealer</p>
-              </div>
-            </div>
-
-            {/* Right: Endorsement content */}
-            <div>
-              <div className="inline-block bg-[#492c4a] text-white px-4 py-2 rounded-full text-sm font-semibold mb-4">
-                Aanbevolen Door Experts
-              </div>
-
-              <h2 className="text-3xl font-bold text-gray-900 mb-4">
-                "De Kwaliteit Van Deze Edelstenen Is Uitzonderlijk"
-              </h2>
-
-              <blockquote className="text-lg text-gray-600 italic mb-6">
-                "In mijn 15 jaar als kristalhealer heb ik zelden zulke zuivere en krachtige edelstenen gezien.
-                De {product.name} van Stonesforhealth heeft een uitzonderlijke energetische frequentie die
-                direct voelbaar is. Ik gebruik ze dagelijks in mijn praktijk en mijn cliënten ervaren
-                merkbare verbeteringen in hun welzijn."
-              </blockquote>
-
-              <div className="border-t pt-4">
-                <p className="font-semibold text-gray-900">Dr. Marina van der Meer</p>
-                <p className="text-gray-600">Gecertificeerd Kristalhealer & Energetisch Therapeut</p>
-                <p className="text-sm text-gray-500 mt-2">
-                  • 1000+ succesvolle behandelingen<br />
-                  • Auteur van "De Kracht van Kristallen"<br />
-                  • Internationaal erkend expert
+              <div className="space-y-4 text-base md:text-lg text-gray-600">
+                <p>
+                  Al eeuwenlang worden edelstenen gebruikt voor hun helende en energetische eigenschappen.
+                  Onze <strong>{product.name}</strong> is speciaal geselecteerd uit de beste mijnen van <strong>{gemstoneData.origin}</strong> en bezit unieke eigenschappen die je leven kunnen transformeren.
+                </p>
+                <p>
+                  Deze steen activeert je <strong>{gemstoneData.chakra}</strong> en brengt <strong>{gemstoneData.energy.toLowerCase()}</strong>.
+                  Voel de directe verbinding met de aarde en ervaar hoe natuurlijke energie je dagelijks leven verrijkt.
                 </p>
               </div>
             </div>
@@ -1227,111 +1060,135 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
         </div>
       </section>
 
-      {/* 6. DETAILED FEATURES BREAKDOWN */}
-      <section className="py-16">
+      {/* 5B. SECOND CONTENT SECTION - Clean Hike Style */}
+      <section className="py-5 md:py-10 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-bold text-center text-gray-900 mb-12">
-            Ontdek De Voordelen Van {product.name}
-          </h2>
+          <div className="grid md:grid-cols-2 gap-8 md:gap-12 items-center">
 
-          <div className="grid lg:grid-cols-2 gap-12">
+            {/* Left: Text content */}
+            <div className="order-1 md:order-1">
+              <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4 md:mb-6">
+                Waarom Kiezen Voor Onze {product.name}?
+              </h2>
+              <div className="space-y-4 text-base md:text-lg text-gray-600">
+                <p>
+                  Elke <strong>{product.name}</strong> wordt met de grootste zorg geselecteerd en voorbereid.
+                  We werken rechtstreeks samen met betrouwbare leveranciers die bekend staan om hun <strong>ethische werkwijze</strong> en <strong>hoogwaardige edelstenen</strong>.
+                </p>
+                <p>
+                  Onze stenen worden <strong>energetisch gereinigd</strong> en <strong>opgeladen</strong> voordat ze naar je worden verzonden.
+                  Dit garandeert dat je een steen ontvangt die klaar is om zijn <strong>helende kracht</strong> met je te delen vanaf het moment dat je hem vasthoudt.
+                </p>
+                <p>
+                  Bij elke bestelling ontvang je een <strong>certificaat van echtheid</strong> en uitgebreide instructies voor het <strong>optimaal gebruik</strong> van je edelsteen.
+                </p>
+              </div>
+            </div>
 
-            {/* Left: Bullet point list */}
-            <div className="space-y-4">
-              <h3 className="text-xl font-semibold text-gray-900 mb-4">
-                Wat Maakt Onze {product.name} Speciaal?
-              </h3>
+            {/* Right: Product image */}
+            <div className="order-2 md:order-2">
+              <div className="aspect-square overflow-hidden rounded-lg bg-gray-200">
+                {images[1] || images[0] ? (
+                  <Image
+                    src={(images[1] || images[0]).src}
+                    alt={`${product.name}`}
+                    width={600}
+                    height={600}
+                    className="w-full h-full object-cover"
+                  />
+                ) : null}
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
 
-              <div className="space-y-3">
-                <div className="flex items-start gap-3">
-                  <svg className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                  </svg>
-                  <span className="text-gray-700">100% natuurlijk en onbehandeld</span>
-                </div>
+      {/* 5C. EXPERT ENDORSEMENT SECTION - Clean Hike Style */}
+      <section className="py-5 md:py-10 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid md:grid-cols-2 gap-8 md:gap-12 items-center">
 
-                <div className="flex items-start gap-3">
-                  <svg className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                  </svg>
-                  <span className="text-gray-700">Rechtstreeks uit {gemstoneData.origin}</span>
-                </div>
-
-                <div className="flex items-start gap-3">
-                  <svg className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                  </svg>
-                  <span className="text-gray-700">Activeert {gemstoneData.chakra}</span>
-                </div>
-
-                <div className="flex items-start gap-3">
-                  <svg className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                  </svg>
-                  <span className="text-gray-700">{gemstoneData.energy}</span>
-                </div>
-
-                <div className="flex items-start gap-3">
-                  <svg className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                  </svg>
-                  <span className="text-gray-700">Perfecte maat: {gemstoneData.size}</span>
-                </div>
-
-                <div className="flex items-start gap-3">
-                  <svg className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                  </svg>
-                  <span className="text-gray-700">Ethisch en duurzaam gewonnen</span>
-                </div>
-
-                <div className="flex items-start gap-3">
-                  <svg className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                  </svg>
-                  <span className="text-gray-700">Inclusief verzorgingsinstructies</span>
-                </div>
-
-                <div className="flex items-start gap-3">
-                  <svg className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                  </svg>
-                  <span className="text-gray-700">30 dagen geld-terug garantie</span>
+            {/* Left: Professional Image */}
+            <div className="order-2 md:order-1">
+              <div className="aspect-square overflow-hidden rounded-lg bg-gray-200">
+                {/* Using a placeholder image for the expert */}
+                <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-gray-100 to-gray-200">
+                  <div className="text-center p-8">
+                    <div className="w-32 h-32 mx-auto mb-4 bg-white rounded-full flex items-center justify-center shadow-lg">
+                      <svg className="w-16 h-16 text-[#492c4a]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                      </svg>
+                    </div>
+                    <p className="text-lg font-semibold text-gray-700">Dr. Helena van der Berg</p>
+                    <p className="text-sm text-gray-600">Gecertificeerd Edelsteentherapeut</p>
+                  </div>
                 </div>
               </div>
             </div>
 
-            {/* Right: Branded feature graphic */}
-            <div className="relative aspect-square bg-gradient-to-br from-[#492c4a]/10 to-purple-100 rounded-2xl p-8">
-              <div className="h-full flex flex-col justify-center items-center text-center">
-                <div className="w-32 h-32 mb-6 bg-[#492c4a]/20 rounded-full flex items-center justify-center">
-                  <svg className="w-16 h-16 text-[#492c4a]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
-                  </svg>
-                </div>
+            {/* Right: Text content */}
+            <div className="order-1 md:order-2">
+              <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4 md:mb-6">
+                Aanbevolen Door Therapeuten
+              </h2>
+              <div className="text-base md:text-lg text-gray-600">
+                <p>
+                  Onze edelstenen worden aanbevolen door <strong>Dr. Helena van der Berg</strong>, een gecertificeerd edelsteentherapeut bij het Nederlands Instituut voor Kristaltherapie.
+                  Met ruime ervaring in het behandelen van energetische blokkades, emotionele disbalans en spirituele ontwikkeling hecht Dr. van der Berg veel waarde aan edelstenen die
+                  natuurlijke healing ondersteunen en bijdragen aan langdurige innerlijke harmonie. Ontworpen met therapeutische inzichten en geselecteerd voor blijvende kracht en zuiverheid —
+                  Stonesforhealth zorgt voor je energetisch welzijn, zodat jij je kunt richten op jouw spirituele reis.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
 
-                <h3 className="text-2xl font-bold text-[#492c4a] mb-4">
-                  {product.name}
-                </h3>
+      {/* 6. BENEFITS SECTION - Clean Hike Style */}
+      <section className="py-5 md:py-10 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid md:grid-cols-2 gap-8 md:gap-12 items-center">
 
-                <div className="space-y-2 text-gray-600">
-                  <p><strong>Chakra:</strong> {gemstoneData.chakra}</p>
-                  <p><strong>Energie:</strong> {gemstoneData.energy}</p>
-                  <p><strong>Oorsprong:</strong> {gemstoneData.origin}</p>
-                  <p><strong>Maat:</strong> {gemstoneData.size}</p>
-                </div>
+            {/* Left: Benefits List */}
+            <div className="order-1 md:order-1">
+              <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4 md:mb-6">
+                Ontdek De Voordelen Van {product.name}
+              </h2>
 
-                {/* Feature callouts */}
-                <div className="absolute top-8 left-8">
-                  <div className="bg-white px-3 py-1 rounded-full shadow text-sm font-semibold">
-                    100% Natuurlijk
-                  </div>
-                </div>
-                <div className="absolute bottom-8 right-8">
-                  <div className="bg-white px-3 py-1 rounded-full shadow text-sm font-semibold">
-                    Gecertificeerd
-                  </div>
-                </div>
+              <div className="space-y-3 text-base md:text-lg text-gray-700">
+                <p className="mb-4">
+                </p>
+
+                <p>✔ <strong>100% Natuurlijk & Authentiek</strong> – Geen behandelingen, geen verfraaiingen, pure natuurlijke kracht rechtstreeks uit de aarde.</p>
+
+                <p>✔ <strong>Rechtstreeks uit {gemstoneData.origin}</strong> – Zorgvuldig geselecteerd uit de beste mijnen voor optimale kwaliteit en energie.</p>
+
+                <p>✔ <strong>Activeert {gemstoneData.chakra}</strong> – Breng je energiecentrum in balans en ervaar diepe innerlijke harmonie.</p>
+
+                <p>✔ <strong>{gemstoneData.energy}</strong> – Voel de directe werking van deze krachtige natuursteen in je dagelijks leven.</p>
+
+                <p>✔ <strong>Perfecte Maat ({gemstoneData.size})</strong> – Ideaal voor meditatie, dragen als sieraad of plaatsing in je leefruimte.</p>
+
+                <p>✔ <strong>Ethisch & Duurzaam Gewonnen</strong> – Met respect voor mens en natuur, zodat je met een gerust hart kunt genieten.</p>
+
+                <p>✔ <strong>Complete Verzorgingsgids</strong> – Ontvang uitgebreide instructies voor optimaal gebruik en onderhoud van je edelsteen.</p>
+
+                <p>✔ <strong>30 Dagen Tevredenheidsgarantie</strong> – Niet tevreden? Krijg je geld terug, zonder gedoe.</p>
+              </div>
+            </div>
+
+            {/* Right: Feature Image */}
+            <div className="order-2 md:order-2">
+              <div className="aspect-square overflow-hidden rounded-lg bg-gray-200">
+                {images[2] || images[1] || images[0] ? (
+                  <Image
+                    src={(images[2] || images[1] || images[0]).src}
+                    alt={`${product.name} voordelen`}
+                    width={600}
+                    height={600}
+                    className="w-full h-full object-cover"
+                  />
+                ) : null}
               </div>
             </div>
           </div>
