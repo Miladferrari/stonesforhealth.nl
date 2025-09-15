@@ -13,12 +13,28 @@ export default async function Home() {
   let categories: Category[] = [];
   let categoryPrices: Record<number, number> = {};
   let apiError = false;
-  
+
   // Fetch categories from WooCommerce
   try {
     categories = await woocommerce.getCategories({ per_page: 20, hide_empty: false });
     // Filter out parent categories or specific ones you want to show
     categories = categories.filter(cat => cat.parent === 0 && cat.slug !== 'uncategorized');
+
+    // Sort categories by best-selling logic
+    // In the future when sales data is available, we can fetch sales count per category
+    // and sort by: categories.sort((a, b) => b.salesCount - a.salesCount)
+    // For now, we'll sort by product count as a proxy for popularity
+    categories = categories
+      .sort((a, b) => {
+        // Future enhancement: Add a 'sales_count' meta field to categories
+        // const aSales = a.meta_data?.find(m => m.key === 'sales_count')?.value || 0;
+        // const bSales = b.meta_data?.find(m => m.key === 'sales_count')?.value || 0;
+        // return bSales - aSales;
+
+        // Current: Sort by product count (most products first)
+        return (b.count || 0) - (a.count || 0);
+      })
+      .slice(0, 4); // Limit to maximum 4 collections
   } catch (error) {
     console.error('Failed to fetch categories:', error);
     // Fallback categories if API fails
@@ -132,9 +148,9 @@ export default async function Home() {
               </p>
               
               <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start mb-8">
-                <Link 
+                <Link
                   href="/alle-producten"
-                  className="inline-flex items-center justify-center gap-2 bg-[#3b223b] hover:bg-[#4d2e4d] text-white px-8 py-4 rounded-full text-lg font-medium transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-1 font-[family-name:var(--font-eb-garamond)]"
+                  className="inline-flex items-center justify-center gap-2 bg-[#fbe022] hover:bg-[#e6cc1f] text-black px-8 py-4 rounded-full text-lg font-medium transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-1 font-[family-name:var(--font-eb-garamond)]"
                 >
                   <span>Shop kristallen</span>
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -240,9 +256,9 @@ export default async function Home() {
 
           {/* View All Button */}
           <div className="text-center mt-12">
-            <Link 
-              href="/alle-producten" 
-              className="inline-flex items-center gap-2 bg-[#492c4a] hover:bg-[#6b4069] text-white px-8 py-3 rounded-full font-semibold transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1"
+            <Link
+              href="/alle-producten"
+              className="inline-flex items-center gap-2 bg-[#fbe022] hover:bg-[#e6cc1f] text-black px-8 py-3 rounded-full font-semibold transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1"
             >
               <span>Bekijk Alle Producten</span>
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -454,9 +470,9 @@ export default async function Home() {
               </div>
 
               {/* CTA */}
-              <Link 
+              <Link
                 href="/quiz"
-                className="w-full inline-flex items-center justify-center gap-3 bg-white hover:bg-white/90 text-[#3b223b] px-8 py-4 rounded-xl font-bold text-lg transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-1 font-[family-name:var(--font-eb-garamond)]"
+                className="w-full inline-flex items-center justify-center gap-3 bg-[#fbe022] hover:bg-[#e6cc1f] text-black px-8 py-4 rounded-xl font-bold text-lg transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-1 font-[family-name:var(--font-eb-garamond)]"
               >
                 <span>Start Gratis Quiz</span>
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -495,9 +511,9 @@ export default async function Home() {
             </p>
           </div>
           
-          {/* Collection Cards Grid */}
+          {/* Collection Cards Grid - Shows up to 4 collections */}
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6 mb-12">
-            {categories.length > 0 ? categories.map((category, index) => (
+            {categories.length > 0 ? categories.slice(0, 4).map((category, index) => (
               <Link 
                 key={category.id} 
                 href={`/alle-producten?category=${category.slug}`}
@@ -687,9 +703,9 @@ export default async function Home() {
           
           {/* CTA Button */}
           <div className="text-center">
-            <Link 
-              href="/alle-producten" 
-              className="inline-flex items-center gap-3 bg-[#492c4a] hover:bg-[#6b4069] text-white px-8 py-4 rounded-full font-bold text-lg transition-all duration-300 shadow-xl hover:shadow-2xl transform hover:-translate-y-1 font-[family-name:var(--font-eb-garamond)]"
+            <Link
+              href="/alle-producten"
+              className="inline-flex items-center gap-3 bg-[#fbe022] hover:bg-[#e6cc1f] text-black px-8 py-4 rounded-full font-bold text-lg transition-all duration-300 shadow-xl hover:shadow-2xl transform hover:-translate-y-1 font-[family-name:var(--font-eb-garamond)]"
             >
               <span>Ontdek Alle Kristallen</span>
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

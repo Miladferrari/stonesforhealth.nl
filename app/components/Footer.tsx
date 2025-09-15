@@ -2,17 +2,57 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import { memo } from 'react';
+import { memo, useEffect, useState } from 'react';
 import { usePathname } from 'next/navigation';
+
+interface Category {
+  id: number;
+  name: string;
+  slug: string;
+  parent: number;
+  description: string;
+  display: string;
+  image: any;
+  count: number;
+}
 
 const Footer = memo(function Footer() {
   const pathname = usePathname();
-  
+  const [categories, setCategories] = useState<Category[]>([
+    // Fallback categories
+    { id: 1, name: 'Chakra Kristallen', slug: 'chakra', parent: 0, description: '', display: 'default', image: null, count: 24 },
+    { id: 2, name: 'Bescherming', slug: 'bescherming', parent: 0, description: '', display: 'default', image: null, count: 18 },
+    { id: 3, name: 'Liefde & Relaties', slug: 'liefde', parent: 0, description: '', display: 'default', image: null, count: 21 },
+    { id: 4, name: 'Bestsellers', slug: 'bestsellers', parent: 0, description: '', display: 'default', image: null, count: 15 }
+  ]);
+
+  // Fetch categories on component mount
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await fetch('/api/categories');
+        if (response.ok) {
+          const data = await response.json();
+          const topCategories = data
+            .filter((cat: Category) => cat.parent === 0 && cat.slug !== 'uncategorized')
+            .sort((a: Category, b: Category) => (b.count || 0) - (a.count || 0))
+            .slice(0, 4);
+          setCategories(topCategories);
+        }
+      } catch (error) {
+        console.error('Failed to fetch categories for footer:', error);
+        // Keep fallback categories
+      }
+    };
+
+    fetchCategories();
+  }, []);
+
   // Don't render footer on checkout pages
   if (pathname?.startsWith('/checkout')) {
     return null;
   }
-  
+
   return (
     <footer className="bg-[#f7f3ec]">
       {/* Main Footer Content */}
@@ -57,29 +97,29 @@ const Footer = memo(function Footer() {
             <div className="inline-flex items-center gap-4 bg-white/60 backdrop-blur-sm rounded-full px-5 py-3 shadow-sm border border-gray-100 mx-auto md:mx-0">
               {/* Profile avatars */}
               <div className="flex -space-x-3">
-                <img 
-                  src="https://i.pravatar.cc/150?img=1" 
-                  alt="Anna" 
+                <img
+                  src="https://i.pravatar.cc/150?img=1"
+                  alt="Anna"
                   className="w-8 h-8 rounded-full border-2 border-white object-cover shadow-sm"
                 />
-                <img 
-                  src="https://i.pravatar.cc/150?img=5" 
-                  alt="Maria" 
+                <img
+                  src="https://i.pravatar.cc/150?img=5"
+                  alt="Maria"
                   className="w-8 h-8 rounded-full border-2 border-white object-cover shadow-sm"
                 />
-                <img 
-                  src="https://i.pravatar.cc/150?img=9" 
-                  alt="Sophie" 
+                <img
+                  src="https://i.pravatar.cc/150?img=9"
+                  alt="Sophie"
                   className="w-8 h-8 rounded-full border-2 border-white object-cover shadow-sm"
                 />
                 <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#492c4a] to-[#6b4069] border-2 border-white flex items-center justify-center text-white text-[10px] font-bold shadow-sm">
                   +3K
                 </div>
               </div>
-              
+
               {/* Divider */}
               <div className="h-6 w-px bg-gradient-to-b from-transparent via-gray-300 to-transparent"></div>
-              
+
               {/* Stars and text */}
               <div className="flex flex-col">
                 <div className="flex items-center gap-1">
@@ -105,11 +145,6 @@ const Footer = memo(function Footer() {
               <div>
                 <h3 className="text-base font-semibold text-gray-900 font-[family-name:var(--font-eb-garamond)]">Service</h3>
                 <ul role="list" className="mt-6 space-y-4">
-                  <li>
-                    <Link href="/account" className="text-base text-gray-800 font-medium hover:text-[#492c4a] transition-colors font-[family-name:var(--font-eb-garamond)]">
-                      Mijn Account
-                    </Link>
-                  </li>
                   <li>
                     <Link href="/orders" className="text-base text-gray-800 font-medium hover:text-[#492c4a] transition-colors font-[family-name:var(--font-eb-garamond)]">
                       Bestellingen
@@ -162,26 +197,16 @@ const Footer = memo(function Footer() {
               <div>
                 <h3 className="text-base font-semibold text-gray-900 font-[family-name:var(--font-eb-garamond)]">Collecties</h3>
                 <ul role="list" className="mt-6 space-y-4">
-                  <li>
-                    <Link href="/alle-producten?category=chakra" className="text-base text-gray-800 font-medium hover:text-[#492c4a] transition-colors font-[family-name:var(--font-eb-garamond)]">
-                      Chakra Kristallen
-                    </Link>
-                  </li>
-                  <li>
-                    <Link href="/alle-producten?category=bescherming" className="text-base text-gray-800 font-medium hover:text-[#492c4a] transition-colors font-[family-name:var(--font-eb-garamond)]">
-                      Bescherming
-                    </Link>
-                  </li>
-                  <li>
-                    <Link href="/alle-producten?category=liefde" className="text-base text-gray-800 font-medium hover:text-[#492c4a] transition-colors font-[family-name:var(--font-eb-garamond)]">
-                      Liefde & Relaties
-                    </Link>
-                  </li>
-                  <li>
-                    <Link href="/bestsellers" className="text-base text-gray-800 font-medium hover:text-[#492c4a] transition-colors font-[family-name:var(--font-eb-garamond)]">
-                      Bestsellers
-                    </Link>
-                  </li>
+                  {categories.map((category) => (
+                    <li key={category.id}>
+                      <Link
+                        href={category.slug === 'bestsellers' ? '/bestsellers' : `/alle-producten?category=${category.slug}`}
+                        className="text-base text-gray-800 font-medium hover:text-[#492c4a] transition-colors font-[family-name:var(--font-eb-garamond)]"
+                      >
+                        {category.name}
+                      </Link>
+                    </li>
+                  ))}
                 </ul>
               </div>
               <div className="mt-10 md:mt-0">
