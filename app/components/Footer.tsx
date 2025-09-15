@@ -146,11 +146,6 @@ const Footer = memo(function Footer() {
                 <h3 className="text-base font-semibold text-gray-900 font-[family-name:var(--font-eb-garamond)]">Service</h3>
                 <ul role="list" className="mt-6 space-y-4">
                   <li>
-                    <Link href="/orders" className="text-base text-gray-800 font-medium hover:text-[#492c4a] transition-colors font-[family-name:var(--font-eb-garamond)]">
-                      Bestellingen
-                    </Link>
-                  </li>
-                  <li>
                     <Link href="/contact" className="text-base text-gray-800 font-medium hover:text-[#492c4a] transition-colors font-[family-name:var(--font-eb-garamond)]">
                       Contact
                     </Link>

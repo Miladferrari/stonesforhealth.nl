@@ -24,24 +24,46 @@ export default function ContactPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
+    setSubmitStatus('idle');
 
-    // Simulate form submission
     try {
-      // Here you would typically send the form data to your backend
-      await new Promise(resolve => setTimeout(resolve, 1000));
-
-      setSubmitStatus('success');
-      setFormData({
-        name: '',
-        email: '',
-        phone: '',
-        message: ''
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          phone: formData.phone || undefined,
+          message: formData.message,
+          subject: `Contact vanaf website - ${formData.name}`
+        }),
       });
 
-      setTimeout(() => {
-        setSubmitStatus('idle');
-      }, 5000);
+      const data = await response.json();
+
+      if (response.ok) {
+        setSubmitStatus('success');
+        setFormData({
+          name: '',
+          email: '',
+          phone: '',
+          message: ''
+        });
+
+        setTimeout(() => {
+          setSubmitStatus('idle');
+        }, 7000);
+      } else {
+        console.error('Contact form error:', data.error);
+        setSubmitStatus('error');
+        setTimeout(() => {
+          setSubmitStatus('idle');
+        }, 5000);
+      }
     } catch (error) {
+      console.error('Network error:', error);
       setSubmitStatus('error');
       setTimeout(() => {
         setSubmitStatus('idle');
