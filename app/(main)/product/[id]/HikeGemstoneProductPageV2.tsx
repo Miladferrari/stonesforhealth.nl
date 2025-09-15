@@ -107,16 +107,25 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
-          // Show sticky header when main button is NOT visible
-          // Hide sticky header when main button IS visible
-          setShowStickyHeader(!entry.isIntersecting);
+          const isDesktop = window.innerWidth >= 1024;
+
+          if (isDesktop) {
+            // On desktop: only show sticky when button has COMPLETELY scrolled out of view
+            // Check if the BOTTOM of the button is above the viewport (completely scrolled past)
+            const buttonBottom = entry.boundingClientRect.bottom;
+            const isCompletelyAboveViewport = buttonBottom < 0;
+
+            setShowStickyHeader(isCompletelyAboveViewport);
+          } else {
+            // On mobile/tablet: show when button is not visible
+            setShowStickyHeader(!entry.isIntersecting);
+          }
         });
       },
       {
-        // Trigger when button crosses viewport
+        // Trigger when button is fully out of view
         threshold: 0,
-        // Add margin to account for navbar height (120px)
-        rootMargin: '-120px 0px 0px 0px'
+        rootMargin: '0px'
       }
     );
 
@@ -217,7 +226,7 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
               <div className="flex-1 overflow-hidden">
                 {/* Mobile view - Only price */}
                 <div className="sm:hidden">
-                  <span className="text-lg font-bold text-black">
+                  <span className="text-lg font-bold text-black font-[family-name:var(--font-eb-garamond)]">
                     €{selectedBundle === 'single' ? price.toFixed(2).replace('.', ',') :
                       selectedBundle === 'duo' ? bundlePrices.duo.toFixed(2).replace('.', ',') :
                       bundlePrices.family.toFixed(2).replace('.', ',')}
@@ -226,21 +235,21 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
 
                 {/* Desktop view - Full info */}
                 <div className="hidden sm:block">
-                  <h5 className="text-sm sm:text-base font-semibold text-gray-900 truncate">{product.name}</h5>
+                  <h5 className="text-sm sm:text-base font-semibold text-gray-900 truncate font-[family-name:var(--font-eb-garamond)]">{product.name}</h5>
                   <div className="flex flex-wrap items-center gap-2 sm:gap-3">
-                    <span className="text-base sm:text-lg font-semibold text-black">
+                    <span className="text-base sm:text-lg font-semibold text-black font-[family-name:var(--font-eb-garamond)]">
                       €{selectedBundle === 'single' ? price.toFixed(2).replace('.', ',') :
                         selectedBundle === 'duo' ? bundlePrices.duo.toFixed(2).replace('.', ',') :
                         bundlePrices.family.toFixed(2).replace('.', ',')}
                     </span>
                     {isOnSale && (
                       <>
-                        <span className="text-xs sm:text-sm text-gray-400 line-through hidden min-[808px]:inline">
+                        <span className="text-xs sm:text-sm text-gray-400 line-through hidden min-[808px]:inline font-[family-name:var(--font-eb-garamond)]">
                           €{selectedBundle === 'single' ? regularPrice.toFixed(2).replace('.', ',') :
                             selectedBundle === 'duo' ? (regularPrice * 2).toFixed(2).replace('.', ',') :
                             (regularPrice * 3).toFixed(2).replace('.', ',')}
                         </span>
-                        <span className="badge inline-flex max-[425px]:inline-flex items-center gap-1 text-black text-[10px] sm:text-xs font-bold px-1.5 sm:px-2 py-0.5 sm:py-1 rounded hidden lg:inline-flex" style={{ backgroundColor: '#fbe022' }}>
+                        <span className="badge inline-flex max-[425px]:inline-flex items-center gap-1 text-black text-[10px] sm:text-xs font-bold px-1.5 sm:px-2 py-0.5 sm:py-1 rounded hidden lg:inline-flex font-[family-name:var(--font-eb-garamond)]" style={{ backgroundColor: '#fbe022' }}>
                           <span className="material-icons-outlined text-xs sm:text-sm">local_offer</span>
                           <span>JE BESPAART {selectedBundle === 'duo' ? '10' : selectedBundle === 'family' ? '17' : discount}%</span>
                         </span>
@@ -253,7 +262,7 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
               {/* Bundle Selector - Improved styling */}
               <div className="relative">
                 <select
-                  className="appearance-none px-3 sm:px-4 lg:px-5 py-2.5 sm:py-2.5 lg:py-3 pr-8 sm:pr-10 border border-gray-300 sm:border-gray-400 rounded-md sm:rounded-lg text-xs sm:text-base font-semibold focus:outline-none focus:ring-2 focus:ring-black focus:border-black bg-white text-black cursor-pointer hover:border-black transition-all min-w-[85px] sm:min-w-[140px] lg:min-w-[180px]"
+                  className="appearance-none px-3 sm:px-4 lg:px-5 py-2.5 sm:py-2.5 lg:py-3 pr-8 sm:pr-10 border border-gray-300 sm:border-gray-400 rounded-md sm:rounded-lg text-xs sm:text-base font-semibold focus:outline-none focus:ring-2 focus:ring-black focus:border-black bg-white text-black cursor-pointer hover:border-black transition-all min-w-[85px] sm:min-w-[140px] lg:min-w-[180px] font-[family-name:var(--font-eb-garamond)]"
                   value={selectedBundle}
                   onChange={(e) => {
                     setSelectedBundle(e.target.value);
@@ -280,20 +289,20 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
                 {/* Mobile Button (≤768px) - Compact version */}
                 <button
                   onClick={handleAddToCart}
-                  className="md:hidden px-3 py-2.5 bg-[#fbe022] text-black font-bold rounded-md hover:bg-[#e6cc1f] transition-all min-h-[44px]"
+                  className="md:hidden px-3 py-2.5 bg-[#fbe022] text-black font-bold rounded-md hover:bg-[#e6cc1f] transition-all min-h-[44px] font-[family-name:var(--font-eb-garamond)]"
                   disabled={isAddingToCart}
                   type="button"
                 >
                   <span className="flex items-center justify-center gap-1">
                     <span className="material-icons-outlined text-lg">shopping_cart</span>
-                    <span className="text-xs font-bold hidden min-[400px]:inline">Voeg toe</span>
+                    <span className="text-xs font-bold hidden min-[400px]:inline font-[family-name:var(--font-eb-garamond)]">Voeg toe</span>
                   </span>
                 </button>
 
                 {/* Desktop Button (>768px) */}
                 <button
                   onClick={handleAddToCart}
-                  className="hidden md:flex px-4 lg:px-6 py-2.5 lg:py-3 bg-[#fbe022] text-black font-bold rounded-lg hover:bg-[#e6cc1f] transition-all items-center justify-center gap-2 text-base whitespace-nowrap min-h-[48px]"
+                  className="hidden md:flex px-4 lg:px-6 py-2.5 lg:py-3 bg-[#fbe022] text-black font-bold rounded-lg hover:bg-[#e6cc1f] transition-all items-center justify-center gap-2 text-base whitespace-nowrap min-h-[48px] font-[family-name:var(--font-eb-garamond)]"
                   disabled={isAddingToCart}
                   type="button"
                 >
@@ -325,7 +334,7 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
                     priority
                   />
                   {/* Zoom indicator */}
-                  <div className="absolute bottom-4 right-4 bg-white/90 px-3 py-1 rounded text-sm opacity-0 group-hover:opacity-100 transition-opacity">
+                  <div className="absolute bottom-4 right-4 bg-white/90 px-3 py-1 rounded text-sm opacity-0 group-hover:opacity-100 transition-opacity font-[family-name:var(--font-eb-garamond)]">
                     🔍 Zoom
                   </div>
                 </div>
@@ -366,7 +375,7 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
                 </svg>
               </div>
               <div className="flex-1">
-                <p className="text-sm text-gray-700 flex items-center gap-2">
+                <p className="text-sm text-gray-700 flex items-center gap-2 font-[family-name:var(--font-eb-garamond)]">
                   <span>Aanbevolen door <strong>Robbin Nieborg</strong></span>
                   <span className="border-l border-gray-400 pl-2">"Deze edelstenen bezitten krachtige energetische eigenschappen"</span>
                   <svg className="w-4 h-4 text-green-600" fill="currentColor" viewBox="0 0 20 20">
@@ -378,7 +387,7 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
 
             {/* Product title */}
             <div>
-              <h1 className="text-4xl font-bold text-gray-900 mb-3">
+              <h1 className="text-4xl font-bold text-gray-900 mb-3 font-[family-name:var(--font-eb-garamond)]">
                 {product.name} - Authentieke Edelsteen
               </h1>
 
@@ -398,7 +407,7 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
                       </svg>
                     ))}
                   </div>
-                  <span className="text-xs text-gray-600 font-medium ml-0.5">
+                  <span className="text-base md:text-lg text-gray-600 font-medium ml-0.5 font-[family-name:var(--font-eb-garamond)]">
                     4,237 Reviews
                   </span>
                 </button>
@@ -427,7 +436,7 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
                       {/* Rating Summary */}
                       <div className="mb-4">
                         <div className="flex items-center gap-3 mb-1">
-                          <span className="text-2xl font-bold text-gray-900">5.0</span>
+                          <span className="text-2xl font-bold text-gray-900 font-[family-name:var(--font-eb-garamond)]">5.0</span>
                           <div className="flex gap-0.5">
                             {[1,2,3,4,5].map(star => (
                               <svg key={star} className="w-4 h-4 text-[#FAD14C] fill-current" viewBox="0 0 15 15">
@@ -436,7 +445,7 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
                             ))}
                           </div>
                         </div>
-                        <p className="text-sm text-gray-600">Based on <strong>4,237 reviews</strong></p>
+                        <p className="text-sm text-gray-600 font-[family-name:var(--font-eb-garamond)]">Based on <strong>4,237 reviews</strong></p>
                       </div>
 
                       {/* Rating Bars */}
@@ -552,30 +561,30 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
                   <svg className="w-5 h-5 text-green-600 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                   </svg>
-                  <span className="text-sm text-gray-700">100% Authentiek - Gecertificeerd door experts</span>
+                  <span className="text-base md:text-lg text-gray-700 font-[family-name:var(--font-eb-garamond)]">100% Authentiek - Gecertificeerd door experts</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <svg className="w-5 h-5 text-green-600 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                   </svg>
-                  <span className="text-sm text-gray-700">Energetisch geladen & gereinigd voor optimale werking</span>
+                  <span className="text-base md:text-lg text-gray-700 font-[family-name:var(--font-eb-garamond)]">Energetisch geladen & gereinigd voor optimale werking</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <svg className="w-5 h-5 text-green-600 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                     <path d="M5 8a1 1 0 011-1h1V6a4 4 0 118 0v1h1a1 1 0 011 1v8a1 1 0 01-1 1H6a1 1 0 01-1-1V8zm4-2v1h2V6a1 1 0 00-2 0z"/>
                   </svg>
-                  <span className="text-sm text-gray-700">Gratis verzending & 30 dagen retourgarantie</span>
+                  <span className="text-base md:text-lg text-gray-700 font-[family-name:var(--font-eb-garamond)]">Gratis verzending & 30 dagen retourgarantie</span>
                 </div>
               </div>
 
               {/* Price with strikethrough */}
               <div className="flex items-center gap-3 mb-2">
-                <span className="text-xl font-light text-[#492c4a]">
+                <span className="text-xl font-light text-[#492c4a] font-[family-name:var(--font-eb-garamond)]">
                   €{price.toFixed(2).replace('.', ',')}
                 </span>
                 {isOnSale && (
                   <>
-                    <span className="text-xl text-gray-400 line-through">
+                    <span className="text-xl text-gray-400 line-through font-[family-name:var(--font-eb-garamond)]">
                       €{regularPrice.toFixed(2).replace('.', ',')}
                     </span>
                     <span className="badge number-discount_saved discount_saved-51613903651156" style={{
@@ -592,7 +601,7 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
                       letterSpacing: '0.05em'
                     }}>
                       <span className="material-icons-outlined" style={{ fontSize: '14px' }}>local_offer</span>
-                      <span style={{ fontWeight: '900' }}>JE BESPAART {discount}%</span>
+                      <span style={{ fontWeight: '900' }} className="font-[family-name:var(--font-eb-garamond)]">JE BESPAART {discount}%</span>
                     </span>
                   </>
                 )}
@@ -607,17 +616,17 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
                       <span className="relative inline-flex rounded-full h-3 w-3 bg-amber-500"></span>
                     </span>
                   </div>
-                  <p className="text-sm text-gray-800 m-0">
-                    Vanwege onze <span className="font-semibold text-amber-700">najaarssale</span> zijn er nog maar enkele exemplaren op voorraad!
+                  <p className="text-base md:text-lg text-gray-800 m-0 font-[family-name:var(--font-eb-garamond)]">
+                    Vanwege onze <span className="font-semibold text-amber-700 font-[family-name:var(--font-eb-garamond)]">najaarssale</span> zijn er nog maar enkele exemplaren op voorraad!
                   </p>
                 </div>
               </div>
             </div>
 
             {/* Bundle options - Hike style */}
-            <div className="kaching-bundles__block-title text-center text-sm font-medium text-black mt-3 mb-3 flex items-center justify-center">
+            <div className="kaching-bundles__block-title text-center text-base md:text-lg font-medium text-black mt-3 mb-3 flex items-center justify-center">
               <span className="flex-1 h-0.5 mr-3" style={{ backgroundColor: '#d1d5db' }}></span>
-              <span className="font-semibold">Bundelpromotie is geldig tot 23.59 uur</span>
+              <span className="font-semibold font-[family-name:var(--font-eb-garamond)]">Bundelpromotie is geldig tot 23.59 uur</span>
               <span className="flex-1 h-0.5 ml-3" style={{ backgroundColor: '#d1d5db' }}></span>
             </div>
             <div className="space-y-4">
@@ -655,15 +664,15 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
                       </div>
                       <div className="kaching-bundles__bar-content-left">
                         <div className="kaching-bundles__bar-first-line">
-                          <span className="kaching-bundles__bar-title text-base font-semibold text-gray-900">1 paar</span>
+                          <span className="kaching-bundles__bar-title text-base md:text-lg font-semibold text-gray-900 font-[family-name:var(--font-eb-garamond)]">1 paar</span>
                         </div>
-                        <div className="kaching-bundles__bar-subtitle text-sm text-gray-600">Standaardprijs</div>
+                        <div className="kaching-bundles__bar-subtitle text-base md:text-lg text-gray-600 font-[family-name:var(--font-eb-garamond)]">Standaardprijs</div>
                       </div>
                     </div>
                     <div className="kaching-bundles__bar-pricing text-right">
-                      <div className="kaching-bundles__bar-price text-lg font-semibold text-gray-900">€{bundlePrices.single.toFixed(2).replace('.', ',')}</div>
+                      <div className="kaching-bundles__bar-price text-lg font-semibold text-gray-900 font-[family-name:var(--font-eb-garamond)]">€{bundlePrices.single.toFixed(2).replace('.', ',')}</div>
                       {isOnSale && (
-                        <div className="kaching-bundles__bar-full-price text-sm text-gray-400 line-through">€{regularPrice.toFixed(2).replace('.', ',')}</div>
+                        <div className="kaching-bundles__bar-full-price text-sm text-gray-400 line-through font-[family-name:var(--font-eb-garamond)]">€{regularPrice.toFixed(2).replace('.', ',')}</div>
                       )}
                     </div>
                   </div>
@@ -708,14 +717,14 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
                       </div>
                       <div className="kaching-bundles__bar-content-left">
                         <div className="kaching-bundles__bar-first-line">
-                          <span className="kaching-bundles__bar-title text-base font-semibold text-gray-900">2 paar</span>
+                          <span className="kaching-bundles__bar-title text-base md:text-lg font-semibold text-gray-900 font-[family-name:var(--font-eb-garamond)]">2 paar</span>
                         </div>
-                        <div className="kaching-bundles__bar-subtitle text-sm text-black font-medium">10% korting op de totale bestelling!</div>
+                        <div className="kaching-bundles__bar-subtitle text-base md:text-lg text-black font-medium font-[family-name:var(--font-eb-garamond)]">10% korting op de totale bestelling!</div>
                       </div>
                     </div>
                     <div className="kaching-bundles__bar-pricing text-right">
-                      <div className="kaching-bundles__bar-price text-lg font-semibold text-black">€{bundlePrices.duo.toFixed(2).replace('.', ',')}</div>
-                      <div className="kaching-bundles__bar-full-price text-sm text-gray-400 line-through">€{(bundlePrices.single * 2).toFixed(2).replace('.', ',')}</div>
+                      <div className="kaching-bundles__bar-price text-lg font-semibold text-black font-[family-name:var(--font-eb-garamond)]">€{bundlePrices.duo.toFixed(2).replace('.', ',')}</div>
+                      <div className="kaching-bundles__bar-full-price text-sm text-gray-400 line-through font-[family-name:var(--font-eb-garamond)]">€{(bundlePrices.single * 2).toFixed(2).replace('.', ',')}</div>
                     </div>
                   </div>
                 </div>
@@ -754,17 +763,17 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
                       </div>
                       <div className="kaching-bundles__bar-content-left">
                         <div className="kaching-bundles__bar-first-line flex items-center gap-2">
-                          <span className="kaching-bundles__bar-title text-base font-semibold text-gray-900">3 paar</span>
-                          <span className="bg-green-100 text-green-700 text-xs font-bold px-2 py-0.5 rounded uppercase">
+                          <span className="kaching-bundles__bar-title text-base md:text-lg font-semibold text-gray-900 font-[family-name:var(--font-eb-garamond)]">3 paar</span>
+                          <span className="bg-green-100 text-green-700 text-xs font-bold px-2 py-0.5 rounded uppercase font-[family-name:var(--font-eb-garamond)]">
                             Beste Koop!
                           </span>
                         </div>
-                        <div className="kaching-bundles__bar-subtitle text-sm text-black font-medium">17% korting op de totale bestelling!</div>
+                        <div className="kaching-bundles__bar-subtitle text-base md:text-lg text-black font-medium font-[family-name:var(--font-eb-garamond)]">17% korting op de totale bestelling!</div>
                       </div>
                     </div>
                     <div className="kaching-bundles__bar-pricing text-right">
-                      <div className="kaching-bundles__bar-price text-lg font-semibold text-black">€{bundlePrices.family.toFixed(2).replace('.', ',')}</div>
-                      <div className="kaching-bundles__bar-full-price text-sm text-gray-400 line-through">€{(bundlePrices.single * 3).toFixed(2).replace('.', ',')}</div>
+                      <div className="kaching-bundles__bar-price text-lg font-semibold text-black font-[family-name:var(--font-eb-garamond)]">€{bundlePrices.family.toFixed(2).replace('.', ',')}</div>
+                      <div className="kaching-bundles__bar-full-price text-sm text-gray-400 line-through font-[family-name:var(--font-eb-garamond)]">€{(bundlePrices.single * 3).toFixed(2).replace('.', ',')}</div>
                     </div>
                   </div>
                 </div>
@@ -776,7 +785,7 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
               id="mainAddToCartButton"
               onClick={handleAddToCart}
               disabled={isAddingToCart}
-              className="w-full py-4 bg-[#fbe022] text-black text-lg font-bold rounded-lg hover:bg-[#e6cc1f] transition-all transform hover:scale-[1.02] disabled:opacity-50 disabled:transform-none"
+              className="w-full py-4 bg-[#fbe022] text-black text-lg font-bold rounded-lg hover:bg-[#e6cc1f] transition-all transform hover:scale-[1.02] disabled:opacity-50 disabled:transform-none font-[family-name:var(--font-eb-garamond)]"
             >
               {isAddingToCart ? (
                 <span className="flex items-center justify-center gap-2">
@@ -784,12 +793,12 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
                     <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                     <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                   </svg>
-                  Toevoegen...
+                  <span className="font-[family-name:var(--font-eb-garamond)]">Toevoegen...</span>
                 </span>
               ) : (
                 <span className="btn__text flex items-center justify-center gap-2">
                   <span className="material-icons-outlined button-cart-icon">shopping_cart</span>
-                  <span className="btn__add-to-cart-text2">Voeg toe aan winkelwagen</span>
+                  <span className="btn__add-to-cart-text2 font-[family-name:var(--font-eb-garamond)]">Voeg toe aan winkelwagen</span>
                 </span>
               )}
             </button>
@@ -814,8 +823,8 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
                 </div>
               </div>
               <div className="text-center px-1 md:px-2">
-                <h3 className="text-sm md:text-base font-bold text-gray-900 mb-1 md:mb-1.5 font-[family-name:var(--font-eb-garamond)]">Authentieke Natuursteen</h3>
-                <p className="text-[10px] md:text-xs text-gray-600 leading-relaxed">100% natuurlijke edelstenen, gecertificeerd authentiek en onbehandeld.</p>
+                <h3 className="text-base md:text-lg font-bold text-gray-900 mb-1 md:mb-1.5 font-[family-name:var(--font-eb-garamond)]">Authentieke Natuursteen</h3>
+                <p className="text-base md:text-lg text-gray-600 leading-relaxed font-[family-name:var(--font-eb-garamond)]">100% natuurlijke edelstenen, gecertificeerd authentiek en onbehandeld.</p>
               </div>
             </div>
 
@@ -831,8 +840,8 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
                 </div>
               </div>
               <div className="text-center px-1 md:px-2">
-                <h3 className="text-sm md:text-base font-bold text-gray-900 mb-1 md:mb-1.5 font-[family-name:var(--font-eb-garamond)]">Energetische Kracht</h3>
-                <p className="text-[10px] md:text-xs text-gray-600 leading-relaxed">Voorgeladen met positieve energie voor maximaal effect en directe werking.</p>
+                <h3 className="text-base md:text-lg font-bold text-gray-900 mb-1 md:mb-1.5 font-[family-name:var(--font-eb-garamond)]">Energetische Kracht</h3>
+                <p className="text-base md:text-lg text-gray-600 leading-relaxed font-[family-name:var(--font-eb-garamond)]">Voorgeladen met positieve energie voor maximaal effect en directe werking.</p>
               </div>
             </div>
 
@@ -848,8 +857,8 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
                 </div>
               </div>
               <div className="text-center px-1 md:px-2">
-                <h3 className="text-sm md:text-base font-bold text-gray-900 mb-1 md:mb-1.5 font-[family-name:var(--font-eb-garamond)]">Spirituele Helende Kracht</h3>
-                <p className="text-[10px] md:text-xs text-gray-600 leading-relaxed">Ondersteunt emotionele balans en spirituele groei voor innerlijke rust.</p>
+                <h3 className="text-base md:text-lg font-bold text-gray-900 mb-1 md:mb-1.5 font-[family-name:var(--font-eb-garamond)]">Spirituele Helende Kracht</h3>
+                <p className="text-base md:text-lg text-gray-600 leading-relaxed font-[family-name:var(--font-eb-garamond)]">Ondersteunt emotionele balans en spirituele groei voor innerlijke rust.</p>
               </div>
             </div>
 
@@ -864,8 +873,8 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
                 </div>
               </div>
               <div className="text-center px-1 md:px-2">
-                <h3 className="text-sm md:text-base font-bold text-gray-900 mb-1 md:mb-1.5 font-[family-name:var(--font-eb-garamond)]">Ethisch Gewonnen</h3>
-                <p className="text-[10px] md:text-xs text-gray-600 leading-relaxed">Met respect voor mens, natuur en milieu, duurzaam en verantwoord.</p>
+                <h3 className="text-base md:text-lg font-bold text-gray-900 mb-1 md:mb-1.5 font-[family-name:var(--font-eb-garamond)]">Ethisch Gewonnen</h3>
+                <p className="text-base md:text-lg text-gray-600 leading-relaxed font-[family-name:var(--font-eb-garamond)]">Met respect voor mens, natuur en milieu, duurzaam en verantwoord.</p>
               </div>
             </div>
 
@@ -1042,10 +1051,10 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
 
             {/* Right: Text content */}
             <div className="order-1 md:order-2">
-              <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4 md:mb-6">
+              <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4 md:mb-6 font-[family-name:var(--font-eb-garamond)]">
                 Ontdek De Transformerende Kracht Van {product.name}
               </h2>
-              <div className="space-y-4 text-base md:text-lg text-gray-600">
+              <div className="space-y-4 text-base md:text-lg text-gray-600 font-[family-name:var(--font-eb-garamond)]">
                 <p>
                   Al eeuwenlang worden edelstenen gebruikt voor hun helende en energetische eigenschappen.
                   Onze <strong>{product.name}</strong> is speciaal geselecteerd uit de beste mijnen van <strong>{gemstoneData.origin}</strong> en bezit unieke eigenschappen die je leven kunnen transformeren.
@@ -1067,10 +1076,10 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
 
             {/* Left: Text content */}
             <div className="order-1 md:order-1">
-              <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4 md:mb-6">
+              <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4 md:mb-6 font-[family-name:var(--font-eb-garamond)]">
                 Waarom Kiezen Voor Onze {product.name}?
               </h2>
-              <div className="space-y-4 text-base md:text-lg text-gray-600">
+              <div className="space-y-4 text-base md:text-lg text-gray-600 font-[family-name:var(--font-eb-garamond)]">
                 <p>
                   Elke <strong>{product.name}</strong> wordt met de grootste zorg geselecteerd en voorbereid.
                   We werken rechtstreeks samen met betrouwbare leveranciers die bekend staan om hun <strong>ethische werkwijze</strong> en <strong>hoogwaardige edelstenen</strong>.
@@ -1119,8 +1128,8 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                       </svg>
                     </div>
-                    <p className="text-lg font-semibold text-gray-700">Robbin Nieborg</p>
-                    <p className="text-sm text-gray-600">"Deze edelstenen bezitten krachtige energetische eigenschappen"</p>
+                    <p className="text-lg font-semibold text-gray-700 font-[family-name:var(--font-eb-garamond)]">Robbin Nieborg</p>
+                    <p className="text-sm text-gray-600 font-[family-name:var(--font-eb-garamond)]">"Deze edelstenen bezitten krachtige energetische eigenschappen"</p>
                   </div>
                 </div>
               </div>
@@ -1128,10 +1137,10 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
 
             {/* Right: Text content */}
             <div className="order-1 md:order-2">
-              <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4 md:mb-6">
+              <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4 md:mb-6 font-[family-name:var(--font-eb-garamond)]">
                 Aanbevolen Door Therapeuten
               </h2>
-              <div className="text-base md:text-lg text-gray-600">
+              <div className="text-base md:text-lg text-gray-600 font-[family-name:var(--font-eb-garamond)]">
                 <p>
                   Onze edelstenen worden aanbevolen door <strong>Robbin Nieborg</strong>, een ervaren specialist in energetische healing en kristaltherapie.
                   "Deze edelstenen bezitten krachtige energetische eigenschappen" - met deze overtuiging selecteert Robbin alleen de zuiverste en meest krachtige stenen.
@@ -1152,11 +1161,11 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
 
             {/* Left: Benefits List */}
             <div className="order-1 md:order-1">
-              <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4 md:mb-6">
+              <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4 md:mb-6 font-[family-name:var(--font-eb-garamond)]">
                 Ontdek De Voordelen Van {product.name}
               </h2>
 
-              <div className="space-y-3 text-base md:text-lg text-gray-700">
+              <div className="space-y-3 text-base md:text-lg text-gray-700 font-[family-name:var(--font-eb-garamond)]">
                 <p className="mb-4">
                 </p>
 
@@ -1200,7 +1209,7 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
       <section className="py-10 md:py-16 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-8">
-            <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4">
+            <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4 font-[family-name:var(--font-eb-garamond)]">
               Wat Onze Klanten Zeggen
             </h2>
             <div className="flex justify-center items-center gap-2 mb-2">
@@ -1211,7 +1220,7 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
                   </svg>
                 ))}
               </div>
-              <span className="text-base font-semibold text-gray-700">5.0 • 4,237 Reviews</span>
+              <span className="text-base font-semibold text-gray-700 font-[family-name:var(--font-eb-garamond)]">5.0 • 4,237 Reviews</span>
             </div>
           </div>
 
@@ -1228,13 +1237,13 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
                       </span>
                     </div>
                     <div>
-                      <p className="text-sm font-semibold text-gray-900 leading-tight">{review.name.split(' ')[0]} {review.name.split(' ')[1]?.[0]}.</p>
+                      <p className="text-base md:text-lg font-semibold text-gray-900 leading-tight font-[family-name:var(--font-eb-garamond)]">{review.name.split(' ')[0]} {review.name.split(' ')[1]?.[0]}.</p>
                       {review.verified && (
                         <div className="flex items-center gap-1 mt-0.5">
                           <svg viewBox="0 0 24 24" aria-label="Geverifieerd" className="w-3.5 h-3.5 text-green-600 fill-current">
                             <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
                           </svg>
-                          <span className="text-xs text-green-600">Geverifieerd</span>
+                          <span className="text-sm text-green-600 font-[family-name:var(--font-eb-garamond)]">Geverifieerd</span>
                         </div>
                       )}
                     </div>
@@ -1251,10 +1260,10 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
                 </div>
 
                 {/* Review Text */}
-                <p className="text-sm text-gray-700 leading-relaxed mb-3">{review.text}</p>
+                <p className="text-base md:text-lg text-gray-700 leading-relaxed mb-3 font-[family-name:var(--font-eb-garamond)]">{review.text}</p>
 
                 {/* Date */}
-                <p className="text-xs text-gray-500">{review.date}</p>
+                <p className="text-sm text-gray-500 font-[family-name:var(--font-eb-garamond)]">{review.date}</p>
               </div>
             ))}
 
@@ -1263,15 +1272,15 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
               <div className="flex items-start justify-between mb-3">
                 <div className="flex items-center gap-2">
                   <div className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center flex-shrink-0">
-                    <span className="text-sm font-semibold text-gray-600">JB</span>
+                    <span className="text-base md:text-lg font-semibold text-gray-600 font-[family-name:var(--font-eb-garamond)]">JB</span>
                   </div>
                   <div>
-                    <p className="text-sm font-semibold text-gray-900 leading-tight">Johan B.</p>
+                    <p className="text-base md:text-lg font-semibold text-gray-900 leading-tight font-[family-name:var(--font-eb-garamond)]">Johan B.</p>
                     <div className="flex items-center gap-1 mt-0.5">
                       <svg viewBox="0 0 24 24" aria-label="Geverifieerd" className="w-3.5 h-3.5 text-green-600 fill-current">
                         <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
                       </svg>
-                      <span className="text-xs text-green-600">Geverifieerd</span>
+                      <span className="text-xs text-green-600 font-[family-name:var(--font-eb-garamond)]">Geverifieerd</span>
                     </div>
                   </div>
                 </div>
@@ -1283,23 +1292,23 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
                   </svg>
                 ))}
               </div>
-              <p className="text-sm text-gray-700 leading-relaxed mb-3">Fantastische kwaliteit! De energie is direct voelbaar.</p>
-              <p className="text-xs text-gray-500">5 dagen geleden</p>
+              <p className="text-base md:text-lg text-gray-700 leading-relaxed mb-3 font-[family-name:var(--font-eb-garamond)]">Fantastische kwaliteit! De energie is direct voelbaar.</p>
+              <p className="text-sm text-gray-500 font-[family-name:var(--font-eb-garamond)]">5 dagen geleden</p>
             </div>
 
             <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-5 hover:shadow-md transition-shadow">
               <div className="flex items-start justify-between mb-3">
                 <div className="flex items-center gap-2">
                   <div className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center flex-shrink-0">
-                    <span className="text-sm font-semibold text-gray-600">AV</span>
+                    <span className="text-base md:text-lg font-semibold text-gray-600 font-[family-name:var(--font-eb-garamond)]">AV</span>
                   </div>
                   <div>
-                    <p className="text-sm font-semibold text-gray-900 leading-tight">Anna V.</p>
+                    <p className="text-base md:text-lg font-semibold text-gray-900 leading-tight font-[family-name:var(--font-eb-garamond)]">Anna V.</p>
                     <div className="flex items-center gap-1 mt-0.5">
                       <svg viewBox="0 0 24 24" aria-label="Geverifieerd" className="w-3.5 h-3.5 text-green-600 fill-current">
                         <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
                       </svg>
-                      <span className="text-xs text-green-600">Geverifieerd</span>
+                      <span className="text-xs text-green-600 font-[family-name:var(--font-eb-garamond)]">Geverifieerd</span>
                     </div>
                   </div>
                 </div>
@@ -1311,14 +1320,14 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
                   </svg>
                 ))}
               </div>
-              <p className="text-sm text-gray-700 leading-relaxed mb-3">Eindelijk weer goed slapen! Deze amethist heeft mijn nachtrust enorm verbeterd. Ik word uitgerust wakker.</p>
-              <p className="text-xs text-gray-500">1 week geleden</p>
+              <p className="text-base md:text-lg text-gray-700 leading-relaxed mb-3 font-[family-name:var(--font-eb-garamond)]">Eindelijk weer goed slapen! Deze amethist heeft mijn nachtrust enorm verbeterd. Ik word uitgerust wakker.</p>
+              <p className="text-sm text-gray-500 font-[family-name:var(--font-eb-garamond)]">1 week geleden</p>
             </div>
           </div>
 
           {/* Load More Button */}
           <div className="text-center mt-8">
-            <button className="px-6 py-2.5 bg-black text-white font-semibold rounded-lg hover:bg-gray-800 transition-colors">
+            <button className="px-6 py-2.5 bg-black text-white font-semibold rounded-lg hover:bg-gray-800 transition-colors font-[family-name:var(--font-eb-garamond)]">
               Meer reviews laden
             </button>
           </div>
