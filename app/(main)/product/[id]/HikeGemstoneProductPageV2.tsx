@@ -503,7 +503,7 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
 
               {/* Price with strikethrough */}
               <div className="flex items-center gap-3 mb-6">
-                <span className="text-3xl font-bold text-[#492c4a]">
+                <span className="text-xl font-light text-[#492c4a]">
                   €{price.toFixed(2).replace('.', ',')}
                 </span>
                 {isOnSale && (
@@ -511,156 +511,191 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
                     <span className="text-xl text-gray-400 line-through">
                       €{regularPrice.toFixed(2).replace('.', ',')}
                     </span>
-                    <div className="flex items-center gap-1 bg-gradient-to-r from-orange-500 to-red-500 text-white px-3 py-1.5 rounded-full">
-                      <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                        <path fillRule="evenodd" d="M5 2a2 2 0 00-2 2v14l3.5-2 3.5 2 3.5-2 3.5 2V4a2 2 0 00-2-2H5zm2.5 3a1.5 1.5 0 100 3 1.5 1.5 0 000-3zm6.207.293a1 1 0 00-1.414 0l-6 6a1 1 0 101.414 1.414l6-6a1 1 0 000-1.414zM12.5 10a1.5 1.5 0 100 3 1.5 1.5 0 000-3z" clipRule="evenodd"/>
-                      </svg>
-                      <span className="text-sm font-bold uppercase tracking-wider">
-                        Je bespaart {discount}%
-                      </span>
-                    </div>
+                    <span className="badge number-discount_saved discount_saved-51613903651156" style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '3px',
+                      background: '#000000',
+                      color: 'white',
+                      padding: '4px 10px',
+                      borderRadius: '4px',
+                      fontSize: '12px',
+                      fontWeight: '800',
+                      textTransform: 'uppercase',
+                      letterSpacing: '0.05em'
+                    }}>
+                      <span className="material-icons-outlined" style={{ fontSize: '14px' }}>local_offer</span>
+                      <span style={{ fontWeight: '900' }}>JE BESPAART {discount}%</span>
+                    </span>
                   </>
                 )}
+              </div>
+
+              {/* Spring sale info */}
+              <div className="custom-spring-sale-info mb-4">
+                <span style={{ padding: '6px', paddingLeft: '2px', color: '#000000' }}>
+                  <div className="metafield-rich_text_field">
+                    <p>Vanwege onze <strong>najaarssale</strong> zijn er nog maar enkele exemplaren op voorraad!</p>
+                  </div>
+                </span>
               </div>
             </div>
 
             {/* Bundle options - Hike style */}
-            <div className="space-y-2">
-              <div className="text-base font-semibold text-gray-800 mb-3">
-                Kies je pakket (bespaar tot 30%)
-              </div>
-              <div className="text-sm text-green-600 font-medium mb-4">
-                ✓ Op voorraad - Nog {product.stock_quantity || 12} beschikbaar
-              </div>
+            <div className="kaching-bundles__block-title text-center text-sm font-medium text-black mb-3 flex items-center justify-center">
+              <span className="flex-1 h-0.5 mr-3" style={{ backgroundColor: '#d1d5db' }}></span>
+              <span className="font-semibold">Bundelpromotie is geldig tot 23.59 uur</span>
+              <span className="flex-1 h-0.5 ml-3" style={{ backgroundColor: '#d1d5db' }}></span>
+            </div>
+            <div className="space-y-4">
 
               {/* Single option */}
-              <label className={`relative block p-5 border-2 rounded-xl cursor-pointer transition-all ${
-                selectedBundle === 'single'
-                  ? 'border-[#492c4a] bg-purple-50/30'
-                  : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
-              }`}>
-                <input
-                  type="radio"
-                  name="bundle"
-                  value="single"
-                  checked={selectedBundle === 'single'}
-                  onChange={(e) => setSelectedBundle(e.target.value)}
-                  className="sr-only"
-                />
-                <div className="flex items-start justify-between">
-                  <div className="flex items-start gap-4">
-                    {/* Custom radio button */}
-                    <div className={`mt-1 w-5 h-5 rounded-full border-2 flex items-center justify-center transition-colors ${
-                      selectedBundle === 'single'
-                        ? 'border-[#492c4a] bg-[#492c4a]'
-                        : 'border-gray-400 bg-white'
-                    }`}>
-                      {selectedBundle === 'single' && (
-                        <div className="w-2 h-2 bg-white rounded-full"></div>
-                      )}
-                    </div>
-                    <div className="flex-1">
-                      <div className="flex items-center gap-2">
-                        <span className="text-lg font-bold text-gray-900">1 steen</span>
-                      </div>
-                      <div className="text-sm text-gray-600 mt-1">Standaardprijs</div>
-                    </div>
-                  </div>
-                  <div className="text-right">
-                    <div className="text-xl font-bold text-gray-900">€{bundlePrices.single.toFixed(2)}</div>
-                  </div>
-                </div>
-              </label>
-
-              {/* Duo option - Most Popular */}
-              <div className="relative">
-                <div className="absolute -top-2 left-1/2 transform -translate-x-1/2 z-10">
-                  <span className="bg-orange-500 text-white text-xs font-bold px-4 py-1 rounded-full uppercase tracking-wide">
-                    Meest Populair!
-                  </span>
-                </div>
-                <label className={`relative block p-5 pt-6 border-2 rounded-xl cursor-pointer transition-all ${
-                  selectedBundle === 'duo'
-                    ? 'border-orange-500 bg-orange-50/30 ring-2 ring-orange-200'
-                    : 'border-orange-300 hover:border-orange-400 hover:bg-orange-50/20'
-                }`}>
+              <div className="kaching-bundles__bar-wrapper">
+                <div
+                  role="button"
+                  tabIndex={0}
+                  className={`kaching-bundles__bar-main relative block p-4 border rounded-lg cursor-pointer transition-all ${
+                    selectedBundle === 'single'
+                      ? 'border-black bg-gray-50'
+                      : 'border-gray-300 hover:border-gray-400 bg-white'
+                  }`}
+                  onClick={() => setSelectedBundle('single')}
+                >
                   <input
                     type="radio"
+                    className="sr-only"
+                    name="bundle"
+                    value="single"
+                    checked={selectedBundle === 'single'}
+                    onChange={(e) => setSelectedBundle(e.target.value)}
+                  />
+                  <div className="kaching-bundles__bar-content flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <div className={`kaching-bundles__bar-radio w-5 h-5 rounded-full border-2 flex items-center justify-center ${
+                        selectedBundle === 'single'
+                          ? 'border-black bg-black'
+                          : 'border-gray-400 bg-white'
+                      }`}>
+                        {selectedBundle === 'single' && (
+                          <div className="w-2 h-2 bg-white rounded-full" />
+                        )}
+                      </div>
+                      <div className="kaching-bundles__bar-content-left">
+                        <div className="kaching-bundles__bar-first-line">
+                          <span className="kaching-bundles__bar-title text-base font-semibold text-gray-900">1 paar</span>
+                        </div>
+                        <div className="kaching-bundles__bar-subtitle text-sm text-gray-600">Standaardprijs</div>
+                      </div>
+                    </div>
+                    <div className="kaching-bundles__bar-pricing text-right">
+                      <div className="kaching-bundles__bar-price text-lg font-semibold text-gray-900">€{bundlePrices.single.toFixed(2).replace('.', ',')}</div>
+                      {isOnSale && (
+                        <div className="kaching-bundles__bar-full-price text-sm text-gray-400 line-through">€{regularPrice.toFixed(2).replace('.', ',')}</div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Duo option - Most Popular */}
+              <div className="kaching-bundles__bar-wrapper relative">
+                <div
+                  role="button"
+                  tabIndex={0}
+                  className={`kaching-bundles__bar-main relative block p-4 border rounded-lg cursor-pointer transition-all ${
+                    selectedBundle === 'duo'
+                      ? 'border-black bg-gray-50'
+                      : 'border-gray-300 hover:border-gray-400 bg-white'
+                  }`}
+                  onClick={() => setSelectedBundle('duo')}
+                >
+                  <div className="kaching-bundles__bar-most-popular kaching-bundles__bar-most-popular--simple absolute -top-3 right-2">
+                    <div className="kaching-bundles__bar-most-popular__content text-white text-xs font-bold px-3 py-1 rounded uppercase" style={{ backgroundColor: '#538125' }}>
+                      MEEST POPULAIR!
+                    </div>
+                  </div>
+                  <input
+                    type="radio"
+                    className="sr-only"
                     name="bundle"
                     value="duo"
                     checked={selectedBundle === 'duo'}
                     onChange={(e) => setSelectedBundle(e.target.value)}
-                    className="sr-only"
                   />
-                  <div className="flex items-start justify-between">
-                    <div className="flex items-start gap-4">
-                      {/* Custom radio button */}
-                      <div className={`mt-1 w-5 h-5 rounded-full border-2 flex items-center justify-center transition-colors ${
+                  <div className="kaching-bundles__bar-content flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <div className={`kaching-bundles__bar-radio w-5 h-5 rounded-full border-2 flex items-center justify-center ${
                         selectedBundle === 'duo'
-                          ? 'border-orange-500 bg-orange-500'
+                          ? 'border-black bg-black'
                           : 'border-gray-400 bg-white'
                       }`}>
                         {selectedBundle === 'duo' && (
-                          <div className="w-2 h-2 bg-white rounded-full"></div>
+                          <div className="w-2 h-2 bg-white rounded-full" />
                         )}
                       </div>
-                      <div className="flex-1">
-                        <div className="flex items-center gap-2">
-                          <span className="text-lg font-bold text-gray-900">2 stenen</span>
+                      <div className="kaching-bundles__bar-content-left">
+                        <div className="kaching-bundles__bar-first-line">
+                          <span className="kaching-bundles__bar-title text-base font-semibold text-gray-900">2 paar</span>
                         </div>
-                        <div className="text-sm text-orange-600 font-medium mt-1">10% korting op de totale bestelling!</div>
+                        <div className="kaching-bundles__bar-subtitle text-sm text-black font-medium">10% korting op de totale bestelling!</div>
                       </div>
                     </div>
-                    <div className="text-right">
-                      <div className="text-xl font-bold text-orange-600">€{bundlePrices.duo.toFixed(2)}</div>
-                      <div className="text-sm text-gray-400 line-through">€{(bundlePrices.single * 2).toFixed(2)}</div>
+                    <div className="kaching-bundles__bar-pricing text-right">
+                      <div className="kaching-bundles__bar-price text-lg font-semibold text-black">€{bundlePrices.duo.toFixed(2).replace('.', ',')}</div>
+                      <div className="kaching-bundles__bar-full-price text-sm text-gray-400 line-through">€{(bundlePrices.single * 2).toFixed(2).replace('.', ',')}</div>
                     </div>
                   </div>
-                </label>
+                </div>
               </div>
 
               {/* Family/Trio option - Best Value */}
-              <label className={`relative block p-5 border-2 rounded-xl cursor-pointer transition-all ${
-                selectedBundle === 'family'
-                  ? 'border-[#492c4a] bg-purple-50/30'
-                  : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
-              }`}>
-                <input
-                  type="radio"
-                  name="bundle"
-                  value="family"
-                  checked={selectedBundle === 'family'}
-                  onChange={(e) => setSelectedBundle(e.target.value)}
-                  className="sr-only"
-                />
-                <div className="flex items-start justify-between">
-                  <div className="flex items-start gap-4">
-                    {/* Custom radio button */}
-                    <div className={`mt-1 w-5 h-5 rounded-full border-2 flex items-center justify-center transition-colors ${
-                      selectedBundle === 'family'
-                        ? 'border-[#492c4a] bg-[#492c4a]'
-                        : 'border-gray-400 bg-white'
-                    }`}>
-                      {selectedBundle === 'family' && (
-                        <div className="w-2 h-2 bg-white rounded-full"></div>
-                      )}
-                    </div>
-                    <div className="flex-1">
-                      <div className="flex items-center gap-2">
-                        <span className="text-lg font-bold text-gray-900">3 stenen</span>
-                        <span className="bg-green-100 text-green-700 text-xs font-bold px-2 py-0.5 rounded uppercase">
-                          Beste Koop!
-                        </span>
+              <div className="kaching-bundles__bar-wrapper relative">
+                <div
+                  role="button"
+                  tabIndex={0}
+                  className={`kaching-bundles__bar-main relative block p-4 border rounded-lg cursor-pointer transition-all ${
+                    selectedBundle === 'family'
+                      ? 'border-black bg-gray-50'
+                      : 'border-gray-300 hover:border-gray-400 bg-white'
+                  }`}
+                  onClick={() => setSelectedBundle('family')}
+                >
+                  <input
+                    type="radio"
+                    className="sr-only"
+                    name="bundle"
+                    value="family"
+                    checked={selectedBundle === 'family'}
+                    onChange={(e) => setSelectedBundle(e.target.value)}
+                  />
+                  <div className="kaching-bundles__bar-content flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <div className={`kaching-bundles__bar-radio w-5 h-5 rounded-full border-2 flex items-center justify-center ${
+                        selectedBundle === 'family'
+                          ? 'border-black bg-black'
+                          : 'border-gray-400 bg-white'
+                      }`}>
+                        {selectedBundle === 'family' && (
+                          <div className="w-2 h-2 bg-white rounded-full" />
+                        )}
                       </div>
-                      <div className="text-sm text-green-600 font-medium mt-1">17% korting op de totale bestelling!</div>
+                      <div className="kaching-bundles__bar-content-left">
+                        <div className="kaching-bundles__bar-first-line flex items-center gap-2">
+                          <span className="kaching-bundles__bar-title text-base font-semibold text-gray-900">3 paar</span>
+                          <span className="bg-green-100 text-green-700 text-xs font-bold px-2 py-0.5 rounded uppercase">
+                            Beste Koop!
+                          </span>
+                        </div>
+                        <div className="kaching-bundles__bar-subtitle text-sm text-black font-medium">17% korting op de totale bestelling!</div>
+                      </div>
                     </div>
-                  </div>
-                  <div className="text-right">
-                    <div className="text-xl font-bold text-green-600">€{bundlePrices.family.toFixed(2)}</div>
-                    <div className="text-sm text-gray-400 line-through">€{(bundlePrices.single * 3).toFixed(2)}</div>
+                    <div className="kaching-bundles__bar-pricing text-right">
+                      <div className="kaching-bundles__bar-price text-lg font-semibold text-black">€{bundlePrices.family.toFixed(2).replace('.', ',')}</div>
+                      <div className="kaching-bundles__bar-full-price text-sm text-gray-400 line-through">€{(bundlePrices.single * 3).toFixed(2).replace('.', ',')}</div>
+                    </div>
                   </div>
                 </div>
-              </label>
+              </div>
             </div>
 
             {/* Large green Add to Cart button */}
@@ -678,25 +713,13 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
                   Toevoegen...
                 </span>
               ) : (
-                'Toevoegen aan Winkelwagen'
+                <span className="btn__text flex items-center justify-center gap-2">
+                  <span className="material-icons-outlined button-cart-icon">shopping_cart</span>
+                  <span className="btn__add-to-cart-text2">Voeg toe aan winkelwagen</span>
+                </span>
               )}
             </button>
 
-            {/* Shipping and return info */}
-            <div className="grid grid-cols-2 gap-4 pt-4 border-t">
-              <div className="flex items-center gap-2 text-sm">
-                <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" />
-                </svg>
-                <span>Gratis verzending vanaf €50</span>
-              </div>
-              <div className="flex items-center gap-2 text-sm">
-                <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6" />
-                </svg>
-                <span>30 dagen retourrecht</span>
-              </div>
-            </div>
           </div>
         </div>
       </section>
