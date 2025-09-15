@@ -848,9 +848,6 @@ export default function UnifiedCheckoutPage() {
                               />
                               <div>
                                 <p className="font-medium text-[#2D2D2D]">{rate.method_title}</p>
-                                {rate.delivery_time && (
-                                  <p className="text-base text-gray-600">{rate.delivery_time}</p>
-                                )}
                               </div>
                             </div>
                             <span className="font-semibold text-[#492c4a]">
@@ -1155,7 +1152,7 @@ export default function UnifiedCheckoutPage() {
                 </h2>
                 <StripePaymentForm
                   orderId={orderId}
-                  amount={total}
+                  total={total}
                   onSuccess={handlePaymentSuccess}
                   onError={(error) => setError(error)}
                 />

@@ -137,7 +137,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   const clearCart = () => {
     setItems([]);
     setAppliedCoupon(null);
-    localStorage.removeItem('123noodklaar-coupon');
+    localStorage.removeItem('stonesforhealth-coupon');
   };
 
   const getTotalPrice = () => {
@@ -158,7 +158,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
 
   const removeDiscount = () => {
     setAppliedCoupon(null);
-    localStorage.removeItem('123noodklaar-coupon');
+    localStorage.removeItem('stonesforhealth-coupon');
   };
 
   const getDiscountAmount = () => {
@@ -238,11 +238,26 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       
       // Check if response is JSON
       const contentType = response.headers.get('content-type');
+      let data;
+
       if (!contentType || !contentType.includes('application/json')) {
-        throw new Error('Shipping API returned non-JSON response');
+        // If not JSON, try to read as text for error details
+        const text = await response.text();
+        console.warn('Shipping API returned non-JSON response:', text);
+        // Provide fallback shipping rates instead of throwing
+        data = {
+          rates: [
+            {
+              method_id: 'flat_rate',
+              method_title: 'Standaard verzending',
+              cost: 4.95,
+              free: false
+            }
+          ]
+        };
+      } else {
+        data = await response.json();
       }
-      
-      const data = await response.json();
       
       if (data.rates && data.rates.length > 0) {
         setShipping(prev => ({

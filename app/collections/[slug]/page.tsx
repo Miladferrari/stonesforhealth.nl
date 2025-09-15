@@ -109,7 +109,6 @@ export default function CollectionPage() {
           {
             id: 1,
             src: '/1.jpeg',
-            name: 'Product Image',
             alt: productNames[i % productNames.length]
           }
         ],
@@ -118,7 +117,9 @@ export default function CollectionPage() {
         attributes: [],
         variations: [],
         short_description: 'Prachtige natuurlijke edelsteen met krachtige energie.',
-        description: 'Deze authentieke edelsteen is zorgvuldig geselecteerd voor zijn unieke eigenschappen.'
+        description: 'Deze authentieke edelsteen is zorgvuldig geselecteerd voor zijn unieke eigenschappen.',
+        stock_status: 'instock',
+        stock_quantity: 10
       } as Product);
     }
 

@@ -4,6 +4,8 @@ import { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Product } from '@/lib/woocommerce';
+import { useCart } from '@/app/contexts/CartContext';
+import { useToast } from '@/app/contexts/ToastContext';
 
 interface CollectionProductGridProps {
   products: Product[];
@@ -19,6 +21,8 @@ export default function CollectionProductGrid({
   onPageChange
 }: CollectionProductGridProps) {
   const [hoveredProduct, setHoveredProduct] = useState<number | null>(null);
+  const { addToCart } = useCart();
+  const { showToast } = useToast();
 
   const calculateDiscount = (product: Product) => {
     if (!product.on_sale || !product.regular_price) return 0;
@@ -146,7 +150,9 @@ export default function CollectionProductGrid({
                       aria-label="Toevoegen aan winkelwagen"
                       onClick={(e) => {
                         e.preventDefault();
-                        // Add to cart functionality
+                        e.stopPropagation();
+                        addToCart(product);
+                        showToast('Product toegevoegd aan winkelwagen!', 'success');
                       }}
                     >
                       <svg className="w-4 h-4 text-[#492c4a] group-hover/btn:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">

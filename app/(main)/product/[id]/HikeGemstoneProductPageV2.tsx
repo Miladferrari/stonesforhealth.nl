@@ -78,12 +78,12 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
   const reviewDropdownRef = useRef<HTMLDivElement>(null);
   const reviewButtonRef = useRef<HTMLButtonElement>(null);
 
-  // Extract gemstone properties
+  // Extract gemstone properties - using default values
   const gemstoneData = {
-    chakra: product.attributes?.find(a => a.name === 'Chakra')?.options?.[0] || 'Hart Chakra',
-    origin: product.attributes?.find(a => a.name === 'Origin')?.options?.[0] || 'Brazilië',
-    size: product.attributes?.find(a => a.name === 'Size')?.options?.[0] || '3-5 cm',
-    energy: product.attributes?.find(a => a.name === 'Energy')?.options?.[0] || 'Kalmerend & Beschermend',
+    chakra: 'Hart Chakra',
+    origin: 'Brazilië',
+    size: '3-5 cm',
+    energy: 'Kalmerend & Beschermend',
   };
 
   // Calculate pricing

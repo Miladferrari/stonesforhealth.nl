@@ -246,10 +246,17 @@ class WooCommerceAPI {
 
       if (!response.ok) {
         const errorText = await response.text();
-        console.error(
-          `[WooCommerce API] Error: ${response.status} ${response.statusText}`,
-          errorText
-        );
+        // Only log non-404 errors as errors, 404s are expected sometimes
+        if (response.status === 404) {
+          console.debug(
+            `[WooCommerce API] Resource not found: ${endpoint}`
+          );
+        } else {
+          console.error(
+            `[WooCommerce API] Error: ${response.status} ${response.statusText}`,
+            errorText
+          );
+        }
 
         // Try to parse error details
         let errorDetails = "";

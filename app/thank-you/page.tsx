@@ -260,7 +260,7 @@ function ThankYouContent() {
         {/* Contact Info */}
         <div className="mt-12 text-center text-sm text-gray-600">
           <p>Heb je vragen over je bestelling?</p>
-          <p>Neem contact op via <a href="mailto:support@123noodklaar.nl" className="text-medical-green hover:underline">support@123noodklaar.nl</a></p>
+          <p>Neem contact op via <a href="mailto:info@stonesforhealth.nl" className="text-medical-green hover:underline">info@stonesforhealth.nl</a></p>
         </div>
       </div>
     </div>

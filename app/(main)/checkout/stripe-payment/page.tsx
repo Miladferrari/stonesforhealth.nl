@@ -344,7 +344,7 @@ function StripePaymentContent() {
     );
   }
 
-  const returnUrl = `https://123noodklaar.nl/thank-you?order=${orderData.id}`;
+  const returnUrl = `${process.env.NEXT_PUBLIC_SITE_URL || 'https://stonesforhealth.nl'}/thank-you?order=${orderData.id}`;
 
   return (
     <div className="min-h-screen bg-gray-50">

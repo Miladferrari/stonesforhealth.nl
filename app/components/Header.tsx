@@ -9,7 +9,7 @@ const Header = memo(function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [helpDropdownOpen, setHelpDropdownOpen] = useState(false);
   const [shopDropdownOpen, setShopDropdownOpen] = useState(false);
-  const [categories, setCategories] = useState([]);
+  const [categories, setCategories] = useState<any[]>([]);
   const { setIsCartOpen, getTotalItems } = useCart();
 
   // Timeout refs for dropdown delays
@@ -28,8 +28,8 @@ const Header = memo(function Header() {
         if (response.ok) {
           const data = await response.json();
           const topCategories = data
-            .filter((cat) => cat.parent === 0 && cat.slug !== 'uncategorized')
-            .sort((a, b) => (b.count || 0) - (a.count || 0))
+            .filter((cat: any) => cat.parent === 0 && cat.slug !== 'uncategorized')
+            .sort((a: any, b: any) => (b.count || 0) - (a.count || 0))
             .slice(0, 6); // Show top 6 categories in dropdown
           setCategories(topCategories);
         }

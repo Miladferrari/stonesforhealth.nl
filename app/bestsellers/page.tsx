@@ -92,7 +92,6 @@ export default function BestsellersPage() {
           {
             id: 1,
             src: '/1.jpeg',
-            name: 'Product Image',
             alt: bestsellers[i % bestsellers.length]
           }
         ],
@@ -101,7 +100,9 @@ export default function BestsellersPage() {
         attributes: [],
         variations: [],
         short_description: '⭐ Bestseller - Door klanten aanbevolen!',
-        description: 'Een van onze meest populaire edelstenen, geliefd om zijn krachtige eigenschappen.'
+        description: 'Een van onze meest populaire edelstenen, geliefd om zijn krachtige eigenschappen.',
+        stock_status: 'instock',
+        stock_quantity: 10
       } as Product);
     }
 

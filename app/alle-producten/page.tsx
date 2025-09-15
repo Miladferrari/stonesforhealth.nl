@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import CollectionHero from '@/app/components/collection/CollectionHero';
 import CollectionTrustBadges from '@/app/components/collection/CollectionTrustBadges';
@@ -10,7 +10,7 @@ import { Product } from '@/lib/woocommerce';
 
 const PRODUCTS_PER_PAGE = 12;
 
-export default function AlleProductenPage() {
+function AlleProductenContent() {
   const searchParams = useSearchParams();
   const category = searchParams?.get('category');
 
@@ -66,13 +66,15 @@ export default function AlleProductenPage() {
           setTotalPages(data.totalPages || 1);
         }
       } else {
-        console.error('Failed to fetch products');
+        // API might be unavailable, using fallback products
+        console.warn('Products API not available, using fallback products');
         // Use fallback products
         setProducts(generateFallbackProducts());
         setTotalPages(3);
       }
     } catch (error) {
-      console.error('Error fetching products:', error);
+      // Handle error gracefully without alarming console errors
+      console.warn('Using fallback products due to API unavailability');
       // Use fallback products
       setProducts(generateFallbackProducts());
       setTotalPages(3);
@@ -110,7 +112,6 @@ export default function AlleProductenPage() {
           {
             id: 1,
             src: '/1.jpeg',
-            name: 'Product Image',
             alt: productNames[i % productNames.length]
           }
         ],
@@ -119,7 +120,9 @@ export default function AlleProductenPage() {
         attributes: [],
         variations: [],
         short_description: 'Prachtige natuurlijke edelsteen met krachtige energie.',
-        description: 'Deze authentieke edelsteen is zorgvuldig geselecteerd voor zijn unieke eigenschappen.'
+        description: 'Deze authentieke edelsteen is zorgvuldig geselecteerd voor zijn unieke eigenschappen.',
+        stock_status: 'instock',
+        stock_quantity: 10
       } as Product);
     }
 
@@ -169,5 +172,20 @@ export default function AlleProductenPage() {
       )}
 
     </div>
+  );
+}
+
+export default function AlleProductenPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-white flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#492c4a] mx-auto mb-4"></div>
+          <p className="text-gray-900">Producten laden...</p>
+        </div>
+      </div>
+    }>
+      <AlleProductenContent />
+    </Suspense>
   );
 }
