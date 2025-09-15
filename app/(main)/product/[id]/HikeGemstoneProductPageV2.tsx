@@ -193,7 +193,7 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
       {/* STICKY ADD TO CART */}
       <div
         id="stickyAddToCart"
-        className={`fixed top-[120px] lg:top-[130px] xl:top-[130px] 2xl:top-[130px] left-0 right-0 bg-white shadow-lg z-40 transition-transform duration-300 ${
+        className={`fixed top-[120px] md:top-[135px] lg:top-[130px] xl:top-[130px] 2xl:top-[130px] left-0 right-0 bg-white shadow-lg z-40 transition-transform duration-300 ${
           showStickyHeader ? 'translate-y-0' : '-translate-y-full'
         }`}
       >
@@ -307,7 +307,7 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
       </div>
 
       {/* 2. MAIN PRODUCT SECTION */}
-      <section ref={headerRef} className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-16">
+      <section ref={headerRef} className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 md:pt-24 lg:pt-8 pb-16">
         <div className="grid lg:grid-cols-2 gap-12">
 
           {/* Left: Large product image gallery */}
