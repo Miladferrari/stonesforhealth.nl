@@ -99,6 +99,34 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
     family: price * 2.5
   };
 
+  // Handle sticky header visibility using Intersection Observer
+  useEffect(() => {
+    const mainButton = document.getElementById('mainAddToCartButton');
+    if (!mainButton) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          // Show sticky header when main button is NOT visible
+          // Hide sticky header when main button IS visible
+          setShowStickyHeader(!entry.isIntersecting);
+        });
+      },
+      {
+        // Trigger when button crosses viewport
+        threshold: 0,
+        // Add margin to account for navbar height (120px)
+        rootMargin: '-120px 0px 0px 0px'
+      }
+    );
+
+    observer.observe(mainButton);
+
+    return () => {
+      observer.disconnect();
+    };
+  }, [product]); // Re-run when product changes
+
   // Handle review dropdown close on outside click
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -131,18 +159,6 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
     }
   }, [showReviewDropdown]);
 
-  // Handle sticky header visibility
-  useEffect(() => {
-    const handleScroll = () => {
-      if (headerRef.current) {
-        const headerBottom = headerRef.current.getBoundingClientRect().bottom;
-        setShowStickyHeader(headerBottom < 0);
-      }
-    };
-
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
 
   const handleAddToCart = async () => {
     setIsAddingToCart(true);
@@ -174,67 +190,118 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
   return (
     <div className="min-h-screen bg-white">
 
-      {/* 1. STICKY HEADER WITH PRODUCT SUMMARY */}
-      <div className={`fixed top-0 left-0 right-0 bg-white shadow-lg z-50 transition-transform duration-300 ${
-        showStickyHeader ? 'translate-y-0' : '-translate-y-full'
-      }`}>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center gap-4 py-3">
-            {/* Small thumbnail */}
-            <div className="w-12 h-12 flex-shrink-0">
-              {images[0] && (
-                <Image
-                  src={images[0].src}
-                  alt={product.name}
-                  width={48}
-                  height={48}
-                  className="w-full h-full object-cover rounded"
-                />
-              )}
-            </div>
-
-            {/* Product title */}
-            <div className="flex-1 min-w-0">
-              <h2 className="text-sm font-semibold text-gray-900 truncate">{product.name}</h2>
-              <div className="flex items-center gap-2">
-                <span className="text-lg font-bold text-[#492c4a]">€{price.toFixed(2)}</span>
-                {isOnSale && (
-                  <span className="bg-red-500 text-white text-xs px-2 py-0.5 rounded">-{discount}%</span>
+      {/* STICKY ADD TO CART */}
+      <div
+        id="stickyAddToCart"
+        className={`fixed top-[120px] left-0 right-0 bg-white shadow-lg z-40 transition-transform duration-300 ${
+          showStickyHeader ? 'translate-y-0' : '-translate-y-full'
+        }`}
+      >
+        <div className="wrapper">
+          <div className="max-w-7xl mx-auto px-3 sm:px-4">
+            <div className="flex items-center gap-2 sm:gap-3 lg:gap-4 py-2.5 sm:py-3">
+              {/* Product Image - Visible on all sizes */}
+              <div className="flex-shrink-0">
+                {images[0] && (
+                  <Image
+                    src={images[0].src}
+                    alt={product.name}
+                    width={65}
+                    height={65}
+                    className="w-10 h-10 sm:w-14 sm:h-14 lg:w-16 lg:h-16 object-cover rounded"
+                  />
                 )}
               </div>
+
+              {/* Mobile: Price only | Desktop: Full product info */}
+              <div className="flex-1 overflow-hidden">
+                {/* Mobile view - Only price */}
+                <div className="sm:hidden">
+                  <span className="text-lg font-bold text-black">
+                    €{selectedBundle === 'single' ? price.toFixed(2).replace('.', ',') :
+                      selectedBundle === 'duo' ? bundlePrices.duo.toFixed(2).replace('.', ',') :
+                      bundlePrices.family.toFixed(2).replace('.', ',')}
+                  </span>
+                </div>
+
+                {/* Desktop view - Full info */}
+                <div className="hidden sm:block">
+                  <h5 className="text-sm sm:text-base font-semibold text-gray-900 truncate">{product.name}</h5>
+                  <div className="flex flex-wrap items-center gap-2 sm:gap-3">
+                    <span className="text-base sm:text-lg font-semibold text-black">
+                      €{selectedBundle === 'single' ? price.toFixed(2).replace('.', ',') :
+                        selectedBundle === 'duo' ? bundlePrices.duo.toFixed(2).replace('.', ',') :
+                        bundlePrices.family.toFixed(2).replace('.', ',')}
+                    </span>
+                    {isOnSale && (
+                      <>
+                        <span className="text-xs sm:text-sm text-gray-400 line-through hidden min-[808px]:inline">
+                          €{selectedBundle === 'single' ? regularPrice.toFixed(2).replace('.', ',') :
+                            selectedBundle === 'duo' ? (regularPrice * 2).toFixed(2).replace('.', ',') :
+                            (regularPrice * 3).toFixed(2).replace('.', ',')}
+                        </span>
+                        <span className="badge inline-flex items-center gap-1 text-black text-[10px] sm:text-xs font-bold px-1.5 sm:px-2 py-0.5 sm:py-1 rounded hidden lg:inline-flex" style={{ backgroundColor: '#fbe022' }}>
+                          <span className="material-icons-outlined text-xs sm:text-sm">local_offer</span>
+                          <span>JE BESPAART {selectedBundle === 'duo' ? '10' : selectedBundle === 'family' ? '17' : discount}%</span>
+                        </span>
+                      </>
+                    )}
+                  </div>
+                </div>
+              </div>
+
+              {/* Bundle Selector - Improved styling */}
+              <div className="relative">
+                <select
+                  className="appearance-none px-3 sm:px-4 lg:px-5 py-2.5 sm:py-2.5 lg:py-3 pr-8 sm:pr-10 border border-gray-300 sm:border-gray-400 rounded-md sm:rounded-lg text-xs sm:text-base font-semibold focus:outline-none focus:ring-2 focus:ring-black focus:border-black bg-white text-black cursor-pointer hover:border-black transition-all min-w-[85px] sm:min-w-[140px] lg:min-w-[180px]"
+                  value={selectedBundle}
+                  onChange={(e) => {
+                    setSelectedBundle(e.target.value);
+                    // Update quantity based on bundle selection
+                    if (e.target.value === 'single') setQuantity(1);
+                    else if (e.target.value === 'duo') setQuantity(2);
+                    else if (e.target.value === 'family') setQuantity(3);
+                  }}
+                >
+                  <option value="single">1 paar</option>
+                  <option value="duo">2 paar</option>
+                  <option value="family">3 paar</option>
+                </select>
+                {/* Custom dropdown arrow */}
+                <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2 sm:pr-3">
+                  <svg className="h-4 w-4 sm:h-5 sm:w-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
+                </div>
+              </div>
+
+              {/* Add to Cart Button - Different designs for mobile and desktop */}
+              <div className="flex-shrink-0 md:flex-initial">
+                {/* Mobile Button (≤768px) - Compact version */}
+                <button
+                  onClick={handleAddToCart}
+                  className="md:hidden px-3 py-2.5 bg-[#fbe022] text-black font-bold rounded-md hover:bg-[#e6cc1f] transition-all min-h-[44px]"
+                  disabled={isAddingToCart}
+                  type="button"
+                >
+                  <span className="flex items-center justify-center gap-1">
+                    <span className="material-icons-outlined text-lg">shopping_cart</span>
+                    <span className="text-xs font-bold hidden min-[400px]:inline">Voeg toe</span>
+                  </span>
+                </button>
+
+                {/* Desktop Button (>768px) */}
+                <button
+                  onClick={handleAddToCart}
+                  className="hidden md:flex px-4 lg:px-6 py-2.5 lg:py-3 bg-[#fbe022] text-black font-bold rounded-lg hover:bg-[#e6cc1f] transition-all items-center justify-center gap-2 text-base whitespace-nowrap min-h-[48px]"
+                  disabled={isAddingToCart}
+                  type="button"
+                >
+                  <span className="material-icons-outlined text-lg">shopping_cart</span>
+                  <span>Voeg toe aan winkelwagen</span>
+                </button>
+              </div>
             </div>
-
-            {/* Size selector */}
-            <select className="px-3 py-1.5 border border-gray-300 rounded text-sm">
-              <option>3-5 cm</option>
-              <option>5-7 cm</option>
-              <option>7-10 cm</option>
-            </select>
-
-            {/* Quantity */}
-            <div className="flex items-center border border-gray-300 rounded">
-              <button
-                onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                className="px-2 py-1 hover:bg-gray-50"
-              >
-                -
-              </button>
-              <span className="px-3 py-1 min-w-[40px] text-center">{quantity}</span>
-              <button
-                onClick={() => setQuantity(quantity + 1)}
-                className="px-2 py-1 hover:bg-gray-50"
-              >
-                +
-              </button>
-            </div>
-
-            {/* Add to cart button */}
-            <button
-              onClick={handleAddToCart}
-              className="px-6 py-2 bg-[#4A5D23] text-white rounded font-semibold hover:bg-[#3A4D13] transition-colors"
-            >
-              In Winkelwagen
-            </button>
           </div>
         </div>
       </div>
@@ -706,6 +773,7 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
 
             {/* Large green Add to Cart button */}
             <button
+              id="mainAddToCartButton"
               onClick={handleAddToCart}
               disabled={isAddingToCart}
               className="w-full py-4 bg-[#fbe022] text-black text-lg font-bold rounded-lg hover:bg-[#e6cc1f] transition-all transform hover:scale-[1.02] disabled:opacity-50 disabled:transform-none"

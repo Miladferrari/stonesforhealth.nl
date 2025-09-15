@@ -14,7 +14,7 @@ const Header = memo(function Header() {
   };
 
   return (
-    <nav className="bg-white shadow-sm border-b border-gray-100 z-50 transition-all duration-300 ease-in-out">
+    <nav className="relative bg-white shadow-sm border-b border-gray-100 z-50 transition-all duration-300 ease-in-out">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex h-20 items-center justify-between">
           {/* Logo */}
