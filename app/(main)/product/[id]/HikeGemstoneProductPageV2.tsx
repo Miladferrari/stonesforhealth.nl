@@ -367,8 +367,8 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
               </div>
               <div className="flex-1">
                 <p className="text-sm text-gray-700 flex items-center gap-2">
-                  <span>Aanbevolen door <strong>Dr. Helena van der Berg</strong></span>
-                  <span className="border-l border-gray-400 pl-2">Gecertificeerd Edelsteentherapeut</span>
+                  <span>Aanbevolen door <strong>Robbin Nieborg</strong></span>
+                  <span className="border-l border-gray-400 pl-2">"Deze edelstenen bezitten krachtige energetische eigenschappen"</span>
                   <svg className="w-4 h-4 text-green-600" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd"/>
                   </svg>
@@ -1119,8 +1119,8 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                       </svg>
                     </div>
-                    <p className="text-lg font-semibold text-gray-700">Dr. Helena van der Berg</p>
-                    <p className="text-sm text-gray-600">Gecertificeerd Edelsteentherapeut</p>
+                    <p className="text-lg font-semibold text-gray-700">Robbin Nieborg</p>
+                    <p className="text-sm text-gray-600">"Deze edelstenen bezitten krachtige energetische eigenschappen"</p>
                   </div>
                 </div>
               </div>
@@ -1133,9 +1133,10 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
               </h2>
               <div className="text-base md:text-lg text-gray-600">
                 <p>
-                  Onze edelstenen worden aanbevolen door <strong>Dr. Helena van der Berg</strong>, een gecertificeerd edelsteentherapeut bij het Nederlands Instituut voor Kristaltherapie.
-                  Met ruime ervaring in het behandelen van energetische blokkades, emotionele disbalans en spirituele ontwikkeling hecht Dr. van der Berg veel waarde aan edelstenen die
-                  natuurlijke healing ondersteunen en bijdragen aan langdurige innerlijke harmonie. Ontworpen met therapeutische inzichten en geselecteerd voor blijvende kracht en zuiverheid —
+                  Onze edelstenen worden aanbevolen door <strong>Robbin Nieborg</strong>, een ervaren specialist in energetische healing en kristaltherapie.
+                  "Deze edelstenen bezitten krachtige energetische eigenschappen" - met deze overtuiging selecteert Robbin alleen de zuiverste en meest krachtige stenen.
+                  Met jarenlange expertise in het werken met natuurlijke kristallen en hun helende eigenschappen, waarborgt Robbin de authentieke kwaliteit van elke steen.
+                  Ontworpen met therapeutische inzichten en geselecteerd voor blijvende kracht en zuiverheid —
                   Stonesforhealth zorgt voor je energetisch welzijn, zodat jij je kunt richten op jouw spirituele reis.
                 </p>
               </div>
