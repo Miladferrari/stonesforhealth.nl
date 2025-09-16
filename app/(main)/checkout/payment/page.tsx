@@ -18,8 +18,8 @@ export default function PaymentPage() {
   const { items, clearCart, getDiscountAmount, getTotalPrice, getShippingCost, getFinalTotal } = useCart();
 
   // Get order details from URL params
-  const orderId = searchParams.get('orderId');
-  const orderTotal = searchParams.get('total');
+  const orderId = searchParams?.get('orderId') || null;
+  const orderTotal = searchParams?.get('total') || null;
 
   // Payment states
   const [loading, setLoading] = useState(false);

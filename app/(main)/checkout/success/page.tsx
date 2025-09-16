@@ -8,8 +8,8 @@ import { useCart } from '../../../contexts/CartContextStoreAPI';
 function SuccessContent() {
   const searchParams = useSearchParams();
   const { clearCart } = useCart();
-  const orderId = searchParams.get('order_id') || searchParams.get('order');
-  const orderKey = searchParams.get('key');
+  const orderId = searchParams?.get('order_id') || searchParams?.get('order') || null;
+  const orderKey = searchParams?.get('key') || null;
   const [orderNumber, setOrderNumber] = useState<string>('');
   const [orderStatus, setOrderStatus] = useState<string>('');
   const [loading, setLoading] = useState(true);
