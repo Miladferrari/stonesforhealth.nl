@@ -1162,7 +1162,7 @@ export default function UnifiedCheckoutPage() {
                   orderId={createdOrderId || 0}
                   total={getFinalTotal()}
                   onSuccess={handlePaymentSuccess}
-                  onError={(error) => setError(error)}
+                  onError={(error: string) => setError(error)}
                 />
               </div>
 

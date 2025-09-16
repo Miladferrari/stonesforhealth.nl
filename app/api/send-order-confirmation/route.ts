@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import nodemailer from 'nodemailer';
-import { fetchFromWooCommerce } from '@/lib/woocommerce';
+import { woocommerce } from '@/lib/woocommerce';
 
 // Create transporter with Gmail configuration
 const createTransporter = () => {
@@ -175,7 +175,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Fetch order from WooCommerce
-    const order = await fetchFromWooCommerce(`orders/${orderId}`);
+    const order = await woocommerce.getOrder(orderId);
 
     if (!order || order.code === 'woocommerce_rest_shop_order_invalid_id') {
       return NextResponse.json(
