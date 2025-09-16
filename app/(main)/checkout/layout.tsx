@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { EB_Garamond } from 'next/font/google';
 import '../../globals.css';
 import CheckoutHeader from '../../components/CheckoutHeader';
-import { CartProvider } from '../../contexts/CartContext';
+import { CartProvider } from '../../contexts/CartContextStoreAPI';
 
 const ebGaramond = EB_Garamond({
   subsets: ['latin'],

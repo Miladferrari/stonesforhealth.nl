@@ -3,7 +3,7 @@
 import { useEffect, useState, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
-import { useCart } from '../../../contexts/CartContext';
+import { useCart } from '../../../contexts/CartContextStoreAPI';
 
 function SuccessContent() {
   const searchParams = useSearchParams();

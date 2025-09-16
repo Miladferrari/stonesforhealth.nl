@@ -4,7 +4,7 @@ import { useEffect, useState, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
-import { useCart } from '@/app/contexts/CartContext';
+import { useCart } from '@/app/contexts/CartContextStoreAPI';
 
 interface OrderData {
   id: number;
@@ -32,22 +32,97 @@ function ThankYouContent() {
   const searchParams = useSearchParams();
   const orderId = searchParams.get('order');
   const redirectStatus = searchParams.get('redirect_status');
+  const sessionId = searchParams.get('session_id');
+  const paymentIntentId = searchParams.get('payment_intent');
   const { clearCart } = useCart();
   const [orderData, setOrderData] = useState<OrderData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [hasFetched, setHasFetched] = useState(false);
 
-  // Check redirect_status first and redirect to payment-failed if needed
+  // Verify payment if session_id OR payment_intent is present
   useEffect(() => {
+    const verifyPayment = async () => {
+      if (sessionId && orderId && !hasFetched) {
+        try {
+          const response = await fetch('/api/verify-payment', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              sessionId,
+              orderId,
+            }),
+          });
+
+          const result = await response.json();
+
+          if (result.success) {
+            // Payment verified successfully
+            clearCart();
+          } else {
+            // Payment failed
+            window.location.href = `/payment-failed?order=${orderId}&reason=payment_verification_failed`;
+          }
+        } catch (error) {
+          console.error('Payment verification error:', error);
+        }
+        setHasFetched(true);
+      }
+    };
+
+    const confirmPaymentIntent = async () => {
+      if (paymentIntentId && orderId && !hasFetched) {
+        try {
+          const response = await fetch('/api/confirm-payment', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              paymentIntentId,
+              orderId,
+            }),
+          });
+
+          const result = await response.json();
+
+          if (result.success && result.status === 'succeeded') {
+            // Payment confirmed successfully
+            clearCart();
+            console.log('Payment intent confirmed, order updated to processing');
+          } else if (result.status === 'processing') {
+            // Payment is still processing
+            console.log('Payment is still processing');
+          } else {
+            // Payment failed
+            window.location.href = `/payment-failed?order=${orderId}&reason=payment_confirmation_failed`;
+          }
+        } catch (error) {
+          console.error('Payment confirmation error:', error);
+        }
+        setHasFetched(true);
+      }
+    };
+
+    // Check redirect_status for payment flow
     if (redirectStatus === 'failed' && orderId) {
-      // Redirect to payment failed page for failed/cancelled payments
       window.location.href = `/payment-failed?order=${orderId}&reason=payment_failed`;
     } else if (redirectStatus === 'succeeded' && orderId) {
-      // Clear cart for successful payments only once
       clearCart();
+      // Also confirm payment intent if present
+      if (paymentIntentId) {
+        confirmPaymentIntent();
+      }
+    } else if (sessionId) {
+      // Stripe Checkout Session flow
+      verifyPayment();
+    } else if (paymentIntentId) {
+      // Stripe Payment Intent flow
+      confirmPaymentIntent();
     }
-  }, [redirectStatus, orderId]); // Remove clearCart from dependencies to prevent infinite loop
+  }, [redirectStatus, orderId, sessionId, paymentIntentId, hasFetched]); // Remove clearCart from dependencies
 
   useEffect(() => {
     // Prevent multiple fetches
@@ -187,7 +262,7 @@ function ThankYouContent() {
               </div>
               <div>
                 <p className="font-[family-name:var(--font-eb-garamond)] text-gray-600 text-base">E-mailadres</p>
-                <p className="font-[family-name:var(--font-eb-garamond)] font-medium text-gray-900 text-lg">{orderData.customer.email}</p>
+                <p className="font-[family-name:var(--font-eb-garamond)] font-medium text-gray-900 text-lg">{orderData.customer?.email || orderData.billing?.email || orderData.formData?.email || 'Niet beschikbaar'}</p>
               </div>
               <div>
                 <p className="font-[family-name:var(--font-eb-garamond)] text-gray-600 text-base">Totaalbedrag</p>
@@ -200,9 +275,15 @@ function ThankYouContent() {
           <div className="border-b pb-6 mb-6">
             <h3 className="text-lg font-[family-name:var(--font-eb-garamond)] font-semibold text-gray-900 mb-3">Bezorgadres</h3>
             <div className="text-gray-600">
-              <p className="font-[family-name:var(--font-eb-garamond)] font-medium text-gray-900 text-lg">{orderData.customer.first_name} {orderData.customer.last_name}</p>
-              <p className="font-[family-name:var(--font-eb-garamond)] text-base">{orderData.customer.address_1}</p>
-              <p className="font-[family-name:var(--font-eb-garamond)] text-base">{orderData.customer.postcode} {orderData.customer.city}</p>
+              <p className="font-[family-name:var(--font-eb-garamond)] font-medium text-gray-900 text-lg">
+                {orderData.customer?.first_name || orderData.shipping?.first_name || orderData.formData?.firstName || 'Naam'} {orderData.customer?.last_name || orderData.shipping?.last_name || orderData.formData?.lastName || ''}
+              </p>
+              <p className="font-[family-name:var(--font-eb-garamond)] text-base">
+                {orderData.customer?.address_1 || orderData.shipping?.address_1 || orderData.formData?.address || 'Adres niet beschikbaar'}
+              </p>
+              <p className="font-[family-name:var(--font-eb-garamond)] text-base">
+                {orderData.customer?.postcode || orderData.shipping?.postcode || orderData.formData?.postcode || ''} {orderData.customer?.city || orderData.shipping?.city || orderData.formData?.city || ''}
+              </p>
             </div>
           </div>
 
@@ -210,15 +291,21 @@ function ThankYouContent() {
           <div>
             <h3 className="text-lg font-[family-name:var(--font-eb-garamond)] font-semibold text-gray-900 mb-4">Bestelde producten</h3>
             <div className="space-y-4">
-              {orderData.items.map((item, index) => (
+              {(orderData.items || []).map((item, index) => {
+                const productName = item.name || item.product?.name || 'Product';
+                const productPrice = item.price || item.product?.price || '0';
+                const productImages = item.images || item.product?.images || [];
+                const productQuantity = item.quantity || 1;
+
+                return (
                 <div key={index} className="flex items-center gap-5 p-5 bg-white border border-gray-100 rounded-xl shadow-sm hover:shadow-md transition-shadow">
                   {/* Product Image */}
                   <div className="flex-shrink-0">
-                    {item.images && item.images[0]?.src ? (
+                    {productImages[0]?.src ? (
                       <div className="w-[90px] h-[90px] relative overflow-hidden rounded-xl border border-gray-100">
                         <Image
-                          src={item.images[0].src}
-                          alt={item.name}
+                          src={productImages[0].src}
+                          alt={productName}
                           fill
                           className="object-cover"
                           sizes="90px"
@@ -236,15 +323,15 @@ function ThankYouContent() {
                   {/* Product Details */}
                   <div className="flex-1 min-w-0">
                     <h4 className="font-[family-name:var(--font-eb-garamond)] font-semibold text-gray-900 text-base truncate">
-                      {item.name}
+                      {productName}
                     </h4>
-                    {item.quantity > 1 && (
+                    {productQuantity > 1 && (
                       <div className="flex items-center gap-2 mt-1">
                         <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-[family-name:var(--font-eb-garamond)] bg-amber-orange/10 text-amber-orange">
-                          {item.quantity}x
+                          {productQuantity}x
                         </span>
                         <span className="font-[family-name:var(--font-eb-garamond)] text-sm text-gray-500">
-                          €{parseFloat(item.price).toFixed(2)} per stuk
+                          €{parseFloat(productPrice).toFixed(2)} per stuk
                         </span>
                       </div>
                     )}
@@ -253,11 +340,11 @@ function ThankYouContent() {
                   {/* Price */}
                   <div className="flex flex-col items-end">
                     <p className="font-[family-name:var(--font-eb-garamond)] font-bold text-xl text-gray-900">
-                      €{(parseFloat(item.price) * item.quantity).toFixed(2)}
+                      €{(parseFloat(productPrice) * productQuantity).toFixed(2)}
                     </p>
                   </div>
                 </div>
-              ))}
+              )})}
             </div>
           </div>
         </div>

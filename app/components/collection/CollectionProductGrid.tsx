@@ -4,7 +4,7 @@ import { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Product } from '@/lib/woocommerce';
-import { useCart } from '@/app/contexts/CartContext';
+import { useCart } from '@/app/contexts/CartContextStoreAPI';
 import { useToast } from '@/app/contexts/ToastContext';
 
 interface CollectionProductGridProps {

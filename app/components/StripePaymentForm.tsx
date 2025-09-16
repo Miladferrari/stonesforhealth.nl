@@ -137,107 +137,13 @@ const PaymentForm = forwardRef<StripePaymentFormHandle, StripePaymentFormProps>(
 
     setIsProcessing(true);
 
+    // Simplified payment handling - no backend calls
+    // Will be handled by WooCommerce Store API
     try {
-      // Get order data from session storage for email
-      const orderDataStr = sessionStorage.getItem('orderData');
-      const orderData = orderDataStr ? JSON.parse(orderDataStr) : null;
-      
-      // Build full name from first and last name
-      const fullName = `${orderData?.customer?.first_name || ''} ${orderData?.customer?.last_name || ''}`.trim() || 'Klant';
-      
-      // Confirm the payment with billing details provided programmatically
-      const { error, paymentIntent } = await stripe.confirmPayment({
-        elements,
-        confirmParams: {
-          return_url: `${window.location.origin}/thank-you?order=${orderId}`,
-          payment_method_data: {
-            billing_details: {
-              name: fullName,
-              email: orderData?.customer?.email || 'klant@example.com',
-              phone: orderData?.customer?.phone || '+31612345678',
-              address: {
-                line1: orderData?.customer?.address_1 || 'Onbekend adres',
-                line2: orderData?.customer?.address_2 || null,
-                city: orderData?.customer?.city || 'Onbekende stad',
-                postal_code: orderData?.customer?.postcode || '1000AA',
-                country: orderData?.customer?.country || 'NL',
-                state: ''
-              }
-            }
-          }
-        },
-        redirect: 'if_required',
-      });
-
-      if (error) {
-        // Check if user cancelled the payment
-        if (error.message?.includes('canceled') || error.message?.includes('cancelled')) {
-          // Update order status to cancelled before redirect
-          try {
-            await window.fetch('/api/update-order-status', {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({
-                orderId: orderId,
-                status: 'cancelled',
-                note: 'Payment cancelled by customer'
-              }),
-            });
-          } catch (updateError) {
-            console.error('Failed to update order status:', updateError);
-          }
-          // Redirect to payment failed page for cancelled payments
-          window.location.href = `/payment-failed?order=${orderId}&reason=cancelled`;
-        } else {
-          // Update order status to failed for other errors
-          try {
-            await window.fetch('/api/update-order-status', {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({
-                orderId: orderId,
-                status: 'failed',
-                note: `Payment failed: ${error.message || 'Unknown error'}`
-              }),
-            });
-          } catch (updateError) {
-            console.error('Failed to update order status:', updateError);
-          }
-          onError(error.message || 'Er is een fout opgetreden bij de betaling');
-          // Redirect to payment failed page for failed payments
-          window.location.href = `/payment-failed?order=${orderId}&reason=failed`;
-        }
-      } else if (paymentIntent && paymentIntent.status === 'succeeded') {
-        // Payment successful - update order status
-        try {
-          const updateResponse = await window.fetch('/api/update-order-status', {
-            method: 'POST',
-            headers: { 
-              'Content-Type': 'application/json',
-              'Cache-Control': 'no-cache'
-            },
-            body: JSON.stringify({
-              orderId: orderId,
-              status: 'completed',
-              transactionId: paymentIntent.id,
-              note: `Payment successful via Stripe (${paymentIntent.id})`
-            }),
-            credentials: 'same-origin'
-          });
-          
-          if (!updateResponse.ok) {
-            console.error('Failed to update order status, but payment was successful');
-          }
-        } catch (updateError) {
-          console.error('Error updating order status:', updateError);
-          // Don't block payment success - order status can be updated manually if needed
-        }
-        
-        // Call success callback and redirect regardless of status update
-        onSuccess();
-        // Redirect to thank you page with order ID
-        window.location.href = `/thank-you?order=${orderId}`;
-      }
+      // Placeholder for Store API integration
+      setIsProcessing(false);
+      onError('Payment processing through WooCommerce Store API coming soon.');
+      return;
     } catch (err: any) {
       onError(err.message || 'Er is een fout opgetreden bij de betaling');
     } finally {
@@ -375,77 +281,10 @@ const StripePaymentForm = forwardRef<StripePaymentFormHandle, StripePaymentFormP
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Fetch payment intent with retry logic
-    const fetchPaymentIntent = async (retryCount = 0) => {
-      try {
-        // Only send request if orderId is valid
-        if (!orderId || orderId <= 0) {
-          // Don't throw error, just return silently - waiting for valid orderId
-          console.log('Waiting for valid order ID before fetching payment intent');
-          return;
-        }
-
-        // Use native fetch to avoid extension interference
-        const response = await window.fetch('/api/stripe-intent', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Cache-Control': 'no-cache'
-          },
-          body: JSON.stringify({ orderId }),
-          credentials: 'same-origin'
-        });
-
-        // Check if response is valid
-        if (!response || !response.ok) {
-          // Try to get error message
-          let errorMessage = 'Failed to create payment intent';
-          try {
-            const data = await response.json();
-            errorMessage = data.message || errorMessage;
-          } catch {
-            // If JSON parsing fails, use status text
-            errorMessage = response?.statusText || errorMessage;
-          }
-          throw new Error(errorMessage);
-        }
-
-        const data = await response.json();
-
-        if (!data.clientSecret) {
-          throw new Error('No client secret received from server');
-        }
-
-        setClientSecret(data.clientSecret);
-        setLoading(false);
-
-        // Call onReady callback when PaymentIntent is ready
-        if (onReady) {
-          onReady();
-        }
-      } catch (error: any) {
-        console.error('Payment intent fetch error:', error);
-
-        // Retry logic for transient errors - but NOT for invalid order ID
-        if (retryCount < 2 && !error.message?.includes('No client secret') && !error.message?.includes('Invalid order')) {
-          console.log(`Retrying payment intent fetch (attempt ${retryCount + 1})...`);
-          setTimeout(() => fetchPaymentIntent(retryCount + 1), 1000 * (retryCount + 1));
-        } else {
-          onError(error.message || 'Er is een fout opgetreden bij het laden van de betaalpagina');
-          setLoading(false);
-        }
-      }
-    };
-
-    // Only fetch payment intent if we have a valid orderId
-    if (orderId && orderId > 0) {
-      fetchPaymentIntent();
-    } else {
-      // If no valid orderId, set loading to false to show the payment form UI without error
-      console.log('No valid orderId yet, showing payment form UI');
-      setLoading(false);
-    }
-  }, [orderId, onError, onReady]);
+    // Payment intent fetching removed - will be handled by WooCommerce Store API
+    // Always show payment form UI without attempting to fetch
+    setLoading(false);
+  }, []);
 
   if (loading) {
     return (

@@ -1,6 +1,6 @@
 'use client';
 
-import { useCart } from '../contexts/CartContext';
+import { useCart } from '../contexts/CartContextStoreAPI';
 import { useToast } from '../contexts/ToastContext';
 import { Product } from '@/lib/woocommerce';
 

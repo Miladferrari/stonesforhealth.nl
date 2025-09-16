@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { useState, memo, useEffect, useRef } from 'react';
-import { useCart } from '../contexts/CartContext';
+import { useCart } from '../contexts/CartContextStoreAPI';
 
 const Header = memo(function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -241,41 +241,83 @@ const Header = memo(function Header() {
       {mobileMenuOpen && (
         <div className="lg:hidden bg-white border-t border-gray-100">
           <div className="space-y-1 px-4 pb-3 pt-2">
-            <Link
-              href="/alle-producten"
-              className="block px-3 py-2 text-base font-light text-[#2D2D2D] hover:text-[#8B7355] transition-colors font-[family-name:var(--font-eb-garamond)]"
-              onClick={() => setMobileMenuOpen(false)}
-            >
-              Shop
-            </Link>
-            <Link
-              href="/bestsellers"
-              className="block px-3 py-2 text-base font-light text-[#2D2D2D] hover:text-[#8B7355] transition-colors font-[family-name:var(--font-eb-garamond)]"
-              onClick={() => setMobileMenuOpen(false)}
-            >
-              Bestsellers
-            </Link>
-            {/* Helpcentrum items for mobile */}
-            <div className="px-3 py-2">
-              <div className="text-base font-medium text-[#2D2D2D] mb-2 font-[family-name:var(--font-eb-garamond)]">
-                Helpcentrum
-              </div>
-              <div className="pl-4 space-y-1">
-                <Link
-                  href="/contact"
-                  className="block px-3 py-1 text-sm font-light text-[#2D2D2D] hover:text-[#8B7355] transition-colors font-[family-name:var(--font-eb-garamond)]"
-                  onClick={() => setMobileMenuOpen(false)}
+            {/* Shop with dropdown */}
+            <div>
+              <button
+                onClick={() => setShopDropdownOpen(!shopDropdownOpen)}
+                className="w-full flex items-center justify-between px-3 py-2 text-base font-light text-[#2D2D2D] hover:text-[#8B7355] transition-colors font-[family-name:var(--font-eb-garamond)]"
+              >
+                <span>Shop</span>
+                <svg
+                  className={`w-4 h-4 transition-transform ${shopDropdownOpen ? 'rotate-180' : ''}`}
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
                 >
-                  Contact
-                </Link>
-                <Link
-                  href="/volg-je-bestelling"
-                  className="block px-3 py-1 text-sm font-light text-[#2D2D2D] hover:text-[#8B7355] transition-colors font-[family-name:var(--font-eb-garamond)]"
-                  onClick={() => setMobileMenuOpen(false)}
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                </svg>
+              </button>
+              {shopDropdownOpen && (
+                <div className="pl-8 space-y-1 mt-1">
+                  <Link
+                    href="/alle-producten"
+                    className="block px-3 py-2 text-base font-light text-[#2D2D2D] hover:text-[#8B7355] transition-colors font-[family-name:var(--font-eb-garamond)]"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    Alle producten
+                  </Link>
+                  <Link
+                    href="/bestsellers"
+                    className="block px-3 py-2 text-base font-light text-[#2D2D2D] hover:text-[#8B7355] transition-colors font-[family-name:var(--font-eb-garamond)]"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    Bestsellers
+                  </Link>
+                  <Link
+                    href="/collections"
+                    className="block px-3 py-2 text-base font-light text-[#2D2D2D] hover:text-[#8B7355] transition-colors font-[family-name:var(--font-eb-garamond)]"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    Collecties
+                  </Link>
+                </div>
+              )}
+            </div>
+
+            {/* Helpcentrum with dropdown */}
+            <div>
+              <button
+                onClick={() => setHelpDropdownOpen(!helpDropdownOpen)}
+                className="w-full flex items-center justify-between px-3 py-2 text-base font-light text-[#2D2D2D] hover:text-[#8B7355] transition-colors font-[family-name:var(--font-eb-garamond)]"
+              >
+                <span>Helpcentrum</span>
+                <svg
+                  className={`w-4 h-4 transition-transform ${helpDropdownOpen ? 'rotate-180' : ''}`}
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
                 >
-                  Volg je bestelling
-                </Link>
-              </div>
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                </svg>
+              </button>
+              {helpDropdownOpen && (
+                <div className="pl-8 space-y-1 mt-1">
+                  <Link
+                    href="/contact"
+                    className="block px-3 py-2 text-base font-light text-[#2D2D2D] hover:text-[#8B7355] transition-colors font-[family-name:var(--font-eb-garamond)]"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    Contact
+                  </Link>
+                  <Link
+                    href="/volg-je-bestelling"
+                    className="block px-3 py-2 text-base font-light text-[#2D2D2D] hover:text-[#8B7355] transition-colors font-[family-name:var(--font-eb-garamond)]"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    Volg je bestelling
+                  </Link>
+                </div>
+              )}
             </div>
 
             <Link

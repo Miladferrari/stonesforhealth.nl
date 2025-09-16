@@ -1,4 +1,4 @@
-import { CartProvider } from "../contexts/CartContext";
+import { CartProvider } from "../contexts/CartContextStoreAPI";
 import { ToastProvider } from "../contexts/ToastContext";
 
 export default function PaymentFailedLayout({

@@ -60,36 +60,12 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     error: null
   });
 
-  // Load cart from localStorage on mount (client-side only)
+  // Mark as hydrated on mount (client-side only)
   useEffect(() => {
-    const savedCart = localStorage.getItem('123noodklaar-cart');
-    if (savedCart) {
-      try {
-        setItems(JSON.parse(savedCart));
-      } catch (error) {
-        console.error('Failed to parse cart from localStorage:', error);
-      }
-    }
-    
-    // Load saved coupon
-    const savedCoupon = localStorage.getItem('123noodklaar-coupon');
-    if (savedCoupon) {
-      try {
-        setAppliedCoupon(JSON.parse(savedCoupon));
-      } catch (error) {
-        console.error('Failed to parse coupon from localStorage:', error);
-      }
-    }
-    
     setIsHydrated(true);
   }, []);
 
-  // Save cart to localStorage whenever it changes (only after hydration)
-  useEffect(() => {
-    if (isHydrated) {
-      localStorage.setItem('123noodklaar-cart', JSON.stringify(items));
-    }
-  }, [items, isHydrated]);
+  // Cart persistence removed - will be handled by WooCommerce Store API
 
   const addToCart = (product: Product, quantity: number = 1) => {
     // Don't add out of stock products
@@ -137,7 +113,6 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   const clearCart = () => {
     setItems([]);
     setAppliedCoupon(null);
-    localStorage.removeItem('stonesforhealth-coupon');
   };
 
   const getTotalPrice = () => {
@@ -153,12 +128,10 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
 
   const applyDiscount = (coupon: any) => {
     setAppliedCoupon(coupon);
-    localStorage.setItem('123noodklaar-coupon', JSON.stringify(coupon));
   };
 
   const removeDiscount = () => {
     setAppliedCoupon(null);
-    localStorage.removeItem('stonesforhealth-coupon');
   };
 
   const getDiscountAmount = () => {

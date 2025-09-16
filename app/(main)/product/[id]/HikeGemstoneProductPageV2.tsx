@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
-import { useCart } from '@/app/contexts/CartContext';
+import { useCart } from '@/app/contexts/CartContextStoreAPI';
 import { Product } from '@/lib/woocommerce';
 
 interface HikeGemstoneProductPageV2Props {
