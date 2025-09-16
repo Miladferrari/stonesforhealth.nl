@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { fetchFromWooCommerce } from '@/lib/woocommerce';
+import { woocommerce } from '@/lib/woocommerce';
 
 // Valid WooCommerce order statuses
 const VALID_STATUSES = [
@@ -49,13 +49,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Update order in WooCommerce
-    const updatedOrder = await fetchFromWooCommerce(
-      `orders/${orderId}`,
-      {
-        method: 'PUT',
-        body: JSON.stringify(updateData)
-      }
-    );
+    const updatedOrder = await woocommerce.updateOrder(orderId, updateData);
 
     if (!updatedOrder || updatedOrder.code === 'woocommerce_rest_shop_order_invalid_id') {
       return NextResponse.json(
@@ -67,16 +61,10 @@ export async function POST(request: NextRequest) {
     // Add order note if provided
     if (note) {
       try {
-        await fetchFromWooCommerce(
-          `orders/${orderId}/notes`,
-          {
-            method: 'POST',
-            body: JSON.stringify({
-              note: note,
-              customer_note: false
-            })
-          }
-        );
+        await woocommerce.createOrderNote(orderId, {
+          note: note,
+          customer_note: false
+        });
       } catch (noteError) {
         console.error('Failed to add order note:', noteError);
         // Continue even if note fails
@@ -117,7 +105,7 @@ export async function GET(request: NextRequest) {
     }
 
     // Fetch order from WooCommerce
-    const order = await fetchFromWooCommerce(`orders/${orderId}`);
+    const order = await woocommerce.getOrder(orderId);
 
     if (!order || order.code === 'woocommerce_rest_shop_order_invalid_id') {
       return NextResponse.json(

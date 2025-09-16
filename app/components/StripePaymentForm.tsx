@@ -187,7 +187,8 @@ const PaymentForm = forwardRef<StripePaymentFormHandle, StripePaymentFormProps>(
             body: JSON.stringify({
               orderId: orderId,
               status: 'processing',
-              paymentIntentId: paymentIntent.id
+              transactionId: paymentIntent.id,
+              note: `Payment successful via Stripe (${paymentIntent.id})`
             }),
             credentials: 'same-origin'
           });

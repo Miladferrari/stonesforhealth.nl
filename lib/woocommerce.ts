@@ -513,14 +513,22 @@ class WooCommerceAPI {
     return paymentUrl;
   }
 
-  async getOrder(orderId: number): Promise<any> {
+  async getOrder(orderId: number | string): Promise<any> {
     return this.fetchAPI(`orders/${orderId}`);
   }
 
-  async updateOrder(orderId: number, data: any): Promise<any> {
+  async updateOrder(orderId: number | string, data: any): Promise<any> {
     return this.fetchAPI(`orders/${orderId}`, {
       method: "PUT",
       body: JSON.stringify(data),
+      useCache: false,
+    });
+  }
+
+  async createOrderNote(orderId: number | string, noteData: { note: string; customer_note?: boolean }): Promise<any> {
+    return this.fetchAPI(`orders/${orderId}/notes`, {
+      method: "POST",
+      body: JSON.stringify(noteData),
       useCache: false,
     });
   }
