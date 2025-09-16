@@ -14,18 +14,22 @@ function PaymentFailedContent() {
 
   useEffect(() => {
     // Check if we still have order data in session storage
-    const checkOrderData = () => {
+    const checkOrderData = async () => {
       const storedOrderData = sessionStorage.getItem('orderData');
       const pendingOrderId = sessionStorage.getItem('pendingOrderId');
-      
+
       if (storedOrderData && pendingOrderId) {
         setHasOrderData(true);
+
+        // Only update order status if user doesn't retry payment
+        // This allows order to be reused for retry attempts
+        // Status will be updated on successful payment or when user gives up
       }
       setIsLoading(false);
     };
 
     checkOrderData();
-  }, []);
+  }, [orderId, reason]);
 
   const handleRetryPayment = () => {
     // Check if order data still exists
@@ -34,11 +38,38 @@ function PaymentFailedContent() {
 
     if (storedOrderData && pendingOrderId) {
       // Go back to checkout page to retry payment
+      // Order will be reused
       router.push('/checkout');
     } else {
       // No data, start over from cart
       router.push('/cart');
     }
+  };
+
+  const handleAbandonOrder = async () => {
+    // Update order status when user explicitly abandons
+    if (orderId) {
+      try {
+        await fetch('/api/update-order-status', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            orderId: orderId,
+            status: 'cancelled',
+            note: 'Customer abandoned payment'
+          }),
+        });
+      } catch (error) {
+        console.error('Error updating abandoned order:', error);
+      }
+    }
+
+    // Clear session data and go to shop
+    sessionStorage.removeItem('orderData');
+    sessionStorage.removeItem('pendingOrderId');
+    router.push('/alle-producten');
   };
 
   const getErrorMessage = () => {
@@ -142,12 +173,12 @@ function PaymentFailedContent() {
             </Link>
           )}
 
-          <Link
-            href="/alle-producten"
+          <button
+            onClick={handleAbandonOrder}
             className="block w-full bg-white text-gray-700 border-2 border-gray-300 py-3 px-6 rounded-md font-medium hover:bg-gray-50 transition-colors text-center font-[family-name:var(--font-eb-garamond)] text-lg"
           >
             Verder winkelen
-          </Link>
+          </button>
         </div>
 
         {/* Trust badges - bottom of page */}

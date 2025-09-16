@@ -63,7 +63,7 @@ const generateOrderConfirmationEmail = (order: any) => {
               month: 'long',
               day: 'numeric'
             })}</p>
-            <p><strong>Status:</strong> ${order.status === 'processing' ? 'In behandeling' : 'Ontvangen'}</p>
+            <p><strong>Status:</strong> ${order.status === 'completed' ? 'Voltooid' : order.status === 'processing' ? 'In behandeling' : 'Ontvangen'}</p>
           </div>
 
           <h3 style="color: #492c4a;">Bestelgegevens</h3>

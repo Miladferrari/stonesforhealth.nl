@@ -17,6 +17,8 @@ interface StripePaymentFormProps {
   total: number;
   onSuccess: () => void;
   onError: (error: string) => void;
+  shouldAutoSubmit?: boolean;
+  onReady?: () => void;
 }
 
 export interface StripePaymentFormHandle {
@@ -170,10 +172,40 @@ const PaymentForm = forwardRef<StripePaymentFormHandle, StripePaymentFormProps>(
       if (error) {
         // Check if user cancelled the payment
         if (error.message?.includes('canceled') || error.message?.includes('cancelled')) {
+          // Update order status to cancelled before redirect
+          try {
+            await window.fetch('/api/update-order-status', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                orderId: orderId,
+                status: 'cancelled',
+                note: 'Payment cancelled by customer'
+              }),
+            });
+          } catch (updateError) {
+            console.error('Failed to update order status:', updateError);
+          }
           // Redirect to payment failed page for cancelled payments
           window.location.href = `/payment-failed?order=${orderId}&reason=cancelled`;
         } else {
+          // Update order status to failed for other errors
+          try {
+            await window.fetch('/api/update-order-status', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                orderId: orderId,
+                status: 'failed',
+                note: `Payment failed: ${error.message || 'Unknown error'}`
+              }),
+            });
+          } catch (updateError) {
+            console.error('Failed to update order status:', updateError);
+          }
           onError(error.message || 'Er is een fout opgetreden bij de betaling');
+          // Redirect to payment failed page for failed payments
+          window.location.href = `/payment-failed?order=${orderId}&reason=failed`;
         }
       } else if (paymentIntent && paymentIntent.status === 'succeeded') {
         // Payment successful - update order status
@@ -186,7 +218,7 @@ const PaymentForm = forwardRef<StripePaymentFormHandle, StripePaymentFormProps>(
             },
             body: JSON.stringify({
               orderId: orderId,
-              status: 'processing',
+              status: 'completed',
               transactionId: paymentIntent.id,
               note: `Payment successful via Stripe (${paymentIntent.id})`
             }),
@@ -338,7 +370,7 @@ function PaymentFormStandalone({ orderId, total, onSuccess, onError }: StripePay
   );
 }
 
-const StripePaymentForm = forwardRef<StripePaymentFormHandle, StripePaymentFormProps>(({ orderId, total, onSuccess, onError }, ref) => {
+const StripePaymentForm = forwardRef<StripePaymentFormHandle, StripePaymentFormProps>(({ orderId, total, onSuccess, onError, shouldAutoSubmit, onReady }, ref) => {
   const [clientSecret, setClientSecret] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -346,10 +378,15 @@ const StripePaymentForm = forwardRef<StripePaymentFormHandle, StripePaymentFormP
     // Fetch payment intent with retry logic
     const fetchPaymentIntent = async (retryCount = 0) => {
       try {
+        // Only send request if orderId is valid
+        if (!orderId || orderId <= 0) {
+          throw new Error('Invalid order ID');
+        }
+
         // Use native fetch to avoid extension interference
         const response = await window.fetch('/api/stripe-intent', {
           method: 'POST',
-          headers: { 
+          headers: {
             'Content-Type': 'application/json',
             'Cache-Control': 'no-cache'
           },
@@ -372,12 +409,18 @@ const StripePaymentForm = forwardRef<StripePaymentFormHandle, StripePaymentFormP
         }
 
         const data = await response.json();
-        
+
         if (!data.clientSecret) {
           throw new Error('No client secret received from server');
         }
 
         setClientSecret(data.clientSecret);
+        setLoading(false);
+
+        // Call onReady callback when PaymentIntent is ready
+        if (onReady) {
+          onReady();
+        }
       } catch (error: any) {
         console.error('Payment intent fetch error:', error);
         
@@ -387,10 +430,6 @@ const StripePaymentForm = forwardRef<StripePaymentFormHandle, StripePaymentFormP
           setTimeout(() => fetchPaymentIntent(retryCount + 1), 1000 * (retryCount + 1));
         } else {
           onError(error.message || 'Er is een fout opgetreden bij het laden van de betaalpagina');
-          setLoading(false);
-        }
-      } finally {
-        if (retryCount === 0 || retryCount >= 2) {
           setLoading(false);
         }
       }
@@ -403,7 +442,7 @@ const StripePaymentForm = forwardRef<StripePaymentFormHandle, StripePaymentFormP
       // If no valid orderId, set loading to false to show the payment form UI
       setLoading(false);
     }
-  }, [orderId, onError]);
+  }, [orderId, onError, onReady]);
 
   if (loading) {
     return (

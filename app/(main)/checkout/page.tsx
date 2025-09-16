@@ -73,6 +73,7 @@ export default function UnifiedCheckoutPage() {
 
   // Payment flow states
   const [createdOrderId, setCreatedOrderId] = useState<number | null>(null);
+  const [shouldAutoSubmit, setShouldAutoSubmit] = useState(false);
 
   // Field validation states
   const [fieldErrors, setFieldErrors] = useState<{ [key: string]: string }>({});
@@ -80,6 +81,18 @@ export default function UnifiedCheckoutPage() {
   // Debounce timers for shipping calculations
   const debounceTimerRef = useRef<NodeJS.Timeout | null>(null);
   const stripeFormRef = useRef<StripePaymentFormHandle>(null);
+
+  // Restore pending order on mount (for payment retry)
+  useEffect(() => {
+    const pendingOrderId = sessionStorage.getItem('pendingOrderId');
+    if (pendingOrderId) {
+      const orderId = parseInt(pendingOrderId, 10);
+      if (!isNaN(orderId)) {
+        console.log('Restoring pending order ID:', orderId);
+        setCreatedOrderId(orderId);
+      }
+    }
+  }, []);
 
   // Auto-save to sessionStorage
   useEffect(() => {
@@ -291,6 +304,14 @@ export default function UnifiedCheckoutPage() {
 
   // Create order and initiate payment
   const handlePayNow = async () => {
+    // Prevent multiple simultaneous order creation
+    if (loading || createdOrderId) {
+      // If already processing or order exists, trigger payment instead
+      if (createdOrderId && stripeFormRef.current?.submit) {
+        stripeFormRef.current.submit();
+      }
+      return;
+    }
 
     if (!validateForm()) {
       // Scroll to first error
@@ -337,6 +358,23 @@ export default function UnifiedCheckoutPage() {
           method_title: selectedRate.method_title,
           total: selectedRate.cost.toFixed(2)
         });
+      }
+
+      // Check if we already have a pending order ID to reuse
+      const existingOrderId = sessionStorage.getItem('pendingOrderId');
+
+      // If we have an existing order, skip creation and go straight to payment
+      if (existingOrderId && !createdOrderId) {
+        const orderId = parseInt(existingOrderId, 10);
+        if (!isNaN(orderId)) {
+          console.log('Reusing existing order:', orderId);
+          setCreatedOrderId(orderId);
+          setLoading(false);
+
+          // Set flag to auto-submit once PaymentIntent is ready
+          setShouldAutoSubmit(true);
+          return;
+        }
       }
 
       const orderData = {
@@ -452,12 +490,8 @@ export default function UnifiedCheckoutPage() {
         setCreatedOrderId(result.order.id);
         setLoading(false);
 
-        // Wait for StripePaymentForm to mount and then trigger payment
-        setTimeout(() => {
-          if (stripeFormRef.current?.submit) {
-            stripeFormRef.current.submit();
-          }
-        }, 1000);
+        // Set flag to auto-submit once PaymentIntent is ready
+        setShouldAutoSubmit(true);
 
       } catch (paymentError) {
         console.error('Payment setup error:', paymentError);
@@ -475,8 +509,11 @@ export default function UnifiedCheckoutPage() {
   // Handle payment success
   const handlePaymentSuccess = async () => {
     clearCart();
+    // Clear all session data on successful payment
     sessionStorage.removeItem('checkoutFormData');
     sessionStorage.removeItem('selectedShippingRate');
+    sessionStorage.removeItem('pendingOrderId');
+    sessionStorage.removeItem('orderData');
     router.push('/checkout/success');
   };
 
@@ -1163,6 +1200,14 @@ export default function UnifiedCheckoutPage() {
                   total={getFinalTotal()}
                   onSuccess={handlePaymentSuccess}
                   onError={(error: string) => setError(error)}
+                  shouldAutoSubmit={shouldAutoSubmit}
+                  onReady={() => {
+                    // PaymentIntent is ready, trigger auto-submit if needed
+                    if (shouldAutoSubmit && stripeFormRef.current?.submit) {
+                      setShouldAutoSubmit(false); // Prevent multiple submits
+                      stripeFormRef.current.submit();
+                    }
+                  }}
                 />
               </div>
 
