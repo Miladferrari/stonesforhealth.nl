@@ -157,13 +157,13 @@ export default async function Home() {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
                   </svg>
                 </Link>
-                <Link 
-                  href="/quiz"
+                <Link
+                  href="/contact"
                   className="inline-flex items-center justify-center gap-2 bg-white hover:bg-gray-50 text-[#3b223b] px-8 py-4 rounded-full text-lg font-medium transition-all duration-200 border border-[#3b223b]/20 font-[family-name:var(--font-eb-garamond)]"
                 >
-                  <span>Kristal quiz</span>
+                  <span>Contact</span>
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                   </svg>
                 </Link>
               </div>
@@ -305,14 +305,14 @@ export default async function Home() {
               <svg className="w-5 h-5 text-yellow-300" fill="currentColor" viewBox="0 0 20 20">
                 <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
               </svg>
-              <span className="text-sm font-bold text-yellow-300 uppercase tracking-wider font-[family-name:var(--font-eb-garamond)]">Meest Populaire Quiz van 2024</span>
+              <span className="text-sm font-bold text-yellow-300 uppercase tracking-wider font-[family-name:var(--font-eb-garamond)]">Meest Populaire Winkel van 2024</span>
             </div>
             
             <h2 className="text-4xl lg:text-5xl font-bold text-white mb-6 font-[family-name:var(--font-eb-garamond)]">
               Ontdek Jouw Perfecte Kristal in <span className="text-yellow-300">3 Minuten</span>
             </h2>
             <p className="text-xl text-white/90 max-w-3xl mx-auto mb-6 font-[family-name:var(--font-eb-garamond)]">
-              Al <span className="font-bold text-yellow-300">2.347 mensen</span> vonden deze maand hun ideale kristal via onze wetenschappelijke quiz
+              Al <span className="font-bold text-yellow-300">2.347 mensen</span> vonden deze maand hun ideale kristal in onze winkel
             </p>
             
             {/* Trust badges */}
@@ -461,7 +461,7 @@ export default async function Home() {
               {/* Testimonial */}
               <div className="bg-white/20 backdrop-blur rounded-xl p-5 mb-6 border border-white/30">
                 <p className="text-base text-white font-medium italic mb-3">
-                  "De quiz hielp me het perfecte kristal vinden voor mijn situatie. Ik voel me nu veel rustiger."
+                  "De winkel heeft een geweldige selectie kristallen. Ik vond precies wat ik zocht en voel me nu veel rustiger."
                 </p>
                 <div className="flex items-center gap-2">
                   <img src="https://i.pravatar.cc/24?img=3" alt="Sarah" className="w-6 h-6 rounded-full" />
@@ -471,10 +471,10 @@ export default async function Home() {
 
               {/* CTA */}
               <Link
-                href="/quiz"
+                href="/alle-producten"
                 className="w-full inline-flex items-center justify-center gap-3 bg-[#fbe022] hover:bg-[#e6cc1f] text-black px-8 py-4 rounded-xl font-bold text-lg transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-1 font-[family-name:var(--font-eb-garamond)]"
               >
-                <span>Start Gratis Quiz</span>
+                <span>Shop Nu</span>
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
                 </svg>

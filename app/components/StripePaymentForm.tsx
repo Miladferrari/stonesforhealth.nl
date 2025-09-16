@@ -380,7 +380,9 @@ const StripePaymentForm = forwardRef<StripePaymentFormHandle, StripePaymentFormP
       try {
         // Only send request if orderId is valid
         if (!orderId || orderId <= 0) {
-          throw new Error('Invalid order ID');
+          // Don't throw error, just return silently - waiting for valid orderId
+          console.log('Waiting for valid order ID before fetching payment intent');
+          return;
         }
 
         // Use native fetch to avoid extension interference
@@ -423,9 +425,9 @@ const StripePaymentForm = forwardRef<StripePaymentFormHandle, StripePaymentFormP
         }
       } catch (error: any) {
         console.error('Payment intent fetch error:', error);
-        
-        // Retry logic for transient errors
-        if (retryCount < 2 && !error.message?.includes('No client secret')) {
+
+        // Retry logic for transient errors - but NOT for invalid order ID
+        if (retryCount < 2 && !error.message?.includes('No client secret') && !error.message?.includes('Invalid order')) {
           console.log(`Retrying payment intent fetch (attempt ${retryCount + 1})...`);
           setTimeout(() => fetchPaymentIntent(retryCount + 1), 1000 * (retryCount + 1));
         } else {
@@ -439,7 +441,8 @@ const StripePaymentForm = forwardRef<StripePaymentFormHandle, StripePaymentFormP
     if (orderId && orderId > 0) {
       fetchPaymentIntent();
     } else {
-      // If no valid orderId, set loading to false to show the payment form UI
+      // If no valid orderId, set loading to false to show the payment form UI without error
+      console.log('No valid orderId yet, showing payment form UI');
       setLoading(false);
     }
   }, [orderId, onError, onReady]);
