@@ -190,11 +190,13 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
     { src: '/placeholder.jpg', alt: product.name }
   ];
 
-  // Ensure we have at least 6 thumbnail images for the gallery
-  const thumbnailImages = [...images];
-  while (thumbnailImages.length < 6) {
-    thumbnailImages.push(images[0]);
-  }
+  // Create array with actual images and placeholders for empty slots
+  const thumbnailSlots = Array(6).fill(null).map((_, index) => {
+    if (index < images.length) {
+      return images[index];
+    }
+    return null; // Empty slot
+  });
 
   return (
     <div className="min-h-screen bg-white">
@@ -343,24 +345,45 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
 
             {/* Thumbnail row */}
             <div className="grid grid-cols-6 gap-2">
-              {thumbnailImages.slice(0, 6).map((image, index) => (
-                <button
-                  key={index}
-                  onClick={() => setSelectedImage(index % images.length)}
-                  className={`aspect-square rounded overflow-hidden border-2 transition-all ${
-                    selectedImage === (index % images.length)
-                      ? 'border-[#492c4a]'
-                      : 'border-gray-200 hover:border-gray-300'
-                  }`}
-                >
-                  <Image
-                    src={image.src}
-                    alt={`${product.name} ${index + 1}`}
-                    width={100}
-                    height={100}
-                    className="w-full h-full object-cover"
-                  />
-                </button>
+              {thumbnailSlots.map((image, index) => (
+                image ? (
+                  <button
+                    key={index}
+                    onClick={() => setSelectedImage(index)}
+                    className={`aspect-square rounded overflow-hidden border-2 transition-all ${
+                      selectedImage === index
+                        ? 'border-[#492c4a]'
+                        : 'border-gray-200 hover:border-gray-300'
+                    }`}
+                  >
+                    <Image
+                      src={image.src}
+                      alt={`${product.name} ${index + 1}`}
+                      width={100}
+                      height={100}
+                      className="w-full h-full object-cover"
+                    />
+                  </button>
+                ) : (
+                  <div
+                    key={index}
+                    className="aspect-square rounded overflow-hidden border-2 border-gray-100 bg-gray-50 flex items-center justify-center"
+                  >
+                    <svg
+                      className="w-8 h-8 text-gray-300"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={1.5}
+                        d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+                      />
+                    </svg>
+                  </div>
+                )
               ))}
             </div>
           </div>
