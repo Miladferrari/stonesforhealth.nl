@@ -919,7 +919,7 @@ export default function UnifiedCheckoutPage() {
                   <>
                     <div className="space-y-3">
                       {shipping.rates
-                        .sort((a, b) => parseFloat(a.cost) - parseFloat(b.cost))
+                        .sort((a, b) => a.cost - b.cost)
                         .map((rate) => (
                         <label
                           key={rate.method_id}

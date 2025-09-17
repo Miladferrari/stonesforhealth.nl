@@ -76,6 +76,7 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
   const [selectedBundle, setSelectedBundle] = useState('single');
   const [showReviewDropdown, setShowReviewDropdown] = useState(false);
   const [currentReviewIndex, setCurrentReviewIndex] = useState(0);
+  const [visibleReviewsCount, setVisibleReviewsCount] = useState(12); // Initially show 3 rows (12 reviews on desktop, 4 cols x 3 rows)
   const headerRef = useRef<HTMLDivElement>(null);
   const reviewDropdownRef = useRef<HTMLDivElement>(null);
   const reviewButtonRef = useRef<HTMLButtonElement>(null);
@@ -1384,9 +1385,9 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
             </div>
           </div>
 
-          {/* Masonry Grid of Review Cards */}
+          {/* Masonry Grid of Review Cards - Show limited reviews */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-            {customerReviews.map(review => (
+            {customerReviews.slice(0, visibleReviewsCount).map(review => (
               <div key={review.id} className="bg-white rounded-lg shadow-sm border border-gray-200 p-5 hover:shadow-md transition-shadow">
                 {/* Header */}
                 <div className="flex items-start justify-between mb-3">
@@ -1425,12 +1426,20 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
 
           </div>
 
-          {/* Load More Button */}
-          <div className="text-center mt-8">
-            <button className="px-6 py-2.5 bg-black text-white font-semibold rounded-lg hover:bg-gray-800 transition-colors font-[family-name:var(--font-eb-garamond)]">
-              Meer reviews laden
-            </button>
-          </div>
+          {/* Load More Button - Show only if there are more reviews to load */}
+          {visibleReviewsCount < customerReviews.length && (
+            <div className="text-center mt-8">
+              <button
+                onClick={() => {
+                  // Load 4 more rows (16 reviews on desktop, 4 cols x 4 rows)
+                  setVisibleReviewsCount(prev => Math.min(prev + 16, customerReviews.length));
+                }}
+                className="px-6 py-2.5 bg-black text-white font-semibold rounded-lg hover:bg-gray-800 transition-colors font-[family-name:var(--font-eb-garamond)]"
+              >
+                Meer reviews laden ({Math.min(16, customerReviews.length - visibleReviewsCount)} van {customerReviews.length - visibleReviewsCount})
+              </button>
+            </div>
+          )}
         </div>
       </section>
 
