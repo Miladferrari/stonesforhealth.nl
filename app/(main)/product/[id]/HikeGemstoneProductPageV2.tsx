@@ -1061,59 +1061,59 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
           {/* Auto-scrolling Image Slider */}
           <div className="relative overflow-hidden">
             <div className="flex gap-4 animate-scroll">
-              {/* First set of images - all using your 1.jpeg image */}
+              {/* First set of images - using the 8 review images */}
               <div className="w-56 h-80 flex-shrink-0">
                 <img
-                  src="/1.jpeg"
+                  src="/review1.png"
                   alt="Klant met edelsteen"
                   className="w-full h-full object-cover rounded-lg"
                 />
               </div>
               <div className="w-56 h-80 flex-shrink-0">
                 <img
-                  src="/1.jpeg"
+                  src="/review2.png"
                   alt="Kristallen collectie"
                   className="w-full h-full object-cover rounded-lg"
                 />
               </div>
               <div className="w-56 h-80 flex-shrink-0">
                 <img
-                  src="/1.jpeg"
+                  src="/review3.png"
                   alt="Healing stenen"
                   className="w-full h-full object-cover rounded-lg"
                 />
               </div>
               <div className="w-56 h-80 flex-shrink-0">
                 <img
-                  src="/1.jpeg"
+                  src="/review4.png"
                   alt="Meditatie met kristallen"
                   className="w-full h-full object-cover rounded-lg"
                 />
               </div>
               <div className="w-56 h-80 flex-shrink-0">
                 <img
-                  src="/1.jpeg"
+                  src="/review5.png"
                   alt="Chakra stenen"
                   className="w-full h-full object-cover rounded-lg"
                 />
               </div>
               <div className="w-56 h-80 flex-shrink-0">
                 <img
-                  src="/1.jpeg"
+                  src="/review6.png"
                   alt="Edelsteen sieraden"
                   className="w-full h-full object-cover rounded-lg"
                 />
               </div>
               <div className="w-56 h-80 flex-shrink-0">
                 <img
-                  src="/1.jpeg"
+                  src="/review7.png"
                   alt="Kristallen energie"
                   className="w-full h-full object-cover rounded-lg"
                 />
               </div>
               <div className="w-56 h-80 flex-shrink-0">
                 <img
-                  src="/1.jpeg"
+                  src="/review8.png"
                   alt="Healing kristallen"
                   className="w-full h-full object-cover rounded-lg"
                 />
@@ -1122,56 +1122,56 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
               {/* Duplicate set for seamless loop */}
               <div className="w-56 h-80 flex-shrink-0">
                 <img
-                  src="/1.jpeg"
+                  src="/review1.png"
                   alt="Klant met edelsteen"
                   className="w-full h-full object-cover rounded-lg"
                 />
               </div>
               <div className="w-56 h-80 flex-shrink-0">
                 <img
-                  src="/1.jpeg"
+                  src="/review2.png"
                   alt="Kristallen collectie"
                   className="w-full h-full object-cover rounded-lg"
                 />
               </div>
               <div className="w-56 h-80 flex-shrink-0">
                 <img
-                  src="/1.jpeg"
+                  src="/review3.png"
                   alt="Healing stenen"
                   className="w-full h-full object-cover rounded-lg"
                 />
               </div>
               <div className="w-56 h-80 flex-shrink-0">
                 <img
-                  src="/1.jpeg"
+                  src="/review4.png"
                   alt="Meditatie met kristallen"
                   className="w-full h-full object-cover rounded-lg"
                 />
               </div>
               <div className="w-56 h-80 flex-shrink-0">
                 <img
-                  src="/1.jpeg"
+                  src="/review5.png"
                   alt="Chakra stenen"
                   className="w-full h-full object-cover rounded-lg"
                 />
               </div>
               <div className="w-56 h-80 flex-shrink-0">
                 <img
-                  src="/1.jpeg"
+                  src="/review6.png"
                   alt="Edelsteen sieraden"
                   className="w-full h-full object-cover rounded-lg"
                 />
               </div>
               <div className="w-56 h-80 flex-shrink-0">
                 <img
-                  src="/1.jpeg"
+                  src="/review7.png"
                   alt="Kristallen energie"
                   className="w-full h-full object-cover rounded-lg"
                 />
               </div>
               <div className="w-56 h-80 flex-shrink-0">
                 <img
-                  src="/1.jpeg"
+                  src="/review8.png"
                   alt="Healing kristallen"
                   className="w-full h-full object-cover rounded-lg"
                 />
