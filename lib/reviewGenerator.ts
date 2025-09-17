@@ -180,9 +180,9 @@ function generateIndividualReviews(productId: number, count: number, distributio
     }
   });
 
-  // Shuffle rating pool for random distribution
+  // Shuffle rating pool deterministically based on productId
   for (let i = ratingPool.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
+    const j = Math.floor(((productId + i * 13) % (i + 1)));
     [ratingPool[i], ratingPool[j]] = [ratingPool[j], ratingPool[i]];
   }
 
@@ -203,7 +203,7 @@ function generateIndividualReviews(productId: number, count: number, distributio
       location: cities[cityIndex],
       rating: rating,
       date: timeAgo[timeIndex],
-      verified: Math.random() > 0.2, // 80% verified
+      verified: ((productId + i * 11) % 10) > 2, // 80% verified, deterministic
       text: possibleTexts[textIndex]
     });
   }

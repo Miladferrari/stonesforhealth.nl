@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import { useCart } from '@/app/contexts/CartContextStoreAPI';
 import { Product } from '@/lib/woocommerce';
 import { generateProductReviewData } from '@/lib/reviewGenerator';
@@ -66,7 +67,7 @@ const legacyCustomerReviews = [
 ];
 
 export default function HikeGemstoneProductPageV2({ product, relatedProducts = [] }: HikeGemstoneProductPageV2Props) {
-  const { addToCart } = useCart();
+  const { addToCart, items } = useCart();
   const [selectedImage, setSelectedImage] = useState(0);
   const [quantity, setQuantity] = useState(1);
   const [isAddingToCart, setIsAddingToCart] = useState(false);
@@ -78,6 +79,23 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
   const headerRef = useRef<HTMLDivElement>(null);
   const reviewDropdownRef = useRef<HTMLDivElement>(null);
   const reviewButtonRef = useRef<HTMLButtonElement>(null);
+
+  // Check if product is out of stock
+  const isOutOfStock = product.stock_status !== 'instock' || product.stock_quantity === 0;
+
+  // Check how many of this product are already in cart
+  const cartQuantity = items.find(item => item.product.id === product.id)?.quantity || 0;
+
+  // Check if we've reached the maximum quantity (stock limit)
+  const hasReachedMaxQuantity = product.stock_quantity !== null && cartQuantity >= product.stock_quantity;
+
+  // Calculate available quantity (stock minus what's in cart)
+  const availableQuantity = product.stock_quantity !== null ? Math.max(0, product.stock_quantity - cartQuantity) : Infinity;
+
+  // Check if each bundle option is available
+  const canSelectSingle = availableQuantity >= 1;
+  const canSelectDuo = availableQuantity >= 2;
+  const canSelectFamily = availableQuantity >= 3;
 
   // Generate comprehensive review data with individual reviews
   const reviewData = generateProductReviewData(product.id);
@@ -143,6 +161,21 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
     duo: price * 1.8,
     family: price * 2.5
   };
+
+  // Auto-adjust selected bundle if current selection becomes unavailable
+  useEffect(() => {
+    if (selectedBundle === 'family' && !canSelectFamily) {
+      if (canSelectDuo) {
+        setSelectedBundle('duo');
+      } else if (canSelectSingle) {
+        setSelectedBundle('single');
+      }
+    } else if (selectedBundle === 'duo' && !canSelectDuo) {
+      if (canSelectSingle) {
+        setSelectedBundle('single');
+      }
+    }
+  }, [availableQuantity, selectedBundle, canSelectSingle, canSelectDuo, canSelectFamily]);
 
   // Handle sticky header visibility using Intersection Observer
   useEffect(() => {
@@ -215,9 +248,21 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
 
 
   const handleAddToCart = async () => {
-    setIsAddingToCart(true);
+    // Don't add to cart if out of stock or max quantity reached
+    if (isOutOfStock || hasReachedMaxQuantity) {
+      console.warn('Cannot add to cart:', isOutOfStock ? 'Out of stock' : 'Max quantity reached');
+      return;
+    }
 
     const quantityToAdd = selectedBundle === 'duo' ? 2 : selectedBundle === 'family' ? 3 : 1;
+
+    // Double-check that selected bundle quantity is available
+    if (quantityToAdd > availableQuantity) {
+      console.warn('Cannot add to cart: Selected bundle quantity exceeds available stock');
+      return;
+    }
+
+    setIsAddingToCart(true);
 
     try {
       addToCart(product as any, quantityToAdd);
@@ -336,25 +381,47 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
                 {/* Mobile Button (≤768px) - Compact version */}
                 <button
                   onClick={handleAddToCart}
-                  className="md:hidden px-3 py-2.5 bg-[#fbe022] text-black font-bold rounded-md hover:bg-[#e6cc1f] transition-all min-h-[44px] font-[family-name:var(--font-eb-garamond)]"
-                  disabled={isAddingToCart}
+                  className={`md:hidden px-3 py-2.5 font-bold rounded-md transition-all min-h-[44px] font-[family-name:var(--font-eb-garamond)] ${
+                    isOutOfStock || hasReachedMaxQuantity
+                      ? 'bg-gray-400 text-white cursor-not-allowed'
+                      : 'bg-[#fbe022] text-black hover:bg-[#e6cc1f]'
+                  }`}
+                  disabled={isAddingToCart || isOutOfStock || hasReachedMaxQuantity}
                   type="button"
                 >
-                  <span className="flex items-center justify-center gap-1">
-                    <span className="material-icons-outlined text-lg">shopping_cart</span>
-                    <span className="text-xs font-bold hidden min-[400px]:inline font-[family-name:var(--font-eb-garamond)]">Voeg toe</span>
-                  </span>
+                  {isOutOfStock ? (
+                    <span className="text-xs font-bold font-[family-name:var(--font-eb-garamond)]">Uitverkocht</span>
+                  ) : hasReachedMaxQuantity ? (
+                    <span className="text-xs font-bold font-[family-name:var(--font-eb-garamond)]">Binnenkort weer beschikbaar</span>
+                  ) : (
+                    <span className="flex items-center justify-center gap-1">
+                      <span className="material-icons-outlined text-lg">shopping_cart</span>
+                      <span className="text-xs font-bold hidden min-[400px]:inline font-[family-name:var(--font-eb-garamond)]">Voeg toe</span>
+                    </span>
+                  )}
                 </button>
 
                 {/* Desktop Button (>768px) */}
                 <button
                   onClick={handleAddToCart}
-                  className="hidden md:flex px-4 lg:px-6 py-2.5 lg:py-3 bg-[#fbe022] text-black font-bold rounded-lg hover:bg-[#e6cc1f] transition-all items-center justify-center gap-2 text-base whitespace-nowrap min-h-[48px] font-[family-name:var(--font-eb-garamond)]"
-                  disabled={isAddingToCart}
+                  className={`hidden md:flex px-4 lg:px-6 py-2.5 lg:py-3 font-bold rounded-lg transition-all items-center justify-center gap-2 text-base whitespace-nowrap min-h-[48px] font-[family-name:var(--font-eb-garamond)] ${
+                    isOutOfStock || hasReachedMaxQuantity
+                      ? 'bg-gray-400 text-white cursor-not-allowed'
+                      : 'bg-[#fbe022] text-black hover:bg-[#e6cc1f]'
+                  }`}
+                  disabled={isAddingToCart || isOutOfStock || hasReachedMaxQuantity}
                   type="button"
                 >
-                  <span className="material-icons-outlined text-lg">shopping_cart</span>
-                  <span>Voeg toe aan winkelwagen</span>
+                  {isOutOfStock ? (
+                    <span>Uitverkocht</span>
+                  ) : hasReachedMaxQuantity ? (
+                    <span>Binnenkort weer op voorraad</span>
+                  ) : (
+                    <>
+                      <span className="material-icons-outlined text-lg">shopping_cart</span>
+                      <span>Voeg toe aan winkelwagen</span>
+                    </>
+                  )}
                 </button>
               </div>
             </div>
@@ -435,21 +502,17 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
 
           {/* Right: Product details sidebar */}
           <div className="space-y-6">
-            {/* Trust indicator - Expert endorsement */}
-            <div className="flex items-center gap-2 p-3 bg-purple-50 rounded-lg border border-purple-200">
-              <div className="w-10 h-10 rounded-full bg-[#492c4a] flex items-center justify-center flex-shrink-0">
-                <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
-                  <path d="M10.394 2.08a1 1 0 00-.788 0l-7 3a1 1 0 000 1.84L5.25 8.051a.999.999 0 01.356-.257l4-1.714a1 1 0 11.788 1.838L7.667 9.088l1.94.831a1 1 0 00.787 0l7-3a1 1 0 000-1.838l-7-3zM3.31 9.397L5 10.12v4.102a8.969 8.969 0 00-1.05-.174 1 1 0 01-.89-.89 11.115 11.115 0 01.25-3.762zM9.3 16.573A9.026 9.026 0 007 14.935v-3.957l1.818.78a3 3 0 002.364 0l5.508-2.361a11.026 11.026 0 01.25 3.762 1 1 0 01-.89.89 8.968 8.968 0 00-5.35 2.524 1 1 0 01-1.4 0zM6 18a1 1 0 001-1v-2.065a8.935 8.935 0 00-2-.712V17a1 1 0 001 1z"/>
-                </svg>
-              </div>
-              <div className="flex-1">
-                <p className="text-sm text-gray-700 flex items-center gap-2 font-[family-name:var(--font-eb-garamond)]">
-                  <span>Aanbevolen door <strong>Robbin Nieborg</strong></span>
-                  <span className="border-l border-gray-400 pl-2">"Deze edelstenen bezitten krachtige energetische eigenschappen"</span>
-                  <svg className="w-4 h-4 text-green-600" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd"/>
-                  </svg>
-                </p>
+            {/* Customer satisfaction banner */}
+            <div className="flex items-center bg-[#ECECEC] p-2.5 rounded-[5px]">
+              <img
+                src="//www.canapuff.com/cdn/shop/files/Canapuff_Happy_Client_2_120x.png?v=1733390721"
+                alt="Order stats image"
+                width="60"
+                height="60"
+                className="object-cover rounded-[5px]"
+              />
+              <div className="text-base md:text-lg ml-[15px] text-gray-700 font-[family-name:var(--font-eb-garamond)]">
+                Sluit je aan bij 4.278+ tevreden klanten - beoordeeld met 4.4/5
               </div>
             </div>
 
@@ -608,20 +671,23 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
               {/* USP's - Hike Style */}
               <div className="flex flex-col gap-2 mb-6">
                 <div className="flex items-center gap-2">
-                  <svg className="w-5 h-5 text-green-600 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                  <svg role="presentation" focusable="false" strokeWidth="2" width="24" height="24" className="text-green-600 flex-shrink-0" style={{ "--icon-height": "24px" } as React.CSSProperties} viewBox="0 0 18 18">
+                    <path d="M0 9C0 4.02944 4.02944 0 9 0C13.9706 0 18 4.02944 18 9C18 13.9706 13.9706 18 9 18C4.02944 18 0 13.9706 0 9Z" fill="currentColor"></path>
+                    <path d="M5 8.8L7.62937 11.6L13 6" stroke="#ffffff" fill="none"></path>
                   </svg>
                   <span className="text-base md:text-lg text-gray-700 font-[family-name:var(--font-eb-garamond)]">100% Authentiek - Gecertificeerd door experts</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <svg className="w-5 h-5 text-green-600 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                  <svg role="presentation" focusable="false" strokeWidth="2" width="24" height="24" className="text-green-600 flex-shrink-0" style={{ "--icon-height": "24px" } as React.CSSProperties} viewBox="0 0 18 18">
+                    <path d="M0 9C0 4.02944 4.02944 0 9 0C13.9706 0 18 4.02944 18 9C18 13.9706 13.9706 18 9 18C4.02944 18 0 13.9706 0 9Z" fill="currentColor"></path>
+                    <path d="M5 8.8L7.62937 11.6L13 6" stroke="#ffffff" fill="none"></path>
                   </svg>
                   <span className="text-base md:text-lg text-gray-700 font-[family-name:var(--font-eb-garamond)]">Energetisch geladen & gereinigd voor optimale werking</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <svg className="w-5 h-5 text-green-600 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                    <path d="M5 8a1 1 0 011-1h1V6a4 4 0 118 0v1h1a1 1 0 011 1v8a1 1 0 01-1 1H6a1 1 0 01-1-1V8zm4-2v1h2V6a1 1 0 00-2 0z"/>
+                  <svg role="presentation" focusable="false" strokeWidth="2" width="24" height="24" className="text-green-600 flex-shrink-0" style={{ "--icon-height": "24px" } as React.CSSProperties} viewBox="0 0 18 18">
+                    <path d="M0 9C0 4.02944 4.02944 0 9 0C13.9706 0 18 4.02944 18 9C18 13.9706 13.9706 18 9 18C4.02944 18 0 13.9706 0 9Z" fill="currentColor"></path>
+                    <path d="M5 8.8L7.62937 11.6L13 6" stroke="#ffffff" fill="none"></path>
                   </svg>
                   <span className="text-base md:text-lg text-gray-700 font-[family-name:var(--font-eb-garamond)]">Gratis verzending & 30 dagen retourgarantie</span>
                 </div>
@@ -629,7 +695,7 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
 
               {/* Price with strikethrough */}
               <div className="flex items-center gap-3 mb-2">
-                <span className="text-xl font-light text-[#492c4a] font-[family-name:var(--font-eb-garamond)]">
+                <span className="text-2xl md:text-3xl font-semibold text-black font-[family-name:var(--font-eb-garamond)]">
                   €{price.toFixed(2).replace('.', ',')}
                 </span>
                 {isOnSale && (
@@ -656,6 +722,14 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
                   </>
                 )}
               </div>
+
+              {/* Tax and shipping info */}
+              <p className="text-sm text-gray-600 font-[family-name:var(--font-eb-garamond)] mb-2">
+                Inclusief BTW.
+                <Link href="/policies/shipping-policy" className="underline hover:text-gray-800 ml-1">
+                  Verzendkosten berekend
+                </Link> bij checkout.
+              </p>
 
               {/* Spring sale info */}
               <div className="custom-spring-sale-info bg-amber-50 border border-amber-200 rounded-md p-3 mt-4 mb-3">
@@ -685,13 +759,15 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
               <div className="kaching-bundles__bar-wrapper">
                 <div
                   role="button"
-                  tabIndex={0}
-                  className={`kaching-bundles__bar-main relative block p-4 border rounded-lg cursor-pointer transition-all ${
-                    selectedBundle === 'single'
-                      ? 'border-black bg-white'
-                      : 'border-gray-300 hover:border-gray-400 bg-white'
+                  tabIndex={canSelectSingle ? 0 : -1}
+                  className={`kaching-bundles__bar-main relative block p-4 border rounded-lg transition-all ${
+                    !canSelectSingle
+                      ? 'border-gray-200 bg-gray-50 cursor-not-allowed opacity-50'
+                      : selectedBundle === 'single'
+                      ? 'border-black bg-white cursor-pointer'
+                      : 'border-gray-300 hover:border-gray-400 bg-white cursor-pointer'
                   }`}
-                  onClick={() => setSelectedBundle('single')}
+                  onClick={() => canSelectSingle && setSelectedBundle('single')}
                 >
                   <input
                     type="radio"
@@ -699,7 +775,8 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
                     name="bundle"
                     value="single"
                     checked={selectedBundle === 'single'}
-                    onChange={(e) => setSelectedBundle(e.target.value)}
+                    disabled={!canSelectSingle}
+                    onChange={(e) => canSelectSingle && setSelectedBundle(e.target.value)}
                   />
                   <div className="kaching-bundles__bar-content flex items-center justify-between">
                     <div className="flex items-center gap-3">
@@ -733,13 +810,15 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
               <div className="kaching-bundles__bar-wrapper relative">
                 <div
                   role="button"
-                  tabIndex={0}
-                  className={`kaching-bundles__bar-main relative block p-4 border rounded-lg cursor-pointer transition-all ${
-                    selectedBundle === 'duo'
-                      ? 'border-black bg-white'
-                      : 'border-gray-300 hover:border-gray-400 bg-white'
+                  tabIndex={canSelectDuo ? 0 : -1}
+                  className={`kaching-bundles__bar-main relative block p-4 border rounded-lg transition-all ${
+                    !canSelectDuo
+                      ? 'border-gray-200 bg-gray-50 cursor-not-allowed opacity-50'
+                      : selectedBundle === 'duo'
+                      ? 'border-black bg-white cursor-pointer'
+                      : 'border-gray-300 hover:border-gray-400 bg-white cursor-pointer'
                   }`}
-                  onClick={() => setSelectedBundle('duo')}
+                  onClick={() => canSelectDuo && setSelectedBundle('duo')}
                 >
                   <div className="kaching-bundles__bar-most-popular kaching-bundles__bar-most-popular--simple absolute -top-3 right-2">
                     <div className="kaching-bundles__bar-most-popular__content text-black text-xs font-bold px-3 py-1 rounded uppercase" style={{ backgroundColor: '#fbe022' }}>
@@ -752,7 +831,8 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
                     name="bundle"
                     value="duo"
                     checked={selectedBundle === 'duo'}
-                    onChange={(e) => setSelectedBundle(e.target.value)}
+                    disabled={!canSelectDuo}
+                    onChange={(e) => canSelectDuo && setSelectedBundle(e.target.value)}
                   />
                   <div className="kaching-bundles__bar-content flex items-center justify-between">
                     <div className="flex items-center gap-3">
@@ -784,13 +864,15 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
               <div className="kaching-bundles__bar-wrapper relative">
                 <div
                   role="button"
-                  tabIndex={0}
-                  className={`kaching-bundles__bar-main relative block p-4 border rounded-lg cursor-pointer transition-all ${
-                    selectedBundle === 'family'
-                      ? 'border-black bg-white'
-                      : 'border-gray-300 hover:border-gray-400 bg-white'
+                  tabIndex={canSelectFamily ? 0 : -1}
+                  className={`kaching-bundles__bar-main relative block p-4 border rounded-lg transition-all ${
+                    !canSelectFamily
+                      ? 'border-gray-200 bg-gray-50 cursor-not-allowed opacity-50'
+                      : selectedBundle === 'family'
+                      ? 'border-black bg-white cursor-pointer'
+                      : 'border-gray-300 hover:border-gray-400 bg-white cursor-pointer'
                   }`}
-                  onClick={() => setSelectedBundle('family')}
+                  onClick={() => canSelectFamily && setSelectedBundle('family')}
                 >
                   <input
                     type="radio"
@@ -798,7 +880,8 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
                     name="bundle"
                     value="family"
                     checked={selectedBundle === 'family'}
-                    onChange={(e) => setSelectedBundle(e.target.value)}
+                    disabled={!canSelectFamily}
+                    onChange={(e) => canSelectFamily && setSelectedBundle(e.target.value)}
                   />
                   <div className="kaching-bundles__bar-content flex items-center justify-between">
                     <div className="flex items-center gap-3">
@@ -834,10 +917,22 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
             <button
               id="mainAddToCartButton"
               onClick={handleAddToCart}
-              disabled={isAddingToCart}
-              className="w-full py-4 bg-[#fbe022] text-black text-lg font-bold rounded-lg hover:bg-[#e6cc1f] transition-all transform hover:scale-[1.02] disabled:opacity-50 disabled:transform-none font-[family-name:var(--font-eb-garamond)]"
+              disabled={isAddingToCart || isOutOfStock || hasReachedMaxQuantity}
+              className={`w-full py-4 text-lg font-bold rounded-lg transition-all transform font-[family-name:var(--font-eb-garamond)] ${
+                isOutOfStock || hasReachedMaxQuantity
+                  ? 'bg-gray-400 text-white cursor-not-allowed'
+                  : 'bg-[#fbe022] text-black hover:bg-[#e6cc1f] hover:scale-[1.02] disabled:opacity-50 disabled:transform-none'
+              }`}
             >
-              {isAddingToCart ? (
+              {isOutOfStock ? (
+                <span className="flex items-center justify-center">
+                  <span className="font-[family-name:var(--font-eb-garamond)]">Uitverkocht</span>
+                </span>
+              ) : hasReachedMaxQuantity ? (
+                <span className="flex items-center justify-center">
+                  <span className="font-[family-name:var(--font-eb-garamond)]">Binnenkort weer op voorraad</span>
+                </span>
+              ) : isAddingToCart ? (
                 <span className="flex items-center justify-center gap-2">
                   <svg className="animate-spin h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                     <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
@@ -852,6 +947,27 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
                 </span>
               )}
             </button>
+
+            {/* Stock status - moved below button */}
+            <div className="flex items-center gap-2 mt-1">
+              {isOutOfStock ? (
+                <>
+                  <svg role="presentation" focusable="false" strokeWidth="2" width="18" height="18" className="text-red-600" style={{ "--icon-height": "18px" } as React.CSSProperties} viewBox="0 0 18 18">
+                    <path d="M0 9C0 4.02944 4.02944 0 9 0C13.9706 0 18 4.02944 18 9C18 13.9706 13.9706 18 9 18C4.02944 18 0 13.9706 0 9Z" fill="currentColor"></path>
+                    <path d="M6 6L12 12M12 6L6 12" stroke="#ffffff" strokeWidth="2" fill="none"></path>
+                  </svg>
+                  <span className="text-red-600 font-[family-name:var(--font-eb-garamond)]">Tijdelijk uitverkocht</span>
+                </>
+              ) : (
+                <>
+                  <svg role="presentation" focusable="false" strokeWidth="2" width="18" height="18" className="text-green-600" style={{ "--icon-height": "18px" } as React.CSSProperties} viewBox="0 0 18 18">
+                    <path d="M0 9C0 4.02944 4.02944 0 9 0C13.9706 0 18 4.02944 18 9C18 13.9706 13.9706 18 9 18C4.02944 18 0 13.9706 0 9Z" fill="currentColor"></path>
+                    <path d="M5 8.8L7.62937 11.6L13 6" stroke="#ffffff" fill="none"></path>
+                  </svg>
+                  <span className="text-green-600 font-[family-name:var(--font-eb-garamond)]">Geleverd in 1-3 werkdagen</span>
+                </>
+              )}
+            </div>
 
           </div>
         </div>
