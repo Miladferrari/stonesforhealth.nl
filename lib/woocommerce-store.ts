@@ -206,10 +206,10 @@ class WooCommerceStoreAPI {
   ): Promise<T> {
     const url = `${this.baseUrl}${endpoint}`;
 
-    const headers: HeadersInit = {
+    const headers: Record<string, string> = {
       'Content-Type': 'application/json',
       'Accept': 'application/json',
-      ...options.headers,
+      ...(options.headers as Record<string, string>),
     };
 
     // Add nonce for authenticated requests (if available)

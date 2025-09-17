@@ -12,10 +12,10 @@ export default function LayoutContent({
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
-  
+
   // Pages that should NOT have navbar and footer
   const hideLayoutPages = ['/thank-you', '/payment-failed'];
-  const shouldHideLayout = hideLayoutPages.some(page => pathname.startsWith(page));
+  const shouldHideLayout = pathname ? hideLayoutPages.some(page => pathname.startsWith(page)) : false;
 
   if (shouldHideLayout) {
     // For thank-you and payment-failed pages, only show the content

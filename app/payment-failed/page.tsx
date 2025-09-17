@@ -7,8 +7,8 @@ import Link from 'next/link';
 function PaymentFailedContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
-  const orderId = searchParams.get('order');
-  const reason = searchParams.get('reason') || 'cancelled';
+  const orderId = searchParams?.get('order') || null;
+  const reason = searchParams?.get('reason') || 'cancelled';
   const [hasOrderData, setHasOrderData] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 

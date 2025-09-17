@@ -20,20 +20,46 @@ interface OrderData {
     city: string;
     postcode: string;
   };
+  billing?: {
+    email?: string;
+    [key: string]: any;
+  };
+  shipping?: {
+    first_name?: string;
+    last_name?: string;
+    address_1?: string;
+    city?: string;
+    postcode?: string;
+    [key: string]: any;
+  };
+  formData?: {
+    email?: string;
+    firstName?: string;
+    lastName?: string;
+    address?: string;
+    city?: string;
+    postcode?: string;
+    [key: string]: any;
+  };
   items: Array<{
     name: string;
     quantity: number;
     price: string;
     images?: Array<{ src: string }>;
+    product?: {
+      name?: string;
+      price?: string;
+      images?: Array<{ src: string }>;
+    };
   }>;
 }
 
 function ThankYouContent() {
   const searchParams = useSearchParams();
-  const orderId = searchParams.get('order');
-  const redirectStatus = searchParams.get('redirect_status');
-  const sessionId = searchParams.get('session_id');
-  const paymentIntentId = searchParams.get('payment_intent');
+  const orderId = searchParams?.get('order') || null;
+  const redirectStatus = searchParams?.get('redirect_status') || null;
+  const sessionId = searchParams?.get('session_id') || null;
+  const paymentIntentId = searchParams?.get('payment_intent') || null;
   const { clearCart } = useCart();
   const [orderData, setOrderData] = useState<OrderData | null>(null);
   const [loading, setLoading] = useState(true);
