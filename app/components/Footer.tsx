@@ -4,7 +4,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { memo, useEffect, useState } from 'react';
 import { usePathname } from 'next/navigation';
-import TrustpilotWidget from './TrustpilotWidget';
+import TrustpilotFooterWidget from './TrustpilotFooterWidget';
 
 interface Category {
   id: number;
@@ -131,7 +131,7 @@ const Footer = memo(function Footer() {
                       </svg>
                     ))}
                   </div>
-                  <span className="text-sm bg-[#492c4a]/10 text-[#492c4a] px-1.5 py-0.5 rounded-md font-semibold">4.9/5</span>
+                  <span className="text-sm bg-[#492c4a]/10 text-[#492c4a] px-1.5 py-0.5 rounded-md font-semibold">4.4/5</span>
                 </div>
                 <span className="text-sm text-gray-700 font-semibold mt-0.5 font-[family-name:var(--font-eb-garamond)]">
                   Vertrouwd door <span className="font-bold text-[#492c4a]">3000+</span> klanten
@@ -140,7 +140,7 @@ const Footer = memo(function Footer() {
             </div>
             {/* Trustpilot Widget */}
             <div className="mt-8 flex justify-center md:justify-start">
-              <TrustpilotWidget />
+              <TrustpilotFooterWidget />
             </div>
           </div>
 

@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useCartWithToast } from '../hooks/useCartWithToast';
+import TrustpilotWidget from './TrustpilotWidget';
 
 export default function SlideInCart() {
   const router = useRouter();
@@ -123,6 +124,10 @@ export default function SlideInCart() {
             })()}
           </div>
 
+          {/* Trustpilot Widget */}
+          <div className="px-5 py-3 bg-gradient-to-r from-[#faf8f4] to-white border-b border-[#E8DCC6]">
+            <TrustpilotWidget />
+          </div>
 
           {/* Cart items */}
           <div className="flex-1 overflow-y-auto">

@@ -3,6 +3,7 @@ import dynamicImport from 'next/dynamic';
 import Link from 'next/link';
 import Image from 'next/image';
 import BestsellerGrid from '@/app/components/BestsellerGrid';
+import TrustpilotWidget from '@/app/components/TrustpilotWidget';
 
 // Force dynamic rendering to always fetch fresh data
 export const dynamic = 'force-dynamic';
@@ -132,7 +133,7 @@ export default async function Home() {
                           </svg>
                         ))}
                       </div>
-                      <span className="text-xs bg-[#492c4a]/10 text-[#492c4a] px-1.5 py-0.5 rounded-md font-semibold">4.9/5</span>
+                      <span className="text-xs bg-[#492c4a]/10 text-[#492c4a] px-1.5 py-0.5 rounded-md font-semibold">4.4/5</span>
                     </div>
                     <span className="text-[11px] text-gray-600 font-medium mt-1 font-[family-name:var(--font-eb-garamond)]">Vertrouwd door <span className="font-bold text-[#492c4a]">3000+</span> klanten</span>
                   </div>
@@ -169,45 +170,52 @@ export default async function Home() {
               </div>
 
               {/* Reviews - Desktop only */}
-              <div className="hidden lg:inline-flex items-center justify-center lg:justify-start gap-4 bg-white/60 backdrop-blur-sm rounded-full px-5 py-3 shadow-sm border border-gray-100">
-                {/* Profile avatars */}
-                <div className="flex -space-x-3">
-                  <img 
-                    src="https://i.pravatar.cc/150?img=1" 
-                    alt="Anna" 
-                    className="w-10 h-10 rounded-full border-2 border-white object-cover shadow-sm"
-                  />
-                  <img 
-                    src="https://i.pravatar.cc/150?img=5" 
-                    alt="Maria" 
-                    className="w-10 h-10 rounded-full border-2 border-white object-cover shadow-sm"
-                  />
-                  <img 
-                    src="https://i.pravatar.cc/150?img=9" 
-                    alt="Sophie" 
-                    className="w-10 h-10 rounded-full border-2 border-white object-cover shadow-sm"
-                  />
-                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#492c4a] to-[#6b4069] border-2 border-white flex items-center justify-center text-white text-xs font-bold shadow-sm">
-                    +3K
+              <div className="hidden lg:block space-y-3">
+                <div className="inline-flex items-center justify-center lg:justify-start gap-4 bg-white/60 backdrop-blur-sm rounded-full px-5 py-3 shadow-sm border border-gray-100">
+                  {/* Profile avatars */}
+                  <div className="flex -space-x-3">
+                    <img
+                      src="https://i.pravatar.cc/150?img=1"
+                      alt="Anna"
+                      className="w-10 h-10 rounded-full border-2 border-white object-cover shadow-sm"
+                    />
+                    <img
+                      src="https://i.pravatar.cc/150?img=5"
+                      alt="Maria"
+                      className="w-10 h-10 rounded-full border-2 border-white object-cover shadow-sm"
+                    />
+                    <img
+                      src="https://i.pravatar.cc/150?img=9"
+                      alt="Sophie"
+                      className="w-10 h-10 rounded-full border-2 border-white object-cover shadow-sm"
+                    />
+                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#492c4a] to-[#6b4069] border-2 border-white flex items-center justify-center text-white text-xs font-bold shadow-sm">
+                      +3K
+                    </div>
+                  </div>
+
+                  {/* Divider */}
+                  <div className="h-8 w-px bg-gradient-to-b from-transparent via-gray-300 to-transparent"></div>
+
+                  {/* Stars and text */}
+                  <div className="flex flex-col">
+                    <div className="flex items-center gap-1">
+                      <div className="flex items-center">
+                        {[...Array(5)].map((_, i) => (
+                          <svg key={i} className="w-3.5 h-3.5 text-[#492c4a] fill-current" viewBox="0 0 20 20">
+                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                          </svg>
+                        ))}
+                      </div>
+                      <span className="text-xs bg-[#492c4a]/10 text-[#492c4a] px-1.5 py-0.5 rounded-md font-semibold">4.4/5</span>
+                    </div>
+                    <span className="text-[11px] text-gray-600 font-medium mt-1 font-[family-name:var(--font-eb-garamond)]">Vertrouwd door <span className="font-bold text-[#492c4a]">3000+</span> klanten</span>
                   </div>
                 </div>
-                
-                {/* Divider */}
-                <div className="h-8 w-px bg-gradient-to-b from-transparent via-gray-300 to-transparent"></div>
-                
-                {/* Stars and text */}
-                <div className="flex flex-col">
-                  <div className="flex items-center gap-1">
-                    <div className="flex items-center">
-                      {[...Array(5)].map((_, i) => (
-                        <svg key={i} className="w-3.5 h-3.5 text-[#492c4a] fill-current" viewBox="0 0 20 20">
-                          <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                        </svg>
-                      ))}
-                    </div>
-                    <span className="text-xs bg-[#492c4a]/10 text-[#492c4a] px-1.5 py-0.5 rounded-md font-semibold">4.9/5</span>
-                  </div>
-                  <span className="text-[11px] text-gray-600 font-medium mt-1 font-[family-name:var(--font-eb-garamond)]">Vertrouwd door <span className="font-bold text-[#492c4a]">3000+</span> klanten</span>
+
+                {/* Trustpilot Widget */}
+                <div className="flex">
+                  <TrustpilotWidget />
                 </div>
               </div>
             </div>

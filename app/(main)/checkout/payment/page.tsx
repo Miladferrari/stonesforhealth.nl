@@ -545,6 +545,71 @@ function PaymentPageContent() {
               </svg>
               <span className="text-base text-[#6b7280] font-[family-name:var(--font-eb-garamond)]">Veilig en versleuteld</span>
             </div>
+
+            {/* Trust Section - Mobile/Tablet Only */}
+            <div className="lg:hidden pb-6">
+              <div className="pt-6">
+                {/* Trustpilot Widget */}
+                <div className="mb-4">
+                  <TrustpilotWidget />
+                </div>
+                <h4 className="text-base font-medium text-black mb-4 text-left uppercase tracking-wider font-[family-name:var(--font-eb-garamond)]">
+                  WAAROM MEER DAN 4.278 KLANTEN VOOR STONESFORHEALTH KOZEN
+                </h4>
+                <div className="space-y-4">
+                  {/* 30 Days Return */}
+                  <div className="flex items-start gap-3">
+                    <div className="flex-shrink-0 w-10 h-10">
+                      <svg className="w-10 h-10 text-[#492c4a]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6" />
+                      </svg>
+                    </div>
+                    <div className="flex-1">
+                      <p className="text-base font-medium text-black font-[family-name:var(--font-eb-garamond)]">
+                        30 dagen retourrecht
+                      </p>
+                      <p className="text-sm text-black/70 font-medium mt-0.5 font-[family-name:var(--font-eb-garamond)]">
+                        Niet tevreden? Retourneer gratis binnen 30 dagen
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Secure Payment */}
+                  <div className="flex items-start gap-3">
+                    <div className="flex-shrink-0 w-10 h-10">
+                      <svg className="w-10 h-10 text-[#492c4a]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                      </svg>
+                    </div>
+                    <div className="flex-1">
+                      <p className="text-base font-medium text-black font-[family-name:var(--font-eb-garamond)]">
+                        100% Veilig betalen
+                      </p>
+                      <p className="text-sm text-black/70 font-medium mt-0.5 font-[family-name:var(--font-eb-garamond)]">
+                        Beveiligde betaling met SSL-encryptie
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Natural Stones */}
+                  <div className="flex items-start gap-3">
+                    <div className="flex-shrink-0 w-10 h-10">
+                      <svg className="w-10 h-10 text-[#492c4a]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+                      </svg>
+                    </div>
+                    <div className="flex-1">
+                      <p className="text-base font-medium text-black font-[family-name:var(--font-eb-garamond)]">
+                        100% Natuurlijke stenen
+                      </p>
+                      <p className="text-sm text-black/70 font-medium mt-0.5 font-[family-name:var(--font-eb-garamond)]">
+                        Authentieke edelstenen met certificaat
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
             </div>
           </div>
 
