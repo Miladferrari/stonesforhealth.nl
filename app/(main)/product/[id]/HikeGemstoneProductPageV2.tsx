@@ -4,14 +4,15 @@ import { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
 import { useCart } from '@/app/contexts/CartContextStoreAPI';
 import { Product } from '@/lib/woocommerce';
+import { generateProductReviewData } from '@/lib/reviewGenerator';
 
 interface HikeGemstoneProductPageV2Props {
   product: Product;
   relatedProducts?: Product[];
 }
 
-// Customer reviews data
-const customerReviews = [
+// Legacy customer reviews data (will be replaced by dynamic generation)
+const legacyCustomerReviews = [
   {
     id: 1,
     name: "Sarah van der Meer",
@@ -36,10 +37,10 @@ const customerReviews = [
     id: 3,
     name: "Lisa de Boer",
     location: "Utrecht",
-    rating: 5,
+    rating: 4,
     date: "3 weken geleden",
     verified: true,
-    text: "Mijn angsten zijn verminderd sinds ik deze steen draag. Ongelooflijk!",
+    text: "Mijn angsten zijn verminderd sinds ik deze steen draag. Heel tevreden!",
     image: "/images/review-3.jpg"
   },
   {
@@ -56,7 +57,7 @@ const customerReviews = [
     id: 5,
     name: "Emma Visser",
     location: "Eindhoven",
-    rating: 5,
+    rating: 4,
     date: "2 maanden geleden",
     verified: true,
     text: "Mooiste steen uit mijn collectie. Super blij mee!",
@@ -77,6 +78,50 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
   const headerRef = useRef<HTMLDivElement>(null);
   const reviewDropdownRef = useRef<HTMLDivElement>(null);
   const reviewButtonRef = useRef<HTMLButtonElement>(null);
+
+  // Generate comprehensive review data with individual reviews
+  const reviewData = generateProductReviewData(product.id);
+  const customerReviews = reviewData.reviews;
+  console.log('[Reviews] Generated data:', reviewData);
+
+  // Helper function to render stars based on rating
+  const renderStars = (rating: number, size: string = 'w-4 h-4') => {
+    const fullStars = Math.floor(rating);
+    const hasHalfStar = rating % 1 !== 0;
+    const emptyStars = 5 - Math.ceil(rating);
+    const partialFill = ((rating % 1) * 100).toFixed(0);
+
+    return (
+      <div className="flex gap-0">
+        {/* Full stars */}
+        {[...Array(fullStars)].map((_, i) => (
+          <svg key={`full-${i}`} className={`${size} text-[#FAD14C] fill-current`} viewBox="0 0 24 24">
+            <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+          </svg>
+        ))}
+
+        {/* Partial star */}
+        {hasHalfStar && (
+          <svg className={`${size} text-gray-300 fill-current relative`} viewBox="0 0 24 24">
+            <defs>
+              <linearGradient id={`star-gradient-${rating}`}>
+                <stop offset={`${partialFill}%`} stopColor="#FAD14C" />
+                <stop offset={`${partialFill}%`} stopColor="#e0e0e0" />
+              </linearGradient>
+            </defs>
+            <path fill={`url(#star-gradient-${rating})`} d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+          </svg>
+        )}
+
+        {/* Empty stars */}
+        {[...Array(emptyStars)].map((_, i) => (
+          <svg key={`empty-${i}`} className={`${size} text-gray-300 fill-current`} viewBox="0 0 24 24">
+            <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+          </svg>
+        ))}
+      </div>
+    );
+  };
 
   // Extract gemstone properties - using default values
   const gemstoneData = {
@@ -420,18 +465,12 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
                   ref={reviewButtonRef}
                   onClick={() => setShowReviewDropdown(!showReviewDropdown)}
                   className="inline-flex items-center gap-1.5 px-2 py-1 border border-gray-200 rounded-md hover:border-gray-300 transition-colors group"
-                  title="5.0 rating (4,237 votes)"
-                  aria-label="5.0 rating (4,237 votes)"
+                  title={`${reviewData.averageRating} rating (${reviewData.totalReviews} votes)`}
+                  aria-label={`${reviewData.averageRating} rating (${reviewData.totalReviews} votes)`}
                 >
-                  <div className="flex gap-0">
-                    {[1,2,3,4,5].map(star => (
-                      <svg key={star} className="w-4 h-4 text-[#FAD14C] fill-current" viewBox="0 0 24 24">
-                        <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
-                      </svg>
-                    ))}
-                  </div>
+                  {renderStars(parseFloat(reviewData.averageRating))}
                   <span className="text-base md:text-lg text-gray-600 font-medium ml-0.5 font-[family-name:var(--font-eb-garamond)]">
-                    4,237 Reviews
+                    {reviewData.totalReviews} Reviews
                   </span>
                 </button>
 
@@ -459,27 +498,15 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
                       {/* Rating Summary */}
                       <div className="mb-4">
                         <div className="flex items-center gap-3 mb-1">
-                          <span className="text-2xl font-bold text-gray-900 font-[family-name:var(--font-eb-garamond)]">5.0</span>
-                          <div className="flex gap-0.5">
-                            {[1,2,3,4,5].map(star => (
-                              <svg key={star} className="w-4 h-4 text-[#FAD14C] fill-current" viewBox="0 0 15 15">
-                                <path d="M3.42968 14.8504C2.93657 15.1718 2.64893 14.9575 2.78248 14.3789L3.89197 9.49308L0.265579 6.23586C-0.165889 5.85014 -0.0631589 5.48585 0.512132 5.44299L5.26855 5.04655L7.10743 0.417867C7.31289 -0.139289 7.67245 -0.139289 7.88818 0.417867L9.73733 5.04655L14.4835 5.44299C15.0588 5.49656 15.1718 5.83943 14.73 6.23586L11.1036 9.49308L12.2131 14.3789C12.3467 14.9575 12.0693 15.1718 11.5659 14.8504L7.49781 12.2467L3.42968 14.8504Z"/>
-                              </svg>
-                            ))}
-                          </div>
+                          <span className="text-2xl font-bold text-gray-900 font-[family-name:var(--font-eb-garamond)]">{reviewData.averageRating}</span>
+                          {renderStars(parseFloat(reviewData.averageRating))}
                         </div>
-                        <p className="text-sm text-gray-600 font-[family-name:var(--font-eb-garamond)]">Based on <strong>4,237 reviews</strong></p>
+                        <p className="text-sm text-gray-600 font-[family-name:var(--font-eb-garamond)]">Based on <strong>{reviewData.totalReviews} reviews</strong></p>
                       </div>
 
                       {/* Rating Bars */}
                       <div className="space-y-1.5 mb-4">
-                        {[
-                          { stars: 5, percentage: 100, count: 4237 },
-                          { stars: 4, percentage: 0, count: 0 },
-                          { stars: 3, percentage: 0, count: 0 },
-                          { stars: 2, percentage: 0, count: 0 },
-                          { stars: 1, percentage: 0, count: 0 }
-                        ].map(rating => (
+                        {reviewData.distribution.map(rating => (
                           <div key={rating.stars} className="flex items-center gap-2 text-xs">
                             <span className="w-3 text-gray-600">{rating.stars}</span>
                             <svg className="w-3 h-3 text-[#FAD14C] fill-current" viewBox="0 0 15 15">
@@ -1236,14 +1263,8 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
               Wat Onze Klanten Zeggen
             </h2>
             <div className="flex justify-center items-center gap-2 mb-2">
-              <div className="flex gap-0.5">
-                {[1,2,3,4,5].map(star => (
-                  <svg key={star} className="w-5 h-5 text-[#FAD14C] fill-current" viewBox="0 0 20 20">
-                    <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z" />
-                  </svg>
-                ))}
-              </div>
-              <span className="text-base font-semibold text-gray-700 font-[family-name:var(--font-eb-garamond)]">5.0 • 4,237 Reviews</span>
+              {renderStars(parseFloat(reviewData.averageRating), 'w-5 h-5')}
+              <span className="text-base font-semibold text-gray-700 font-[family-name:var(--font-eb-garamond)]">{reviewData.averageRating} • {reviewData.totalReviews} Reviews</span>
             </div>
           </div>
 
@@ -1273,13 +1294,9 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
                   </div>
                 </div>
 
-                {/* Stars */}
-                <div className="flex gap-0.5 mb-2">
-                  {[1,2,3,4,5].map(star => (
-                    <svg key={star} className="w-4 h-4 text-[#FAD14C] fill-current" viewBox="0 0 20 20">
-                      <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z" />
-                    </svg>
-                  ))}
+                {/* Stars - Show actual rating */}
+                <div className="mb-2">
+                  {renderStars(review.rating)}
                 </div>
 
                 {/* Review Text */}
@@ -1290,62 +1307,6 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
               </div>
             ))}
 
-            {/* Add more review placeholders for masonry effect */}
-            <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-5 hover:shadow-md transition-shadow">
-              <div className="flex items-start justify-between mb-3">
-                <div className="flex items-center gap-2">
-                  <div className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center flex-shrink-0">
-                    <span className="text-base md:text-lg font-semibold text-gray-600 font-[family-name:var(--font-eb-garamond)]">JB</span>
-                  </div>
-                  <div>
-                    <p className="text-base md:text-lg font-semibold text-gray-900 leading-tight font-[family-name:var(--font-eb-garamond)]">Johan B.</p>
-                    <div className="flex items-center gap-1 mt-0.5">
-                      <svg viewBox="0 0 24 24" aria-label="Geverifieerd" className="w-3.5 h-3.5 text-green-600 fill-current">
-                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
-                      </svg>
-                      <span className="text-xs text-green-600 font-[family-name:var(--font-eb-garamond)]">Geverifieerd</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div className="flex gap-0.5 mb-2">
-                {[1,2,3,4,5].map(star => (
-                  <svg key={star} className="w-4 h-4 text-[#FAD14C] fill-current" viewBox="0 0 20 20">
-                    <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z" />
-                  </svg>
-                ))}
-              </div>
-              <p className="text-base md:text-lg text-gray-700 leading-relaxed mb-3 font-[family-name:var(--font-eb-garamond)]">Fantastische kwaliteit! De energie is direct voelbaar.</p>
-              <p className="text-sm text-gray-500 font-[family-name:var(--font-eb-garamond)]">5 dagen geleden</p>
-            </div>
-
-            <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-5 hover:shadow-md transition-shadow">
-              <div className="flex items-start justify-between mb-3">
-                <div className="flex items-center gap-2">
-                  <div className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center flex-shrink-0">
-                    <span className="text-base md:text-lg font-semibold text-gray-600 font-[family-name:var(--font-eb-garamond)]">AV</span>
-                  </div>
-                  <div>
-                    <p className="text-base md:text-lg font-semibold text-gray-900 leading-tight font-[family-name:var(--font-eb-garamond)]">Anna V.</p>
-                    <div className="flex items-center gap-1 mt-0.5">
-                      <svg viewBox="0 0 24 24" aria-label="Geverifieerd" className="w-3.5 h-3.5 text-green-600 fill-current">
-                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
-                      </svg>
-                      <span className="text-xs text-green-600 font-[family-name:var(--font-eb-garamond)]">Geverifieerd</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div className="flex gap-0.5 mb-2">
-                {[1,2,3,4,5].map(star => (
-                  <svg key={star} className="w-4 h-4 text-[#FAD14C] fill-current" viewBox="0 0 20 20">
-                    <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z" />
-                  </svg>
-                ))}
-              </div>
-              <p className="text-base md:text-lg text-gray-700 leading-relaxed mb-3 font-[family-name:var(--font-eb-garamond)]">Eindelijk weer goed slapen! Deze amethist heeft mijn nachtrust enorm verbeterd. Ik word uitgerust wakker.</p>
-              <p className="text-sm text-gray-500 font-[family-name:var(--font-eb-garamond)]">1 week geleden</p>
-            </div>
           </div>
 
           {/* Load More Button */}

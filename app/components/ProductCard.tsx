@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { useState, useCallback, memo, useEffect } from 'react';
 import { useCartWithToast } from '../hooks/useCartWithToast';
 import type { Product } from '@/lib/woocommerce';
+import { getProductReviewSummary } from '@/lib/reviewGenerator';
 
 interface ProductCardProps {
   product: Product;
@@ -15,6 +16,41 @@ const ProductCard = memo(function ProductCard({ product }: ProductCardProps) {
   const [isAdding, setIsAdding] = useState(false);
   const [showAdded, setShowAdded] = useState(false);
   const [isWishlisted, setIsWishlisted] = useState(false);
+
+  // Function to render stars with partial fill based on rating
+  const renderStars = (rating: number) => {
+    const fullStars = Math.floor(rating);
+    const partialFill = (rating - fullStars) * 100;
+
+    return (
+      <>
+        {[...Array(5)].map((_, i) => (
+          <svg
+            key={`star-${product.id}-${i}`}
+            className="w-5 h-5 inline-block"
+            viewBox="0 0 20 20"
+          >
+            <defs>
+              {i === fullStars && partialFill > 0 && (
+                <linearGradient id={`star-gradient-${product.id}-${i}`} x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset={`${partialFill}%`} stopColor="#FFD700" />
+                  <stop offset={`${partialFill}%`} stopColor="#e0e0e0" />
+                </linearGradient>
+              )}
+            </defs>
+            <path
+              d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"
+              fill={
+                i < fullStars ? '#FFD700' :
+                i === fullStars && partialFill > 0 ? `url(#star-gradient-${product.id}-${i})` :
+                '#e0e0e0'
+              }
+            />
+          </svg>
+        ))}
+      </>
+    );
+  };
   
   const mainImage = product.images[0];
   const price = parseFloat(product.price);
@@ -25,10 +61,8 @@ const ProductCard = memo(function ProductCard({ product }: ProductCardProps) {
   // Check if product is out of stock
   const isOutOfStock = product.stock_status !== 'instock' || product.stock_quantity === 0;
   
-  // Mock rating data - in production this would come from the API
-  const rating = 4.7;
-  // Use a deterministic value based on product ID to avoid hydration mismatch
-  const reviewCount = (product.id % 45) + 5;
+  // Get review data from the review generator
+  const { rating, count: reviewCount } = getProductReviewSummary(product.id);
   
   // Initialize wishlist state from localStorage
   useEffect(() => {
@@ -178,15 +212,7 @@ const ProductCard = memo(function ProductCard({ product }: ProductCardProps) {
         
         <div className="flex items-center gap-2 mb-3">
           <div className="flex">
-            {[...Array(5)].map((_, i) => (
-              <svg 
-                key={`star-${product.id}-${i}`} 
-                className={`w-5 h-5 ${i < Math.floor(rating) ? 'text-yellow-400' : 'text-gray-200'} fill-current`} 
-                viewBox="0 0 20 20"
-              >
-                <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/>
-              </svg>
-            ))}
+            {renderStars(rating)}
           </div>
           <span className="text-sm text-steel-gray">({reviewCount})</span>
         </div>

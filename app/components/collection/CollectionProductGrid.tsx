@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { Product } from '@/lib/woocommerce';
 import { useCart } from '@/app/contexts/CartContextStoreAPI';
 import { useToast } from '@/app/contexts/ToastContext';
+import { getProductReviewSummary } from '@/lib/reviewGenerator';
 
 interface CollectionProductGridProps {
   products: Product[];
@@ -31,16 +32,34 @@ export default function CollectionProductGrid({
     return Math.round(((regular - sale) / regular) * 100);
   };
 
-  const renderStars = (rating: number = 0) => {
+  const renderStars = (rating: number, productId: number) => {
+    const fullStars = Math.floor(rating);
+    const partialFill = (rating - fullStars) * 100;
+
     return (
       <div className="flex">
-        {[1, 2, 3, 4, 5].map((star) => (
+        {[...Array(5)].map((_, i) => (
           <svg
-            key={star}
-            className={`w-3.5 h-3.5 ${star <= rating ? 'text-[#FAD14C]' : 'text-gray-300'} fill-current`}
+            key={`star-${productId}-${i}`}
+            className="w-3.5 h-3.5 inline-block"
             viewBox="0 0 20 20"
           >
-            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+            <defs>
+              {i === fullStars && partialFill > 0 && (
+                <linearGradient id={`star-gradient-collection-${productId}-${i}`} x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset={`${partialFill}%`} stopColor="#FAD14C" />
+                  <stop offset={`${partialFill}%`} stopColor="#D1D5DB" />
+                </linearGradient>
+              )}
+            </defs>
+            <path
+              d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"
+              fill={
+                i < fullStars ? '#FAD14C' :
+                i === fullStars && partialFill > 0 ? `url(#star-gradient-collection-${productId}-${i})` :
+                '#D1D5DB'
+              }
+            />
           </svg>
         ))}
       </div>
@@ -120,12 +139,17 @@ export default function CollectionProductGrid({
                   </Link>
 
                   {/* Rating */}
-                  <div className="flex items-center gap-1 mb-2">
-                    {renderStars(0)}
-                    <span className="text-xs text-gray-500">
-                      ({Math.floor(Math.random() * 50) + 10})
-                    </span>
-                  </div>
+                  {(() => {
+                    const reviewData = getProductReviewSummary(product.id);
+                    return (
+                      <div className="flex items-center gap-1 mb-2">
+                        {renderStars(reviewData.rating, product.id)}
+                        <span className="text-xs text-gray-500">
+                          ({reviewData.count})
+                        </span>
+                      </div>
+                    );
+                  })()}
 
                   {/* Price and Cart Button */}
                   <div className="flex items-center justify-between">
