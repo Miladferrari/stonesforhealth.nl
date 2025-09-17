@@ -6,6 +6,7 @@ import Image from 'next/image';
 import dynamic from 'next/dynamic';
 import { useCart } from '../../contexts/CartContextStoreAPI';
 import CouponInput from '../../components/CouponInput';
+import TrustpilotWidget from '../../components/TrustpilotWidget';
 
 // Import type for the ref handle
 import type { StripePaymentFormHandle } from '@/app/components/StripePaymentForm';
@@ -1386,8 +1387,12 @@ export default function UnifiedCheckoutPage() {
               {/* Trust Icons Section */}
               <div className="pb-6">
                 <div className="border-t border-[#e5e7eb] pt-6">
+                  {/* Trustpilot Widget */}
+                  <div className="mb-4">
+                    <TrustpilotWidget />
+                  </div>
                   <h4 className="text-base font-medium text-black mb-4 text-left uppercase tracking-wider font-[family-name:var(--font-eb-garamond)]">
-                    WAAROM MEER DAN 10.000 KLANTEN VOOR STONESFORHEALTH KOZEN
+                    WAAROM MEER DAN 4.278 KLANTEN VOOR STONESFORHEALTH KOZEN
                   </h4>
                   <div className="space-y-4">
                     {/* 30 Days Return */}

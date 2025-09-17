@@ -4,6 +4,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { memo, useEffect, useState } from 'react';
 import { usePathname } from 'next/navigation';
+import TrustpilotWidget from './TrustpilotWidget';
 
 interface Category {
   id: number;
@@ -136,6 +137,10 @@ const Footer = memo(function Footer() {
                   Vertrouwd door <span className="font-bold text-[#492c4a]">3000+</span> klanten
                 </span>
               </div>
+            </div>
+            {/* Trustpilot Widget */}
+            <div className="mt-8 flex justify-center md:justify-start">
+              <TrustpilotWidget />
             </div>
           </div>
 

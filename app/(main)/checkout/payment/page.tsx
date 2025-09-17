@@ -4,6 +4,7 @@ import { useEffect, useState, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Image from 'next/image';
 import { useCart } from '@/app/contexts/CartContextStoreAPI';
+import TrustpilotWidget from '@/app/components/TrustpilotWidget';
 import dynamic from 'next/dynamic';
 
 // Dynamically import payment form to avoid SSR issues
@@ -300,7 +301,7 @@ function PaymentPageContent() {
 
         <div className="relative max-w-7xl mx-auto w-full flex flex-col lg:flex-row min-h-screen px-4 sm:px-6 lg:px-8">
           {/* Main payment form - left side */}
-          <div className="flex-1 lg:flex-initial lg:w-2/3 py-8 pr-0 lg:pr-8 bg-[#f9fafb]">
+          <div className="flex-1 lg:flex-initial lg:w-3/5 py-8 pr-0 lg:pr-8 bg-[#f9fafb]">
           {/* Back button and Progress indicator */}
           <div className="mb-8">
             <button
@@ -548,7 +549,7 @@ function PaymentPageContent() {
           </div>
 
           {/* Order summary - right side (desktop) */}
-          <div className="hidden lg:block lg:w-1/3 bg-gray-100">
+          <div className="hidden lg:block lg:w-2/5 bg-gray-100">
             <div className="sticky top-0 h-screen overflow-y-auto py-8 pl-8 pr-8 bg-gray-100">
           {/* Trust banner */}
           <div className="mb-4">
@@ -701,8 +702,12 @@ function PaymentPageContent() {
           {/* Why choose us section */}
           <div className="pb-6">
             <div className="border-t border-[#e5e7eb] pt-6">
+              {/* Trustpilot Widget */}
+              <div className="mb-4">
+                <TrustpilotWidget />
+              </div>
               <h4 className="text-base font-medium text-black mb-4 text-left uppercase tracking-wider font-[family-name:var(--font-eb-garamond)]">
-                WAAROM MEER DAN 10.000 KLANTEN VOOR STONESFORHEALTH KOZEN
+                WAAROM MEER DAN 4.278 KLANTEN VOOR STONESFORHEALTH KOZEN
               </h4>
               <div className="space-y-4">
                 <div className="flex items-start gap-3">

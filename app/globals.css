@@ -7,6 +7,34 @@ html {
   background-color: #ffffff;
 }
 
+/* Material Icons sizing fix */
+.material-icons-outlined {
+  font-size: inherit;
+  width: auto;
+  height: auto;
+  line-height: 1;
+  vertical-align: middle;
+  display: inline-block;
+}
+
+/* Specific icon sizes for different contexts */
+.button-cart-icon {
+  font-size: 20px !important;
+}
+
+/* Ensure icons in specific components have proper sizes */
+.material-icons-outlined.text-xs {
+  font-size: 12px !important;
+}
+
+.material-icons-outlined.text-sm {
+  font-size: 14px !important;
+}
+
+.material-icons-outlined.text-lg {
+  font-size: 18px !important;
+}
+
 /* Star Parallax Animations */
 @keyframes star-parallax-1 {
   0% {
