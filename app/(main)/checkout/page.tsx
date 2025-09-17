@@ -918,7 +918,9 @@ export default function UnifiedCheckoutPage() {
                 ) : shipping.rates.length > 0 ? (
                   <>
                     <div className="space-y-3">
-                      {shipping.rates.map((rate) => (
+                      {shipping.rates
+                        .sort((a, b) => parseFloat(a.cost) - parseFloat(b.cost))
+                        .map((rate) => (
                         <label
                           key={rate.method_id}
                           className={`block p-4 border rounded-lg cursor-pointer transition-all ${
