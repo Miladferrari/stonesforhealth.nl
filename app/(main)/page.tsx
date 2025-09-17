@@ -301,6 +301,70 @@ export default async function Home() {
         </div>
       </section>
 
+      {/* Customer Reviews Slider */}
+      <section className="py-16 bg-[#f7f3ec]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h2 className="text-3xl lg:text-4xl font-bold text-[#492c4a] text-center mb-10 font-[family-name:var(--font-eb-garamond)]">
+            Klanten zijn dol op onze edelstenen!
+          </h2>
+
+          {/* Floating review images - Infinite scroll */}
+          <div className="relative overflow-hidden">
+            <div className="flex gap-4 animate-scroll">
+              <div className="w-56 h-80 flex-shrink-0">
+                <img alt="Klant met edelsteen" className="w-full h-full object-cover rounded-lg" src="/review1.png" />
+              </div>
+              <div className="w-56 h-80 flex-shrink-0">
+                <img alt="Kristallen collectie" className="w-full h-full object-cover rounded-lg" src="/review2.png" />
+              </div>
+              <div className="w-56 h-80 flex-shrink-0">
+                <img alt="Healing stenen" className="w-full h-full object-cover rounded-lg" src="/review3.png" />
+              </div>
+              <div className="w-56 h-80 flex-shrink-0">
+                <img alt="Meditatie met kristallen" className="w-full h-full object-cover rounded-lg" src="/review4.png" />
+              </div>
+              <div className="w-56 h-80 flex-shrink-0">
+                <img alt="Chakra stenen" className="w-full h-full object-cover rounded-lg" src="/review5.png" />
+              </div>
+              <div className="w-56 h-80 flex-shrink-0">
+                <img alt="Edelsteen sieraden" className="w-full h-full object-cover rounded-lg" src="/review6.png" />
+              </div>
+              <div className="w-56 h-80 flex-shrink-0">
+                <img alt="Kristallen energie" className="w-full h-full object-cover rounded-lg" src="/review7.png" />
+              </div>
+              <div className="w-56 h-80 flex-shrink-0">
+                <img alt="Healing kristallen" className="w-full h-full object-cover rounded-lg" src="/review8.png" />
+              </div>
+              {/* Duplicate set for seamless loop */}
+              <div className="w-56 h-80 flex-shrink-0">
+                <img alt="Klant met edelsteen" className="w-full h-full object-cover rounded-lg" src="/review1.png" />
+              </div>
+              <div className="w-56 h-80 flex-shrink-0">
+                <img alt="Kristallen collectie" className="w-full h-full object-cover rounded-lg" src="/review2.png" />
+              </div>
+              <div className="w-56 h-80 flex-shrink-0">
+                <img alt="Healing stenen" className="w-full h-full object-cover rounded-lg" src="/review3.png" />
+              </div>
+              <div className="w-56 h-80 flex-shrink-0">
+                <img alt="Meditatie met kristallen" className="w-full h-full object-cover rounded-lg" src="/review4.png" />
+              </div>
+              <div className="w-56 h-80 flex-shrink-0">
+                <img alt="Chakra stenen" className="w-full h-full object-cover rounded-lg" src="/review5.png" />
+              </div>
+              <div className="w-56 h-80 flex-shrink-0">
+                <img alt="Edelsteen sieraden" className="w-full h-full object-cover rounded-lg" src="/review6.png" />
+              </div>
+              <div className="w-56 h-80 flex-shrink-0">
+                <img alt="Kristallen energie" className="w-full h-full object-cover rounded-lg" src="/review7.png" />
+              </div>
+              <div className="w-56 h-80 flex-shrink-0">
+                <img alt="Healing kristallen" className="w-full h-full object-cover rounded-lg" src="/review8.png" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Wave Transition */}
       <div className="relative -mt-8 pointer-events-none">
         <svg viewBox="0 0 1440 80" fill="none" className="w-full h-20">

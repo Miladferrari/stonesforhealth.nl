@@ -485,6 +485,10 @@ main {
   animation: scroll-right 20s linear infinite;
 }
 
+.animate-scroll {
+  animation: scroll-left 30s linear infinite;
+}
+
 .scrollbar-hide {
   -ms-overflow-style: none;
   scrollbar-width: none;
