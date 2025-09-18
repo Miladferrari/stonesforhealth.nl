@@ -520,7 +520,7 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
             {/* Product title */}
             <div>
               <h1 className="text-4xl font-bold text-gray-900 mb-3 font-[family-name:var(--font-eb-garamond)]">
-                {product.name} - Authentieke Edelsteen
+                {product.name}
               </h1>
 
               {/* Star rating + review count with dropdown - Compact Hike Style */}
@@ -982,7 +982,7 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
             {/* Feature 1 - Authentic Stone */}
             <div className="flex flex-col">
               <div className="flex items-center justify-center mb-2">
-                <img src="/usp4.svg" alt="Bescherming" className="w-24 h-24 md:w-32 md:h-32" />
+                <img src="/usp4.svg" alt="Bescherming" className="w-28 h-28 md:w-36 md:h-36" />
               </div>
               <div className="text-center px-1 md:px-2">
                 <h3 className="text-base md:text-lg font-bold text-gray-900 mb-1 md:mb-1.5 font-[family-name:var(--font-eb-garamond)]">Authentieke Natuursteen</h3>
@@ -993,7 +993,7 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
             {/* Feature 2 - Energetic Power */}
             <div className="flex flex-col">
               <div className="flex items-center justify-center mb-2">
-                <img src="/usp3.svg" alt="Energie" className="w-24 h-24 md:w-32 md:h-32" />
+                <img src="/usp3.svg" alt="Energie" className="w-28 h-28 md:w-36 md:h-36" />
               </div>
               <div className="text-center px-1 md:px-2">
                 <h3 className="text-base md:text-lg font-bold text-gray-900 mb-1 md:mb-1.5 font-[family-name:var(--font-eb-garamond)]">Energetische Kracht</h3>
@@ -1004,7 +1004,7 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
             {/* Feature 3 - Spiritual Healing */}
             <div className="flex flex-col">
               <div className="flex items-center justify-center mb-2">
-                <img src="/usp2.svg" alt="Liefde" className="w-24 h-24 md:w-32 md:h-32" />
+                <img src="/usp2.svg" alt="Liefde" className="w-28 h-28 md:w-36 md:h-36" />
               </div>
               <div className="text-center px-1 md:px-2">
                 <h3 className="text-base md:text-lg font-bold text-gray-900 mb-1 md:mb-1.5 font-[family-name:var(--font-eb-garamond)]">Spirituele Helende Kracht</h3>
@@ -1015,7 +1015,7 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
             {/* Feature 4 - Ethically Sourced */}
             <div className="flex flex-col">
               <div className="flex items-center justify-center mb-2">
-                <img src="/usp1.svg" alt="Kwaliteit" className="w-24 h-24 md:w-32 md:h-32" />
+                <img src="/usp1.svg" alt="Kwaliteit" className="w-28 h-28 md:w-36 md:h-36" />
               </div>
               <div className="text-center px-1 md:px-2">
                 <h3 className="text-base md:text-lg font-bold text-gray-900 mb-1 md:mb-1.5 font-[family-name:var(--font-eb-garamond)]">Ethisch Gewonnen</h3>
@@ -1181,16 +1181,12 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
 
             {/* Left: Image/Video */}
             <div className="order-2 md:order-1">
-              <div className="aspect-square overflow-hidden rounded-lg bg-gray-200">
-                {images[0] && (
-                  <Image
-                    src={images[0].src}
-                    alt={`${product.name}`}
-                    width={600}
-                    height={600}
-                    className="w-full h-full object-cover"
-                  />
-                )}
+              <div className="aspect-square overflow-hidden rounded-lg bg-[#f7f3ec]">
+                <img
+                  src="/image1.png"
+                  alt="Stones for Health - Natuurlijke edelstenen en kristallen"
+                  className="w-full h-full object-cover"
+                />
               </div>
             </div>
 
@@ -1242,15 +1238,11 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
             {/* Right: Product image */}
             <div className="order-2 md:order-2">
               <div className="aspect-square overflow-hidden rounded-lg bg-gray-200">
-                {images[1] || images[0] ? (
-                  <Image
-                    src={(images[1] || images[0]).src}
-                    alt={`${product.name}`}
-                    width={600}
-                    height={600}
-                    className="w-full h-full object-cover"
-                  />
-                ) : null}
+                <img
+                  src="/image2.png"
+                  alt="Stones for Health - Kristallen collectie"
+                  className="w-full h-full object-cover"
+                />
               </div>
             </div>
           </div>
