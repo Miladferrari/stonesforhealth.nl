@@ -981,13 +981,8 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
 
             {/* Feature 1 - Authentic Stone */}
             <div className="flex flex-col">
-              <div className="aspect-square mb-2 overflow-hidden rounded-lg bg-[#faf8f4]">
-                <div className="w-full h-full flex items-center justify-center p-4 md:p-6">
-                  <svg className="w-14 h-14 md:w-20 md:h-20 text-[#492c4a]" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M12 2L2 7v10c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V7l-10-5zm0 2.18l7 3.5V17c0 4.52-2.98 8.69-7 9.93-4.02-1.24-7-5.41-7-9.93V7.68l7-3.5zM10 12l-3 3 1.41 1.41L10 14.83l3.59 3.58L15 17l-5-5z"/>
-                    <circle cx="12" cy="10" r="1.5"/>
-                  </svg>
-                </div>
+              <div className="flex items-center justify-center mb-2">
+                <img src="/usp4.svg" alt="Bescherming" className="w-24 h-24 md:w-32 md:h-32" />
               </div>
               <div className="text-center px-1 md:px-2">
                 <h3 className="text-base md:text-lg font-bold text-gray-900 mb-1 md:mb-1.5 font-[family-name:var(--font-eb-garamond)]">Authentieke Natuursteen</h3>
@@ -997,14 +992,8 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
 
             {/* Feature 2 - Energetic Power */}
             <div className="flex flex-col">
-              <div className="aspect-square mb-2 overflow-hidden rounded-lg bg-[#faf8f4]">
-                <div className="w-full h-full flex items-center justify-center p-4 md:p-6">
-                  <svg className="w-14 h-14 md:w-20 md:h-20 text-[#492c4a]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/>
-                    <circle cx="12" cy="12" r="10" strokeWidth="1" opacity="0.3"/>
-                    <circle cx="12" cy="12" r="7" strokeWidth="1" opacity="0.5"/>
-                  </svg>
-                </div>
+              <div className="flex items-center justify-center mb-2">
+                <img src="/usp3.svg" alt="Energie" className="w-24 h-24 md:w-32 md:h-32" />
               </div>
               <div className="text-center px-1 md:px-2">
                 <h3 className="text-base md:text-lg font-bold text-gray-900 mb-1 md:mb-1.5 font-[family-name:var(--font-eb-garamond)]">Energetische Kracht</h3>
@@ -1014,14 +1003,8 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
 
             {/* Feature 3 - Spiritual Healing */}
             <div className="flex flex-col">
-              <div className="aspect-square mb-2 overflow-hidden rounded-lg bg-[#faf8f4]">
-                <div className="w-full h-full flex items-center justify-center p-4 md:p-6">
-                  <svg className="w-14 h-14 md:w-20 md:h-20 text-[#492c4a]" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
-                    <path d="M12 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z" opacity="0.5"/>
-                    <path d="M12 11c-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4-1.79-4-4-4z" opacity="0.3"/>
-                  </svg>
-                </div>
+              <div className="flex items-center justify-center mb-2">
+                <img src="/usp2.svg" alt="Liefde" className="w-24 h-24 md:w-32 md:h-32" />
               </div>
               <div className="text-center px-1 md:px-2">
                 <h3 className="text-base md:text-lg font-bold text-gray-900 mb-1 md:mb-1.5 font-[family-name:var(--font-eb-garamond)]">Spirituele Helende Kracht</h3>
@@ -1031,13 +1014,8 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
 
             {/* Feature 4 - Ethically Sourced */}
             <div className="flex flex-col">
-              <div className="aspect-square mb-2 overflow-hidden rounded-lg bg-[#faf8f4]">
-                <div className="w-full h-full flex items-center justify-center p-4 md:p-6">
-                  <svg className="w-14 h-14 md:w-20 md:h-20 text-[#492c4a]" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
-                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z" opacity="0.3"/>
-                  </svg>
-                </div>
+              <div className="flex items-center justify-center mb-2">
+                <img src="/usp1.svg" alt="Kwaliteit" className="w-24 h-24 md:w-32 md:h-32" />
               </div>
               <div className="text-center px-1 md:px-2">
                 <h3 className="text-base md:text-lg font-bold text-gray-900 mb-1 md:mb-1.5 font-[family-name:var(--font-eb-garamond)]">Ethisch Gewonnen</h3>
