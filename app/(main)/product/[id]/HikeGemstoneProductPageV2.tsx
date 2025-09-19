@@ -75,6 +75,7 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
   const [selectedSize, setSelectedSize] = useState('3-5 cm');
   const [selectedBundle, setSelectedBundle] = useState('single');
   const [showReviewDropdown, setShowReviewDropdown] = useState(false);
+  const [activeTab, setActiveTab] = useState('description');
   const [currentReviewIndex, setCurrentReviewIndex] = useState(0);
   const [visibleReviewsCount, setVisibleReviewsCount] = useState(12); // Initially show 3 rows (12 reviews on desktop, 4 cols x 3 rows)
   const headerRef = useRef<HTMLDivElement>(null);
@@ -277,9 +278,9 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
     }
   };
 
-  const images = product.images?.length > 0 ? product.images : [
-    { src: '/placeholder.jpg', alt: product.name }
-  ];
+  // Check if product has images
+  const hasImages = product.images && product.images.length > 0;
+  const images = hasImages ? product.images : [];
 
   // Create array with actual images and placeholders for empty slots
   const thumbnailSlots = Array(6).fill(null).map((_, index) => {
@@ -431,14 +432,14 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
       </div>
 
       {/* 2. MAIN PRODUCT SECTION */}
-      <section ref={headerRef} className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 md:pt-24 lg:pt-8 pb-16">
+      <section ref={headerRef} className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 md:pt-24 lg:pt-8 pb-4">
         <div className="grid lg:grid-cols-2 gap-12">
 
           {/* Left: Large product image gallery */}
           <div className="space-y-4">
             {/* Main product image */}
             <div className="aspect-square bg-white rounded-lg overflow-hidden">
-              {images[selectedImage] && (
+              {hasImages && images[selectedImage] ? (
                 <div className="relative w-full h-full group">
                   <Image
                     src={images[selectedImage].src}
@@ -452,6 +453,22 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
                   <div className="absolute bottom-4 right-4 bg-white/90 px-3 py-1 rounded text-sm opacity-0 group-hover:opacity-100 transition-opacity font-[family-name:var(--font-eb-garamond)]">
                     🔍 Zoom
                   </div>
+                </div>
+              ) : (
+                <div className="w-full h-full bg-gray-50 flex items-center justify-center">
+                  <svg
+                    className="w-24 h-24 text-gray-300"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="1.5"
+                      d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+                    />
+                  </svg>
                 </div>
               )}
             </div>
@@ -504,15 +521,25 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
           {/* Right: Product details sidebar */}
           <div className="space-y-6">
             {/* Customer satisfaction banner */}
-            <div className="flex items-center bg-[#ECECEC] p-2.5 rounded-[5px]">
-              <img
-                src="//www.canapuff.com/cdn/shop/files/Canapuff_Happy_Client_2_120x.png?v=1733390721"
-                alt="Order stats image"
-                width="60"
-                height="60"
-                className="object-cover rounded-[5px]"
-              />
-              <div className="text-base md:text-lg ml-[15px] text-gray-700 font-[family-name:var(--font-eb-garamond)]">
+            <div className="flex items-center bg-[#ECECEC] p-3 rounded-lg">
+              <div className="flex -space-x-2">
+                <img
+                  src="https://i.pravatar.cc/150?img=5"
+                  alt="Maria"
+                  className="w-10 h-10 rounded-full border-2 border-white object-cover shadow-sm"
+                />
+                <img
+                  src="https://i.pravatar.cc/150?img=8"
+                  alt="Anna"
+                  className="w-10 h-10 rounded-full border-2 border-white object-cover shadow-sm"
+                />
+                <img
+                  src="https://i.pravatar.cc/150?img=12"
+                  alt="Sophie"
+                  className="w-10 h-10 rounded-full border-2 border-white object-cover shadow-sm"
+                />
+              </div>
+              <div className="text-base md:text-lg ml-4 text-gray-700 font-[family-name:var(--font-eb-garamond)]">
                 Sluit je aan bij 4.278+ tevreden klanten - beoordeeld met 4.4/5
               </div>
             </div>
@@ -970,6 +997,163 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
               )}
             </div>
 
+          </div>
+        </div>
+      </section>
+
+      {/* PRODUCT DESCRIPTION & DETAILS SECTION */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
+        <div className="bg-white rounded-lg shadow-sm border border-gray-100">
+          {/* Tab Navigation */}
+          <div className="border-b border-gray-200">
+            <nav className="flex space-x-8 px-6" aria-label="Product information">
+              <button
+                onClick={() => setActiveTab('description')}
+                className={`py-4 px-1 border-b-2 font-medium text-base transition-colors font-[family-name:var(--font-eb-garamond)] ${
+                  activeTab === 'description'
+                    ? 'border-[#492c4a] text-[#492c4a]'
+                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                }`}
+              >
+                Productbeschrijving
+              </button>
+              <button
+                onClick={() => setActiveTab('details')}
+                className={`py-4 px-1 border-b-2 font-medium text-base transition-colors font-[family-name:var(--font-eb-garamond)] ${
+                  activeTab === 'details'
+                    ? 'border-[#492c4a] text-[#492c4a]'
+                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                }`}
+              >
+                Product Details
+              </button>
+              <button
+                onClick={() => setActiveTab('shipping')}
+                className={`py-4 px-1 border-b-2 font-medium text-base transition-colors font-[family-name:var(--font-eb-garamond)] ${
+                  activeTab === 'shipping'
+                    ? 'border-[#492c4a] text-[#492c4a]'
+                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                }`}
+              >
+                Verzending & Retour
+              </button>
+            </nav>
+          </div>
+
+          {/* Tab Content */}
+          <div className="px-6 py-8">
+            {activeTab === 'description' && (
+              <div className="prose prose-lg max-w-none font-[family-name:var(--font-eb-garamond)]">
+                <h3 className="text-2xl font-bold text-gray-900 mb-4 font-[family-name:var(--font-eb-garamond)]">
+                  Over dit product
+                </h3>
+                {product.description && product.description.trim() !== '' ? (
+                  <div
+                    className="text-gray-700 space-y-4 leading-relaxed"
+                    dangerouslySetInnerHTML={{ __html: product.description }}
+                  />
+                ) : product.short_description && product.short_description.trim() !== '' ? (
+                  <div
+                    className="text-gray-700 space-y-4 leading-relaxed"
+                    dangerouslySetInnerHTML={{ __html: product.short_description }}
+                  />
+                ) : (
+                  <div className="text-gray-500 italic">
+                    <p>
+                      Er is nog geen productbeschrijving beschikbaar voor dit artikel.
+                    </p>
+                    <p className="mt-2 text-sm">
+                      Neem contact met ons op voor meer informatie over dit product.
+                    </p>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {activeTab === 'details' && (
+              <div className="space-y-6">
+                <h3 className="text-2xl font-bold text-gray-900 mb-4 font-[family-name:var(--font-eb-garamond)]">
+                  Product Details
+                </h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="space-y-4">
+                    <div className="flex justify-between py-3 border-b border-gray-200">
+                      <span className="text-gray-600 font-[family-name:var(--font-eb-garamond)]">Product ID</span>
+                      <span className="text-gray-900 font-medium font-[family-name:var(--font-eb-garamond)]">#{product.id}</span>
+                    </div>
+                    <div className="flex justify-between py-3 border-b border-gray-200">
+                      <span className="text-gray-600 font-[family-name:var(--font-eb-garamond)]">SKU</span>
+                      <span className="text-gray-900 font-medium font-[family-name:var(--font-eb-garamond)]">{product.slug}</span>
+                    </div>
+                    <div className="flex justify-between py-3 border-b border-gray-200">
+                      <span className="text-gray-600 font-[family-name:var(--font-eb-garamond)]">Voorraad Status</span>
+                      <span className="text-gray-900 font-medium font-[family-name:var(--font-eb-garamond)]">
+                        {product.stock_status === 'instock' ? 'Op voorraad' : 'Beperkt beschikbaar'}
+                      </span>
+                    </div>
+                  </div>
+                  <div className="space-y-4">
+                    <div className="flex justify-between py-3 border-b border-gray-200">
+                      <span className="text-gray-600 font-[family-name:var(--font-eb-garamond)]">Categorie</span>
+                      <span className="text-gray-900 font-medium font-[family-name:var(--font-eb-garamond)]">
+                        {product.categories && product.categories.length > 0
+                          ? product.categories.map(cat => cat.name).join(', ')
+                          : 'Edelstenen'}
+                      </span>
+                    </div>
+                    <div className="flex justify-between py-3 border-b border-gray-200">
+                      <span className="text-gray-600 font-[family-name:var(--font-eb-garamond)]">Gewicht</span>
+                      <span className="text-gray-900 font-medium font-[family-name:var(--font-eb-garamond)]">Varieert per steen</span>
+                    </div>
+                    <div className="flex justify-between py-3 border-b border-gray-200">
+                      <span className="text-gray-600 font-[family-name:var(--font-eb-garamond)]">Herkomst</span>
+                      <span className="text-gray-900 font-medium font-[family-name:var(--font-eb-garamond)]">Natuurlijk gewonnen</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {activeTab === 'shipping' && (
+              <div className="space-y-6">
+                <h3 className="text-2xl font-bold text-gray-900 mb-4 font-[family-name:var(--font-eb-garamond)]">
+                  Verzending & Retour
+                </h3>
+                <div className="space-y-4 text-gray-700 font-[family-name:var(--font-eb-garamond)]">
+                  <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+                    <h4 className="font-semibold text-green-900 mb-2">✓ Gratis verzending</h4>
+                    <p>Bij bestellingen boven €50 binnen Nederland</p>
+                  </div>
+
+                  <div>
+                    <h4 className="font-semibold text-gray-900 mb-2">Verzendtijden</h4>
+                    <ul className="list-disc list-inside space-y-1 ml-4">
+                      <li>Nederland: 1-2 werkdagen</li>
+                      <li>België: 2-3 werkdagen</li>
+                      <li>Duitsland: 3-4 werkdagen</li>
+                      <li>Rest van Europa: 4-7 werkdagen</li>
+                    </ul>
+                  </div>
+
+                  <div>
+                    <h4 className="font-semibold text-gray-900 mb-2">Retourbeleid</h4>
+                    <p>
+                      Je hebt 30 dagen bedenktijd vanaf ontvangst van je bestelling.
+                      Producten kunnen alleen geretourneerd worden in originele staat en verpakking.
+                    </p>
+                  </div>
+
+                  <div>
+                    <h4 className="font-semibold text-gray-900 mb-2">Verpakking</h4>
+                    <p>
+                      Al onze producten worden zorgvuldig verpakt in milieuvriendelijke materialen
+                      om schade tijdens verzending te voorkomen. Elke bestelling bevat een
+                      informatiekaart over de eigenschappen van je steen.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </section>
