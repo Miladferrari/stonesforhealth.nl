@@ -1130,8 +1130,6 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
                     <ul className="list-disc list-inside space-y-1 ml-4">
                       <li>Nederland: 1-2 werkdagen</li>
                       <li>België: 2-3 werkdagen</li>
-                      <li>Duitsland: 3-4 werkdagen</li>
-                      <li>Rest van Europa: 4-7 werkdagen</li>
                     </ul>
                   </div>
 
