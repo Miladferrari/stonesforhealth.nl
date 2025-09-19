@@ -4,11 +4,13 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useState, memo, useEffect, useRef } from 'react';
 import { useCart } from '../contexts/CartContextStoreAPI';
+import SearchDropdown from './SearchDropdown';
 
 const Header = memo(function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [helpDropdownOpen, setHelpDropdownOpen] = useState(false);
   const [shopDropdownOpen, setShopDropdownOpen] = useState(false);
+  const [searchModalOpen, setSearchModalOpen] = useState(false);
   const [categories, setCategories] = useState<any[]>([]);
   const { setIsCartOpen, getTotalItems } = useCart();
 
@@ -49,8 +51,9 @@ const Header = memo(function Header() {
   }, []);
 
   return (
-    <nav className="relative bg-white shadow-sm border-b border-gray-100 z-50 transition-all duration-300 ease-in-out">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <>
+      <nav className="relative bg-white shadow-sm border-b border-gray-100 z-50 transition-all duration-300 ease-in-out">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex h-20 items-center justify-between">
           {/* Logo */}
           <div className="flex items-center">
@@ -197,7 +200,11 @@ const Header = memo(function Header() {
           {/* Right section - Search and Cart */}
           <div className="flex items-center space-x-4">
             {/* Search Icon */}
-            <button className="p-2 text-[#2D2D2D] hover:text-[#8B7355] transition-colors hidden lg:block">
+            <button
+              onClick={() => setSearchModalOpen(!searchModalOpen)}
+              data-search-button
+              className="p-2 text-[#2D2D2D] hover:text-[#8B7355] transition-colors hidden lg:block"
+            >
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-5 h-5">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
               </svg>
@@ -212,6 +219,17 @@ const Header = memo(function Header() {
                 <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 10.5V6a3.75 3.75 0 10-7.5 0v4.5m11.356-1.993l1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 01-1.12-1.243l1.264-12A1.125 1.125 0 015.513 7.5h12.974c.576 0 1.059.435 1.119 1.007zM8.625 10.5a.375.375 0 11-.75 0 .375.375 0 01.75 0zm7.5 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
               </svg>
               <span className="font-light font-[family-name:var(--font-eb-garamond)]">Cart ({getTotalItems()})</span>
+            </button>
+
+            {/* Mobile Search Icon */}
+            <button
+              onClick={() => setSearchModalOpen(!searchModalOpen)}
+              data-search-button
+              className="lg:hidden p-2 text-[#2D2D2D] hover:text-[#8B7355] transition-colors"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-5 h-5">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+              </svg>
             </button>
 
             {/* Mobile menu button */}
@@ -330,7 +348,13 @@ const Header = memo(function Header() {
           </div>
         </div>
       )}
-    </nav>
+        {/* Search Dropdown */}
+        <SearchDropdown
+          isOpen={searchModalOpen}
+          onClose={() => setSearchModalOpen(false)}
+        />
+      </nav>
+    </>
   );
 });
 
