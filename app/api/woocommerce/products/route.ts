@@ -36,10 +36,15 @@ export async function GET(request: NextRequest) {
       params.status = searchParams.get('status');
     }
     
-    // Fetch products from WooCommerce
-    const products = await woocommerce.getProducts(params);
-    
-    return NextResponse.json(products);
+    // Fetch products from WooCommerce with pagination info
+    const result = await woocommerce.getProducts(params);
+
+    // Return response with pagination headers
+    const response = NextResponse.json(result.products);
+    response.headers.set('X-WP-Total', result.total.toString());
+    response.headers.set('X-WP-TotalPages', result.totalPages.toString());
+
+    return response;
   } catch (error: any) {
     console.error('Error fetching products:', error);
     return NextResponse.json(

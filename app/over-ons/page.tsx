@@ -45,7 +45,7 @@ export default function OverOnsPage() {
   return (
     <div className="bg-white">
       {/* Hero Section */}
-      <div className="relative bg-gradient-to-b from-[#f7f3ec] to-white py-16 sm:py-24">
+      <div className="relative bg-gradient-to-b from-[#f7f3ec] to-white py-8 sm:py-12">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
           <div className="mx-auto max-w-2xl text-center">
             <h1 className="text-5xl font-bold tracking-tight text-gray-900 sm:text-6xl font-[family-name:var(--font-eb-garamond)]">
@@ -59,7 +59,7 @@ export default function OverOnsPage() {
       </div>
 
       {/* Story Section */}
-      <div className="mx-auto max-w-7xl px-6 lg:px-8 py-16 sm:py-20">
+      <div className="mx-auto max-w-7xl px-6 lg:px-8 py-8 sm:py-12">
         <div className="mx-auto max-w-4xl">
           <div className="space-y-6 text-lg leading-8 text-gray-700 font-[family-name:var(--font-eb-garamond)]">
             <p className="text-xl font-semibold text-gray-900">
@@ -92,8 +92,45 @@ export default function OverOnsPage() {
         </div>
       </div>
 
+      {/* Partners Section */}
+      <div className="bg-[#f7f3ec] py-8">
+        <div className="mx-auto max-w-7xl px-6 lg:px-8">
+          <div className="mx-auto max-w-4xl">
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-6">
+              <div className="text-center sm:text-left">
+                <p className="text-lg font-semibold text-gray-900 font-[family-name:var(--font-eb-garamond)]">
+                  Officiële verkoop partner van:
+                </p>
+              </div>
+              <div className="flex items-center gap-8">
+                {/* Bol.com Logo */}
+                <div className="bg-white rounded-lg px-6 py-3 flex items-center">
+                  <Image
+                    src="https://cdn.sanity.io/images/qxrxmo3r/over-prd/510e6d75ea3ae45058065da3b7015eb84da40caf-2560x1400.jpg"
+                    alt="Bol.com"
+                    width={80}
+                    height={44}
+                    className="object-contain"
+                  />
+                </div>
+                {/* Amazon Logo */}
+                <div className="bg-white rounded-lg px-6 py-3 flex items-center">
+                  <Image
+                    src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a9/Amazon_logo.svg/1280px-Amazon_logo.svg.png"
+                    alt="Amazon"
+                    width={80}
+                    height={44}
+                    className="object-contain"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       {/* Values Section */}
-      <div className="bg-gradient-to-b from-white to-[#f7f3ec] py-16 sm:py-20">
+      <div className="bg-white py-8 sm:py-12">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
           <div className="mx-auto max-w-2xl text-center mb-16">
             <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl font-[family-name:var(--font-eb-garamond)]">
@@ -122,51 +159,9 @@ export default function OverOnsPage() {
         </div>
       </div>
 
-      {/* Team Section */}
-      <div className="bg-white py-16 sm:py-20">
-        <div className="mx-auto max-w-7xl px-6 lg:px-8">
-          <div className="mx-auto max-w-2xl text-center mb-16">
-            <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl font-[family-name:var(--font-eb-garamond)]">
-              Ons Team
-            </h2>
-            <p className="mt-4 text-lg text-gray-600 font-[family-name:var(--font-eb-garamond)]">
-              Vijf professionals, één passie
-            </p>
-          </div>
-
-          <div className="mx-auto max-w-5xl">
-            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {teamMembers.map((member, index) => (
-                <div key={index} className="group relative bg-gradient-to-b from-[#f7f3ec] to-white rounded-2xl p-6 hover:shadow-lg transition-all">
-                  <div className="flex items-center justify-center w-20 h-20 bg-[#492c4a] rounded-full mx-auto mb-4">
-                    <span className="text-2xl font-bold text-white font-[family-name:var(--font-eb-garamond)]">
-                      {member.name[0]}
-                    </span>
-                  </div>
-                  <h3 className="text-lg font-semibold text-gray-900 text-center font-[family-name:var(--font-eb-garamond)]">
-                    {member.name}
-                  </h3>
-                  <p className="text-sm text-[#492c4a] font-medium text-center mt-1 font-[family-name:var(--font-eb-garamond)]">
-                    {member.role}
-                  </p>
-                  <p className="text-sm text-gray-600 text-center mt-3 font-[family-name:var(--font-eb-garamond)]">
-                    {member.description}
-                  </p>
-                </div>
-              ))}
-            </div>
-
-            <div className="mt-12 text-center">
-              <p className="text-lg text-gray-700 font-[family-name:var(--font-eb-garamond)] max-w-3xl mx-auto">
-                Samen vormen we een hecht team dat elke dag werkt aan één doel: jou de beste kristallen en edelstenen leveren met de service die je verdient. We zijn trots op wat we doen en dat zie je terug in elk pakket dat we versturen.
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
 
       {/* Contact Info Section */}
-      <div className="bg-gradient-to-b from-white to-[#f7f3ec] py-16 sm:py-20">
+      <div className="bg-gradient-to-b from-white to-[#f7f3ec] py-12 sm:py-16">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
           <div className="mx-auto max-w-4xl">
             <div className="bg-white rounded-3xl shadow-xl p-8 sm:p-12">

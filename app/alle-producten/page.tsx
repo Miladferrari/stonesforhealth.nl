@@ -53,13 +53,20 @@ function AlleProductenContent() {
 
         if (Array.isArray(data)) {
           setProducts(data);
-          // Calculate total pages from response headers or default
+          // Get total pages from response headers
           const totalProducts = response.headers.get('X-WP-Total');
-          if (totalProducts) {
+          const totalPagesHeader = response.headers.get('X-WP-TotalPages');
+
+          if (totalPagesHeader) {
+            // Use the total pages directly from header
+            setTotalPages(parseInt(totalPagesHeader));
+          } else if (totalProducts) {
+            // Calculate from total products
             setTotalPages(Math.ceil(parseInt(totalProducts) / PRODUCTS_PER_PAGE));
           } else {
-            // If no header, estimate based on returned products
-            setTotalPages(data.length === PRODUCTS_PER_PAGE ? 3 : 1);
+            // If we got a full page of products, there might be more
+            // Otherwise, this is likely the last page
+            setTotalPages(data.length === PRODUCTS_PER_PAGE ? currentPage + 1 : currentPage);
           }
         } else if (data.products) {
           setProducts(data.products);
@@ -70,14 +77,14 @@ function AlleProductenContent() {
         console.warn('Products API not available, using fallback products');
         // Use fallback products
         setProducts(generateFallbackProducts());
-        setTotalPages(3);
+        setTotalPages(1); // Only show 1 page for fallback
       }
     } catch (error) {
       // Handle error gracefully without alarming console errors
       console.warn('Using fallback products due to API unavailability');
       // Use fallback products
       setProducts(generateFallbackProducts());
-      setTotalPages(3);
+      setTotalPages(1); // Only show 1 page for fallback
     } finally {
       setLoading(false);
     }

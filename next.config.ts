@@ -5,17 +5,25 @@ const nextConfig: NextConfig = {
   images: {
     remotePatterns: [
       {
+        protocol: 'https',
+        hostname: 'wordpress.stonesforhealth.nl',
+        pathname: '/**',
+      },
+      {
         protocol: 'http',
         hostname: 'wordpress.123noodboxen.nl',
         pathname: '/**',
       },
-      // Add your WordPress/WooCommerce domain here
-      // Example for HTTPS:
-      // {
-      //   protocol: 'https',
-      //   hostname: 'your-wordpress-site.com',
-      //   pathname: '/**',
-      // },
+      {
+        protocol: 'https',
+        hostname: 'upload.wikimedia.org',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'cdn.sanity.io',
+        pathname: '/**',
+      },
       // Add other image domains as needed
     ],
     formats: ['image/avif', 'image/webp'],

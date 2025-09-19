@@ -4,10 +4,10 @@ import { woocommerce } from '@/lib/woocommerce';
 export async function GET(request: NextRequest) {
   try {
     const searchParams = request.nextUrl.searchParams;
-    
+
     // Parse query parameters
     const params: any = {};
-    
+
     if (searchParams.get('per_page')) {
       params.per_page = parseInt(searchParams.get('per_page')!);
     }
@@ -26,11 +26,16 @@ export async function GET(request: NextRequest) {
     if (searchParams.get('include')) {
       params.include = searchParams.get('include')!.split(',').map(id => parseInt(id));
     }
-    
-    // Fetch products from WooCommerce
-    const products = await woocommerce.getProducts(params);
-    
-    return NextResponse.json(products);
+
+    // Fetch products from WooCommerce with pagination info
+    const result = await woocommerce.getProducts(params);
+
+    // Return response with pagination headers
+    const response = NextResponse.json(result.products);
+    response.headers.set('X-WP-Total', result.total.toString());
+    response.headers.set('X-WP-TotalPages', result.totalPages.toString());
+
+    return response;
   } catch (error: any) {
     console.error('Error fetching products:', error);
     return NextResponse.json(

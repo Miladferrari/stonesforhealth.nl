@@ -179,6 +179,116 @@ class WooCommerceAPI {
     throw lastError;
   }
 
+  private async fetchAPIWithHeaders<T>(
+    endpoint: string,
+    options?: RequestInit & { useCache?: boolean }
+  ): Promise<{ products: T; total: number; totalPages: number }> {
+    // Caching disabled - always fetch fresh data
+    const timestamp = new Date().toISOString();
+    console.log(
+      `[WooCommerce API] ${timestamp} - Fetching fresh data with headers (no cache)`
+    );
+
+    // Build base URL
+    const baseUrl = `${this.config.baseUrl}/${endpoint}`;
+    let fullUrl: string;
+    let headers: Record<string, string> = {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+      "Cache-Control": "no-cache, no-store, must-revalidate",
+      Pragma: "no-cache",
+    };
+
+    // Check if we need OAuth (HTTP) or can use query params (HTTPS)
+    if (requiresOAuth(this.config.baseUrl)) {
+      console.log(`[WooCommerce API] Using OAuth 1.0a for HTTP connection`);
+      fullUrl = baseUrl;
+
+      // Add OAuth headers
+      const oauthHeaders = createOAuthHeader(
+        fullUrl,
+        options?.method || 'GET',
+        this.config.consumerKey,
+        this.config.consumerSecret
+      );
+
+      headers = { ...headers, ...oauthHeaders };
+    } else {
+      console.log(`[WooCommerce API] Using query parameters for HTTPS connection`);
+      // Add consumer key and secret as query parameters for HTTPS
+      const separator = endpoint.includes("?") ? "&" : "?";
+      const authParams = `${separator}consumer_key=${this.config.consumerKey}&consumer_secret=${this.config.consumerSecret}`;
+      fullUrl = `${baseUrl}${authParams}`;
+    }
+
+    console.log(`[WooCommerce API] Fetching with headers: ${endpoint}`);
+    console.log(
+      `[WooCommerce API] Full URL: ${fullUrl.replace(
+        this.config.consumerSecret,
+        "HIDDEN"
+      )}`
+    );
+
+    try {
+      const response = await fetch(fullUrl, {
+        ...options,
+        headers,
+        mode: "cors",
+        credentials: "omit",
+        next: {
+          revalidate: 0,
+        },
+        cache: "no-store",
+      });
+
+      console.log(`[WooCommerce API] Response status: ${response.status}`);
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        if (response.status === 404) {
+          console.debug(`[WooCommerce API] Resource not found: ${endpoint}`);
+        } else {
+          console.error(`[WooCommerce API] Error: ${response.status} ${response.statusText}`, errorText);
+        }
+
+        // Return empty result with pagination
+        return { products: [] as T, total: 0, totalPages: 0 };
+      }
+
+      // Check if response is JSON
+      const contentType = response.headers.get("content-type");
+      if (!contentType || !contentType.includes("application/json")) {
+        console.warn('[WooCommerce API] Returning empty data due to non-JSON response');
+        return { products: [] as T, total: 0, totalPages: 0 };
+      }
+
+      let data;
+      try {
+        data = await response.json();
+      } catch (jsonError) {
+        console.warn('[WooCommerce API] Failed to parse JSON response, returning empty data');
+        return { products: [] as T, total: 0, totalPages: 0 };
+      }
+
+      // Get pagination headers
+      const total = parseInt(response.headers.get('X-WP-Total') || '0');
+      const totalPages = parseInt(response.headers.get('X-WP-TotalPages') || '0');
+
+      console.log(
+        `[WooCommerce API] Success: Found ${Array.isArray(data) ? data.length : 1} items, Total: ${total}, Pages: ${totalPages}`
+      );
+
+      return {
+        products: data,
+        total: total,
+        totalPages: totalPages
+      };
+    } catch (error: any) {
+      console.error(`[WooCommerce API] Fetch error:`, error);
+      return { products: [] as T, total: 0, totalPages: 0 };
+    }
+  }
+
   private async fetchAPIInternal<T>(
     endpoint: string,
     options?: RequestInit & { useCache?: boolean }
@@ -380,7 +490,7 @@ class WooCommerceAPI {
     order?: "asc" | "desc";
     category?: string;
     include?: number[];
-  }): Promise<Product[]> {
+  }): Promise<{ products: Product[]; total: number; totalPages: number }> {
     const queryParams = new URLSearchParams();
 
     if (params?.per_page)
@@ -397,7 +507,7 @@ class WooCommerceAPI {
     const endpoint = `products${
       queryParams.toString() ? "?" + queryParams.toString() : ""
     }`;
-    return this.fetchAPI<Product[]>(endpoint);
+    return this.fetchAPIWithHeaders<Product[]>(endpoint);
   }
 
   async getProduct(id: number): Promise<Product> {

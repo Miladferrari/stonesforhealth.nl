@@ -22,8 +22,8 @@ export default function BestsellersPage() {
   const fetchBestsellers = async () => {
     setLoading(true);
     try {
-      // Fetch bestselling products - you can sort by popularity or sales
-      const apiUrl = `/api/products?per_page=${PRODUCTS_PER_PAGE}&page=${currentPage}&orderby=popularity&order=desc`;
+      // Fetch products from the bestsellers category (ID: 20)
+      const apiUrl = `/api/products?per_page=${PRODUCTS_PER_PAGE}&page=${currentPage}&category=20`;
 
       const response = await fetch(apiUrl);
 
@@ -32,13 +32,17 @@ export default function BestsellersPage() {
 
         if (Array.isArray(data)) {
           setProducts(data);
-          // Calculate total pages from response headers or default
+          // Get total pages from response headers
           const totalProducts = response.headers.get('X-WP-Total');
-          if (totalProducts) {
+          const totalPagesHeader = response.headers.get('X-WP-TotalPages');
+
+          if (totalPagesHeader) {
+            setTotalPages(parseInt(totalPagesHeader));
+          } else if (totalProducts) {
             setTotalPages(Math.ceil(parseInt(totalProducts) / PRODUCTS_PER_PAGE));
           } else {
-            // If no header, estimate based on returned products
-            setTotalPages(data.length === PRODUCTS_PER_PAGE ? 2 : 1);
+            // If no products in category, show just current page
+            setTotalPages(data.length > 0 ? 1 : 0);
           }
         } else if (data.products) {
           setProducts(data.products);
@@ -130,6 +134,19 @@ export default function BestsellersPage() {
       {loading ? (
         <div className="flex items-center justify-center py-20">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#492c4a]"></div>
+        </div>
+      ) : products.length === 0 ? (
+        <div className="flex flex-col items-center justify-center py-20 px-4">
+          <h2 className="text-2xl font-bold text-gray-900 mb-4 font-[family-name:var(--font-eb-garamond)]">
+            Nog geen bestsellers beschikbaar
+          </h2>
+          <p className="text-gray-600 text-center max-w-md mb-8 font-[family-name:var(--font-eb-garamond)]">
+            We zijn druk bezig met het toevoegen van onze meest populaire producten aan deze categorie.
+            Bekijk ondertussen onze andere collecties!
+          </p>
+          <a href="/alle-producten" className="px-8 py-3 bg-[#492c4a] text-white rounded-lg hover:bg-[#3a2339] transition-colors">
+            Bekijk alle producten
+          </a>
         </div>
       ) : (
         <>

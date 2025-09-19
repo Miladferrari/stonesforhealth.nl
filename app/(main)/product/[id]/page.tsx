@@ -30,13 +30,13 @@ export default async function ProductPage({ params }: ProductPageProps) {
     // Fetch best-selling products for "Vaak samen gekocht" section
     let bestSellingProducts: any[] = [];
     try {
-      const allBestSellingProducts = await woocommerce.getProducts({
+      const result = await woocommerce.getProducts({
         per_page: 5,
         orderby: 'popularity',
         order: 'desc'
       });
       // Filter out the current product and take only 4
-      bestSellingProducts = allBestSellingProducts
+      bestSellingProducts = result.products
         .filter((p: any) => p.id !== product.id)
         .slice(0, 4);
     } catch (error) {
