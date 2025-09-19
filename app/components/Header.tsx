@@ -98,7 +98,8 @@ const Header = memo(function Header() {
 
               {shopDropdownOpen && (
                 <div
-                  className="absolute top-full left-0 mt-1 w-64 bg-white rounded-lg shadow-lg border border-gray-100 py-2 z-50"
+                  className="absolute left-0 w-[500px] bg-white shadow-xl border border-gray-100 rounded-lg z-50 p-4"
+                  style={{ top: 'calc(100% + 32px)' }}
                   onMouseEnter={() => {
                     if (shopDropdownTimeout.current) {
                       clearTimeout(shopDropdownTimeout.current);
@@ -111,23 +112,29 @@ const Header = memo(function Header() {
                     }, 300);
                   }}
                 >
-                  <Link
-                    href="/alle-producten"
-                    className="block px-4 py-2 text-lg text-[#2D2D2D] hover:bg-gray-50 hover:text-[#3b223b] transition-colors font-[family-name:var(--font-eb-garamond)] border-b border-gray-100"
-                    onClick={() => setShopDropdownOpen(false)}
-                  >
-                    Alle Producten
-                  </Link>
-                  {categories.map((category) => (
+                  <div className="grid grid-cols-2 gap-2">
                     <Link
-                      key={category.id}
-                      href={category.slug === 'bestsellers' ? '/bestsellers' : `/alle-producten?category=${category.slug}`}
-                      className="block px-4 py-2 text-lg text-[#2D2D2D] hover:bg-gray-50 hover:text-[#3b223b] transition-colors font-[family-name:var(--font-eb-garamond)]"
+                      href="/alle-producten"
+                      className="px-4 py-3 text-[#2D2D2D] hover:bg-gray-50 hover:text-[#3b223b] transition-colors font-[family-name:var(--font-eb-garamond)] rounded-md"
                       onClick={() => setShopDropdownOpen(false)}
                     >
-                      {category.name}
+                      <div className="font-medium">Alle Producten</div>
+                      <div className="text-sm text-gray-500 mt-0.5">Bekijk alles</div>
                     </Link>
-                  ))}
+                    {categories.map((category) => (
+                      <Link
+                        key={category.id}
+                        href={category.slug === 'bestsellers' ? '/bestsellers' : `/alle-producten?category=${category.slug}`}
+                        className="px-4 py-3 text-[#2D2D2D] hover:bg-gray-50 hover:text-[#3b223b] transition-colors font-[family-name:var(--font-eb-garamond)] rounded-md"
+                        onClick={() => setShopDropdownOpen(false)}
+                      >
+                        <div className="font-medium">{category.name}</div>
+                        {category.count && (
+                          <div className="text-sm text-gray-500 mt-0.5">{category.count} producten</div>
+                        )}
+                      </Link>
+                    ))}
+                  </div>
                 </div>
               )}
             </div>
@@ -161,7 +168,8 @@ const Header = memo(function Header() {
 
               {helpDropdownOpen && (
                 <div
-                  className="absolute top-full left-0 mt-1 w-56 bg-white rounded-lg shadow-lg border border-gray-100 py-2 z-50"
+                  className="absolute left-0 w-56 bg-white shadow-xl border border-gray-100 rounded-lg z-50 py-2"
+                  style={{ top: 'calc(100% + 32px)' }}
                   onMouseEnter={() => {
                     if (helpDropdownTimeout.current) {
                       clearTimeout(helpDropdownTimeout.current);
