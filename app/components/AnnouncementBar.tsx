@@ -7,7 +7,7 @@ export default function AnnouncementBar() {
           <svg className="w-4 h-4 text-white/90" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
           </svg>
-          <span className="text-xs font-light tracking-wide font-[family-name:var(--font-eb-garamond)]">Gratis verzending vanaf €50</span>
+          <span className="text-xs font-light tracking-wide font-[family-name:var(--font-eb-garamond)]">Verzending in Nederland en België</span>
         </div>
       </div>
 
@@ -18,7 +18,7 @@ export default function AnnouncementBar() {
           <svg className="w-4 h-4 text-white/90" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
           </svg>
-          <span className="text-sm font-light tracking-wide font-[family-name:var(--font-eb-garamond)]">Gratis verzending vanaf €50</span>
+          <span className="text-sm font-light tracking-wide font-[family-name:var(--font-eb-garamond)]">Verzending in Nederland en België</span>
         </div>
 
         <span className="text-white/30">•</span>
