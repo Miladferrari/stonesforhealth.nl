@@ -142,10 +142,10 @@ export async function POST(request: NextRequest) {
         if (orderId) {
           console.log(`Processing successful payment for order ${orderId}`);
           
-          // Update order status to completed (payment successful)
+          // Update order status to processing (payment successful, awaiting fulfillment)
           await updateOrderStatus(
             orderId,
-            'completed',
+            'processing',
             paymentIntent.id
           );
           
@@ -191,7 +191,7 @@ export async function POST(request: NextRequest) {
           // Update with charge ID (this provides additional payment reference)
           await updateOrderStatus(
             chargeOrderId,
-            'completed',
+            'processing',
             charge.id
           );
         }

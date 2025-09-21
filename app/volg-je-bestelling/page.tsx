@@ -150,7 +150,7 @@ export default function TrackOrderPage() {
                   onChange={(e) => setEmail(e.target.value)}
                   required
                   placeholder="jouw@email.nl"
-                  className="w-full px-4 py-2.5 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-amber-orange focus:border-transparent transition-all font-[family-name:var(--font-eb-garamond)]"
+                  className="w-full px-4 py-2.5 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-amber-orange focus:border-transparent transition-all font-[family-name:var(--font-eb-garamond)] text-gray-900 bg-white"
                 />
               </div>
 
@@ -165,7 +165,7 @@ export default function TrackOrderPage() {
                   onChange={(e) => setOrderNumber(e.target.value)}
                   required
                   placeholder="12345"
-                  className="w-full px-4 py-2.5 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-amber-orange focus:border-transparent transition-all font-[family-name:var(--font-eb-garamond)]"
+                  className="w-full px-4 py-2.5 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-amber-orange focus:border-transparent transition-all font-[family-name:var(--font-eb-garamond)] text-gray-900 bg-white"
                 />
                 <p className="mt-1 text-sm text-gray-500 font-[family-name:var(--font-eb-garamond)]">
                   Je vindt het bestelnummer in je bevestigingsmail
@@ -409,13 +409,13 @@ export default function TrackOrderPage() {
               {/* Order Summary */}
               <div className="border-t pt-6 mt-6">
                 <div className="space-y-2">
-                  <div className="flex justify-between text-sm">
+                  <div className="flex justify-between text-sm text-gray-900">
                     <span className="text-gray-600 font-[family-name:var(--font-eb-garamond)]">Verzendkosten</span>
                     <span className="font-semibold font-[family-name:var(--font-eb-garamond)]">
                       €{parseFloat(orderData.shipping.total).toFixed(2)}
                     </span>
                   </div>
-                  <div className="flex justify-between text-lg font-bold">
+                  <div className="flex justify-between text-lg font-bold text-gray-900">
                     <span className="font-[family-name:var(--font-eb-garamond)]">Totaal</span>
                     <span className="font-[family-name:var(--font-eb-garamond)]">
                       €{parseFloat(orderData.total).toFixed(2)}
