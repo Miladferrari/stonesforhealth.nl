@@ -13,9 +13,13 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || '', {
 const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET || '';
 
 // WooCommerce API configuration
-const WC_URL = process.env.NEXT_PUBLIC_WORDPRESS_API_URL || '';
-const WC_CONSUMER_KEY = process.env.WC_CONSUMER_KEY || '';
-const WC_CONSUMER_SECRET = process.env.WC_CONSUMER_SECRET || '';
+const WC_URL = process.env.NEXT_PUBLIC_WOOCOMMERCE_URL || process.env.WOOCOMMERCE_URL || '';
+const WC_CONSUMER_KEY = process.env.WOOCOMMERCE_CONSUMER_KEY || '';
+const WC_CONSUMER_SECRET = process.env.WOOCOMMERCE_CONSUMER_SECRET || '';
+
+// Log configuration status (remove in production)
+console.log('[Webhook] WooCommerce URL configured:', WC_URL ? 'Yes' : 'No');
+console.log('[Webhook] WooCommerce credentials configured:', WC_CONSUMER_KEY && WC_CONSUMER_SECRET ? 'Yes' : 'No');
 
 /**
  * Type definition for order status update
@@ -58,8 +62,19 @@ async function updateOrderStatus(
       ];
     }
 
+    // Check if WooCommerce is configured
+    if (!WC_URL || !WC_CONSUMER_KEY || !WC_CONSUMER_SECRET) {
+      console.error('[Webhook] WooCommerce API not configured properly');
+      console.error('[Webhook] WC_URL:', WC_URL ? 'Set' : 'Missing');
+      console.error('[Webhook] WC_CONSUMER_KEY:', WC_CONSUMER_KEY ? 'Set' : 'Missing');
+      console.error('[Webhook] WC_CONSUMER_SECRET:', WC_CONSUMER_SECRET ? 'Set' : 'Missing');
+      throw new Error('WooCommerce API configuration missing');
+    }
+
     // Make authenticated request to WooCommerce
-    const endpoint = `${WC_URL}/wp-json/wc/v3/orders/${orderId}`;
+    const endpoint = `${WC_URL}/orders/${orderId}`;
+    console.log(`[Webhook] Updating order ${orderId} at: ${endpoint}`);
+
     const response = await fetch(endpoint, {
       method: 'PUT',
       headers: {
@@ -75,10 +90,17 @@ async function updateOrderStatus(
     }
 
     const updatedOrder = await response.json();
-    console.log(`Successfully updated order ${orderId} to status: ${status}`);
+    console.log(`[Webhook] Successfully updated order ${orderId} to status: ${status}`);
+    console.log(`[Webhook] Order update response:`, { id: updatedOrder.id, status: updatedOrder.status });
     
   } catch (error) {
-    console.error(`Failed to update order ${orderId} status:`, error);
+    console.error(`[Webhook] Failed to update order ${orderId} status:`, error);
+    console.error(`[Webhook] Error details:`, {
+      orderId,
+      status,
+      wcUrl: WC_URL ? 'configured' : 'missing',
+      credentials: WC_CONSUMER_KEY && WC_CONSUMER_SECRET ? 'configured' : 'missing'
+    });
     // Don't throw - we want to return 200 to Stripe even if WooCommerce update fails
     // This prevents Stripe from retrying the webhook unnecessarily
   }

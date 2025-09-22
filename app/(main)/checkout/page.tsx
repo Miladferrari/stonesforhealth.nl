@@ -95,17 +95,30 @@ export default function UnifiedCheckoutPage() {
       }
     }
 
-    // Restore shipping rate if saved
+    // Restore shipping rate if saved, or select cheapest if not
     const savedShippingRate = sessionStorage.getItem('selectedShippingRate');
-    if (savedShippingRate && shipping.rates.length > 0) {
-      try {
-        const rate = JSON.parse(savedShippingRate);
-        const matchingRate = shipping.rates.find(r => r.method_id === rate.method_id);
-        if (matchingRate) {
-          setSelectedShippingRate(matchingRate);
+    if (shipping.rates.length > 0) {
+      if (savedShippingRate) {
+        try {
+          const rate = JSON.parse(savedShippingRate);
+          const matchingRate = shipping.rates.find(r => r.method_id === rate.method_id);
+          if (matchingRate) {
+            setSelectedShippingRate(matchingRate);
+          } else {
+            // If saved rate doesn't exist anymore, select the cheapest
+            const sortedRates = [...shipping.rates].sort((a, b) => a.cost - b.cost);
+            setSelectedShippingRate(sortedRates[0]);
+          }
+        } catch (error) {
+          console.error('Error restoring shipping rate:', error);
+          // On error, select the cheapest rate
+          const sortedRates = [...shipping.rates].sort((a, b) => a.cost - b.cost);
+          setSelectedShippingRate(sortedRates[0]);
         }
-      } catch (error) {
-        console.error('Error restoring shipping rate:', error);
+      } else if (!shipping.selectedRate) {
+        // No saved rate and no selected rate, select the cheapest
+        const sortedRates = [...shipping.rates].sort((a, b) => a.cost - b.cost);
+        setSelectedShippingRate(sortedRates[0]);
       }
     }
   }, [shipping.rates]);

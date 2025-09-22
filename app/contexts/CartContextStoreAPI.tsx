@@ -300,11 +300,13 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       const data = await response.json();
 
       if (data.rates && data.rates.length > 0) {
+        // Sort rates by cost to find the cheapest
+        const sortedRates = [...data.rates].sort((a, b) => a.cost - b.cost);
         setShipping(prev => ({
           ...prev,
           country,
           rates: data.rates,
-          selectedRate: data.rates[0] || null,
+          selectedRate: sortedRates[0] || null, // Select the cheapest rate
           loading: false
         }));
       } else {
@@ -334,11 +336,13 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       const data = await response.json();
 
       if (data.rates && data.rates.length > 0) {
+        // Sort rates by cost to find the cheapest
+        const sortedRates = [...data.rates].sort((a, b) => a.cost - b.cost);
         setShipping(prev => ({
           ...prev,
           postcode,
           rates: data.rates,
-          selectedRate: data.rates[0] || null,
+          selectedRate: sortedRates[0] || null, // Select the cheapest rate
           loading: false
         }));
       } else {
