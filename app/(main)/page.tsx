@@ -255,7 +255,7 @@ export default async function Home() {
                   className="w-full h-full object-cover rounded-2xl"
                   style={{ aspectRatio: '16/10' }}
                 >
-                  <source src="/banner.mp4" type="video/mp4" />
+                  <source src="/bannerhome.mp4" type="video/mp4" />
                   Je browser ondersteunt geen video.
                 </video>
                 
