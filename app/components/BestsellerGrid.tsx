@@ -68,7 +68,8 @@ export default function BestsellerGrid() {
 
   const fetchProducts = async () => {
     try {
-      const response = await fetch('/api/woocommerce/products?per_page=5');
+      // Fetch from bestsellers category (ID: 20), limited to 5 products
+      const response = await fetch('/api/woocommerce/products?per_page=5&category=20');
       if (response.ok) {
         const data = await response.json();
         // Take maximum 5 products
