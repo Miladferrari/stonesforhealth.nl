@@ -703,21 +703,35 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
                     <path d="M0 9C0 4.02944 4.02944 0 9 0C13.9706 0 18 4.02944 18 9C18 13.9706 13.9706 18 9 18C4.02944 18 0 13.9706 0 9Z" fill="currentColor"></path>
                     <path d="M5 8.8L7.62937 11.6L13 6" stroke="#ffffff" fill="none"></path>
                   </svg>
-                  <span className="text-base md:text-lg text-gray-700 font-[family-name:var(--font-eb-garamond)]">100% Authentiek - Gecertificeerd door experts</span>
+                  <span className="text-base md:text-lg text-gray-700 font-[family-name:var(--font-eb-garamond)]">Gratis verzending vanaf €50 – Binnen Nederland & België</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <svg role="presentation" focusable="false" strokeWidth="2" width="24" height="24" className="text-green-600 flex-shrink-0" style={{ "--icon-height": "24px" } as React.CSSProperties} viewBox="0 0 18 18">
                     <path d="M0 9C0 4.02944 4.02944 0 9 0C13.9706 0 18 4.02944 18 9C18 13.9706 13.9706 18 9 18C4.02944 18 0 13.9706 0 9Z" fill="currentColor"></path>
                     <path d="M5 8.8L7.62937 11.6L13 6" stroke="#ffffff" fill="none"></path>
                   </svg>
-                  <span className="text-base md:text-lg text-gray-700 font-[family-name:var(--font-eb-garamond)]">Energetisch geladen & gereinigd voor optimale werking</span>
+                  <span className="text-base md:text-lg text-gray-700 font-[family-name:var(--font-eb-garamond)]">Voor 19:00 besteld = vandaag verzonden</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <svg role="presentation" focusable="false" strokeWidth="2" width="24" height="24" className="text-green-600 flex-shrink-0" style={{ "--icon-height": "24px" } as React.CSSProperties} viewBox="0 0 18 18">
                     <path d="M0 9C0 4.02944 4.02944 0 9 0C13.9706 0 18 4.02944 18 9C18 13.9706 13.9706 18 9 18C4.02944 18 0 13.9706 0 9Z" fill="currentColor"></path>
                     <path d="M5 8.8L7.62937 11.6L13 6" stroke="#ffffff" fill="none"></path>
                   </svg>
-                  <span className="text-base md:text-lg text-gray-700 font-[family-name:var(--font-eb-garamond)]">Gratis verzending & 30 dagen retourgarantie</span>
+                  <span className="text-base md:text-lg text-gray-700 font-[family-name:var(--font-eb-garamond)]">30 dagen retourrecht – Niet goed, geld terug</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <svg role="presentation" focusable="false" strokeWidth="2" width="24" height="24" className="text-green-600 flex-shrink-0" style={{ "--icon-height": "24px" } as React.CSSProperties} viewBox="0 0 18 18">
+                    <path d="M0 9C0 4.02944 4.02944 0 9 0C13.9706 0 18 4.02944 18 9C18 13.9706 13.9706 18 9 18C4.02944 18 0 13.9706 0 9Z" fill="currentColor"></path>
+                    <path d="M5 8.8L7.62937 11.6L13 6" stroke="#ffffff" fill="none"></path>
+                  </svg>
+                  <span className="text-base md:text-lg text-gray-700 font-[family-name:var(--font-eb-garamond)]">Meer dan 4.000 tevreden klanten</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <svg role="presentation" focusable="false" strokeWidth="2" width="24" height="24" className="text-green-600 flex-shrink-0" style={{ "--icon-height": "24px" } as React.CSSProperties} viewBox="0 0 18 18">
+                    <path d="M0 9C0 4.02944 4.02944 0 9 0C13.9706 0 18 4.02944 18 9C18 13.9706 13.9706 18 9 18C4.02944 18 0 13.9706 0 9Z" fill="currentColor"></path>
+                    <path d="M5 8.8L7.62937 11.6L13 6" stroke="#ffffff" fill="none"></path>
+                  </svg>
+                  <span className="text-base md:text-lg text-gray-700 font-[family-name:var(--font-eb-garamond)]">Veilig & vertrouwd betalen – iDEAL, Bancontact & meer</span>
                 </div>
               </div>
 
@@ -1388,7 +1402,16 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
                       </span>
                     </div>
                     <div>
-                      <p className="text-base md:text-lg font-semibold text-gray-900 leading-tight font-[family-name:var(--font-eb-garamond)]">{review.name.split(' ')[0]} {review.name.split(' ')[1]?.[0]}.</p>
+                      <p className="text-base md:text-lg font-semibold text-gray-900 leading-tight font-[family-name:var(--font-eb-garamond)]">
+                        {(() => {
+                          const nameBeforeComma = review.name.split(',')[0].trim();
+                          const nameParts = nameBeforeComma.split(' ');
+                          if (nameParts.length >= 2) {
+                            return `${nameParts[0]} ${nameParts[1].charAt(0)}.`;
+                          }
+                          return nameParts[0];
+                        })()}
+                      </p>
                       {review.verified && (
                         <div className="flex items-center gap-1 mt-0.5">
                           <svg viewBox="0 0 24 24" aria-label="Geverifieerd" className="w-3.5 h-3.5 text-green-600 fill-current">
