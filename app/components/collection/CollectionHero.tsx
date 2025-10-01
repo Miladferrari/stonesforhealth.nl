@@ -46,8 +46,8 @@ export default function CollectionHero({
           </span>
         </div>
 
-        {/* Mobile Features - Compact Grid */}
-        <div className="md:hidden grid grid-cols-2 gap-1.5 w-full max-w-xs">
+        {/* Mobile Features - Compact Grid - Hidden */}
+        <div className="hidden">
           {features.map((feature, index) => (
             <div key={index} className="bg-white/90 backdrop-blur-sm rounded-lg p-1.5 shadow-md">
               <div className="flex items-center gap-1">
