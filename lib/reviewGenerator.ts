@@ -8,6 +8,11 @@ interface Review {
   date: string;
   verified: boolean;
   text: string;
+  reply?: {
+    author: string;
+    date: string;
+    text: string;
+  };
 }
 
 // Dutch first names for realistic reviews
@@ -84,8 +89,74 @@ const timeAgo = [
   "3 maanden geleden"
 ];
 
+// Custom reviews for specific products (Wierook brander - product ID 3234)
+const customProductReviews: { [key: number]: Review[] } = {
+  3234: [
+    { id: 1, name: "Marieke, 35 jaar", location: "Amsterdam", rating: 5, date: "19 december 2024", verified: true, text: "Prachtige backflow-brander. De rook waterval is rustgevend om naar te kijken. Snelle levering en goed verpakt." },
+    { id: 2, name: "Ahmed, 39 jaar", location: "Rotterdam", rating: 5, date: "23 december 2024", verified: true, text: "Mooi product, precies wat ik zocht. Gebruik hem elke avond in de woonkamer. Geeft echt sfeer en ontspanning. Ook stevig materiaal, voelt niet goedkoop aan." },
+    { id: 3, name: "Sanne, 33 jaar", location: "Utrecht", rating: 5, date: "28 december 2024", verified: true, text: "Eerlijk gezegd had ik niet verwacht dat het zo'n mooi effect zou hebben. De rook valt echt naar beneden, heel bijzonder om te zien. En de levering was netjes binnen 2 dagen." },
+    { id: 4, name: "Peter, 38 jaar", location: "Eindhoven", rating: 4, date: "6 januari 2025", verified: true, text: "Goede prijs/kwaliteit. Soms moet ik even prutsen met het kegeltje om de rook mooi te laten stromen. Verder gewoon tevreden." },
+    { id: 5, name: "Judith, 40 jaar", location: "Den Haag", rating: 4, date: "15 januari 2025", verified: true, text: "Mooi ding, werkt goed. Alleen de kleur was net wat anders dan op de foto, wat lichter. Niet storend, maar daarom geen 5 sterren." },
+    { id: 6, name: "Tom, 36 jaar", location: "Groningen", rating: 5, date: "22 januari 2025", verified: true, text: "Superblij mee! Staat prachtig in mijn meditatiehoek. Tip: gebruik kleinere kegeltjes, dan loopt de rook mooier naar beneden." },
+    { id: 7, name: "Lotte, 34 jaar", location: "Breda", rating: 5, date: "1 februari 2025", verified: true, text: "Fantastisch product, geeft direct sfeer in huis. Ook netjes verpakt ontvangen, niks beschadigd." },
+    { id: 8, name: "Bas, 45 jaar", location: "Nijmegen", rating: 4, date: "7 februari 2025", verified: true, text: "Werkt prima. Soms moet ik het kegeltje opnieuw aansteken, maar dat ligt misschien meer aan de wierook dan aan de brander zelf." },
+    { id: 9, name: "Farida, 31 jaar", location: "Tilburg", rating: 5, date: "14 februari 2025", verified: true, text: "Echt een aanrader. Heel stijlvol in de woonkamer en de rookval is subtiel maar mooi. Klantenservice reageerde ook snel op mijn vraag." },
+    { id: 10, name: "Mark, 43 jaar", location: "Arnhem", rating: 5, date: "20 februari 2025", verified: true, text: "Precies zoals omschreven. De steen is stevig en ziet er luxe uit. Gebruik hem nu bijna dagelijks, heel tevreden." },
+    { id: 11, name: "Ellen, 37 jaar", location: "Almere", rating: 3, date: "26 februari 2025", verified: true, text: "Leuk idee, maar soms werkt het bij mij niet goed. Rook trekt omhoog in plaats van naar beneden. Misschien verkeerd soort kegels gebruikt? Verder prima levering." },
+    { id: 12, name: "Mehmet, 41 jaar", location: "Haarlem", rating: 3, date: "3 maart 2025", verified: true, text: "Het design vind ik prachtig, maar de rook valt niet altijd netjes. Beetje wisselend resultaat dus. Voor de prijs wel oké." },
+    { id: 13, name: "Ingrid, 39 jaar", location: "Apeldoorn", rating: 5, date: "11 maart 2025", verified: true, text: "Gebruik hem elke avond, geeft veel rust. Levering was snel en netjes. Erg blij mee." },
+    { id: 14, name: "Jeroen, 44 jaar", location: "Enschede", rating: 4, date: "18 maart 2025", verified: true, text: "Mooi product, maar zet hem niet in een tochtige ruimte want dan werkt de rookstroom minder. In een rustige kamer is het echt top." },
+    { id: 15, name: "Anouk, 32 jaar", location: "Leiden", rating: 5, date: "25 maart 2025", verified: true, text: "Heel tevreden! De rookwaterval ziet er prachtig uit, zeker in het donker met kaarslicht erbij." },
+    {
+      id: 16,
+      name: "Rob, 40 jaar",
+      location: "Maastricht",
+      rating: 1,
+      date: "15 oktober 2024",
+      verified: true,
+      text: "5 oktober 2 besteld, maar na 6 dagen nog steeds niks ontvangen, belachelijk. Wanneer krijg ik mijn product wel binnen? Anders wil ik mijn geld terug!!",
+      reply: {
+        author: "Team Stonesforhealth",
+        date: "16 oktober 2024",
+        text: "Beste Rob,\n\nBedankt voor het achterlaten van je review. We vinden het erg jammer dat dit zo is gelopen. Door de enorme drukte kan het helaas zijn dat jouw pakket per ongeluk is blijven liggen in ons magazijn. Onze excuses hiervoor!\n\nWe hebben jouw bestelling inmiddels direct opnieuw verzonden. Daarnaast ontvang je van ons een gratis S4H armband en een kortingsvoucher van 10% voor je volgende bestelling in onze webshop, als kleine tegemoetkoming voor het ongemak.\n\nGroetjes,\nTeam Stonesforhealth"
+      }
+    }
+  ]
+};
+
 // Generate review data based on product ID
 export function generateProductReviewData(productId: number) {
+  // Check if this product has custom reviews
+  if (customProductReviews[productId]) {
+    const customReviews = customProductReviews[productId];
+    const reviewCount = customReviews.length;
+
+    // Calculate average rating from custom reviews
+    const totalRating = customReviews.reduce((sum, r) => sum + r.rating, 0);
+    const averageRating = totalRating / reviewCount;
+
+    // Calculate distribution
+    const distribution = [
+      { stars: 5, count: customReviews.filter(r => r.rating === 5).length },
+      { stars: 4, count: customReviews.filter(r => r.rating === 4).length },
+      { stars: 3, count: customReviews.filter(r => r.rating === 3).length },
+      { stars: 2, count: customReviews.filter(r => r.rating === 2).length },
+      { stars: 1, count: customReviews.filter(r => r.rating === 1).length }
+    ];
+
+    return {
+      totalReviews: reviewCount,
+      averageRating: averageRating.toFixed(1),
+      distribution: distribution.map((d, i) => ({
+        stars: 5 - i,
+        percentage: Math.round((d.count / reviewCount) * 100),
+        count: d.count
+      })),
+      reviews: customReviews
+    };
+  }
+
+  // Default: Generate reviews dynamically
   const seed = productId || 1;
 
   // Generate review count between 3-60

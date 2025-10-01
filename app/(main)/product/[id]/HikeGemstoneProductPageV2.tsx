@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useCart } from '@/app/contexts/CartContextStoreAPI';
@@ -1328,55 +1328,28 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
         </div>
       </section>
 
-      {/* 5C. EXPERT ENDORSEMENT SECTION - Clean Hike Style */}
-      <section className="py-5 md:py-10 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid md:grid-cols-2 gap-8 md:gap-12 items-center">
-
-            {/* Left: Professional Image */}
-            <div className="order-2 md:order-1">
-              <div className="aspect-square overflow-hidden rounded-lg bg-gray-200">
-                {/* Using a placeholder image for the expert */}
-                <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-gray-100 to-gray-200">
-                  <div className="text-center p-8">
-                    <div className="w-32 h-32 mx-auto mb-4 bg-white rounded-full flex items-center justify-center shadow-lg">
-                      <svg className="w-16 h-16 text-[#492c4a]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                      </svg>
-                    </div>
-                    <p className="text-lg font-semibold text-gray-700 font-[family-name:var(--font-eb-garamond)]">Robbin Nieborg</p>
-                    <p className="text-sm text-gray-600 font-[family-name:var(--font-eb-garamond)]">"Deze edelstenen bezitten krachtige energetische eigenschappen"</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Right: Text content */}
-            <div className="order-1 md:order-2">
-              <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4 md:mb-6 font-[family-name:var(--font-eb-garamond)]">
-                Aanbevolen Door Therapeuten
-              </h2>
-              <div className="text-base md:text-lg text-gray-600 font-[family-name:var(--font-eb-garamond)]">
-                <p>
-                  Onze edelstenen worden aanbevolen door <strong>Robbin Nieborg</strong>, een ervaren specialist in energetische healing en kristaltherapie.
-                  "Deze edelstenen bezitten krachtige energetische eigenschappen" - met deze overtuiging selecteert Robbin alleen de zuiverste en meest krachtige stenen.
-                  Met jarenlange expertise in het werken met natuurlijke kristallen en hun helende eigenschappen, waarborgt Robbin de authentieke kwaliteit van elke steen.
-                  Ontworpen met therapeutische inzichten en geselecteerd voor blijvende kracht en zuiverheid —
-                  Stonesforhealth zorgt voor je energetisch welzijn, zodat jij je kunt richten op jouw spirituele reis.
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* 6. BENEFITS SECTION - Clean Hike Style */}
       <section className="py-5 md:py-10 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid md:grid-cols-2 gap-8 md:gap-12 items-center">
 
-            {/* Left: Benefits List */}
-            <div className="order-1 md:order-1">
+            {/* Left: Feature Image */}
+            <div className="order-2 md:order-1">
+              <div className="aspect-square overflow-hidden rounded-lg bg-gray-200">
+                {images[2] || images[1] || images[0] ? (
+                  <Image
+                    src={(images[2] || images[1] || images[0]).src}
+                    alt={`${product.name} voordelen`}
+                    width={600}
+                    height={600}
+                    className="w-full h-full object-cover"
+                  />
+                ) : null}
+              </div>
+            </div>
+
+            {/* Right: Benefits List */}
+            <div className="order-1 md:order-2">
               <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4 md:mb-6 font-[family-name:var(--font-eb-garamond)]">
                 Ontdek De Voordelen Van {product.name}
               </h2>
@@ -1402,8 +1375,14 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
                 <p>✔ <strong>30 Dagen Tevredenheidsgarantie</strong> – Niet tevreden? Krijg je geld terug, zonder gedoe.</p>
               </div>
             </div>
+          </div>
+        </div>
+      </section>
 
-            {/* Right: Feature Image */}
+      {/* Duplicate section removed */}
+      <section className="py-5 md:py-10 bg-white" style={{ display: 'none' }}>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid md:grid-cols-2 gap-8 md:gap-12 items-center">
             <div className="order-2 md:order-2">
               <div className="aspect-square overflow-hidden rounded-lg bg-gray-200">
                 {images[2] || images[1] || images[0] ? (
@@ -1437,40 +1416,62 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
           {/* Masonry Grid of Review Cards - Show limited reviews */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
             {customerReviews.slice(0, visibleReviewsCount).map(review => (
-              <div key={review.id} className="bg-white rounded-lg shadow-sm border border-gray-200 p-5 hover:shadow-md transition-shadow">
-                {/* Header */}
-                <div className="flex items-start justify-between mb-3">
-                  <div className="flex items-center gap-2">
-                    <div className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center flex-shrink-0">
-                      <span className="text-sm font-semibold text-gray-600">
-                        {review.name.split(' ').map(n => n[0]).join('')}
-                      </span>
-                    </div>
-                    <div>
-                      <p className="text-base md:text-lg font-semibold text-gray-900 leading-tight font-[family-name:var(--font-eb-garamond)]">{review.name.split(' ')[0]} {review.name.split(' ')[1]?.[0]}.</p>
-                      {review.verified && (
-                        <div className="flex items-center gap-1 mt-0.5">
-                          <svg viewBox="0 0 24 24" aria-label="Geverifieerd" className="w-3.5 h-3.5 text-green-600 fill-current">
-                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
-                          </svg>
-                          <span className="text-sm text-green-600 font-[family-name:var(--font-eb-garamond)]">Geverifieerd</span>
-                        </div>
-                      )}
+              <React.Fragment key={review.id}>
+                <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-5 hover:shadow-md transition-shadow">
+                  {/* Header */}
+                  <div className="flex items-start justify-between mb-3">
+                    <div className="flex items-center gap-2">
+                      <div className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center flex-shrink-0">
+                        <span className="text-sm font-semibold text-gray-600">
+                          {review.name.split(',')[0].charAt(0).toUpperCase()}
+                        </span>
+                      </div>
+                      <div>
+                        <p className="text-base md:text-lg font-semibold text-gray-900 leading-tight font-[family-name:var(--font-eb-garamond)]">{review.name.split(' ')[0]} {review.name.split(' ')[1]?.[0]}.</p>
+                        {review.verified && (
+                          <div className="flex items-center gap-1 mt-0.5">
+                            <svg viewBox="0 0 24 24" aria-label="Geverifieerd" className="w-3.5 h-3.5 text-green-600 fill-current">
+                              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                            </svg>
+                            <span className="text-sm text-green-600 font-[family-name:var(--font-eb-garamond)]">Geverifieerd</span>
+                          </div>
+                        )}
+                      </div>
                     </div>
                   </div>
+
+                  {/* Stars - Show actual rating */}
+                  <div className="mb-2">
+                    {renderStars(review.rating)}
+                  </div>
+
+                  {/* Review Text */}
+                  <p className="text-base md:text-lg text-gray-700 leading-relaxed mb-3 font-[family-name:var(--font-eb-garamond)]">{review.text}</p>
+
+                  {/* Date */}
+                  <p className="text-sm text-gray-500 font-[family-name:var(--font-eb-garamond)]">{review.date}</p>
                 </div>
 
-                {/* Stars - Show actual rating */}
-                <div className="mb-2">
-                  {renderStars(review.rating)}
-                </div>
-
-                {/* Review Text */}
-                <p className="text-base md:text-lg text-gray-700 leading-relaxed mb-3 font-[family-name:var(--font-eb-garamond)]">{review.text}</p>
-
-                {/* Date */}
-                <p className="text-sm text-gray-500 font-[family-name:var(--font-eb-garamond)]">{review.date}</p>
-              </div>
+                {/* Team Reply - Outside grid as full-width row */}
+                {review.reply && (
+                  <div className="sm:col-span-2 lg:col-span-3 xl:col-span-4 mt-2 mb-2">
+                    <div className="ml-6 pl-4 border-l-2 border-[#492c4a] bg-gradient-to-r from-[#492c4a]/5 to-transparent rounded-r-lg p-4">
+                      <div className="flex items-center gap-2 mb-2">
+                        <div className="w-6 h-6 bg-[#492c4a] rounded-full flex items-center justify-center flex-shrink-0">
+                          <svg className="w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6" />
+                          </svg>
+                        </div>
+                        <div>
+                          <p className="text-sm font-bold text-[#492c4a] font-[family-name:var(--font-eb-garamond)]">{review.reply.author}</p>
+                          <p className="text-xs text-gray-500 font-[family-name:var(--font-eb-garamond)]">{review.reply.date}</p>
+                        </div>
+                      </div>
+                      <p className="text-sm md:text-base text-gray-700 leading-relaxed whitespace-pre-line font-[family-name:var(--font-eb-garamond)]">{review.reply.text}</p>
+                    </div>
+                  </div>
+                )}
+              </React.Fragment>
             ))}
 
           </div>
