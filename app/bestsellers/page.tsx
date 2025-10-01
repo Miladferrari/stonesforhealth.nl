@@ -187,7 +187,7 @@ export default function BestsellersPage() {
             </div>
 
             <div className="text-center">
-              <div className="text-4xl font-semibold text-[#492c4a] mb-2 font-[family-name:var(--font-eb-garamond)]">10K+</div>
+              <div className="text-4xl font-semibold text-[#492c4a] mb-2 font-[family-name:var(--font-eb-garamond)]">3K+</div>
               <p className="text-sm text-gray-700 font-medium font-[family-name:var(--font-eb-garamond)]">Tevreden klanten</p>
             </div>
 
