@@ -1023,18 +1023,18 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
           {/* Tab Content */}
           <div className="px-6 py-8">
             {activeTab === 'description' && (
-              <div className="prose prose-lg max-w-none font-[family-name:var(--font-eb-garamond)]">
-                <h3 className="text-2xl font-bold text-gray-900 mb-4 font-[family-name:var(--font-eb-garamond)]">
+              <div className="max-w-none font-[family-name:var(--font-eb-garamond)]">
+                <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4 md:mb-6 font-[family-name:var(--font-eb-garamond)]">
                   Over dit product
-                </h3>
+                </h2>
                 {product.description && product.description.trim() !== '' ? (
                   <div
-                    className="text-gray-700 space-y-4 leading-relaxed"
+                    className="space-y-4 text-base md:text-lg text-gray-600 font-[family-name:var(--font-eb-garamond)]"
                     dangerouslySetInnerHTML={{ __html: product.description }}
                   />
                 ) : product.short_description && product.short_description.trim() !== '' ? (
                   <div
-                    className="text-gray-700 space-y-4 leading-relaxed"
+                    className="space-y-4 text-base md:text-lg text-gray-600 font-[family-name:var(--font-eb-garamond)]"
                     dangerouslySetInnerHTML={{ __html: product.short_description }}
                   />
                 ) : (
@@ -1251,42 +1251,6 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
             animation: scroll 30s linear infinite;
           }
         `}</style>
-      </section>
-
-      {/* 5A. MAIN CONTENT SECTION - Clean Hike Style */}
-      <section className="py-5 md:py-10 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid md:grid-cols-2 gap-8 md:gap-12 items-center">
-
-            {/* Left: Image/Video */}
-            <div className="order-2 md:order-1">
-              <div className="aspect-square overflow-hidden rounded-lg bg-[#f7f3ec]">
-                <img
-                  src="/image1.png"
-                  alt="Stones for Health - Natuurlijke edelstenen en kristallen"
-                  className="w-full h-full object-cover"
-                />
-              </div>
-            </div>
-
-            {/* Right: Text content */}
-            <div className="order-1 md:order-2">
-              <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4 md:mb-6 font-[family-name:var(--font-eb-garamond)]">
-                Ontdek De Transformerende Kracht Van {product.name}
-              </h2>
-              <div className="space-y-4 text-base md:text-lg text-gray-600 font-[family-name:var(--font-eb-garamond)]">
-                <p>
-                  Al eeuwenlang worden edelstenen gebruikt voor hun helende en energetische eigenschappen.
-                  Onze <strong>{product.name}</strong> is speciaal geselecteerd uit de beste mijnen van <strong>{gemstoneData.origin}</strong> en bezit unieke eigenschappen die je leven kunnen transformeren.
-                </p>
-                <p>
-                  Deze steen activeert je <strong>{gemstoneData.chakra}</strong> en brengt <strong>{gemstoneData.energy.toLowerCase()}</strong>.
-                  Voel de directe verbinding met de aarde en ervaar hoe natuurlijke energie je dagelijks leven verrijkt.
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
       </section>
 
       {/* 5B. SECOND CONTENT SECTION - Clean Hike Style */}
