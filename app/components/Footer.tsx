@@ -150,10 +150,10 @@ const Footer = memo(function Footer() {
                 </span>
               </div>
             </div>
-            {/* Trustpilot Widget */}
-            <div className="mt-8 flex justify-center md:justify-start">
+            {/* Trustpilot Widget - Hidden for now */}
+            {/* <div className="mt-8 flex justify-center md:justify-start">
               <TrustpilotFooterWidget />
-            </div>
+            </div> */}
           </div>
 
           {/* Links Grid */}
