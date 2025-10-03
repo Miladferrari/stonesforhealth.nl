@@ -87,6 +87,12 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
   const [touchStartX, setTouchStartX] = useState<number | null>(null);
   const [touchEndX, setTouchEndX] = useState<number | null>(null);
 
+  // Image loading state
+  const [imageLoading, setImageLoading] = useState(false);
+
+  // Helper function to check if image is a GIF
+  const isGif = (url: string) => url.toLowerCase().endsWith('.gif');
+
   // Minimum swipe distance (in px) to trigger image change
   const minSwipeDistance = 50;
 
@@ -483,26 +489,59 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
           <div className="space-y-4">
             {/* Main product image */}
             <div
-              className="aspect-square bg-white rounded-lg overflow-hidden"
+              className="aspect-square bg-white rounded-lg overflow-hidden relative"
               onTouchStart={handleTouchStart}
               onTouchMove={handleTouchMove}
               onTouchEnd={handleTouchEnd}
             >
               {hasImages && images[selectedImage] ? (
-                <div className="relative w-full h-full group">
-                  <Image
-                    src={images[selectedImage].src}
-                    alt={product.name}
-                    width={700}
-                    height={700}
-                    className="w-full h-full object-cover"
-                    priority
-                  />
-                  {/* Zoom indicator */}
-                  <div className="absolute bottom-4 right-4 bg-white/90 px-3 py-1 rounded text-sm opacity-0 group-hover:opacity-100 transition-opacity font-[family-name:var(--font-eb-garamond)]">
-                    🔍 Zoom
+                <>
+                  <div className="relative w-full h-full group">
+                    <Image
+                      src={images[selectedImage].src}
+                      alt={product.name}
+                      width={700}
+                      height={700}
+                      className={`w-full h-full object-cover transition-opacity duration-300 ${imageLoading ? 'opacity-50' : 'opacity-100'}`}
+                      priority
+                      unoptimized={isGif(images[selectedImage].src)}
+                      onLoadingComplete={() => setImageLoading(false)}
+                      onLoadStart={() => setImageLoading(true)}
+                    />
+                    {/* Loading spinner */}
+                    {imageLoading && (
+                      <div className="absolute inset-0 flex items-center justify-center bg-white/50">
+                        <div className="w-12 h-12 border-4 border-[#492c4a] border-t-transparent rounded-full animate-spin"></div>
+                      </div>
+                    )}
+                    {/* Zoom indicator */}
+                    <div className="absolute bottom-4 right-4 bg-white/90 px-3 py-1 rounded text-sm opacity-0 group-hover:opacity-100 transition-opacity font-[family-name:var(--font-eb-garamond)]">
+                      🔍 Zoom
+                    </div>
                   </div>
-                </div>
+
+                  {/* Preload adjacent images (hidden) */}
+                  <div className="hidden">
+                    {selectedImage > 0 && images[selectedImage - 1] && (
+                      <Image
+                        src={images[selectedImage - 1].src}
+                        alt="Preload previous"
+                        width={700}
+                        height={700}
+                        unoptimized={isGif(images[selectedImage - 1].src)}
+                      />
+                    )}
+                    {selectedImage < images.length - 1 && images[selectedImage + 1] && (
+                      <Image
+                        src={images[selectedImage + 1].src}
+                        alt="Preload next"
+                        width={700}
+                        height={700}
+                        unoptimized={isGif(images[selectedImage + 1].src)}
+                      />
+                    )}
+                  </div>
+                </>
               ) : (
                 <div className="w-full h-full bg-gray-50 flex items-center justify-center">
                   <svg
