@@ -204,8 +204,8 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
   // Bundle pricing
   const bundlePrices = {
     single: price,
-    duo: price * 1.8,
-    family: price * 2.5
+    duo: price * 1.6, // 20% discount
+    family: price * 2.25 // 25% discount (3 * 0.75 = 2.25)
   };
 
   // Auto-adjust selected bundle if current selection becomes unavailable
@@ -416,9 +416,9 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
                     else if (e.target.value === 'family') setQuantity(3);
                   }}
                 >
-                  <option value="single">1 paar</option>
-                  <option value="duo">2 paar</option>
-                  <option value="family">3 paar</option>
+                  <option value="single">Solo Set</option>
+                  <option value="duo">Balans Duo</option>
+                  <option value="family">Mystery Trio</option>
                 </select>
                 {/* Custom dropdown arrow */}
                 <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2 sm:pr-3">
@@ -898,9 +898,9 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
                       </div>
                       <div className="kaching-bundles__bar-content-left">
                         <div className="kaching-bundles__bar-first-line">
-                          <span className="kaching-bundles__bar-title text-base md:text-lg font-semibold text-gray-900 font-[family-name:var(--font-eb-garamond)]">1 paar</span>
+                          <span className="kaching-bundles__bar-title text-base md:text-lg font-semibold text-gray-900 font-[family-name:var(--font-eb-garamond)]">1 PAAR</span>
                         </div>
-                        <div className="kaching-bundles__bar-subtitle text-base md:text-lg text-gray-600 font-[family-name:var(--font-eb-garamond)]">Standaardprijs</div>
+                        <div className="kaching-bundles__bar-subtitle text-base md:text-lg text-gray-600 font-[family-name:var(--font-eb-garamond)]">Voor jouw persoonlijke reis</div>
                       </div>
                     </div>
                     <div className="kaching-bundles__bar-pricing text-right">
@@ -913,7 +913,7 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
                 </div>
               </div>
 
-              {/* Duo option - Most Popular */}
+              {/* Duo option */}
               <div className="kaching-bundles__bar-wrapper relative">
                 <div
                   role="button"
@@ -927,11 +927,6 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
                   }`}
                   onClick={() => canSelectDuo && setSelectedBundle('duo')}
                 >
-                  <div className="kaching-bundles__bar-most-popular kaching-bundles__bar-most-popular--simple absolute -top-3 right-2">
-                    <div className="kaching-bundles__bar-most-popular__content text-black text-xs font-bold px-3 py-1 rounded uppercase" style={{ backgroundColor: '#fbe022' }}>
-                      MEEST POPULAIR!
-                    </div>
-                  </div>
                   <input
                     type="radio"
                     className="sr-only"
@@ -953,10 +948,13 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
                         )}
                       </div>
                       <div className="kaching-bundles__bar-content-left">
-                        <div className="kaching-bundles__bar-first-line">
-                          <span className="kaching-bundles__bar-title text-base md:text-lg font-semibold text-gray-900 font-[family-name:var(--font-eb-garamond)]">2 paar</span>
+                        <div className="kaching-bundles__bar-first-line flex items-center gap-2">
+                          <span className="kaching-bundles__bar-title text-base md:text-lg font-semibold text-gray-900 font-[family-name:var(--font-eb-garamond)]">2 PAAR</span>
+                          <span className="bg-green-100 text-green-700 text-base md:text-lg font-bold px-2 py-0.5 rounded uppercase font-[family-name:var(--font-eb-garamond)]">
+                            20% EXTRA KORTING
+                          </span>
                         </div>
-                        <div className="kaching-bundles__bar-subtitle text-base md:text-lg text-black font-medium font-[family-name:var(--font-eb-garamond)]">10% korting op de totale bestelling!</div>
+                        <div className="kaching-bundles__bar-subtitle text-base md:text-lg text-black font-medium font-[family-name:var(--font-eb-garamond)]">Ideaal om te combineren of cadeau te doen</div>
                       </div>
                     </div>
                     <div className="kaching-bundles__bar-pricing text-right">
@@ -967,7 +965,7 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
                 </div>
               </div>
 
-              {/* Family/Trio option - Best Value */}
+              {/* Family/Trio option - Most Popular */}
               <div className="kaching-bundles__bar-wrapper relative">
                 <div
                   role="button"
@@ -981,6 +979,11 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
                   }`}
                   onClick={() => canSelectFamily && setSelectedBundle('family')}
                 >
+                  <div className="kaching-bundles__bar-most-popular kaching-bundles__bar-most-popular--simple absolute -top-3 right-2">
+                    <div className="kaching-bundles__bar-most-popular__content text-black text-xs font-bold px-3 py-1 rounded uppercase" style={{ backgroundColor: '#fbe022' }}>
+                      MEEST POPULAIR!
+                    </div>
+                  </div>
                   <input
                     type="radio"
                     className="sr-only"
@@ -1003,12 +1006,12 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
                       </div>
                       <div className="kaching-bundles__bar-content-left">
                         <div className="kaching-bundles__bar-first-line flex items-center gap-2">
-                          <span className="kaching-bundles__bar-title text-base md:text-lg font-semibold text-gray-900 font-[family-name:var(--font-eb-garamond)]">3 paar</span>
-                          <span className="bg-green-100 text-green-700 text-xs font-bold px-2 py-0.5 rounded uppercase font-[family-name:var(--font-eb-garamond)]">
-                            Beste Koop!
+                          <span className="kaching-bundles__bar-title text-base md:text-lg font-semibold text-gray-900 font-[family-name:var(--font-eb-garamond)]">3 PAAR 🌸</span>
+                          <span className="bg-green-100 text-green-700 text-base md:text-lg font-bold px-2 py-0.5 rounded uppercase font-[family-name:var(--font-eb-garamond)]">
+                            25% EXTRA KORTING
                           </span>
                         </div>
-                        <div className="kaching-bundles__bar-subtitle text-base md:text-lg text-black font-medium font-[family-name:var(--font-eb-garamond)]">17% korting op de totale bestelling!</div>
+                        <div className="kaching-bundles__bar-subtitle text-base md:text-lg text-black font-medium font-[family-name:var(--font-eb-garamond)]">PLUS Gratis mysterie-item & gratis verzending</div>
                       </div>
                     </div>
                     <div className="kaching-bundles__bar-pricing text-right">
@@ -1360,11 +1363,16 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
             {/* Right: Product image */}
             <div className="order-2 md:order-2">
               <div className="aspect-square overflow-hidden rounded-lg bg-gray-200">
-                <img
-                  src="/image2.png"
-                  alt="Stones for Health - Kristallen collectie"
-                  className="w-full h-full object-cover"
-                />
+                {hasImages && (
+                  <Image
+                    src={images[3] ? images[3].src : images[images.length - 1].src}
+                    alt={product.name}
+                    width={600}
+                    height={600}
+                    className="w-full h-full object-cover"
+                    unoptimized={isGif(images[3] ? images[3].src : images[images.length - 1].src)}
+                  />
+                )}
               </div>
             </div>
           </div>
