@@ -83,6 +83,43 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
   const reviewButtonRef = useRef<HTMLButtonElement>(null);
   const thumbnailRefs = useRef<(HTMLButtonElement | null)[]>([]);
 
+  // Touch swipe state for image gallery
+  const [touchStartX, setTouchStartX] = useState<number | null>(null);
+  const [touchEndX, setTouchEndX] = useState<number | null>(null);
+
+  // Minimum swipe distance (in px) to trigger image change
+  const minSwipeDistance = 50;
+
+  // Handle touch start
+  const handleTouchStart = (e: React.TouchEvent) => {
+    setTouchEndX(null); // Reset end position
+    setTouchStartX(e.targetTouches[0].clientX);
+  };
+
+  // Handle touch move
+  const handleTouchMove = (e: React.TouchEvent) => {
+    setTouchEndX(e.targetTouches[0].clientX);
+  };
+
+  // Handle touch end
+  const handleTouchEnd = () => {
+    if (!touchStartX || !touchEndX) return;
+
+    const distance = touchStartX - touchEndX;
+    const isLeftSwipe = distance > minSwipeDistance;
+    const isRightSwipe = distance < -minSwipeDistance;
+
+    if (isLeftSwipe && selectedImage < images.length - 1) {
+      // Swipe left -> next image
+      setSelectedImage(selectedImage + 1);
+    }
+
+    if (isRightSwipe && selectedImage > 0) {
+      // Swipe right -> previous image
+      setSelectedImage(selectedImage - 1);
+    }
+  };
+
   // Check if product is out of stock
   const isOutOfStock = product.stock_status !== 'instock' || product.stock_quantity === 0;
 
@@ -445,7 +482,12 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
           {/* Left: Large product image gallery */}
           <div className="space-y-4">
             {/* Main product image */}
-            <div className="aspect-square bg-white rounded-lg overflow-hidden">
+            <div
+              className="aspect-square bg-white rounded-lg overflow-hidden"
+              onTouchStart={handleTouchStart}
+              onTouchMove={handleTouchMove}
+              onTouchEnd={handleTouchEnd}
+            >
               {hasImages && images[selectedImage] ? (
                 <div className="relative w-full h-full group">
                   <Image
