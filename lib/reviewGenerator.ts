@@ -593,6 +593,49 @@ const customProductReviews: { [key: number]: Review[] } = {
     }
   ],
 
+  // Product ID 3011 - S4H Gouden Driehoek Set op Standaard – Amethist, Rozenkwarts en Bergkristal
+  3011: [
+    { id: 1, name: "Iris, 34 jaar", location: "Amsterdam", rating: 5, date: "21 december 2024", verified: true, text: "De stenen zijn prachtig en de standaard maakt het echt een eyecatcher in mijn woonkamer. Je voelt meteen een rustige energie." },
+    { id: 2, name: "Fatima, 30 jaar", location: "Rotterdam", rating: 4, date: "23 december 2024", verified: true, text: "Mooi product en goede kwaliteit. Had alleen iets sneller geleverd mogen worden, maar verder heel tevreden." },
+    { id: 3, name: "Marloes, 35 jaar", location: "Utrecht", rating: 5, date: "26 december 2024", verified: true, text: "Wat een fijne set. Ik heb hem in mijn slaapkamer gezet en merk dat ik rustiger slaap." },
+    { id: 4, name: "Julia, 31 jaar", location: "Den Haag", rating: 5, date: "29 december 2024", verified: true, text: "Supermooi! De stenen voelen krachtig en de combinatie klopt helemaal. Heel blij met mijn aankoop." },
+    {
+      id: 5,
+      name: "Anouk, 32 jaar",
+      location: "Eindhoven",
+      rating: 3,
+      date: "2 januari 2025",
+      verified: true,
+      text: "De stenen zijn mooi, maar ik had verwacht dat ze wat groter zouden zijn. Verder wel een mooie uitstraling.",
+      reply: {
+        author: "Team Stonesforhealth",
+        date: "2 januari 2025",
+        text: "Hoi Anouk,\n\nDankjewel voor je eerlijke feedback 🌸. We proberen de afmetingen altijd zo goed mogelijk te vermelden, maar snappen je punt. Hopelijk ervaar je alsnog veel rust en harmonie met de set!\n\nGroetjes, Team Stonesforhealth"
+      }
+    },
+    { id: 6, name: "Noor, 29 jaar", location: "Groningen", rating: 5, date: "4 januari 2025", verified: true, text: "Deze set voelt echt bijzonder. De combinatie van amethist, rozenkwarts en bergkristal geeft een hele zachte en liefdevolle energie." },
+    { id: 7, name: "Yvonne, 33 jaar", location: "Breda", rating: 4, date: "7 januari 2025", verified: true, text: "Mooi product, netjes verpakt ontvangen. De standaard had iets steviger gemogen, maar verder heel tevreden." },
+    { id: 8, name: "Esra, 30 jaar", location: "Nijmegen", rating: 5, date: "10 januari 2025", verified: true, text: "Geweldig cadeau voor mezelf. Ik zet hem tijdens meditatie naast me en voel veel meer balans." },
+    {
+      id: 9,
+      name: "Femke, 35 jaar",
+      location: "Tilburg",
+      rating: 2,
+      date: "13 januari 2025",
+      verified: true,
+      text: "Helaas was de standaard scheef en zat er een barstje in één steen. Teleurgesteld.",
+      reply: {
+        author: "Team Stonesforhealth",
+        date: "13 januari 2025",
+        text: "Beste Femke,\n\nWat vervelend dat dit is gebeurd 🙏. Dit hoort absoluut niet zo te zijn. We sturen je direct een nieuwe set toe en je mag de huidige houden of retourneren. Onze excuses voor het ongemak!\n\nGroetjes, Team Stonesforhealth"
+      }
+    },
+    { id: 10, name: "Nadine, 32 jaar", location: "Arnhem", rating: 5, date: "16 januari 2025", verified: true, text: "Echt een aanrader. Mijn praktijkruimte voelt zoveel fijner en lichter sinds ik deze set neer heb gezet." },
+    { id: 11, name: "Amira, 28 jaar", location: "Almere", rating: 5, date: "18 januari 2025", verified: true, text: "Zo mooi en betekenisvol. Ik heb er eentje gekocht voor mezelf en een tweede voor mijn moeder cadeau gedaan." },
+    { id: 12, name: "Lotte, 31 jaar", location: "Haarlem", rating: 4, date: "20 januari 2025", verified: true, text: "Mooie stenen, mooie energie. Levering duurde een dag langer dan verwacht, maar verder heel blij mee." },
+    { id: 13, name: "Hannah, 29 jaar", location: "Apeldoorn", rating: 5, date: "23 januari 2025", verified: true, text: "Wat een prachtige en krachtige combinatie. Je voelt echt de harmonie in de ruimte." }
+  ],
+
   // Product ID 5117 - S4H Morganiet Armband
   5117: [
     { id: 1, name: "Sanne, 32 jaar", location: "Amsterdam", rating: 5, date: "20 december 2024", verified: true, text: "Prachtige zachte kleuren, de armband voelt heel liefdevol. Ik draag hem dagelijks en krijg er complimentjes over." },
