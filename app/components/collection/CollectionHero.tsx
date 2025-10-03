@@ -23,7 +23,7 @@ export default function CollectionHero({
       {/* Background Image */}
       <div className="absolute inset-0">
         <Image
-          src="/1.jpeg"
+          src="/images/banner.png"
           alt="Collection Hero"
           fill
           className="object-cover"
