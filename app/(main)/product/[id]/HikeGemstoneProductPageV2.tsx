@@ -529,18 +529,13 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
                   className="w-10 h-10 rounded-full border-2 border-white object-cover shadow-sm"
                 />
                 <img
-                  src="https://i.pravatar.cc/150?img=8"
-                  alt="Anna"
-                  className="w-10 h-10 rounded-full border-2 border-white object-cover shadow-sm"
-                />
-                <img
                   src="https://i.pravatar.cc/150?img=12"
                   alt="Sophie"
                   className="w-10 h-10 rounded-full border-2 border-white object-cover shadow-sm"
                 />
               </div>
               <div className="text-base md:text-lg ml-4 text-gray-700 font-[family-name:var(--font-eb-garamond)]">
-                Sluit je aan bij 4.278+ tevreden klanten - beoordeeld met 4.4/5
+                Sluit je aan bij 22+ tevreden klanten - beoordeeld met 4.4/5
               </div>
             </div>
 

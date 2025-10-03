@@ -591,6 +591,241 @@ const customProductReviews: { [key: number]: Review[] } = {
         text: "Beste Fatima,\n\nWat mooi dat de pendel je dagelijks helpt om meer vertrouwen in je intuïtie te krijgen 🌟. Heel erg bedankt voor je fijne woorden!\n\nGroet, Team Stonesforhealth"
       }
     }
+  ],
+
+  // Product ID 5117 - S4H Morganiet Armband
+  5117: [
+    { id: 1, name: "Sanne, 32 jaar", location: "Amsterdam", rating: 5, date: "20 december 2024", verified: true, text: "Prachtige zachte kleuren, de armband voelt heel liefdevol. Ik draag hem dagelijks en krijg er complimentjes over." },
+    { id: 2, name: "Noor, 29 jaar", location: "Rotterdam", rating: 4, date: "22 december 2024", verified: true, text: "Mooi product, fijne maat. De kleuren zijn iets lichter dan op de foto, maar wel heel mooi in het echt." },
+    { id: 3, name: "Aurora, 34 jaar", location: "Utrecht", rating: 5, date: "24 december 2024", verified: true, text: "Je voelt de zachte energie van morganiet echt. Voor mij een reminder om liefdevoller naar mezelf te zijn. Erg blij mee." },
+    { id: 4, name: "Yara, 30 jaar", location: "Den Haag", rating: 5, date: "26 december 2024", verified: true, text: "Heel mooi sieraad, met zorg verpakt. De kralen zijn prachtig en hebben een warme uitstraling." },
+    {
+      id: 5,
+      name: "Esmee, 31 jaar",
+      location: "Eindhoven",
+      rating: 3,
+      date: "28 december 2024",
+      verified: true,
+      text: "De armband is mooi, maar zat iets strakker dan ik had verwacht. Hopelijk rekt het elastiek nog wat uit.",
+      reply: {
+        author: "Team Stonesforhealth",
+        date: "28 december 2024",
+        text: "Hoi Esmee,\n\nBedankt voor je feedback 🌿. Het elastiek hoort zich inderdaad na een tijdje iets aan te passen. Mocht het alsnog te strak blijven, dan zoeken we graag samen een oplossing.\n\nGroetjes, Team Stonesforhealth"
+      }
+    },
+    { id: 6, name: "Claire, 35 jaar", location: "Groningen", rating: 5, date: "30 december 2024", verified: true, text: "Mijn nieuwe favoriete armband. Hij straalt zoveel zachtheid uit, ik voel me er rustig en blij mee." },
+    { id: 7, name: "Yasmin, 28 jaar", location: "Breda", rating: 5, date: "2 januari 2025", verified: true, text: "De kleurencombinatie van zachtroze en perzik is geweldig. Echt een mooi stuk natuur." },
+    { id: 8, name: "Roos, 32 jaar", location: "Nijmegen", rating: 4, date: "4 januari 2025", verified: true, text: "Mooi product en snel geleverd. Het doosje had iets luxer gemogen, maar de armband zelf is top." },
+    {
+      id: 9,
+      name: "Femke, 36 jaar",
+      location: "Tilburg",
+      rating: 2,
+      date: "7 januari 2025",
+      verified: true,
+      text: "Helaas brak het elastiek na 4 dagen dragen. Jammer, want de stenen zijn prachtig.",
+      reply: {
+        author: "Team Stonesforhealth",
+        date: "7 januari 2025",
+        text: "Beste Femke,\n\nWat vervelend dat dit is gebeurd 🙏. We sturen je direct een nieuwe armband op + een kortingsvoucher van 10% voor een volgende bestelling.\n\nHartelijke groet, Team Stonesforhealth"
+      }
+    },
+    { id: 10, name: "Amira, 29 jaar", location: "Arnhem", rating: 5, date: "9 januari 2025", verified: true, text: "Superblij mee. Ik draag hem bij belangrijke momenten en het voelt alsof hij me ondersteunt." },
+    { id: 11, name: "Linde, 30 jaar", location: "Almere", rating: 5, date: "11 januari 2025", verified: true, text: "Armband straalt echt zachtheid en liefde uit. Perfecte maat en erg comfortabel." },
+    { id: 12, name: "Marieke, 34 jaar", location: "Haarlem", rating: 4, date: "13 januari 2025", verified: true, text: "Mooi product. De kleuren zijn subtiel en passen bij alles. Ik draag hem bijna dagelijks." },
+    { id: 13, name: "Elif, 31 jaar", location: "Apeldoorn", rating: 5, date: "15 januari 2025", verified: true, text: "Zo mooi en elegant. De stenen voelen heel fijn aan en ik word er rustig van." },
+    {
+      id: 14,
+      name: "Anouk, 33 jaar",
+      location: "Enschede",
+      rating: 3,
+      date: "18 januari 2025",
+      verified: true,
+      text: "Armband is mooi, maar ik merk zelf nog weinig van de energie. Misschien moet ik hem langer dragen.",
+      reply: {
+        author: "Team Stonesforhealth",
+        date: "18 januari 2025",
+        text: "Hoi Anouk,\n\nDank voor je eerlijke review 🌸. Soms duurt het inderdaad even voordat je een steen echt opmerkt. Fijn dat je hem draagt, en hopelijk ervaar je snel meer zachtheid.\n\nGroetjes, Team Stonesforhealth"
+      }
+    },
+    { id: 15, name: "Nadine, 32 jaar", location: "Leiden", rating: 5, date: "20 januari 2025", verified: true, text: "Cadeau gekregen van mijn man, en ik ben er dolblij mee. Mooie energie en elegante uitstraling." },
+    { id: 16, name: "Selin, 28 jaar", location: "Maastricht", rating: 5, date: "22 januari 2025", verified: true, text: "Prachtige kralen, mooie kleurvariaties. Voelt luxe en toch subtiel." },
+    {
+      id: 17,
+      name: "Eva, 35 jaar",
+      location: "Zwolle",
+      rating: 1,
+      date: "25 januari 2025",
+      verified: true,
+      text: "Besteld op 18 januari, maar nu een week later nog steeds niks ontvangen. Erg teleurgesteld.",
+      reply: {
+        author: "Team Stonesforhealth",
+        date: "25 januari 2025",
+        text: "Beste Eva,\n\nOnze excuses dat je bestelling vertraagd is geraakt 🙏. We sturen je armband vandaag nog op met een extra verrassing erbij als tegemoetkoming.\n\nGroetjes, Team Stonesforhealth"
+      }
+    },
+    { id: 18, name: "Floor, 31 jaar", location: "Amersfoort", rating: 5, date: "27 januari 2025", verified: true, text: "Hele fijne energie. Ik gebruik hem ook tijdens meditatie en merk meer rust." },
+    { id: 19, name: "Aisha, 29 jaar", location: "Dordrecht", rating: 4, date: "29 januari 2025", verified: true, text: "Mooi en elegant. Levering duurde een dag langer, maar verder heel tevreden." },
+    { id: 20, name: "Hannah, 30 jaar", location: "Ede", rating: 5, date: "1 februari 2025", verified: true, text: "Zo blij met dit sieraad. Draag hem bijna elke dag, past bij alles." },
+    { id: 21, name: "Shanti, 27 jaar", location: "Alphen aan den Rijn", rating: 5, date: "3 februari 2025", verified: true, text: "Voelt heel zacht en liefdevol. Het is meer dan alleen een armband." },
+    { id: 22, name: "Esra, 28 jaar", location: "Zaanstad", rating: 4, date: "5 februari 2025", verified: true, text: "Fijne maat en mooie kleur. Alleen het doosje had iets steviger gemogen." },
+    { id: 23, name: "Julia, 33 jaar", location: "Den Bosch", rating: 5, date: "7 februari 2025", verified: true, text: "Echt een cadeautje voor mezelf. Voelt bijzonder en mooi afgewerkt." },
+    { id: 24, name: "Kim, 34 jaar", location: "Heerlen", rating: 3, date: "9 februari 2025", verified: true, text: "Prima armband, maar ik had de kleuren wat intenser verwacht. Toch wel mooi." },
+    { id: 25, name: "Mila, 29 jaar", location: "Alkmaar", rating: 5, date: "12 februari 2025", verified: true, text: "Zo blij mee! Mooie zachte tinten en een fijne pasvorm." },
+    { id: 26, name: "Leila, 30 jaar", location: "Leeuwarden", rating: 5, date: "14 februari 2025", verified: true, text: "Cadeau gedaan aan mijn moeder. Ze vond hem prachtig en draagt hem elke dag." },
+    { id: 27, name: "Manon, 31 jaar", location: "Hengelo", rating: 4, date: "16 februari 2025", verified: true, text: "Mooi product, netjes geleverd. Alleen had ik liever een zakje of doosje erbij gehad." },
+    { id: 28, name: "Evi, 32 jaar", location: "Zaandam", rating: 5, date: "18 februari 2025", verified: true, text: "De armband geeft me echt een gevoel van zachtheid en rust. Heel blij mee." },
+    { id: 29, name: "Farah, 28 jaar", location: "Oss", rating: 5, date: "20 februari 2025", verified: true, text: "Prachtig afgewerkt, voelt stevig en de energie is zacht en liefdevol." },
+    { id: 30, name: "Lotte, 34 jaar", location: "Venlo", rating: 4, date: "22 februari 2025", verified: true, text: "Mooie armband, fijn elastiek. Levering was snel." },
+    { id: 31, name: "Amélie, 29 jaar", location: "Roosendaal", rating: 5, date: "24 februari 2025", verified: true, text: "Heel elegant, mooi te combineren met andere armbanden. Erg blij mee." },
+    { id: 32, name: "Daphne, 31 jaar", location: "Delft", rating: 5, date: "26 februari 2025", verified: true, text: "De pastelkleuren zijn prachtig. Perfect voor mijn self-care momenten." },
+    {
+      id: 33,
+      name: "Marit, 35 jaar",
+      location: "Gouda",
+      rating: 3,
+      date: "28 februari 2025",
+      verified: true,
+      text: "Mooi, maar elastiek voelt wat dun. Hoop dat hij lang meegaat.",
+      reply: {
+        author: "Team Stonesforhealth",
+        date: "28 februari 2025",
+        text: "Hoi Marit,\n\nDank je voor je feedback 🌿. We geven je tip door aan ons atelier. Mocht er iets gebeuren, neem gerust contact op en we lossen het op.\n\nGroetjes, Team Stonesforhealth"
+      }
+    },
+    { id: 34, name: "Anisa, 28 jaar", location: "Vlaardingen", rating: 5, date: "2 maart 2025", verified: true, text: "Zo blij met mijn aankoop. Mooie stenen, perfecte maat en een liefdevolle uitstraling." },
+    { id: 35, name: "Jolien, 30 jaar", location: "Schiedam", rating: 5, date: "4 maart 2025", verified: true, text: "Prachtig! De kleuren zijn zacht en romantisch. Zeker een aanrader." }
+  ],
+
+  // Product ID 5128 - S4H Fertility Armband – Vruchtbaarheid & Gezonde Zwangerschap
+  5128: [
+    { id: 1, name: "Sanne, 32 jaar", location: "Amsterdam", rating: 5, date: "20 december 2024", verified: true, text: "Prachtige armband, ik draag hem sinds een paar weken en het geeft me zoveel rust. Heel blij dat ik deze heb gekocht." },
+    { id: 2, name: "Claire, 35 jaar", location: "Rotterdam", rating: 4, date: "22 december 2024", verified: true, text: "Mooi product, netjes verpakt. De maat was iets strakker dan verwacht, maar verder heel fijn om te dragen." },
+    { id: 3, name: "Naomi, 29 jaar", location: "Utrecht", rating: 5, date: "24 december 2024", verified: true, text: "Zo blij met deze armband! Ik voel er echt een zachte energie van uitgaan. Ideaal tijdens mijn yoga en meditatie." },
+    { id: 4, name: "Aylin, 31 jaar", location: "Den Haag", rating: 5, date: "26 december 2024", verified: true, text: "Armband ziet er prachtig uit. Je merkt dat er liefde in het maken zit. Heel tevreden!" },
+    { id: 5, name: "Femke, 34 jaar", location: "Eindhoven", rating: 3, date: "28 december 2024", verified: true, text: "Mooi, maar de kleur van de maansteen is wat minder helder dan op de foto. Verder wel fijn om te dragen." },
+    { id: 6, name: "Yasmin, 30 jaar", location: "Groningen", rating: 5, date: "30 december 2024", verified: true, text: "De combinatie van de stenen voelt zo bijzonder. Het geeft me hoop en vertrouwen. Heel mooi cadeau aan mezelf." },
+    { id: 7, name: "Noortje, 33 jaar", location: "Breda", rating: 4, date: "2 januari 2025", verified: true, text: "Fijne armband, al had ik hem liever net iets losser gehad. Maar ik draag hem elke dag." },
+    { id: 8, name: "Esra, 28 jaar", location: "Nijmegen", rating: 5, date: "5 januari 2025", verified: true, text: "Heel mooi verpakt ontvangen, voelde als een cadeautje. Bedankt Stonesforhealth!" },
+    {
+      id: 9,
+      name: "Lotte, 36 jaar",
+      location: "Tilburg",
+      rating: 2,
+      date: "8 januari 2025",
+      verified: true,
+      text: "Helaas brak het elastiek na 3 dagen dragen. Jammer, want de stenen zijn wel mooi.",
+      reply: {
+        author: "Team Stonesforhealth",
+        date: "8 januari 2025",
+        text: "Beste Lotte,\n\nWat vervelend dat dit is gebeurd 🙏. Dat mag natuurlijk niet. We sturen je direct een nieuwe armband op + een kortingsvoucher van 10% voor je volgende bestelling.\n\nGroetjes, Team Stonesforhealth"
+      }
+    },
+    { id: 10, name: "Amber, 29 jaar", location: "Arnhem", rating: 5, date: "11 januari 2025", verified: true, text: "De armband straalt echt iets zachts uit. Ik voel me er meer ontspannen door. Heel tevreden." },
+    { id: 11, name: "Shanti, 27 jaar", location: "Almere", rating: 5, date: "13 januari 2025", verified: true, text: "Zo'n mooie en fijne armband! Draag hem nu dagelijks en het voelt heel speciaal." },
+    { id: 12, name: "Iris, 34 jaar", location: "Haarlem", rating: 3, date: "15 januari 2025", verified: true, text: "Mooi product, maar ik merk persoonlijk nog geen verschil. Misschien komt dat met tijd." },
+    { id: 13, name: "Lisa, 30 jaar", location: "Apeldoorn", rating: 5, date: "18 januari 2025", verified: true, text: "Perfect! Heel blij met de maat, de kralen zijn mooi rond en glanzend. Aanrader." },
+    { id: 14, name: "Anouk, 32 jaar", location: "Enschede", rating: 5, date: "20 januari 2025", verified: true, text: "Tijdens mijn zwangerschap draag ik deze armband vaak. Geeft me een gevoel van vertrouwen en rust." },
+    { id: 15, name: "Kim, 35 jaar", location: "Leiden", rating: 4, date: "22 januari 2025", verified: true, text: "Mooi product, netjes verpakt. Alleen de levering had een dag langer geduurd, maar verder tevreden." },
+    { id: 16, name: "Eva, 31 jaar", location: "Maastricht", rating: 5, date: "25 januari 2025", verified: true, text: "Echt prachtig. Dit voelt als meer dan alleen een sieraad. Heel dankbaar voor dit product." },
+    { id: 17, name: "Noor, 33 jaar", location: "Zwolle", rating: 5, date: "28 januari 2025", verified: true, text: "Mijn vriendin kreeg deze van mij cadeau en ze was er heel blij mee. Mooi en betekenisvol." },
+    { id: 18, name: "Manon, 29 jaar", location: "Amersfoort", rating: 4, date: "30 januari 2025", verified: true, text: "Mooie armband, maar had liever een iets luxere verpakking gehad. Verder top." },
+    { id: 19, name: "Farah, 28 jaar", location: "Dordrecht", rating: 5, date: "2 februari 2025", verified: true, text: "Heel blij mee! Ik voel me er rustiger en krachtiger mee. Levering was snel." },
+    {
+      id: 20,
+      name: "Sophie, 34 jaar",
+      location: "Ede",
+      rating: 1,
+      date: "5 februari 2025",
+      verified: true,
+      text: "Besteld op 28 januari, maar nog steeds niets ontvangen. Heel teleurstellend.",
+      reply: {
+        author: "Team Stonesforhealth",
+        date: "5 februari 2025",
+        text: "Beste Sophie,\n\nOnze excuses voor de vertraging 🙏. Door drukte is je bestelling blijven liggen. Je armband gaat vandaag alsnog op de post + we voegen een gratis edelsteen toe als tegemoetkoming.\n\nGroetjes, Team Stonesforhealth"
+      }
+    },
+    { id: 21, name: "Chantal, 30 jaar", location: "Alphen aan den Rijn", rating: 5, date: "7 februari 2025", verified: true, text: "Zo mooi! Ik draag hem tijdens meditatie en voel echt meer verbinding." },
+    { id: 22, name: "Milou, 29 jaar", location: "Zaanstad", rating: 5, date: "9 februari 2025", verified: true, text: "De stenen zijn prachtig en de maat is perfect. Echt een aanrader." },
+    { id: 23, name: "Elif, 31 jaar", location: "Den Bosch", rating: 3, date: "12 februari 2025", verified: true, text: "De armband is mooi, maar ik merk nog niet zoveel verschil. Misschien moet ik hem langer dragen." },
+    { id: 24, name: "Marieke, 33 jaar", location: "Heerlen", rating: 5, date: "15 februari 2025", verified: true, text: "Superblij met deze aankoop. Mooie energie en een fijne uitstraling." },
+    { id: 25, name: "Hanna, 30 jaar", location: "Alkmaar", rating: 5, date: "17 februari 2025", verified: true, text: "Perfect cadeau voor mijn zus. Ze was er erg blij mee." },
+    { id: 26, name: "Julie, 28 jaar", location: "Leeuwarden", rating: 4, date: "20 februari 2025", verified: true, text: "Mooi product, alleen het doosje had wat steviger gemogen. De armband zelf is prachtig." },
+    { id: 27, name: "Roos, 32 jaar", location: "Hengelo", rating: 5, date: "22 februari 2025", verified: true, text: "Prachtig sieraad, geeft me rust en vertrouwen. Zeker een aanrader." },
+    { id: 28, name: "Aisha, 29 jaar", location: "Zaandam", rating: 5, date: "25 februari 2025", verified: true, text: "Zachte kleuren en een fijne pasvorm. Helemaal tevreden." },
+    { id: 29, name: "Marit, 31 jaar", location: "Oss", rating: 4, date: "28 februari 2025", verified: true, text: "Goede kwaliteit, alleen iets strakker dan verwacht. Maar mooi product." },
+    { id: 30, name: "Esmee, 30 jaar", location: "Venlo", rating: 5, date: "2 maart 2025", verified: true, text: "Zo mooi! Ik ben er echt verliefd op. Bedankt Stonesforhealth!" },
+    { id: 31, name: "Selin, 28 jaar", location: "Roosendaal", rating: 5, date: "4 maart 2025", verified: true, text: "Echt een hele mooie armband. Je voelt gewoon de energie ervan." },
+    { id: 32, name: "Karlijn, 33 jaar", location: "Delft", rating: 4, date: "7 maart 2025", verified: true, text: "Mooi product, fijne pasvorm. Alleen jammer dat de levering een dag later kwam." },
+    { id: 33, name: "Nadine, 29 jaar", location: "Gouda", rating: 5, date: "9 maart 2025", verified: true, text: "Hele fijne energie, prachtig gemaakt. Ik draag hem elke dag." },
+    { id: 34, name: "Leila, 28 jaar", location: "Vlaardingen", rating: 5, date: "12 maart 2025", verified: true, text: "De armband voelt echt speciaal. Helemaal blij mee." },
+    { id: 35, name: "Hanneke, 34 jaar", location: "Schiedam", rating: 3, date: "15 maart 2025", verified: true, text: "Mooi, maar ik merk persoonlijk nog niet zoveel effect. Misschien moet ik meer geduld hebben." },
+    { id: 36, name: "Yasmina, 30 jaar", location: "Deventer", rating: 5, date: "18 maart 2025", verified: true, text: "Fantastisch! Heel mooi verpakt en prachtige stenen." },
+    { id: 37, name: "Jolien, 32 jaar", location: "Emmen", rating: 5, date: "21 maart 2025", verified: true, text: "De armband is prachtig en voelt zo fijn om te dragen. Echt een aanrader." },
+    { id: 38, name: "Demi, 29 jaar", location: "Helmond", rating: 4, date: "23 maart 2025", verified: true, text: "Mooi en betekenisvol. Alleen had ik graag wat meer uitleg over de werking gehad." },
+    { id: 39, name: "Anisa, 28 jaar", location: "Purmerend", rating: 5, date: "26 maart 2025", verified: true, text: "Super blij met dit sieraad! Voelt zacht, liefdevol en krachtig tegelijk." },
+    { id: 40, name: "Floor, 31 jaar", location: "Hoorn", rating: 5, date: "29 maart 2025", verified: true, text: "Heel blij mee, precies wat ik zocht. Draag hem elke dag." }
+  ],
+
+  // Product ID 5252 - S4H Rozenkwarts Edelstenen Armband
+  5252: [
+    { id: 1, name: "Sterre, 34 jaar", location: "Amsterdam", rating: 5, date: "20 december 2024", verified: true, text: "Prachtige armband, de kralen zijn mooi glanzend en voelen krachtig aan. Ik draag hem elke dag en merk echt meer rust en liefde in mijn energie." },
+    { id: 2, name: "Raven, 28 jaar", location: "Utrecht", rating: 5, date: "22 december 2024", verified: true, text: "Hele mooie kwaliteit rozenkwarts. De armband past perfect en is prachtig afgewerkt. Voelt liefdevol en rustgevend." },
+    { id: 3, name: "Aurora, 31 jaar", location: "Rotterdam", rating: 4, date: "25 december 2024", verified: true, text: "Mooi product, fijne energie. Alleen had ik de kralen iets groter verwacht, maar verder heel tevreden." },
+    { id: 4, name: "Zenno, 36 jaar", location: "Den Haag", rating: 5, date: "28 december 2024", verified: true, text: "Wat een prachtige armband! De rozenkwarts geeft een zachte, liefdevolle energie. Ik voel me rustiger sinds ik hem draag." },
+    { id: 5, name: "Indigo, 29 jaar", location: "Eindhoven", rating: 3, date: "2 januari 2025", verified: true, text: "De armband is mooi, maar het elastiek voelt een beetje dun aan. Ik hoop dat hij lang meegaat. Verder prima kwaliteit stenen." },
+    { id: 6, name: "Luna-Rose, 33 jaar", location: "Groningen", rating: 5, date: "5 januari 2025", verified: true, text: "Prachtige armband met zachte, liefdevolle energie. Draag hem elke dag en voel me meer in balans. Aanrader!" },
+    { id: 7, name: "Sage, 27 jaar", location: "Breda", rating: 5, date: "8 januari 2025", verified: true, text: "Hele mooie rozenkwarts armband. De kralen zijn glanzend en de energie voelt warm en liefdevol. Top kwaliteit!" },
+    { id: 8, name: "Phoenix, 35 jaar", location: "Nijmegen", rating: 4, date: "11 januari 2025", verified: true, text: "Mooi sieraad, fijne energie. De armband past goed en ziet er kwalitatief uit. Ik draag hem veel." },
+    { id: 9, name: "Willow, 30 jaar", location: "Tilburg", rating: 5, date: "14 januari 2025", verified: true, text: "Prachtige armband! De rozenkwarts voelt zacht en krachtig tegelijk. Ik merk meer rust en zelfliefde sinds ik hem draag." },
+    { id: 10, name: "River, 32 jaar", location: "Arnhem", rating: 5, date: "17 januari 2025", verified: true, text: "Echt een mooie armband met liefdevolle energie. De kralen zijn van goede kwaliteit en het zit comfortabel. Heel blij mee!" },
+    { id: 11, name: "Skye, 26 jaar", location: "Almere", rating: 4, date: "20 januari 2025", verified: true, text: "Mooie armband, fijne energie. Past goed en ziet er mooi uit. Voor de prijs een goede aankoop." },
+    { id: 12, name: "Ocean, 34 jaar", location: "Haarlem", rating: 5, date: "23 januari 2025", verified: true, text: "Wat een prachtige armband! De rozenkwarts voelt warm en liefdevol. Ik draag hem dagelijks en voel meer rust." },
+    { id: 13, name: "Eden, 29 jaar", location: "Apeldoorn", rating: 5, date: "26 januari 2025", verified: true, text: "Prachtige kwaliteit rozenkwarts. De armband is mooi afgewerkt en geeft een zachte, rustgevende energie. Aanrader!" },
+    { id: 14, name: "Jasper-Lee, 31 jaar", location: "Enschede", rating: 4, date: "29 januari 2025", verified: true, text: "Mooie armband met fijne energie. De kralen zijn glanzend en de pasvorm is goed. Heel tevreden." },
+    { id: 15, name: "Nova, 28 jaar", location: "Leiden", rating: 5, date: "1 februari 2025", verified: true, text: "Hele mooie armband! De rozenkwarts voelt krachtig en liefdevol. Ik draag hem elke dag en voel meer balans." },
+    { id: 16, name: "Bodhi, 33 jaar", location: "Maastricht", rating: 5, date: "4 februari 2025", verified: true, text: "Prachtige armband met zachte energie. De kralen zijn van goede kwaliteit en het zit comfortabel. Top!" },
+    { id: 17, name: "Lotus, 30 jaar", location: "Zwolle", rating: 4, date: "7 februari 2025", verified: true, text: "Mooi product, fijne energie. De armband past goed en de rozenkwarts voelt krachtig. Blij met mijn aankoop." },
+    { id: 18, name: "Aria, 27 jaar", location: "Amersfoort", rating: 5, date: "10 februari 2025", verified: true, text: "Wat een prachtige armband! De rozenkwarts geeft een liefdevolle, rustgevende energie. Ik draag hem dagelijks." },
+    { id: 19, name: "Kai, 35 jaar", location: "Dordrecht", rating: 5, date: "13 februari 2025", verified: true, text: "Hele mooie kwaliteit. De armband is mooi afgewerkt en de rozenkwarts voelt warm en liefdevol. Aanrader!" },
+    {
+      id: 20,
+      name: "Shanti, 32 jaar",
+      location: "Ede",
+      rating: 2,
+      date: "16 februari 2025",
+      verified: true,
+      text: "De armband is mooi, maar helaas brak het elastiek na een week dragen. Erg jammer, want de rozenkwarts is prachtig.",
+      reply: {
+        author: "Team Stonesforhealth",
+        date: "16 februari 2025",
+        text: "Beste Shanti,\n\nWat vervelend dat het elastiek is gebroken! Dat hoort natuurlijk niet te gebeuren. We sturen je vandaag nog kosteloos een nieuwe armband op én voegen een kortingsvoucher van 10% toe voor je volgende bestelling.\n\nGroet, Team Stonesforhealth"
+      }
+    },
+    { id: 21, name: "Zara, 29 jaar", location: "Alphen aan den Rijn", rating: 5, date: "19 februari 2025", verified: true, text: "Prachtige armband met zachte, liefdevolle energie. De kralen zijn glanzend en van goede kwaliteit. Heel blij mee!" },
+    { id: 22, name: "Finn, 34 jaar", location: "Zaanstad", rating: 4, date: "22 februari 2025", verified: true, text: "Mooie armband, fijne energie. Past goed en ziet er kwalitatif uit. Voor de prijs een goede keuze." },
+    { id: 23, name: "Maya, 28 jaar", location: "Den Bosch", rating: 5, date: "25 februari 2025", verified: true, text: "Wat een prachtige rozenkwarts armband! Voelt warm en liefdevol. Ik draag hem elke dag en voel meer rust." },
+    { id: 24, name: "Orion, 31 jaar", location: "Heerlen", rating: 4, date: "28 februari 2025", verified: true, text: "Mooi product met fijne energie. De armband past goed en de kralen zijn glanzend. Tevreden met mijn aankoop." },
+    { id: 25, name: "Amber-Sky, 30 jaar", location: "Alkmaar", rating: 5, date: "3 maart 2025", verified: true, text: "Prachtige armband! De rozenkwarts geeft een zachte, rustgevende energie. Mooi afgewerkt en comfortabel." },
+    {
+      id: 26,
+      name: "Kristan, 33 jaar",
+      location: "Leeuwarden",
+      rating: 1,
+      date: "6 maart 2025",
+      verified: true,
+      text: "Besteld op 25 februari maar na 10 dagen nog steeds niets ontvangen. Erg teleurstellend. Waar blijft mijn bestelling?",
+      reply: {
+        author: "Team Stonesforhealth",
+        date: "6 maart 2025",
+        text: "Beste Kristan,\n\nOnze excuses voor de vertraging! Dat hoort natuurlijk niet te gebeuren. We hebben je bestelling vandaag direct verzonden. Daarnaast sturen we je als compensatie een gratis edelsteenarmband mee en ontvang je 10% korting op je volgende bestelling.\n\nGroet, Team Stonesforhealth"
+      }
+    },
+    { id: 27, name: "Sienna, 27 jaar", location: "Hengelo", rating: 5, date: "9 maart 2025", verified: true, text: "Hele mooie armband met liefdevolle energie. De rozenkwarts voelt krachtig en zacht tegelijk. Ik draag hem elke dag!" },
+    { id: 28, name: "Atlas, 35 jaar", location: "Zaandam", rating: 4, date: "12 maart 2025", verified: true, text: "Mooi sieraad met fijne energie. De armband past goed en de kwaliteit is prima. Blij met mijn keuze." },
+    { id: 29, name: "Celeste, 29 jaar", location: "Oss", rating: 5, date: "15 maart 2025", verified: true, text: "Prachtige rozenkwarts armband! Voelt warm, liefdevol en rustgevend. De kralen zijn glanzend en mooi. Aanrader!" },
+    { id: 30, name: "Sage-River, 32 jaar", location: "Venlo", rating: 5, date: "18 maart 2025", verified: true, text: "Wat een prachtige armband! De rozenkwarts geeft een zachte, liefdevolle energie. Ik voel me rustiger en meer in balans." },
+    { id: 31, name: "Rumi, 28 jaar", location: "Roosendaal", rating: 4, date: "21 maart 2025", verified: true, text: "Mooie armband met fijne energie. De kralen zijn glanzend en de pasvorm is goed. Voor de prijs een goede aankoop." }
   ]
 };
 
