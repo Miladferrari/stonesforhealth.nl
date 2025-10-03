@@ -81,6 +81,7 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
   const headerRef = useRef<HTMLDivElement>(null);
   const reviewDropdownRef = useRef<HTMLDivElement>(null);
   const reviewButtonRef = useRef<HTMLButtonElement>(null);
+  const thumbnailRefs = useRef<(HTMLButtonElement | null)[]>([]);
 
   // Check if product is out of stock
   const isOutOfStock = product.stock_status !== 'instock' || product.stock_quantity === 0;
@@ -178,6 +179,17 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
       }
     }
   }, [availableQuantity, selectedBundle, canSelectSingle, canSelectDuo, canSelectFamily]);
+
+  // Auto-scroll to selected thumbnail
+  useEffect(() => {
+    if (thumbnailRefs.current[selectedImage]) {
+      thumbnailRefs.current[selectedImage]?.scrollIntoView({
+        behavior: 'smooth',
+        block: 'nearest',
+        inline: 'center'
+      });
+    }
+  }, [selectedImage]);
 
   // Handle sticky header visibility using Intersection Observer
   useEffect(() => {
@@ -474,6 +486,7 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
                 {thumbnailSlots.map((image, index) => (
                   <button
                     key={index}
+                    ref={(el) => thumbnailRefs.current[index] = el}
                     onClick={() => setSelectedImage(index)}
                     className={`flex-shrink-0 w-[calc((100%-2.5rem)/6)] aspect-square rounded overflow-hidden border-2 transition-all ${
                       selectedImage === index
