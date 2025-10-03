@@ -486,7 +486,7 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
                 {thumbnailSlots.map((image, index) => (
                   <button
                     key={index}
-                    ref={(el) => thumbnailRefs.current[index] = el}
+                    ref={(el) => { thumbnailRefs.current[index] = el; }}
                     onClick={() => setSelectedImage(index)}
                     className={`flex-shrink-0 w-[calc((100%-2.5rem)/6)] aspect-square rounded overflow-hidden border-2 transition-all ${
                       selectedImage === index
