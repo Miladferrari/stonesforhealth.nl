@@ -134,6 +134,66 @@ const sampleBlogs = [
     date: '25 maart 2025',
     readTime: '8 min leestijd',
     slug: 'masters-of-shilajit-himalaya'
+  },
+  {
+    id: 14,
+    title: 'Art-of-Stones B.V.: Het Verhaal achter S4H Edelstenen',
+    excerpt: 'Ontdek het krachtige bedrijf achter Stonesforhealth.nl. Art-of-Stones B.V. en het private label S4H brengen hoogwaardige edelstenen en sieraden naar 11 Europese landen.',
+    image: '/Blog images /Art-of-Stones B.V.- Het Verhaal achter S4H Edelstenen.jpeg',
+    category: 'Kristallen',
+    date: '28 maart 2025',
+    readTime: '7 min leestijd',
+    slug: 'art-of-stones-s4h-edelstenen'
+  },
+  {
+    id: 15,
+    title: 'S4H Sieraden: Spirituele Kracht en Stijl in Één',
+    excerpt: 'Ontdek S4H sieraden - de perfecte combinatie van schoonheid en spiritualiteit. Edelsteen armbanden, kettingen en ringen met echte energetische werking voor dagelijks gebruik.',
+    image: '/Blog images /S4H Sieraden- Spirituele Kracht en Stijl in Één.jpeg',
+    category: 'Kristallen',
+    date: '30 maart 2025',
+    readTime: '8 min leestijd',
+    slug: 's4h-sieraden-spirituele-kracht-stijl'
+  },
+  {
+    id: 16,
+    title: 'Agaat: Betekenis, Soorten, Kleuren en Spirituele Werking',
+    excerpt: 'Ontdek agaat - de veelzijdige edelsteen met duizenden jaren geschiedenis. Van blauwe agaat tot vuuragaat, elke kleur heeft unieke kracht voor balans, bescherming en heling.',
+    image: '/Blog images /Agaat- Betekenis, Soorten, Kleuren en Spirituele Werking.jpeg',
+    category: 'Kristallen',
+    date: '2 april 2025',
+    readTime: '10 min leestijd',
+    slug: 'agaat-betekenis-soorten-kleuren-werking'
+  },
+  {
+    id: 17,
+    title: 'Rozenkwarts: De Steen van de Liefde en het Hartchakra',
+    excerpt: 'Ontdek rozenkwarts - de ultieme steen voor liefde, zelfliefde en emotioneel welzijn. Leer over de werking op het hartchakra, toepassingen en waarom deze roze steen al eeuwen geliefd is.',
+    image: '/Blog images /Rozenkwarts- De Steen van de Liefde en het Hartchakra.jpeg',
+    category: 'Kristallen',
+    date: '5 april 2025',
+    readTime: '9 min leestijd',
+    slug: 'rozenkwarts-steen-van-de-liefde'
+  },
+  {
+    id: 18,
+    title: 'Amethist: Soorten, Werking, Vindplaatsen en Spirituele Tips',
+    excerpt: 'Ontdek amethist - de paarse steen van rust, intuïtie en spiritualiteit. Leer over alle soorten, werking op het derde oog chakra, vindplaatsen en hoe je amethist gebruikt voor meditatie.',
+    image: '/Blog images /Amethist- Soorten, Werking, Vindplaatsen en Spirituele Tips.jpeg',
+    category: 'Kristallen',
+    date: '8 april 2025',
+    readTime: '10 min leestijd',
+    slug: 'amethist-soorten-werking-spirituele-tips'
+  },
+  {
+    id: 19,
+    title: 'Top 10 Bekendste & Onbekendste Edelstenen Met Hun Werking',
+    excerpt: 'Ontdek de top 10 meest populaire edelstenen (amethist, rozenkwarts, bergkristal) én de top 10 zeldzame geheimen (moldaviet, larimar, shungiet) met hun unieke spirituele krachten.',
+    image: '/Blog images /Top 10 Bekendste & Onbekendste Edelstenen Met Hun Werking.jpeg',
+    category: 'Kristallen',
+    date: '10 april 2025',
+    readTime: '12 min leestijd',
+    slug: 'top-10-bekendste-onbekendste-edelstenen'
   }
 ];
 
@@ -143,9 +203,22 @@ export default function BlogPage() {
   return (
     <div className="min-h-screen bg-white">
       {/* Hero Section */}
-      <div className="relative bg-gradient-to-br from-[#492c4a] to-[#6b4069] text-white py-16 md:py-24">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4 font-[family-name:var(--font-eb-garamond)]">
+      <div className="relative w-full h-[250px] md:h-[350px] lg:h-[400px] overflow-hidden">
+        {/* Background Image */}
+        <div className="absolute inset-0">
+          <Image
+            src="/images/banner.png"
+            alt="Blog Hero"
+            fill
+            className="object-cover"
+            priority
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/60" />
+        </div>
+
+        {/* Content Overlay */}
+        <div className="relative z-10 h-full flex flex-col items-center justify-center px-4 sm:px-6 lg:px-8 text-center">
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4 font-[family-name:var(--font-eb-garamond)]">
             Kristallen & Spiritualiteit Blog
           </h1>
           <p className="text-lg md:text-xl text-white/90 max-w-3xl mx-auto font-[family-name:var(--font-eb-garamond)]">
