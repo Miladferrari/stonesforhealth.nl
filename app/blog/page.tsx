@@ -19,7 +19,7 @@ const sampleBlogs = [
     id: 2,
     title: 'Chakra\'s en hun Kleuren: De Energiepunten van je Lichaam',
     excerpt: 'Ontdek de 7 hoofdchakra\'s, hun unieke kleuren en energetische betekenis. Leer hoe je deze energiepunten in balans brengt voor optimaal welzijn.',
-    image: '/images/banner.png',
+    image: '/Blog images /Chakra\'s en hun Kleuren- De Energiepunten van je Lichaam.jpeg',
     category: 'Spiritualiteit',
     date: '10 maart 2025',
     readTime: '10 min leestijd',
@@ -39,7 +39,7 @@ const sampleBlogs = [
     id: 4,
     title: 'Volle Maan Oktober 2025: Jagermaan in Ram',
     excerpt: 'Volle maan op 14 oktober 2025. Ontdek de betekenis van de Jagermaan, krachtige rituelen en welke edelstenen perfect passen bij deze transformerende energie.',
-    image: '/images/banner.png',
+    image: '/Blog images /Volle Maan Oktober 2025- De Jagermaan in Ram .jpeg',
     category: 'Spiritualiteit',
     date: '10 oktober 2025',
     readTime: '8 min leestijd',
@@ -49,7 +49,7 @@ const sampleBlogs = [
     id: 5,
     title: 'Volle Maan November 2025: Beaver Moon Supermaan',
     excerpt: 'Supermaan op 5 november 2025. Ontdek de betekenis van de Beaver Moon, gronding rituelen en de beste edelstenen voor deze krachtige volle maan.',
-    image: '/images/banner.png',
+    image: '/Blog images /Volle Maan November 2025- Beaver Moon Supermaan.jpeg',
     category: 'Spiritualiteit',
     date: '1 november 2025',
     readTime: '9 min leestijd',
@@ -59,11 +59,81 @@ const sampleBlogs = [
     id: 6,
     title: 'Volle Maan December 2025: Cold Moon',
     excerpt: 'Laatste volle maan van 2025 op 26 december. Ontdek de betekenis van de Cold Moon, afrondingsrituelen en edelstenen voor reflectie en nieuw begin.',
-    image: '/images/banner.png',
+    image: '/Blog images /Volle Maan December 2025- Cold Moon.jpeg',
     category: 'Spiritualiteit',
     date: '20 december 2025',
     readTime: '8 min leestijd',
     slug: 'volle-maan-december-2025'
+  },
+  {
+    id: 7,
+    title: '2026: Het Jaar van het Vuurpaard',
+    excerpt: 'Chinese astrologie 2026: Ontdek wat het Jaar van het Vuurpaard betekent voor carrière, liefde, gezondheid en spiritualiteit. Inclusief gelukskleuren, nummers en beste edelstenen.',
+    image: '/Blog images /2026- Het Jaar van het Vuurpaard.jpeg',
+    category: 'Spiritualiteit',
+    date: '1 januari 2026',
+    readTime: '10 min leestijd',
+    slug: 'jaar-van-het-vuurpaard-2026'
+  },
+  {
+    id: 8,
+    title: '2025: Het Jaar van de Houten Slang',
+    excerpt: 'Chinese astrologie 2025: Ontdek de wijsheid van het Jaar van de Houten Slang. Transformatie, intuïtie en spirituele groei met de beste edelstenen voor dit jaar.',
+    image: '/Blog images /2025- Het Jaar van de Houten Slang.jpeg',
+    category: 'Spiritualiteit',
+    date: '29 januari 2025',
+    readTime: '9 min leestijd',
+    slug: 'jaar-van-de-houten-slang-2025'
+  },
+  {
+    id: 9,
+    title: 'De Gouden Driehoek: Amethist, Bergkristal & Rozenkwarts',
+    excerpt: 'Ontdek de kracht van de Gouden Driehoek - de meest populaire kristalcombinatie voor balans, liefde en helderheid. Complete gids met toepassingen en tips.',
+    image: '/Blog images /De Gouden Driehoek- Amethist, Bergkristal & Rozenkwarts .jpeg',
+    category: 'Kristallen',
+    date: '5 maart 2025',
+    readTime: '8 min leestijd',
+    slug: 'gouden-driehoek-amethist-bergkristal-rozenkwarts'
+  },
+  {
+    id: 10,
+    title: 'Citrien & Amethist: Zon & Maan in Edelstenen',
+    excerpt: 'Ontdek de perfecte balans tussen Citrien en Amethist. Zon en maan, energie en rust, actie en ontspanning - de krachtigste duo voor harmonie en succes.',
+    image: '/Blog images /Citrien & Amethist- Zon & Maan in Edelstenen.jpeg',
+    category: 'Kristallen',
+    date: '12 maart 2025',
+    readTime: '7 min leestijd',
+    slug: 'citrien-amethist-zon-maan-edelstenen'
+  },
+  {
+    id: 11,
+    title: 'Morganiet & Rhodoniet: Edelstenen van Liefde & Heling',
+    excerpt: 'Ontdek de kracht van Morganiet en Rhodoniet voor hartchakra heling. Zachte liefde meets krachtige emotionele transformatie - perfect voor relaties en zelfliefde.',
+    image: '/Blog images /Morganiet & Rhodoniet- Edelstenen van Liefde & Heling.jpeg',
+    category: 'Kristallen',
+    date: '18 maart 2025',
+    readTime: '7 min leestijd',
+    slug: 'morganiet-rhodoniet-liefde-heling'
+  },
+  {
+    id: 12,
+    title: 'Bergkristal: De Koning onder de Kristallen',
+    excerpt: 'Ontdek waarom Bergkristal de koning van alle kristallen is. Zuivering, versterking, balans en bescherming - de meest veelzijdige en krachtige edelsteen.',
+    image: '/Blog images /Bergkristal- De Koning onder de Kristallen .jpeg',
+    category: 'Kristallen',
+    date: '22 maart 2025',
+    readTime: '9 min leestijd',
+    slug: 'bergkristal-koning-kristallen'
+  },
+  {
+    id: 13,
+    title: 'Masters of Shilajit: Pure Kracht uit de Himalaya',
+    excerpt: 'Ontdek Masters of Shilajit - het beste Shilajit merk ter wereld. 100% pure Himalaya-hars voor energie, focus, herstel en spirituele balans. Zwart goud van de bergen.',
+    image: '/Blog images /Masters of Shilajit- Pure Kracht uit de Himalaya.jpeg',
+    category: 'Bescherming',
+    date: '25 maart 2025',
+    readTime: '8 min leestijd',
+    slug: 'masters-of-shilajit-himalaya'
   }
 ];
 
