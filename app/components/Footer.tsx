@@ -183,6 +183,11 @@ const Footer = memo(function Footer() {
                     </Link>
                   </li>
                   <li>
+                    <Link href="/blog" className="text-base text-gray-800 font-medium hover:text-[#492c4a] transition-colors font-[family-name:var(--font-eb-garamond)]">
+                      Blog
+                    </Link>
+                  </li>
+                  <li>
                     <Link href="/faq" className="text-base text-gray-800 font-medium hover:text-[#492c4a] transition-colors font-[family-name:var(--font-eb-garamond)]">
                       Veelgestelde vragen
                     </Link>
