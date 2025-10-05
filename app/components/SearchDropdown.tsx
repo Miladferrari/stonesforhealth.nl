@@ -178,7 +178,7 @@ export default function SearchDropdown({ isOpen, onClose }: SearchDropdownProps)
                 {results.map((product) => (
                   <Link
                     key={product.id}
-                    href={`/product/${product.id}`}
+                    href={`/product/${product.slug}`}
                     onClick={onClose}
                     className="flex items-center gap-3 p-3 hover:bg-gray-50 rounded-lg transition-colors"
                   >

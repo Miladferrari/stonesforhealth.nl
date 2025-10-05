@@ -93,7 +93,7 @@ export default function CollectionProductGrid({
                 onMouseEnter={() => setHoveredProduct(product.id)}
                 onMouseLeave={() => setHoveredProduct(null)}
               >
-                <Link href={`/product/${product.id}`}>
+                <Link href={`/product/${product.slug}`}>
                   {/* Product Image */}
                   <div className="relative aspect-square overflow-hidden">
                     {/* Discount Badge */}
@@ -131,7 +131,7 @@ export default function CollectionProductGrid({
 
                 {/* Product Info */}
                 <div className="p-2 sm:p-3 md:p-4">
-                  <Link href={`/product/${product.id}`}>
+                  <Link href={`/product/${product.slug}`}>
                     {/* Product Title */}
                     <h3 className="font-bold text-gray-900 mb-1 text-sm sm:text-base md:text-lg font-[family-name:var(--font-eb-garamond)] line-clamp-1 hover:text-[#492c4a] transition-colors cursor-pointer">
                       {product.name}

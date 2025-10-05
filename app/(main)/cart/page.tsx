@@ -117,7 +117,7 @@ export default function CartPage() {
                   >
                     <div className="flex items-start gap-4">
                       {/* Product image */}
-                      <Link href={`/product/${item.product.id}`} className="flex-shrink-0">
+                      <Link href={`/product/${item.product.slug}`} className="flex-shrink-0">
                         <div className="w-24 h-24 md:w-32 md:h-32 bg-gray-100 rounded-md shadow-sm hover:shadow-md transition-shadow flex items-center justify-center p-2">
                           {mainImage ? (
                             <img
@@ -138,7 +138,7 @@ export default function CartPage() {
                       
                       {/* Product details */}
                       <div className="flex-grow">
-                        <Link href={`/product/${item.product.id}`}>
+                        <Link href={`/product/${item.product.slug}`}>
                           <h3 className="font-semibold font-[family-name:var(--font-eb-garamond)] text-[#2D2D2D] hover:text-medical-green transition-colors text-lg">
                             {item.product.name}
                           </h3>

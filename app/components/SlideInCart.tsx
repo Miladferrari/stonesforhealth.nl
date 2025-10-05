@@ -161,7 +161,7 @@ export default function SlideInCart() {
                       <div className="flex gap-4 p-4">
                         {/* Product image */}
                         <div className="w-20 h-20 flex-shrink-0">
-                          <a href={`/product/${item.product.id}`} className="block w-full h-full">
+                          <a href={`/product/${item.product.slug}`} className="block w-full h-full">
                             {mainImage ? (
                               <img
                                 src={mainImage.src}
@@ -182,7 +182,7 @@ export default function SlideInCart() {
                         <div className="flex-1 min-w-0">
                           <div className="flex justify-between items-start mb-2">
                             <div className="flex-1 pr-2">
-                              <a href={`/product/${item.product.id}`} className="text-sm font-medium text-gray-900 hover:text-[#492c4a] transition-colors line-clamp-2">
+                              <a href={`/product/${item.product.slug}`} className="text-sm font-medium text-gray-900 hover:text-[#492c4a] transition-colors line-clamp-2">
                                 {item.product.name}
                               </a>
                             </div>

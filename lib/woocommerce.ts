@@ -514,6 +514,11 @@ class WooCommerceAPI {
     return this.fetchAPI<Product>(`products/${id}`);
   }
 
+  async getProductBySlug(slug: string): Promise<Product | null> {
+    const products = await this.fetchAPI<Product[]>(`products?slug=${slug}`);
+    return products.length > 0 ? products[0] : null;
+  }
+
   async getCategories(params?: {
     per_page?: number;
     orderby?: string;

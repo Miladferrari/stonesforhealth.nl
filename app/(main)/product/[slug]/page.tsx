@@ -1,4 +1,4 @@
-import { notFound } from 'next/navigation';
+import { notFound, redirect } from 'next/navigation';
 import { woocommerce } from '@/lib/woocommerce';
 import HikeGemstoneProductPageV2 from './HikeGemstoneProductPageV2';
 
@@ -7,21 +7,28 @@ export const dynamic = 'force-dynamic';
 export const revalidate = 0;
 
 interface ProductPageProps {
-  params: Promise<{ id: string }>;
+  params: Promise<{ slug: string }>;
 }
 
 export default async function ProductPage({ params }: ProductPageProps) {
-  const { id } = await params;
+  const { slug } = await params;
 
   try {
-    const productId = parseInt(id);
+    let product;
 
-    if (isNaN(productId)) {
-      notFound();
+    // Check if slug is actually a numeric ID (backward compatibility)
+    if (!isNaN(parseInt(slug))) {
+      const productId = parseInt(slug);
+      product = await woocommerce.getProduct(productId);
+
+      if (product && product.slug) {
+        // Redirect old ID-based URL to new slug-based URL
+        redirect(`/product/${product.slug}`);
+      }
+    } else {
+      // Fetch by slug (new method)
+      product = await woocommerce.getProductBySlug(slug);
     }
-
-    // Fetch single product directly via WooCommerce API
-    const product = await woocommerce.getProduct(productId);
 
     if (!product) {
       notFound();

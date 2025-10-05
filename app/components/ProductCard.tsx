@@ -145,7 +145,7 @@ const ProductCard = memo(function ProductCard({ product }: ProductCardProps) {
   return (
     <div className={`product-item bg-white rounded-lg border border-gray-200 hover:shadow-xl transition-shadow duration-300 overflow-hidden relative flex flex-col h-full pb-[200px] ${isOutOfStock ? 'opacity-75' : ''}`}>
       <div className="relative">
-        <Link href={`/product/${product.id}`} className="block">
+        <Link href={`/product/${product.slug}`} className="block">
           <div className="relative w-full aspect-square bg-gray-50 overflow-hidden">
             {mainImage ? (
               <div className="relative w-full h-full">
@@ -204,7 +204,7 @@ const ProductCard = memo(function ProductCard({ product }: ProductCardProps) {
       </div>
       
       <div className="flex flex-col flex-grow p-4">
-        <Link href={`/product/${product.id}`} className="block mb-3">
+        <Link href={`/product/${product.slug}`} className="block mb-3">
           <h3 className="text-lg font-medium text-navy-blue leading-tight line-clamp-2 hover:text-medical-green transition-colors">
             {product.name}
           </h3>
@@ -284,8 +284,8 @@ const ProductCard = memo(function ProductCard({ product }: ProductCardProps) {
           )}
         </button>
         
-        <Link 
-          href={`/product/${product.id}`}
+        <Link
+          href={`/product/${product.slug}`}
           className="block w-full bg-gray-100 hover:bg-gray-200 text-navy-blue py-2 px-4 rounded-md text-sm font-medium text-center transition-colors"
         >
           Meer informatie
