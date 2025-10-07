@@ -2,7 +2,6 @@ import { notFound, redirect } from 'next/navigation';
 import { woocommerce } from '@/lib/woocommerce';
 import HikeGemstoneProductPageV2 from './HikeGemstoneProductPageV2';
 import JsonLd from '@/app/components/JsonLd';
-import Breadcrumbs from '@/app/components/Breadcrumbs';
 import type { Metadata } from 'next';
 
 // Force dynamic rendering to always fetch fresh data
@@ -131,18 +130,10 @@ export default async function ProductPage({ params }: ProductPageProps) {
       }
     };
 
-    // Generate custom breadcrumb items for product
-    const breadcrumbItems = [
-      { name: 'Home', url: 'https://stonesforhealth.nl' },
-      { name: 'Producten', url: 'https://stonesforhealth.nl/alle-producten' },
-      { name: product.name, url: `https://stonesforhealth.nl/product/${product.slug}` }
-    ];
-
     // Always use the gemstone product page for Stonesforhealth
     return (
       <>
         <JsonLd data={productSchema} />
-        <Breadcrumbs customItems={breadcrumbItems} />
         <HikeGemstoneProductPageV2 product={product} relatedProducts={bestSellingProducts} />
       </>
     );
