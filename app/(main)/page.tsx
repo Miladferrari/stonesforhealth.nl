@@ -4,7 +4,6 @@ import Link from 'next/link';
 import Image from 'next/image';
 import type { Metadata } from 'next';
 import BestsellerGrid from '@/app/components/BestsellerGrid';
-import TrustpilotWidget from '@/app/components/TrustpilotWidget';
 import JsonLd from '@/app/components/JsonLd';
 
 // Force dynamic rendering to always fetch fresh data
@@ -294,10 +293,6 @@ export default async function Home() {
                   </div>
                 </div>
 
-                {/* Trustpilot Widget */}
-                <div className="flex">
-                  <TrustpilotWidget />
-                </div>
               </div>
             </div>
 

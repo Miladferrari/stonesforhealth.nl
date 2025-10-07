@@ -15,15 +15,12 @@
     "@stripe/react-stripe-js": "^2.9.0",
     "@stripe/stripe-js": "^2.4.0",
     "@types/nodemailer": "^7.0.1",
-    "crypto-js": "^4.2.0",
-    "framer-motion": "^12.23.3",
     "next": "15.3.4",
     "nodemailer": "^7.0.6",
     "oauth-1.0a": "^2.2.6",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "stripe": "^14.25.0",
-    "web-vitals": "^5.0.3"
+    "stripe": "^14.25.0"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
