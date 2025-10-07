@@ -25,7 +25,7 @@ const blogPostingSchema = {
   "@type": "BlogPosting",
   "headline": "Volle Maan Oktober 2025: De Jagermaan in Ram",
   "description": "Volle maan op 14 oktober 2025 in Ram. Ontdek de spirituele betekenis van de Jagermaan, krachtige rituelen en welke edelstenen perfect passen bij deze volle maan energie.",
-  "image": "https://stonesforhealth.nl/Blog images /Volle Maan Oktober 2025- De Jagermaan in Ram .jpeg",
+  "image": "https://stonesforhealth.nl/Blog images /Volle Maan Oktober 2025- De Jagermaan in Ram .webp",
   "datePublished": "2025-10-10T09:00:00Z",
   "dateModified": "2025-10-10T09:00:00Z",
   "author": {
@@ -71,7 +71,7 @@ export default function VolleMaanOktober2025Page() {
         {/* Featured Image */}
         <div className="relative w-full h-64 sm:h-96 my-8 rounded-xl overflow-hidden bg-gradient-to-br from-gray-50 to-gray-100 border border-gray-200">
           <Image
-            src="/Blog images /Volle Maan Oktober 2025- De Jagermaan in Ram .jpeg"
+            src="/Blog images /Volle Maan Oktober 2025- De Jagermaan in Ram .webp"
             alt="Volle maan oktober 2025 - Jagermaan in Ram met edelstenen"
             fill
             className="object-cover"

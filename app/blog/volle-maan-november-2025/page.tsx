@@ -25,7 +25,7 @@ const blogPostingSchema = {
   "@type": "BlogPosting",
   "headline": "Volle Maan November 2025: Beaver Moon Supermaan",
   "description": "Supermaan op 5 november 2025 om 14:19 uur. Ontdek de spirituele betekenis van de Beaver Moon, gronding rituelen en de beste edelstenen.",
-  "image": "https://stonesforhealth.nl/Blog images /Volle Maan November 2025- Beaver Moon Supermaan.jpeg",
+  "image": "https://stonesforhealth.nl/Blog images /Volle Maan November 2025- Beaver Moon Supermaan.webp",
   "datePublished": "2025-11-01T09:00:00Z",
   "dateModified": "2025-11-01T09:00:00Z",
   "author": {
@@ -71,7 +71,7 @@ export default function VolleMaanNovember2025Page() {
         {/* Featured Image */}
         <div className="relative w-full h-64 sm:h-96 my-8 rounded-xl overflow-hidden bg-gradient-to-br from-gray-50 to-gray-100 border border-gray-200">
           <Image
-            src="/Blog images /Volle Maan November 2025- Beaver Moon Supermaan.jpeg"
+            src="/Blog images /Volle Maan November 2025- Beaver Moon Supermaan.webp"
             alt="Volle maan november 2025 - Beaver Moon Supermaan met edelstenen"
             fill
             className="object-cover"

@@ -40,7 +40,7 @@ const blogPostingSchema = {
   "@type": "BlogPosting",
   "headline": "Rozenkwarts: De Steen van de Liefde en het Hartchakra",
   "description": "Ontdek rozenkwarts - de ultieme edelsteen voor liefde, zelfliefde en emotioneel welzijn. Leer alles over de werking op het hartchakra, geschiedenis, toepassingen en spirituele kracht.",
-  "image": "https://stonesforhealth.nl/Blog images /Rozenkwarts- De Steen van de Liefde en het Hartchakra.jpeg",
+  "image": "https://stonesforhealth.nl/Blog images /Rozenkwarts- De Steen van de Liefde en het Hartchakra.webp",
   "datePublished": "2025-04-05T09:00:00Z",
   "dateModified": "2025-04-05T09:00:00Z",
   "author": {
@@ -81,7 +81,7 @@ export default function RozenkwartsBlog() {
         {/* Banner Image */}
         <div className="relative w-full h-[300px] md:h-[400px] lg:h-[500px] my-8 rounded-xl overflow-hidden">
           <Image
-            src="/Blog images /Rozenkwarts- De Steen van de Liefde en het Hartchakra.jpeg"
+            src="/Blog images /Rozenkwarts- De Steen van de Liefde en het Hartchakra.webp"
             alt="Rozenkwarts - De Steen van de Liefde"
             fill
             className="object-cover"

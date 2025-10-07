@@ -40,7 +40,7 @@ const blogPostingSchema = {
   "@type": "BlogPosting",
   "headline": "Amethist: Soorten, Werking, Vindplaatsen & Spirituele Tips",
   "description": "Ontdek amethist - de paarse steen van rust, intuïtie en spiritualiteit. Leer alles over soorten (chevron, ametrine), werking op het derde oog chakra, vindplaatsen en spirituele toepassingen.",
-  "image": "https://stonesforhealth.nl/Blog images /Amethist- Soorten, Werking, Vindplaatsen en Spirituele Tips.jpeg",
+  "image": "https://stonesforhealth.nl/Blog images /Amethist- Soorten, Werking, Vindplaatsen en Spirituele Tips.webp",
   "datePublished": "2025-04-08T09:00:00Z",
   "dateModified": "2025-04-08T09:00:00Z",
   "author": {
@@ -81,7 +81,7 @@ export default function AmethistBlog() {
         {/* Banner Image */}
         <div className="relative w-full h-[300px] md:h-[400px] lg:h-[500px] my-8 rounded-xl overflow-hidden">
           <Image
-            src="/Blog images /Amethist- Soorten, Werking, Vindplaatsen en Spirituele Tips.jpeg"
+            src="/Blog images /Amethist- Soorten, Werking, Vindplaatsen en Spirituele Tips.webp"
             alt="Amethist - De Paarse Steen van Rust en Intuïtie"
             fill
             className="object-cover"

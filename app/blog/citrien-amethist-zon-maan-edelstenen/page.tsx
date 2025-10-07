@@ -25,7 +25,7 @@ const blogPostingSchema = {
   "@type": "BlogPosting",
   "headline": "Citrien & Amethist: Zon & Maan in Edelstenen",
   "description": "Ontdek de perfecte balans tussen Citrien en Amethist. Zon en maan energie, actie en rust, manifestatie en spiritualiteit.",
-  "image": "https://stonesforhealth.nl/Blog images /Citrien & Amethist- Zon & Maan in Edelstenen.jpeg",
+  "image": "https://stonesforhealth.nl/Blog images /Citrien & Amethist- Zon & Maan in Edelstenen.webp",
   "datePublished": "2025-03-12T09:00:00Z",
   "dateModified": "2025-03-12T09:00:00Z",
   "author": {
@@ -69,7 +69,7 @@ export default function CitrienAmethistPage() {
         {/* Featured Image */}
         <div className="relative h-96 mb-12 rounded-xl overflow-hidden">
           <Image
-            src="/Blog images /Citrien & Amethist- Zon & Maan in Edelstenen.jpeg"
+            src="/Blog images /Citrien & Amethist- Zon & Maan in Edelstenen.webp"
             alt="Citrien en Amethist edelstenen - zon en maan energie in kristallen"
             fill
             className="object-cover"

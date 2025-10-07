@@ -157,19 +157,19 @@ export default async function Home() {
                 <div className="inline-flex items-center justify-center gap-4 bg-white/60 backdrop-blur-sm rounded-full px-5 py-3 shadow-sm border border-gray-100">
                   {/* Profile avatars */}
                   <div className="flex -space-x-3">
-                    <img 
-                      src="https://i.pravatar.cc/150?img=1" 
-                      alt="Anna" 
+                    <img
+                      src="https://i.pravatar.cc/150?img=1"
+                      alt="Tevreden klant Anna - Stonesforhealth review avatar"
                       className="w-10 h-10 rounded-full border-2 border-white object-cover shadow-sm"
                     />
-                    <img 
-                      src="https://i.pravatar.cc/150?img=5" 
-                      alt="Maria" 
+                    <img
+                      src="https://i.pravatar.cc/150?img=5"
+                      alt="Verified customer Maria - 5 sterren review Stonesforhealth"
                       className="w-10 h-10 rounded-full border-2 border-white object-cover shadow-sm"
                     />
-                    <img 
-                      src="https://i.pravatar.cc/150?img=9" 
-                      alt="Sophie" 
+                    <img
+                      src="https://i.pravatar.cc/150?img=9"
+                      alt="Klant Sophie - Positieve edelstenen ervaring review"
                       className="w-10 h-10 rounded-full border-2 border-white object-cover shadow-sm"
                     />
                     <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#492c4a] to-[#6b4069] border-2 border-white flex items-center justify-center text-white text-xs font-bold shadow-sm">
@@ -245,17 +245,17 @@ export default async function Home() {
                   <div className="flex -space-x-3">
                     <img
                       src="https://i.pravatar.cc/150?img=1"
-                      alt="Anna"
+                      alt="Tevreden klant Anna - Stonesforhealth review avatar"
                       className="w-10 h-10 rounded-full border-2 border-white object-cover shadow-sm"
                     />
                     <img
                       src="https://i.pravatar.cc/150?img=5"
-                      alt="Maria"
+                      alt="Verified customer Maria - 5 sterren review Stonesforhealth"
                       className="w-10 h-10 rounded-full border-2 border-white object-cover shadow-sm"
                     />
                     <img
                       src="https://i.pravatar.cc/150?img=9"
-                      alt="Sophie"
+                      alt="Klant Sophie - Positieve edelstenen ervaring review"
                       className="w-10 h-10 rounded-full border-2 border-white object-cover shadow-sm"
                     />
                     <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#492c4a] to-[#6b4069] border-2 border-white flex items-center justify-center text-white text-xs font-bold shadow-sm">
@@ -368,54 +368,54 @@ export default async function Home() {
           {/* Floating review images - Infinite scroll */}
           <div className="relative overflow-hidden">
             <div className="flex gap-4 animate-scroll">
-              <div className="w-56 h-80 flex-shrink-0">
-                <img alt="Klant met edelsteen" className="w-full h-full object-cover rounded-lg" src="/review1.png" />
+              <div className="w-56 h-80 flex-shrink-0 relative">
+                <Image alt="Klant review foto - Amethist edelsteen healing ervaring" className="object-cover rounded-lg" src="/review1.png" fill sizes="224px" />
               </div>
-              <div className="w-56 h-80 flex-shrink-0">
-                <img alt="Kristallen collectie" className="w-full h-full object-cover rounded-lg" src="/review2.png" />
+              <div className="w-56 h-80 flex-shrink-0 relative">
+                <Image alt="Instagram klantfoto - Kristallen collectie display Stonesforhealth" className="object-cover rounded-lg" src="/review2.png" fill sizes="224px" />
               </div>
-              <div className="w-56 h-80 flex-shrink-0">
-                <img alt="Healing stenen" className="w-full h-full object-cover rounded-lg" src="/review3.png" />
+              <div className="w-56 h-80 flex-shrink-0 relative">
+                <Image alt="Customer testimonial - Healing stenen meditatie setup" className="object-cover rounded-lg" src="/review3.png" fill sizes="224px" />
               </div>
-              <div className="w-56 h-80 flex-shrink-0">
-                <img alt="Meditatie met kristallen" className="w-full h-full object-cover rounded-lg" src="/review4.png" />
+              <div className="w-56 h-80 flex-shrink-0 relative">
+                <Image alt="Meditatie met kristallen - Klant ervaring foto Stonesforhealth" className="object-cover rounded-lg" src="/review4.png" fill sizes="224px" />
               </div>
-              <div className="w-56 h-80 flex-shrink-0">
-                <img alt="Chakra stenen" className="w-full h-full object-cover rounded-lg" src="/review5.png" />
+              <div className="w-56 h-80 flex-shrink-0 relative">
+                <Image alt="Chakra stenen arrangement - 7 chakra kristallen testimonial" className="object-cover rounded-lg" src="/review5.png" fill sizes="224px" />
               </div>
-              <div className="w-56 h-80 flex-shrink-0">
-                <img alt="Edelsteen sieraden" className="w-full h-full object-cover rounded-lg" src="/review6.png" />
+              <div className="w-56 h-80 flex-shrink-0 relative">
+                <Image alt="Edelsteen sieraden collectie - Klant review Stonesforhealth" className="object-cover rounded-lg" src="/review6.png" fill sizes="224px" />
               </div>
-              <div className="w-56 h-80 flex-shrink-0">
-                <img alt="Kristallen energie" className="w-full h-full object-cover rounded-lg" src="/review7.png" />
+              <div className="w-56 h-80 flex-shrink-0 relative">
+                <Image alt="Kristallen energie healing - Customer experience foto" className="object-cover rounded-lg" src="/review7.png" fill sizes="224px" />
               </div>
-              <div className="w-56 h-80 flex-shrink-0">
-                <img alt="Healing kristallen" className="w-full h-full object-cover rounded-lg" src="/review8.png" />
+              <div className="w-56 h-80 flex-shrink-0 relative">
+                <Image alt="Healing kristallen testimonial - Rozenkwarts bergkristal klant foto" className="object-cover rounded-lg" src="/review8.png" fill sizes="224px" />
               </div>
               {/* Duplicate set for seamless loop */}
-              <div className="w-56 h-80 flex-shrink-0">
-                <img alt="Klant met edelsteen" className="w-full h-full object-cover rounded-lg" src="/review1.png" />
+              <div className="w-56 h-80 flex-shrink-0 relative">
+                <Image alt="Klant review foto - Amethist edelsteen healing ervaring" className="object-cover rounded-lg" src="/review1.png" fill sizes="224px" />
               </div>
-              <div className="w-56 h-80 flex-shrink-0">
-                <img alt="Kristallen collectie" className="w-full h-full object-cover rounded-lg" src="/review2.png" />
+              <div className="w-56 h-80 flex-shrink-0 relative">
+                <Image alt="Instagram klantfoto - Kristallen collectie display Stonesforhealth" className="object-cover rounded-lg" src="/review2.png" fill sizes="224px" />
               </div>
-              <div className="w-56 h-80 flex-shrink-0">
-                <img alt="Healing stenen" className="w-full h-full object-cover rounded-lg" src="/review3.png" />
+              <div className="w-56 h-80 flex-shrink-0 relative">
+                <Image alt="Customer testimonial - Healing stenen meditatie setup" className="object-cover rounded-lg" src="/review3.png" fill sizes="224px" />
               </div>
-              <div className="w-56 h-80 flex-shrink-0">
-                <img alt="Meditatie met kristallen" className="w-full h-full object-cover rounded-lg" src="/review4.png" />
+              <div className="w-56 h-80 flex-shrink-0 relative">
+                <Image alt="Meditatie met kristallen - Klant ervaring foto Stonesforhealth" className="object-cover rounded-lg" src="/review4.png" fill sizes="224px" />
               </div>
-              <div className="w-56 h-80 flex-shrink-0">
-                <img alt="Chakra stenen" className="w-full h-full object-cover rounded-lg" src="/review5.png" />
+              <div className="w-56 h-80 flex-shrink-0 relative">
+                <Image alt="Chakra stenen arrangement - 7 chakra kristallen testimonial" className="object-cover rounded-lg" src="/review5.png" fill sizes="224px" />
               </div>
-              <div className="w-56 h-80 flex-shrink-0">
-                <img alt="Edelsteen sieraden" className="w-full h-full object-cover rounded-lg" src="/review6.png" />
+              <div className="w-56 h-80 flex-shrink-0 relative">
+                <Image alt="Edelsteen sieraden collectie - Klant review Stonesforhealth" className="object-cover rounded-lg" src="/review6.png" fill sizes="224px" />
               </div>
-              <div className="w-56 h-80 flex-shrink-0">
-                <img alt="Kristallen energie" className="w-full h-full object-cover rounded-lg" src="/review7.png" />
+              <div className="w-56 h-80 flex-shrink-0 relative">
+                <Image alt="Kristallen energie healing - Customer experience foto" className="object-cover rounded-lg" src="/review7.png" fill sizes="224px" />
               </div>
-              <div className="w-56 h-80 flex-shrink-0">
-                <img alt="Healing kristallen" className="w-full h-full object-cover rounded-lg" src="/review8.png" />
+              <div className="w-56 h-80 flex-shrink-0 relative">
+                <Image alt="Healing kristallen testimonial - Rozenkwarts bergkristal klant foto" className="object-cover rounded-lg" src="/review8.png" fill sizes="224px" />
               </div>
             </div>
           </div>
@@ -572,9 +572,9 @@ export default async function Home() {
                 {/* Social proof */}
                 <div className="flex justify-center items-center gap-4 mb-6">
                   <div className="flex -space-x-2">
-                    <img src="https://i.pravatar.cc/32?img=1" alt="User" className="w-8 h-8 rounded-full border-2 border-white" />
-                    <img src="https://i.pravatar.cc/32?img=5" alt="User" className="w-8 h-8 rounded-full border-2 border-white" />
-                    <img src="https://i.pravatar.cc/32?img=9" alt="User" className="w-8 h-8 rounded-full border-2 border-white" />
+                    <img src="https://i.pravatar.cc/32?img=1" alt="Verified Stonesforhealth klant - 5 sterren testimonial" className="w-8 h-8 rounded-full border-2 border-white" />
+                    <img src="https://i.pravatar.cc/32?img=5" alt="Tevreden klant review avatar - Kristallen webshop" className="w-8 h-8 rounded-full border-2 border-white" />
+                    <img src="https://i.pravatar.cc/32?img=9" alt="Customer testimonial photo - Edelstenen ervaring" className="w-8 h-8 rounded-full border-2 border-white" />
                   </div>
                   <div className="text-left">
                     <div className="flex items-center gap-1">
@@ -617,7 +617,7 @@ export default async function Home() {
                   "De winkel heeft een geweldige selectie kristallen. Ik vond precies wat ik zocht en voel me nu veel rustiger."
                 </p>
                 <div className="flex items-center gap-2">
-                  <img src="https://i.pravatar.cc/24?img=3" alt="Sarah" className="w-6 h-6 rounded-full" />
+                  <img src="https://i.pravatar.cc/24?img=3" alt="Sarah K - Verified customer testimonial Stonesforhealth" className="w-6 h-6 rounded-full" />
                   <span className="text-sm text-white/90 font-bold">Sarah K. - Verified</span>
                 </div>
               </div>

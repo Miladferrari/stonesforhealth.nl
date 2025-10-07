@@ -25,7 +25,7 @@ const blogPostingSchema = {
   "@type": "BlogPosting",
   "headline": "Complete Gids: Chakra's en Bijbehorende Kristallen",
   "description": "Ontdek alles over chakra kristallen en chakra stenen. Leer welke edelstenen bij elk van de 7 chakra's horen en hoe je ze gebruikt voor energetische balans.",
-  "image": "https://stonesforhealth.nl/Blog images /Complete Gids- Chakra's en Bijbehorende Kristallen.jpg",
+  "image": "https://stonesforhealth.nl/Blog images /Complete Gids- Chakra's en Bijbehorende Kristallen.webp",
   "datePublished": "2025-03-15T09:00:00Z",
   "dateModified": "2025-03-15T09:00:00Z",
   "author": {
@@ -71,7 +71,7 @@ export default function ChakraKristallenGidsPage() {
         {/* Featured Image */}
         <div className="relative w-full h-64 sm:h-96 my-8 rounded-xl overflow-hidden bg-gradient-to-br from-gray-50 to-gray-100 border border-gray-200">
           <Image
-            src="/Blog images /Complete Gids- Chakra's en Bijbehorende Kristallen.jpg"
+            src="/Blog images /Complete Gids- Chakra's en Bijbehorende Kristallen.webp"
             alt="Chakra kristallen en edelstenen arrangement met de 7 chakra kleuren"
             fill
             className="object-cover"

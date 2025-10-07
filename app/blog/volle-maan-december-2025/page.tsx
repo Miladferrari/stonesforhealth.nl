@@ -25,7 +25,7 @@ const blogPostingSchema = {
   "@type": "BlogPosting",
   "headline": "Volle Maan December 2025: Cold Moon",
   "description": "Laatste volle maan van 2025 op 26 december. Ontdek de betekenis van de Cold Moon, afrondingsrituelen en edelstenen voor reflectie en nieuw begin.",
-  "image": "https://stonesforhealth.nl/Blog images /Volle Maan December 2025- Cold Moon.jpeg",
+  "image": "https://stonesforhealth.nl/Blog images /Volle Maan December 2025- Cold Moon.webp",
   "datePublished": "2025-12-20T09:00:00Z",
   "dateModified": "2025-12-20T09:00:00Z",
   "author": {
@@ -71,7 +71,7 @@ export default function VolleMaanDecember2025Page() {
         {/* Featured Image */}
         <div className="relative w-full h-64 sm:h-96 my-8 rounded-xl overflow-hidden bg-gradient-to-br from-gray-50 to-gray-100 border border-gray-200">
           <Image
-            src="/Blog images /Volle Maan December 2025- Cold Moon.jpeg"
+            src="/Blog images /Volle Maan December 2025- Cold Moon.webp"
             alt="Volle maan december 2025 - Cold Moon met edelstenen"
             fill
             className="object-cover"

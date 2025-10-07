@@ -25,7 +25,7 @@ const blogPostingSchema = {
   "@type": "BlogPosting",
   "headline": "Bergkristal: De Koning onder de Kristallen",
   "description": "Ontdek waarom Bergkristal de koning van alle kristallen is. Complete gids over helder kwarts, werking, soorten en gebruik.",
-  "image": "https://stonesforhealth.nl/Blog images /Bergkristal- De Koning onder de Kristallen .jpeg",
+  "image": "https://stonesforhealth.nl/Blog images /Bergkristal- De Koning onder de Kristallen .webp",
   "datePublished": "2025-03-22T09:00:00Z",
   "dateModified": "2025-03-22T09:00:00Z",
   "author": {
@@ -69,7 +69,7 @@ export default function BergkristalPage() {
         {/* Featured Image */}
         <div className="relative h-96 mb-12 rounded-xl overflow-hidden">
           <Image
-            src="/Blog images /Bergkristal- De Koning onder de Kristallen .jpeg"
+            src="/Blog images /Bergkristal- De Koning onder de Kristallen .webp"
             alt="Bergkristal - helder kwarts kristal, de koning van alle edelstenen"
             fill
             className="object-cover"

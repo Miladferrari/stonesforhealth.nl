@@ -25,7 +25,7 @@ const blogPostingSchema = {
   "@type": "BlogPosting",
   "headline": "Masters of Shilajit: Pure Kracht uit de Himalaya",
   "description": "Ontdek Masters of Shilajit - het beste Shilajit merk. 100% pure Himalaya-hars voor energie, focus, herstel en spirituele balans.",
-  "image": "https://stonesforhealth.nl/Blog images /Masters of Shilajit- Pure Kracht uit de Himalaya.jpeg",
+  "image": "https://stonesforhealth.nl/Blog images /Masters of Shilajit- Pure Kracht uit de Himalaya.webp",
   "datePublished": "2025-03-25T09:00:00Z",
   "dateModified": "2025-03-25T09:00:00Z",
   "author": {
@@ -66,7 +66,7 @@ export default function MastersOfShilajitPage() {
         {/* Banner Image */}
         <div className="relative w-full h-[300px] md:h-[400px] lg:h-[500px] my-8 rounded-xl overflow-hidden">
           <Image
-            src="/Blog images /Masters of Shilajit- Pure Kracht uit de Himalaya.jpeg"
+            src="/Blog images /Masters of Shilajit- Pure Kracht uit de Himalaya.webp"
             alt="Masters of Shilajit - pure Himalaya Shilajit hars, zwart goud uit de bergen"
             fill
             className="object-cover"

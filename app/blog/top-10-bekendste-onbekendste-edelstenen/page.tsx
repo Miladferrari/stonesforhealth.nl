@@ -39,7 +39,7 @@ const blogPostingSchema = {
   "@type": "BlogPosting",
   "headline": "Top 10 Bekendste & Onbekendste Edelstenen Met Hun Werking",
   "description": "Ontdek de top 10 meest populaire edelstenen en de top 10 zeldzame geheimen met hun unieke spirituele krachten en toepassingen.",
-  "image": "https://stonesforhealth.nl/Blog images /Top 10 Bekendste & Onbekendste Edelstenen Met Hun Werking.jpeg",
+  "image": "https://stonesforhealth.nl/Blog images /Top 10 Bekendste & Onbekendste Edelstenen Met Hun Werking.webp",
   "datePublished": "2025-04-10T09:00:00Z",
   "dateModified": "2025-04-10T09:00:00Z",
   "author": {
@@ -80,7 +80,7 @@ export default function Top10EdelsteneBlog() {
         {/* Banner Image */}
         <div className="relative w-full h-[300px] md:h-[400px] lg:h-[500px] my-8 rounded-xl overflow-hidden">
           <Image
-            src="/Blog images /Top 10 Bekendste & Onbekendste Edelstenen Met Hun Werking.jpeg"
+            src="/Blog images /Top 10 Bekendste & Onbekendste Edelstenen Met Hun Werking.webp"
             alt="Top 10 Bekendste & Onbekendste Edelstenen"
             fill
             className="object-cover"

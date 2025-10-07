@@ -40,7 +40,7 @@ const blogPostingSchema = {
   "@type": "BlogPosting",
   "headline": "S4H Sieraden: Spirituele Kracht en Stijl in Één",
   "description": "Ontdek S4H sieraden - edelsteen armbanden, kettingen en ringen met echte spirituele werking. Combineer stijl met chakra balans, bescherming en liefde.",
-  "image": "https://stonesforhealth.nl/Blog images /S4H Sieraden- Spirituele Kracht en Stijl in Één.jpeg",
+  "image": "https://stonesforhealth.nl/Blog images /S4H Sieraden- Spirituele Kracht en Stijl in Één.webp",
   "datePublished": "2025-03-30T09:00:00Z",
   "dateModified": "2025-03-30T09:00:00Z",
   "author": {
@@ -81,7 +81,7 @@ export default function S4HSieradenBlog() {
         {/* Banner Image */}
         <div className="relative w-full h-[300px] md:h-[400px] lg:h-[500px] my-8 rounded-xl overflow-hidden">
           <Image
-            src="/Blog images /S4H Sieraden- Spirituele Kracht en Stijl in Één.jpeg"
+            src="/Blog images /S4H Sieraden- Spirituele Kracht en Stijl in Één.webp"
             alt="S4H Sieraden - Spirituele Kracht en Stijl"
             fill
             className="object-cover"
