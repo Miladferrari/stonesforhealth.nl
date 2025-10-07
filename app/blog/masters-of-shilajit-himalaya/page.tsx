@@ -1,6 +1,8 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { Metadata } from 'next';
+import JsonLd from '@/app/components/JsonLd';
+import Breadcrumbs from '@/app/components/Breadcrumbs';
 
 export const metadata: Metadata = {
   title: 'Masters of Shilajit: Pure Kracht uit de Himalaya | StonesForHealth',
@@ -12,38 +14,59 @@ export const metadata: Metadata = {
     type: 'article',
     publishedTime: '2025-03-25T09:00:00Z',
     authors: ['StonesForHealth'],
+  },
+  alternates: {
+    canonical: 'https://stonesforhealth.nl/blog/masters-of-shilajit-himalaya',
+  }
+};
+
+const blogPostingSchema = {
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Masters of Shilajit: Pure Kracht uit de Himalaya",
+  "description": "Ontdek Masters of Shilajit - het beste Shilajit merk. 100% pure Himalaya-hars voor energie, focus, herstel en spirituele balans.",
+  "image": "https://stonesforhealth.nl/Blog images /Masters of Shilajit- Pure Kracht uit de Himalaya.jpeg",
+  "datePublished": "2025-03-25T09:00:00Z",
+  "dateModified": "2025-03-25T09:00:00Z",
+  "author": {
+    "@type": "Organization",
+    "name": "StonesForHealth"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Stones for Health",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://stonesforhealth.nl/logo.png"
+    }
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://stonesforhealth.nl/blog/masters-of-shilajit-himalaya"
   }
 };
 
 export default function MastersOfShilajitPage() {
   return (
-    <article className="min-h-screen bg-white">
-      {/* Hero Section */}
-      <div className="relative bg-gradient-to-br from-[#492c4a] to-[#6b4069] text-white py-16 md:py-24">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-wrap items-center gap-3 mb-6">
-            <span className="bg-[#fbe022] text-black px-4 py-1.5 rounded-full text-sm font-bold font-[family-name:var(--font-eb-garamond)]">
-              BESCHERMING
-            </span>
-            <span className="text-white/80 text-sm font-[family-name:var(--font-eb-garamond)]">
-              25 maart 2025 • 8 min leestijd
-            </span>
+    <main className="min-h-screen bg-white">
+      <JsonLd data={blogPostingSchema} />
+      <Breadcrumbs />
+      <article className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+        <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-6 leading-tight">
+          Masters of Shilajit: Pure Kracht uit de Himalaya
+        </h1>
+        <div className="flex items-center gap-4 pb-8 border-b border-gray-200">
+          <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#492c4a] to-[#6b4069] flex items-center justify-center text-white font-bold text-lg">S4H</div>
+          <div>
+            <p className="font-semibold text-gray-900">StonesForHealth</p>
+            <p className="text-sm text-gray-600">25 maart 2025 • 8 min read</p>
           </div>
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 font-[family-name:var(--font-eb-garamond)]">
-            Masters of Shilajit: Pure Kracht uit de Himalaya
-          </h1>
-          <p className="text-xl text-white/90 font-[family-name:var(--font-eb-garamond)]">
-            Ontdek Masters of Shilajit - het beste Shilajit merk ter wereld. 100% pure Himalaya-hars voor energie, focus, herstel en spirituele balans. Zwart goud van de bergen.
-          </p>
         </div>
-      </div>
 
-      {/* Main Content */}
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
-        {/* Featured Image */}
-        <div className="relative h-96 mb-12 rounded-xl overflow-hidden">
+        {/* Banner Image */}
+        <div className="relative w-full h-[300px] md:h-[400px] lg:h-[500px] my-8 rounded-xl overflow-hidden">
           <Image
-            src="/images/banner.png"
+            src="/Blog images /Masters of Shilajit- Pure Kracht uit de Himalaya.jpeg"
             alt="Masters of Shilajit - pure Himalaya Shilajit hars, zwart goud uit de bergen"
             fill
             className="object-cover"
@@ -53,13 +76,35 @@ export default function MastersOfShilajitPage() {
 
         {/* Introduction */}
         <div className="prose prose-lg max-w-none">
-          <p className="text-xl text-gray-700 leading-relaxed mb-8 font-[family-name:var(--font-eb-garamond)]">
+          <p className="text-base sm:text-lg text-gray-700 leading-relaxed mb-8 font-[family-name:var(--font-eb-garamond)]">
             Bij <strong>StonesForHealth.nl</strong> vind je alleen producten waarvan we zeker weten dat ze bijdragen aan gezondheid, energie en spirituele balans. Eén van die producten is <strong>Shilajit</strong>, en wij werken met het merk <strong>Masters of Shilajit</strong> – dé specialist in pure, natuurlijke Shilajit-hars uit de Himalaya. In dit blog lees je alles over Masters of Shilajit, waarom dit merk wereldwijd toonaangevend is, en wat Shilajit voor jouw lichaam, geest en spirituele energie kan betekenen.
           </p>
 
+          {/* Lees Ook Section */}
+          <div className="bg-purple-50 border-l-4 border-purple-500 p-6 my-8 rounded">
+            <h3 className="text-lg font-bold text-gray-900 mb-3">📚 Lees Ook</h3>
+            <ul className="space-y-2">
+              <li>
+                <Link href="/blog/art-of-stones-s4h-edelstenen" className="text-purple-600 hover:text-purple-800 underline font-medium">
+                  Art of Stones: Het Verhaal achter S4H
+                </Link> - Ontdek meer over ons merk en onze kwaliteitseisen
+              </li>
+              <li>
+                <Link href="/blog/bergkristal-koning-kristallen" className="text-purple-600 hover:text-purple-800 underline font-medium">
+                  Bergkristal: De Koning der Kristallen
+                </Link> - Combineer Shilajit met kristallen voor extra energie
+              </li>
+              <li>
+                <Link href="/blog/chakra-kristallen-complete-gids" className="text-purple-600 hover:text-purple-800 underline font-medium">
+                  Chakra Kristallen Gids
+                </Link> - Balanceer je energie met kristallen en Shilajit
+              </li>
+            </ul>
+          </div>
+
           {/* Table of Contents */}
           <div className="bg-gray-50 border-l-4 border-gray-900 p-6 my-12 rounded">
-            <h2 className="text-2xl font-bold text-gray-900 mb-4 mt-0 font-[family-name:var(--font-eb-garamond)]">
+            <h2 className="text-lg sm:text-xl font-bold text-gray-900 mb-4 mt-0 font-[family-name:var(--font-eb-garamond)]">
               Inhoudsopgave
             </h2>
             <ul className="space-y-2 font-[family-name:var(--font-eb-garamond)]">
@@ -75,7 +120,7 @@ export default function MastersOfShilajitPage() {
           </div>
 
           {/* Section 0: Wat is Shilajit */}
-          <h2 id="wat-is-shilajit" className="text-3xl font-bold text-gray-900 mt-12 mb-6 font-[family-name:var(--font-eb-garamond)] scroll-mt-24">
+          <h2 id="wat-is-shilajit" className="text-xl sm:text-2xl font-bold text-gray-900 mt-12 mb-6 font-[family-name:var(--font-eb-garamond)] scroll-mt-24">
             ⛰️ Wat is Shilajit?
           </h2>
 
@@ -84,7 +129,7 @@ export default function MastersOfShilajitPage() {
           </p>
 
           <div className="bg-gradient-to-r from-amber-50 to-yellow-50 border-l-4 border-amber-600 p-6 my-8 rounded">
-            <h3 className="text-xl font-bold text-gray-900 mb-3 font-[family-name:var(--font-eb-garamond)]">
+            <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-3 font-[family-name:var(--font-eb-garamond)]">
               🏔️ "Zwart Goud van de Himalaya"
             </h3>
             <p className="text-gray-700 font-[family-name:var(--font-eb-garamond)]">
@@ -93,7 +138,7 @@ export default function MastersOfShilajitPage() {
           </div>
 
           {/* Section 1: Waarom Masters */}
-          <h2 id="waarom-masters" className="text-3xl font-bold text-gray-900 mt-16 mb-6 font-[family-name:var(--font-eb-garamond)] scroll-mt-24">
+          <h2 id="waarom-masters" className="text-xl sm:text-2xl font-bold text-gray-900 mt-16 mb-6 font-[family-name:var(--font-eb-garamond)] scroll-mt-24">
             👑 Wat maakt Masters of Shilajit Uniek?
           </h2>
 
@@ -104,7 +149,7 @@ export default function MastersOfShilajitPage() {
           <div className="grid md:grid-cols-2 gap-6 mb-12">
             {/* Pure Hars */}
             <div className="bg-green-50 border-l-4 border-green-500 p-6 rounded-lg">
-              <h3 className="text-lg font-bold text-gray-900 mb-3 font-[family-name:var(--font-eb-garamond)]">
+              <h3 className="text-base sm:text-lg font-bold text-gray-900 mb-3 font-[family-name:var(--font-eb-garamond)]">
                 ✓ 100% Pure Himalaya Shilajit-hars
               </h3>
               <p className="text-gray-700 text-sm font-[family-name:var(--font-eb-garamond)]">
@@ -114,7 +159,7 @@ export default function MastersOfShilajitPage() {
 
             {/* Traditioneel */}
             <div className="bg-blue-50 border-l-4 border-blue-500 p-6 rounded-lg">
-              <h3 className="text-lg font-bold text-gray-900 mb-3 font-[family-name:var(--font-eb-garamond)]">
+              <h3 className="text-base sm:text-lg font-bold text-gray-900 mb-3 font-[family-name:var(--font-eb-garamond)]">
                 ✓ Handgezuiverd & Traditioneel Verwerkt
               </h3>
               <p className="text-gray-700 text-sm font-[family-name:var(--font-eb-garamond)]">
@@ -124,7 +169,7 @@ export default function MastersOfShilajitPage() {
 
             {/* Lab Getest */}
             <div className="bg-purple-50 border-l-4 border-purple-500 p-6 rounded-lg">
-              <h3 className="text-lg font-bold text-gray-900 mb-3 font-[family-name:var(--font-eb-garamond)]">
+              <h3 className="text-base sm:text-lg font-bold text-gray-900 mb-3 font-[family-name:var(--font-eb-garamond)]">
                 ✓ Laboratorium Getest
               </h3>
               <p className="text-gray-700 text-sm font-[family-name:var(--font-eb-garamond)]">
@@ -134,7 +179,7 @@ export default function MastersOfShilajitPage() {
 
             {/* Fulvinezuur */}
             <div className="bg-amber-50 border-l-4 border-amber-500 p-6 rounded-lg">
-              <h3 className="text-lg font-bold text-gray-900 mb-3 font-[family-name:var(--font-eb-garamond)]">
+              <h3 className="text-base sm:text-lg font-bold text-gray-900 mb-3 font-[family-name:var(--font-eb-garamond)]">
                 ✓ Hoog Fulvinezuurgehalte
               </h3>
               <p className="text-gray-700 text-sm font-[family-name:var(--font-eb-garamond)]">
@@ -144,7 +189,7 @@ export default function MastersOfShilajitPage() {
 
             {/* Transparantie */}
             <div className="bg-pink-50 border-l-4 border-pink-500 p-6 rounded-lg">
-              <h3 className="text-lg font-bold text-gray-900 mb-3 font-[family-name:var(--font-eb-garamond)]">
+              <h3 className="text-base sm:text-lg font-bold text-gray-900 mb-3 font-[family-name:var(--font-eb-garamond)]">
                 ✓ Transparantie & Certificaten
               </h3>
               <p className="text-gray-700 text-sm font-[family-name:var(--font-eb-garamond)]">
@@ -154,7 +199,7 @@ export default function MastersOfShilajitPage() {
 
             {/* Ethisch */}
             <div className="bg-teal-50 border-l-4 border-teal-500 p-6 rounded-lg">
-              <h3 className="text-lg font-bold text-gray-900 mb-3 font-[family-name:var(--font-eb-garamond)]">
+              <h3 className="text-base sm:text-lg font-bold text-gray-900 mb-3 font-[family-name:var(--font-eb-garamond)]">
                 ✓ Ethisch & Duurzaam
               </h3>
               <p className="text-gray-700 text-sm font-[family-name:var(--font-eb-garamond)]">
@@ -164,7 +209,7 @@ export default function MastersOfShilajitPage() {
           </div>
 
           {/* Section 2: Herkomst */}
-          <h2 id="herkomst" className="text-3xl font-bold text-gray-900 mt-16 mb-6 font-[family-name:var(--font-eb-garamond)] scroll-mt-24">
+          <h2 id="herkomst" className="text-xl sm:text-2xl font-bold text-gray-900 mt-16 mb-6 font-[family-name:var(--font-eb-garamond)] scroll-mt-24">
             🏔️ Herkomst: uit de Hoogtes van de Himalaya
           </h2>
 
@@ -173,7 +218,7 @@ export default function MastersOfShilajitPage() {
           </p>
 
           <div className="bg-gradient-to-br from-gray-50 to-stone-100 border-2 border-gray-300 rounded-xl p-8 my-12">
-            <h3 className="text-2xl font-bold text-gray-900 mb-4 text-center font-[family-name:var(--font-eb-garamond)]">
+            <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-4 text-center font-[family-name:var(--font-eb-garamond)]">
               ⛰️ Het Vormingsproces
             </h3>
             <div className="space-y-3 text-gray-700 font-[family-name:var(--font-eb-garamond)]">
@@ -190,7 +235,7 @@ export default function MastersOfShilajitPage() {
           </p>
 
           {/* Section 3: Gezondheidsvoordelen */}
-          <h2 id="gezondheidsvoordelen" className="text-3xl font-bold text-gray-900 mt-16 mb-6 font-[family-name:var(--font-eb-garamond)] scroll-mt-24">
+          <h2 id="gezondheidsvoordelen" className="text-xl sm:text-2xl font-bold text-gray-900 mt-16 mb-6 font-[family-name:var(--font-eb-garamond)] scroll-mt-24">
             💪 Gezondheidsvoordelen van Masters of Shilajit
           </h2>
 
@@ -201,7 +246,7 @@ export default function MastersOfShilajitPage() {
           <div className="space-y-6 mb-12">
             {/* Energie */}
             <div className="border border-gray-200 rounded-lg p-6">
-              <h3 className="text-xl font-bold text-gray-900 mb-3 font-[family-name:var(--font-eb-garamond)]">
+              <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-3 font-[family-name:var(--font-eb-garamond)]">
                 1. ⚡ Energie & Uithoudingsvermogen
               </h3>
               <p className="text-gray-700 font-[family-name:var(--font-eb-garamond)]">
@@ -211,7 +256,7 @@ export default function MastersOfShilajitPage() {
 
             {/* Immuunsysteem */}
             <div className="border border-gray-200 rounded-lg p-6">
-              <h3 className="text-xl font-bold text-gray-900 mb-3 font-[family-name:var(--font-eb-garamond)]">
+              <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-3 font-[family-name:var(--font-eb-garamond)]">
                 2. 🛡️ Immuunsysteem Ondersteuning
               </h3>
               <p className="text-gray-700 font-[family-name:var(--font-eb-garamond)]">
@@ -221,7 +266,7 @@ export default function MastersOfShilajitPage() {
 
             {/* Concentratie */}
             <div className="border border-gray-200 rounded-lg p-6">
-              <h3 className="text-xl font-bold text-gray-900 mb-3 font-[family-name:var(--font-eb-garamond)]">
+              <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-3 font-[family-name:var(--font-eb-garamond)]">
                 3. 🧠 Concentratie & Geheugen
               </h3>
               <p className="text-gray-700 font-[family-name:var(--font-eb-garamond)]">
@@ -231,7 +276,7 @@ export default function MastersOfShilajitPage() {
 
             {/* Hormoonbalans */}
             <div className="border border-gray-200 rounded-lg p-6">
-              <h3 className="text-xl font-bold text-gray-900 mb-3 font-[family-name:var(--font-eb-garamond)]">
+              <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-3 font-[family-name:var(--font-eb-garamond)]">
                 4. ⚖️ Hormoonbalans & Testosteron
               </h3>
               <p className="text-gray-700 font-[family-name:var(--font-eb-garamond)]">
@@ -241,7 +286,7 @@ export default function MastersOfShilajitPage() {
 
             {/* Herstel */}
             <div className="border border-gray-200 rounded-lg p-6">
-              <h3 className="text-xl font-bold text-gray-900 mb-3 font-[family-name:var(--font-eb-garamond)]">
+              <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-3 font-[family-name:var(--font-eb-garamond)]">
                 5. 🔄 Herstel & Anti-aging
               </h3>
               <p className="text-gray-700 font-[family-name:var(--font-eb-garamond)]">
@@ -251,7 +296,7 @@ export default function MastersOfShilajitPage() {
 
             {/* Ontsteking */}
             <div className="border border-gray-200 rounded-lg p-6">
-              <h3 className="text-xl font-bold text-gray-900 mb-3 font-[family-name:var(--font-eb-garamond)]">
+              <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-3 font-[family-name:var(--font-eb-garamond)]">
                 6. 🌿 Ontstekingsbalans
               </h3>
               <p className="text-gray-700 font-[family-name:var(--font-eb-garamond)]">
@@ -261,7 +306,7 @@ export default function MastersOfShilajitPage() {
           </div>
 
           {/* Section 4: Spirituele Dimensie */}
-          <h2 id="spirituele-dimensie" className="text-3xl font-bold text-gray-900 mt-16 mb-6 font-[family-name:var(--font-eb-garamond)] scroll-mt-24">
+          <h2 id="spirituele-dimensie" className="text-xl sm:text-2xl font-bold text-gray-900 mt-16 mb-6 font-[family-name:var(--font-eb-garamond)] scroll-mt-24">
             🕉️ Spirituele Dimensie van Shilajit
           </h2>
 
@@ -270,7 +315,7 @@ export default function MastersOfShilajitPage() {
           </p>
 
           <div className="bg-purple-50 border-l-4 border-purple-500 p-6 md:p-8 mb-8 rounded">
-            <h3 className="text-xl font-bold text-gray-900 mb-4 font-[family-name:var(--font-eb-garamond)]">
+            <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-4 font-[family-name:var(--font-eb-garamond)]">
               Spirituele Voordelen:
             </h3>
             <ul className="space-y-3 text-gray-700 font-[family-name:var(--font-eb-garamond)] pl-5 list-disc">
@@ -283,7 +328,7 @@ export default function MastersOfShilajitPage() {
           </div>
 
           <div className="bg-gradient-to-r from-purple-50 via-blue-50 to-green-50 border-2 border-purple-300 rounded-xl p-8 my-12">
-            <h3 className="text-2xl font-bold text-gray-900 mb-4 text-center font-[family-name:var(--font-eb-garamond)]">
+            <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-4 text-center font-[family-name:var(--font-eb-garamond)]">
               💎 Combineren met Kristallen
             </h3>
             <p className="text-gray-700 mb-4 text-center font-[family-name:var(--font-eb-garamond)]">
@@ -306,13 +351,13 @@ export default function MastersOfShilajitPage() {
           </div>
 
           {/* Section 5: Weetjes */}
-          <h2 id="weetjes" className="text-3xl font-bold text-gray-900 mt-16 mb-6 font-[family-name:var(--font-eb-garamond)] scroll-mt-24">
+          <h2 id="weetjes" className="text-xl sm:text-2xl font-bold text-gray-900 mt-16 mb-6 font-[family-name:var(--font-eb-garamond)] scroll-mt-24">
             💡 Weetjes over Masters of Shilajit
           </h2>
 
           <div className="grid md:grid-cols-2 gap-6 mb-12">
             <div className="bg-blue-50 border border-blue-200 rounded-lg p-6">
-              <h3 className="text-lg font-bold text-gray-900 mb-2 font-[family-name:var(--font-eb-garamond)]">
+              <h3 className="text-base sm:text-lg font-bold text-gray-900 mb-2 font-[family-name:var(--font-eb-garamond)]">
                 🤝 Lokale Samenwerking
               </h3>
               <p className="text-gray-700 text-sm font-[family-name:var(--font-eb-garamond)]">
@@ -321,7 +366,7 @@ export default function MastersOfShilajitPage() {
             </div>
 
             <div className="bg-green-50 border border-green-200 rounded-lg p-6">
-              <h3 className="text-lg font-bold text-gray-900 mb-2 font-[family-name:var(--font-eb-garamond)]">
+              <h3 className="text-base sm:text-lg font-bold text-gray-900 mb-2 font-[family-name:var(--font-eb-garamond)]">
                 🔬 Onafhankelijk Getest
               </h3>
               <p className="text-gray-700 text-sm font-[family-name:var(--font-eb-garamond)]">
@@ -330,7 +375,7 @@ export default function MastersOfShilajitPage() {
             </div>
 
             <div className="bg-amber-50 border border-amber-200 rounded-lg p-6">
-              <h3 className="text-lg font-bold text-gray-900 mb-2 font-[family-name:var(--font-eb-garamond)]">
+              <h3 className="text-base sm:text-lg font-bold text-gray-900 mb-2 font-[family-name:var(--font-eb-garamond)]">
                 🥄 Alleen Pure Hars
               </h3>
               <p className="text-gray-700 text-sm font-[family-name:var(--font-eb-garamond)]">
@@ -339,7 +384,7 @@ export default function MastersOfShilajitPage() {
             </div>
 
             <div className="bg-purple-50 border border-purple-200 rounded-lg p-6">
-              <h3 className="text-lg font-bold text-gray-900 mb-2 font-[family-name:var(--font-eb-garamond)]">
+              <h3 className="text-base sm:text-lg font-bold text-gray-900 mb-2 font-[family-name:var(--font-eb-garamond)]">
                 ✨ Luxe Verpakking
               </h3>
               <p className="text-gray-700 text-sm font-[family-name:var(--font-eb-garamond)]">
@@ -349,7 +394,7 @@ export default function MastersOfShilajitPage() {
           </div>
 
           {/* Section 6: Gebruik */}
-          <h2 id="gebruik" className="text-3xl font-bold text-gray-900 mt-16 mb-6 font-[family-name:var(--font-eb-garamond)] scroll-mt-24">
+          <h2 id="gebruik" className="text-xl sm:text-2xl font-bold text-gray-900 mt-16 mb-6 font-[family-name:var(--font-eb-garamond)] scroll-mt-24">
             📋 Hoe Gebruik je Masters of Shilajit?
           </h2>
 
@@ -358,7 +403,7 @@ export default function MastersOfShilajitPage() {
           </p>
 
           <div className="bg-gradient-to-br from-amber-50 to-yellow-50 border-2 border-amber-400 rounded-xl p-8 mb-12">
-            <h3 className="text-2xl font-bold text-gray-900 mb-6 text-center font-[family-name:var(--font-eb-garamond)]">
+            <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-6 text-center font-[family-name:var(--font-eb-garamond)]">
               Gebruiksinstructies
             </h3>
             <ol className="space-y-4 text-gray-700 font-[family-name:var(--font-eb-garamond)]">
@@ -390,7 +435,7 @@ export default function MastersOfShilajitPage() {
           </div>
 
           <div className="bg-yellow-50 border-l-4 border-yellow-500 p-6 my-8 rounded">
-            <h3 className="text-lg font-bold text-gray-900 mb-2 font-[family-name:var(--font-eb-garamond)]">
+            <h3 className="text-base sm:text-lg font-bold text-gray-900 mb-2 font-[family-name:var(--font-eb-garamond)]">
               💡 Tips voor Optimaal Gebruik
             </h3>
             <ul className="space-y-2 text-gray-700 font-[family-name:var(--font-eb-garamond)] pl-5 list-disc">
@@ -402,31 +447,23 @@ export default function MastersOfShilajitPage() {
           </div>
 
           {/* CTA */}
-          <div className="not-prose bg-gradient-to-br from-[#492c4a] to-[#6b4069] rounded-xl p-8 my-12 text-center">
-            <h3 className="text-2xl md:text-3xl font-bold mb-4 font-[family-name:var(--font-eb-garamond)] text-white">
-              Ervaar de Kracht van de Himalaya
-            </h3>
-            <p className="text-lg mb-6 font-[family-name:var(--font-eb-garamond)] text-white">
-              Ontdek Masters of Shilajit - 100% pure Himalaya-hars bij StonesForHealth.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link href="/alle-producten" className="bg-[#fbe022] hover:bg-[#e6cc1f] text-black px-8 py-3 rounded-lg font-bold transition-colors font-[family-name:var(--font-eb-garamond)]">
-                Shop Masters of Shilajit
-              </Link>
-              <Link href="/bestsellers" className="bg-white/10 hover:bg-white/20 text-white border-2 border-white px-8 py-3 rounded-lg font-bold transition-colors font-[family-name:var(--font-eb-garamond)]">
-                Bestsellers
-              </Link>
+          <div className="not-prose border-2 border-gray-900 rounded-lg p-8 my-12">
+            <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-4">Ervaar de Kracht van de Himalaya</h3>
+            <p className="text-base sm:text-lg text-gray-700 mb-6">Ontdek Masters of Shilajit - 100% pure Himalaya-hars bij StonesForHealth</p>
+            <div className="flex flex-col sm:flex-row gap-4">
+              <Link href="/alle-producten" className="inline-block text-center px-6 py-3 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition-colors font-semibold">Shop Masters of Shilajit</Link>
+              <Link href="/bestsellers" className="inline-block text-center px-6 py-3 border-2 border-gray-900 text-gray-900 rounded-lg hover:bg-gray-50 transition-colors font-semibold">Bestsellers</Link>
             </div>
           </div>
 
           {/* FAQ Section */}
-          <h2 id="faq" className="text-3xl font-bold text-gray-900 mt-16 mb-8 font-[family-name:var(--font-eb-garamond)] scroll-mt-24">
+          <h2 id="faq" className="text-xl sm:text-2xl font-bold text-gray-900 mt-16 mb-8 font-[family-name:var(--font-eb-garamond)] scroll-mt-24">
             Veelgestelde Vragen
           </h2>
 
           <div className="space-y-6 mb-12">
             <div className="border border-gray-200 rounded-lg p-6">
-              <h3 className="text-xl font-bold text-gray-900 mb-3 font-[family-name:var(--font-eb-garamond)]">
+              <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-3 font-[family-name:var(--font-eb-garamond)]">
                 Is Masters of Shilajit veilig?
               </h3>
               <p className="text-gray-700 font-[family-name:var(--font-eb-garamond)]">
@@ -435,7 +472,7 @@ export default function MastersOfShilajitPage() {
             </div>
 
             <div className="border border-gray-200 rounded-lg p-6">
-              <h3 className="text-xl font-bold text-gray-900 mb-3 font-[family-name:var(--font-eb-garamond)]">
+              <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-3 font-[family-name:var(--font-eb-garamond)]">
                 Hoe lang duurt één potje?
               </h3>
               <p className="text-gray-700 font-[family-name:var(--font-eb-garamond)]">
@@ -444,7 +481,7 @@ export default function MastersOfShilajitPage() {
             </div>
 
             <div className="border border-gray-200 rounded-lg p-6">
-              <h3 className="text-xl font-bold text-gray-900 mb-3 font-[family-name:var(--font-eb-garamond)]">
+              <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-3 font-[family-name:var(--font-eb-garamond)]">
                 Wanneer zie ik resultaat?
               </h3>
               <p className="text-gray-700 font-[family-name:var(--font-eb-garamond)]">
@@ -453,7 +490,7 @@ export default function MastersOfShilajitPage() {
             </div>
 
             <div className="border border-gray-200 rounded-lg p-6">
-              <h3 className="text-xl font-bold text-gray-900 mb-3 font-[family-name:var(--font-eb-garamond)]">
+              <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-3 font-[family-name:var(--font-eb-garamond)]">
                 Is Shilajit geschikt voor vrouwen?
               </h3>
               <p className="text-gray-700 font-[family-name:var(--font-eb-garamond)]">
@@ -462,7 +499,7 @@ export default function MastersOfShilajitPage() {
             </div>
 
             <div className="border border-gray-200 rounded-lg p-6">
-              <h3 className="text-xl font-bold text-gray-900 mb-3 font-[family-name:var(--font-eb-garamond)]">
+              <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-3 font-[family-name:var(--font-eb-garamond)]">
                 Wat is het verschil tussen hars, capsules en poeder?
               </h3>
               <p className="text-gray-700 font-[family-name:var(--font-eb-garamond)]">
@@ -471,7 +508,7 @@ export default function MastersOfShilajitPage() {
             </div>
 
             <div className="border border-gray-200 rounded-lg p-6">
-              <h3 className="text-xl font-bold text-gray-900 mb-3 font-[family-name:var(--font-eb-garamond)]">
+              <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-3 font-[family-name:var(--font-eb-garamond)]">
                 Kan ik Shilajit combineren met medicijnen?
               </h3>
               <p className="text-gray-700 font-[family-name:var(--font-eb-garamond)]">
@@ -480,7 +517,7 @@ export default function MastersOfShilajitPage() {
             </div>
 
             <div className="border border-gray-200 rounded-lg p-6">
-              <h3 className="text-xl font-bold text-gray-900 mb-3 font-[family-name:var(--font-eb-garamond)]">
+              <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-3 font-[family-name:var(--font-eb-garamond)]">
                 Hoe bewaar ik Shilajit?
               </h3>
               <p className="text-gray-700 font-[family-name:var(--font-eb-garamond)]">
@@ -490,7 +527,7 @@ export default function MastersOfShilajitPage() {
           </div>
 
           {/* Conclusion */}
-          <h2 className="text-3xl font-bold text-gray-900 mt-16 mb-6 font-[family-name:var(--font-eb-garamond)]">
+          <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mt-16 mb-6 font-[family-name:var(--font-eb-garamond)]">
             Het Zwarte Goud van de Himalaya
           </h2>
           <p className="text-gray-700 leading-relaxed mb-6 font-[family-name:var(--font-eb-garamond)]">
@@ -505,37 +542,67 @@ export default function MastersOfShilajitPage() {
 
           {/* Related Articles */}
           <div className="mt-16 pt-12 border-t-2 border-gray-200">
-            <h2 className="text-2xl font-bold text-gray-900 mb-6 font-[family-name:var(--font-eb-garamond)]">
+            <h2 className="text-lg sm:text-xl font-bold text-gray-900 mb-6 font-[family-name:var(--font-eb-garamond)]">
               Gerelateerde Artikelen
             </h2>
             <div className="grid md:grid-cols-3 gap-6">
-              <Link href="/blog/bergkristal-koning-kristallen" className="group">
+              <Link href="/blog/art-of-stones-s4h-edelstenen" className="group">
                 <div className="border border-gray-200 rounded-lg p-4 hover:border-gray-900 transition-colors">
                   <h3 className="font-bold text-gray-900 mb-2 group-hover:text-gray-700 transition-colors font-[family-name:var(--font-eb-garamond)]">
-                    Bergkristal: De Koning der Kristallen
+                    Art of Stones: Het Verhaal achter S4H
                   </h3>
                   <p className="text-sm text-gray-600 font-[family-name:var(--font-eb-garamond)]">
-                    Perfect te combineren met Shilajit
+                    Ontdek ons merk en kwaliteitseisen
                   </p>
                 </div>
               </Link>
-              <Link href="/blog/jaar-van-de-houten-slang-2025" className="group">
+              <Link href="/blog/bergkristal-koning-kristallen" className="group">
                 <div className="border border-gray-200 rounded-lg p-4 hover:border-gray-900 transition-colors">
                   <h3 className="font-bold text-gray-900 mb-2 group-hover:text-gray-700 transition-colors font-[family-name:var(--font-eb-garamond)]">
-                    2025: Jaar van de Houten Slang
+                    Bergkristal: De Koning
                   </h3>
                   <p className="text-sm text-gray-600 font-[family-name:var(--font-eb-garamond)]">
-                    Spirituele groei en vitaliteit
+                    Combineer met Shilajit voor extra energie
                   </p>
                 </div>
               </Link>
               <Link href="/blog/chakra-kristallen-complete-gids" className="group">
                 <div className="border border-gray-200 rounded-lg p-4 hover:border-gray-900 transition-colors">
                   <h3 className="font-bold text-gray-900 mb-2 group-hover:text-gray-700 transition-colors font-[family-name:var(--font-eb-garamond)]">
-                    Complete Gids: Chakra Kristallen
+                    Chakra Kristallen Gids
                   </h3>
                   <p className="text-sm text-gray-600 font-[family-name:var(--font-eb-garamond)]">
-                    Energetische balans en vitaliteit
+                    Energetische balans met kristallen
+                  </p>
+                </div>
+              </Link>
+              <Link href="/blog/top-10-edelstenen-beginners" className="group">
+                <div className="border border-gray-200 rounded-lg p-4 hover:border-gray-900 transition-colors">
+                  <h3 className="font-bold text-gray-900 mb-2 group-hover:text-gray-700 transition-colors font-[family-name:var(--font-eb-garamond)]">
+                    Top 10 Edelstenen
+                  </h3>
+                  <p className="text-sm text-gray-600 font-[family-name:var(--font-eb-garamond)]">
+                    Must-have kristallen voor vitaliteit
+                  </p>
+                </div>
+              </Link>
+              <Link href="/blog/gouden-driehoek-amethist-bergkristal-rozenkwarts" className="group">
+                <div className="border border-gray-200 rounded-lg p-4 hover:border-gray-900 transition-colors">
+                  <h3 className="font-bold text-gray-900 mb-2 group-hover:text-gray-700 transition-colors font-[family-name:var(--font-eb-garamond)]">
+                    De Gouden Driehoek
+                  </h3>
+                  <p className="text-sm text-gray-600 font-[family-name:var(--font-eb-garamond)]">
+                    Complete balans voor lichaam en geest
+                  </p>
+                </div>
+              </Link>
+              <Link href="/blog/amethist-soorten-werking-spirituele-tips" className="group">
+                <div className="border border-gray-200 rounded-lg p-4 hover:border-gray-900 transition-colors">
+                  <h3 className="font-bold text-gray-900 mb-2 group-hover:text-gray-700 transition-colors font-[family-name:var(--font-eb-garamond)]">
+                    Amethist Complete Gids
+                  </h3>
+                  <p className="text-sm text-gray-600 font-[family-name:var(--font-eb-garamond)]">
+                    Rust en focus combineren met Shilajit
                   </p>
                 </div>
               </Link>
@@ -544,7 +611,7 @@ export default function MastersOfShilajitPage() {
 
           {/* Author Bio */}
           <div className="mt-12 bg-gray-50 border border-gray-200 rounded-lg p-8">
-            <h3 className="text-xl font-bold text-gray-900 mb-4 font-[family-name:var(--font-eb-garamond)]">
+            <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-4 font-[family-name:var(--font-eb-garamond)]">
               Over StonesForHealth
             </h3>
             <p className="text-gray-700 leading-relaxed font-[family-name:var(--font-eb-garamond)]">
@@ -552,7 +619,7 @@ export default function MastersOfShilajitPage() {
             </p>
           </div>
         </div>
-      </div>
-    </article>
+      </article>
+    </main>
   );
 }

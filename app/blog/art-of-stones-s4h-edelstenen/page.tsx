@@ -1,6 +1,8 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import type { Metadata } from 'next';
+import JsonLd from '@/app/components/JsonLd';
+import Breadcrumbs from '@/app/components/Breadcrumbs';
 
 export const metadata: Metadata = {
   title: 'Art-of-Stones B.V.: Het Verhaal achter S4H Edelstenen & Sieraden | Stonesforhealth.nl',
@@ -28,40 +30,91 @@ export const metadata: Metadata = {
     type: 'article',
     publishedTime: '2025-03-28',
   },
+  alternates: {
+    canonical: 'https://stonesforhealth.nl/blog/art-of-stones-s4h-edelstenen',
+  }
+};
+
+const blogPostingSchema = {
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Art-of-Stones B.V.: Het Verhaal achter S4H Edelstenen",
+  "description": "Ontdek Art-of-Stones B.V., het bedrijf achter het private label S4H (Stones for Health). Hoogwaardige edelstenen en sieraden in 11 Europese landen.",
+  "image": "https://stonesforhealth.nl/Blog images /Art-of-Stones B.V.- Het Verhaal achter S4H Edelstenen.jpeg",
+  "datePublished": "2025-03-28T09:00:00Z",
+  "dateModified": "2025-03-28T09:00:00Z",
+  "author": {
+    "@type": "Organization",
+    "name": "StonesForHealth"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Stones for Health",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://stonesforhealth.nl/logo.png"
+    }
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://stonesforhealth.nl/blog/art-of-stones-s4h-edelstenen"
+  }
 };
 
 export default function ArtOfStonesBlog() {
   return (
-    <div className="min-h-screen bg-white">
-      {/* Hero Section */}
-      <div className="relative w-full h-[300px] md:h-[400px] lg:h-[500px]">
-        <Image
-          src="/images/banner.png"
-          alt="Art-of-Stones B.V. - S4H Edelstenen & Sieraden"
-          fill
-          className="object-cover"
-          priority
-        />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/50 to-black/70" />
-        <div className="absolute inset-0 flex items-center justify-center">
-          <div className="text-center text-white px-4 max-w-4xl">
-            <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold mb-4 font-[family-name:var(--font-eb-garamond)]">
-              Art-of-Stones B.V.
-            </h1>
-            <p className="text-lg md:text-2xl text-white/90 font-[family-name:var(--font-eb-garamond)]">
-              Het Verhaal achter het Merk S4H Edelstenen & Sieraden
-            </p>
+    <main className="min-h-screen bg-white">
+      <JsonLd data={blogPostingSchema} />
+      <Breadcrumbs />
+      <article className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+        <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-6 leading-tight">
+          Art-of-Stones B.V.: Het Verhaal achter S4H Edelstenen
+        </h1>
+        <div className="flex items-center gap-4 pb-8 border-b border-gray-200">
+          <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#492c4a] to-[#6b4069] flex items-center justify-center text-white font-bold text-lg">S4H</div>
+          <div>
+            <p className="font-semibold text-gray-900">StonesForHealth</p>
+            <p className="text-sm text-gray-600">28 maart 2025 • 12 min read</p>
           </div>
         </div>
-      </div>
 
-      {/* Main Content */}
-      <article className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        {/* Banner Image */}
+        <div className="relative w-full h-[300px] md:h-[400px] lg:h-[500px] my-8 rounded-xl overflow-hidden">
+          <Image
+            src="/Blog images /Art-of-Stones B.V.- Het Verhaal achter S4H Edelstenen.jpeg"
+            alt="Art-of-Stones B.V. - S4H Edelstenen & Sieraden"
+            fill
+            className="object-cover"
+            priority
+          />
+        </div>
         {/* Introduction */}
         <div className="prose prose-lg max-w-none mb-12">
-          <p className="text-xl text-gray-700 leading-relaxed font-[family-name:var(--font-eb-garamond)]">
+          <p className="text-base sm:text-lg text-gray-700 leading-relaxed font-[family-name:var(--font-eb-garamond)]">
             Bij <Link href="/" className="text-[#492c4a] font-semibold hover:underline">Stonesforhealth.nl</Link> vind je een breed assortiment aan <Link href="/collections/all" className="text-[#492c4a] font-semibold hover:underline">edelstenen</Link>, spirituele producten en <Link href="/collections/all" className="text-[#492c4a] font-semibold hover:underline">sieraden</Link>. Wat veel klanten niet weten, is dat er een krachtig bedrijf achter dit succes staat: <strong>Art-of-Stones B.V.</strong> Dit bedrijf is de trotse eigenaar van het private label <strong>S4H (Stones for Health)</strong> ‒ een uniek merk dat staat voor kwaliteit, spiritualiteit en pure energie.
           </p>
+
+          {/* Lees Ook Section */}
+          <div className="bg-purple-50 border-l-4 border-purple-500 p-6 my-8 rounded">
+            <h3 className="text-lg font-bold text-gray-900 mb-3">📚 Lees Ook</h3>
+            <ul className="space-y-2">
+              <li>
+                <Link href="/blog/s4h-sieraden-spirituele-kracht-stijl" className="text-purple-600 hover:text-purple-800 underline font-medium">
+                  S4H Sieraden: Spirituele Kracht en Stijl
+                </Link> - Ontdek onze unieke sieraden collectie met echte edelstenen
+              </li>
+              <li>
+                <Link href="/blog/top-10-edelstenen-beginners" className="text-purple-600 hover:text-purple-800 underline font-medium">
+                  Top 10 Edelstenen voor Beginners
+                </Link> - Must-have kristallen uit de S4H collectie
+              </li>
+              <li>
+                <Link href="/blog/gouden-driehoek-amethist-bergkristal-rozenkwarts" className="text-purple-600 hover:text-purple-800 underline font-medium">
+                  De Gouden Driehoek
+                </Link> - De meest populaire S4H set voor beginners
+              </li>
+            </ul>
+          </div>
         </div>
 
         {/* Table of Contents */}
@@ -475,19 +528,13 @@ export default function ArtOfStonesBlog() {
         </section>
 
         {/* CTA Section */}
-        <div className="bg-gradient-to-br from-[#492c4a] to-[#6b4069] rounded-2xl p-8 md:p-12 text-center text-white mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4 font-[family-name:var(--font-eb-garamond)]">
-            Ontdek de Kracht van S4H Edelstenen
-          </h2>
-          <p className="text-lg text-white/90 mb-6 font-[family-name:var(--font-eb-garamond)]">
-            Shop hoogwaardige edelstenen, kristallen en sieraden bij Stonesforhealth.nl
-          </p>
-          <Link
-            href="/collections/all"
-            className="inline-block bg-[#fbe022] hover:bg-[#e6cc1f] text-black px-8 py-4 rounded-lg font-bold transition-colors font-[family-name:var(--font-eb-garamond)] text-lg"
-          >
-            Bekijk Alle Edelstenen →
-          </Link>
+        <div className="border-2 border-gray-900 rounded-lg p-8 my-12">
+          <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-4">Ontdek de Kracht van S4H Edelstenen</h3>
+          <p className="text-base sm:text-lg text-gray-700 mb-6">Shop hoogwaardige edelstenen, kristallen en sieraden bij Stonesforhealth.nl</p>
+          <div className="flex flex-col sm:flex-row gap-4">
+            <Link href="/alle-producten" className="inline-block text-center px-6 py-3 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition-colors font-semibold">Bekijk Alle Edelstenen</Link>
+            <Link href="/bestsellers" className="inline-block text-center px-6 py-3 border-2 border-gray-900 text-gray-900 rounded-lg hover:bg-gray-50 transition-colors font-semibold">Bestsellers</Link>
+          </div>
         </div>
 
         {/* Related Articles */}
@@ -496,24 +543,24 @@ export default function ArtOfStonesBlog() {
             Gerelateerde Artikelen
           </h2>
           <div className="grid md:grid-cols-3 gap-6">
-            <Link href="/blog/bergkristal-koning-kristallen" className="group">
+            <Link href="/blog/s4h-sieraden-spirituele-kracht-stijl" className="group">
               <div className="bg-white border-2 border-[#492c4a]/20 rounded-xl p-6 hover:border-[#492c4a]/40 hover:shadow-lg transition-all">
                 <h3 className="text-xl font-bold text-[#492c4a] mb-2 group-hover:text-[#6b4069] font-[family-name:var(--font-eb-garamond)]">
-                  Bergkristal: De Koning
+                  S4H Sieraden Collectie
                 </h3>
                 <p className="text-gray-600 text-sm font-[family-name:var(--font-eb-garamond)]">
-                  Ontdek waarom bergkristal de koning van alle kristallen is en hoe je het gebruikt.
+                  Ontdek onze sieraden - stijl en spiritualiteit in één
                 </p>
               </div>
             </Link>
 
-            <Link href="/blog/chakra-kristallen-complete-gids" className="group">
+            <Link href="/blog/top-10-edelstenen-beginners" className="group">
               <div className="bg-white border-2 border-[#492c4a]/20 rounded-xl p-6 hover:border-[#492c4a]/40 hover:shadow-lg transition-all">
                 <h3 className="text-xl font-bold text-[#492c4a] mb-2 group-hover:text-[#6b4069] font-[family-name:var(--font-eb-garamond)]">
-                  Chakra Kristallen Gids
+                  Top 10 Edelstenen
                 </h3>
                 <p className="text-gray-600 text-sm font-[family-name:var(--font-eb-garamond)]">
-                  Complete gids over chakra's en bijbehorende kristallen voor balans en heling.
+                  Must-have kristallen uit de S4H collectie
                 </p>
               </div>
             </Link>
@@ -524,7 +571,40 @@ export default function ArtOfStonesBlog() {
                   De Gouden Driehoek
                 </h3>
                 <p className="text-gray-600 text-sm font-[family-name:var(--font-eb-garamond)]">
-                  Ontdek de kracht van de meest populaire kristalcombinatie voor balans en liefde.
+                  De meest populaire S4H kristalcombinatie
+                </p>
+              </div>
+            </Link>
+
+            <Link href="/blog/bergkristal-koning-kristallen" className="group">
+              <div className="bg-white border-2 border-[#492c4a]/20 rounded-xl p-6 hover:border-[#492c4a]/40 hover:shadow-lg transition-all">
+                <h3 className="text-xl font-bold text-[#492c4a] mb-2 group-hover:text-[#6b4069] font-[family-name:var(--font-eb-garamond)]">
+                  Bergkristal: De Koning
+                </h3>
+                <p className="text-gray-600 text-sm font-[family-name:var(--font-eb-garamond)]">
+                  Flagship product van S4H - altijd op voorraad
+                </p>
+              </div>
+            </Link>
+
+            <Link href="/blog/amethist-soorten-werking-spirituele-tips" className="group">
+              <div className="bg-white border-2 border-[#492c4a]/20 rounded-xl p-6 hover:border-[#492c4a]/40 hover:shadow-lg transition-all">
+                <h3 className="text-xl font-bold text-[#492c4a] mb-2 group-hover:text-[#6b4069] font-[family-name:var(--font-eb-garamond)]">
+                  Amethist Complete Gids
+                </h3>
+                <p className="text-gray-600 text-sm font-[family-name:var(--font-eb-garamond)]">
+                  Populairste S4H steen voor rust en spiritualiteit
+                </p>
+              </div>
+            </Link>
+
+            <Link href="/blog/rozenkwarts-steen-van-de-liefde" className="group">
+              <div className="bg-white border-2 border-[#492c4a]/20 rounded-xl p-6 hover:border-[#492c4a]/40 hover:shadow-lg transition-all">
+                <h3 className="text-xl font-bold text-[#492c4a] mb-2 group-hover:text-[#6b4069] font-[family-name:var(--font-eb-garamond)]">
+                  Rozenkwarts: Steen van de Liefde
+                </h3>
+                <p className="text-gray-600 text-sm font-[family-name:var(--font-eb-garamond)]">
+                  Bestseller in de S4H liefdes collectie
                 </p>
               </div>
             </Link>
@@ -548,6 +628,6 @@ export default function ArtOfStonesBlog() {
           </div>
         </div>
       </article>
-    </div>
+    </main>
   );
 }

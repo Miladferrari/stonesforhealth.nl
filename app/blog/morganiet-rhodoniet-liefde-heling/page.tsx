@@ -1,6 +1,8 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { Metadata } from 'next';
+import JsonLd from '@/app/components/JsonLd';
+import Breadcrumbs from '@/app/components/Breadcrumbs';
 
 export const metadata: Metadata = {
   title: 'Morganiet & Rhodoniet: Edelstenen van Liefde & Heling | StonesForHealth',
@@ -12,38 +14,62 @@ export const metadata: Metadata = {
     type: 'article',
     publishedTime: '2025-03-18T09:00:00Z',
     authors: ['StonesForHealth'],
+  },
+  alternates: {
+    canonical: 'https://stonesforhealth.nl/blog/morganiet-rhodoniet-liefde-heling',
+  }
+};
+
+const blogPostingSchema = {
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Morganiet & Rhodoniet: Edelstenen van Liefde & Heling",
+  "description": "Ontdek Morganiet en Rhodoniet voor hartchakra heling. Onvoorwaardelijke liefde, emotionele heling, vergeving en compassie.",
+  "image": "https://stonesforhealth.nl/Blog images /Morganiet & Rhodoniet- Edelstenen van Liefde & Heling.jpeg",
+  "datePublished": "2025-03-18T09:00:00Z",
+  "dateModified": "2025-03-18T09:00:00Z",
+  "author": {
+    "@type": "Organization",
+    "name": "StonesForHealth"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Stones for Health",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://stonesforhealth.nl/logo.png"
+    }
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://stonesforhealth.nl/blog/morganiet-rhodoniet-liefde-heling"
   }
 };
 
 export default function MorganietRhodonietPage() {
   return (
-    <article className="min-h-screen bg-white">
-      {/* Hero Section */}
-      <div className="relative bg-gradient-to-br from-[#492c4a] to-[#6b4069] text-white py-16 md:py-24">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-wrap items-center gap-3 mb-6">
-            <span className="bg-[#fbe022] text-black px-4 py-1.5 rounded-full text-sm font-bold font-[family-name:var(--font-eb-garamond)]">
-              KRISTALLEN
-            </span>
-            <span className="text-white/80 text-sm font-[family-name:var(--font-eb-garamond)]">
-              18 maart 2025 • 7 min leestijd
-            </span>
-          </div>
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 font-[family-name:var(--font-eb-garamond)]">
-            Morganiet & Rhodoniet: Edelstenen van Liefde & Heling
-          </h1>
-          <p className="text-xl text-white/90 font-[family-name:var(--font-eb-garamond)]">
-            Ontdek de kracht van Morganiet en Rhodoniet voor hartchakra heling. Zachte liefde meets krachtige emotionele transformatie - perfect voor relaties en zelfliefde.
-          </p>
-        </div>
-      </div>
+    <main className="min-h-screen bg-white">
+      <JsonLd data={blogPostingSchema} />
+      <Breadcrumbs />
+      <article className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+        {/* Header */}
+        <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-6 leading-tight">
+          Morganiet & Rhodoniet: Edelstenen van Liefde & Heling
+        </h1>
 
-      {/* Main Content */}
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
+        <div className="flex items-center gap-4 pb-8 border-b border-gray-200">
+          <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#492c4a] to-[#6b4069] flex items-center justify-center text-white font-bold text-lg">
+            S4H
+          </div>
+          <div>
+            <p className="font-semibold text-gray-900">StonesForHealth</p>
+            <p className="text-sm text-gray-600">18 maart 2025 • 7 min leestijd</p>
+          </div>
+        </div>
         {/* Featured Image */}
         <div className="relative h-96 mb-12 rounded-xl overflow-hidden">
           <Image
-            src="/images/banner.png"
+            src="/Blog images /Morganiet & Rhodoniet- Edelstenen van Liefde & Heling.jpeg"
             alt="Morganiet en Rhodoniet edelstenen - hartchakra kristallen voor liefde en emotionele heling"
             fill
             className="object-cover"
@@ -53,13 +79,23 @@ export default function MorganietRhodonietPage() {
 
         {/* Introduction */}
         <div className="prose prose-lg max-w-none">
-          <p className="text-xl text-gray-700 leading-relaxed mb-8 font-[family-name:var(--font-eb-garamond)]">
+          <p className="text-base sm:text-lg text-gray-700 leading-relaxed mb-8 font-[family-name:var(--font-eb-garamond)]">
             <strong>Morganiet</strong> en <strong>Rhodoniet</strong> zijn edelstenen die beide verbonden zijn met het <strong>hartchakra</strong> en symbool staan voor liefde, compassie en innerlijke heling. Toch hebben ze elk hun eigen unieke energie en werking: Morganiet is de zachte, liefdevolle steen van onvoorwaardelijke liefde en emotionele balans, terwijl Rhodoniet de krachtige heler is die helpt oude wonden en trauma's los te laten.
           </p>
 
+          {/* Lees Ook Section */}
+          <div className="bg-purple-50 border-l-4 border-purple-500 p-6 my-8 rounded">
+            <h3 className="text-lg font-bold text-gray-900 mb-3">📚 Lees Ook</h3>
+            <ul className="space-y-2">
+              <li><Link href="/blog/rozenkwarts-steen-van-de-liefde" className="text-purple-600 hover:text-purple-800 underline font-medium">Rozenkwarts: Steen van Liefde</Link> - De meest populaire hartchakra steen</li>
+              <li><Link href="/blog/chakra-kristallen-complete-gids" className="text-purple-600 hover:text-purple-800 underline font-medium">Chakra Kristallen Complete Gids</Link> - Alle hartchakra stenen op een rij</li>
+              <li><Link href="/blog/gouden-driehoek-amethist-bergkristal-rozenkwarts" className="text-purple-600 hover:text-purple-800 underline font-medium">De Gouden Driehoek</Link> - Combineer met rozenkwarts voor extra kracht</li>
+            </ul>
+          </div>
+
           {/* Table of Contents */}
           <div className="bg-gray-50 border-l-4 border-gray-900 p-6 my-12 rounded">
-            <h2 className="text-2xl font-bold text-gray-900 mb-4 mt-0 font-[family-name:var(--font-eb-garamond)]">
+            <h2 className="text-lg sm:text-xl font-bold text-gray-900 mb-4 mt-0 font-[family-name:var(--font-eb-garamond)]">
               Inhoudsopgave
             </h2>
             <ul className="space-y-2 font-[family-name:var(--font-eb-garamond)]">
@@ -73,14 +109,14 @@ export default function MorganietRhodonietPage() {
           </div>
 
           {/* Section 1: Morganiet */}
-          <h2 id="morganiet" className="text-3xl font-bold text-gray-900 mt-12 mb-6 font-[family-name:var(--font-eb-garamond)] scroll-mt-24">
+          <h2 id="morganiet" className="text-xl sm:text-2xl font-bold text-gray-900 mt-12 mb-6 font-[family-name:var(--font-eb-garamond)] scroll-mt-24">
             💗 Morganiet – De Steen van Onvoorwaardelijke Liefde
           </h2>
 
           <div className="bg-gradient-to-br from-pink-50 to-rose-50 border-l-4 border-pink-400 p-6 md:p-8 mb-8 rounded-lg">
             <div className="grid md:grid-cols-2 gap-6">
               <div>
-                <h3 className="text-lg font-bold text-gray-900 mb-2 font-[family-name:var(--font-eb-garamond)]">
+                <h3 className="text-base sm:text-lg font-bold text-gray-900 mb-2 font-[family-name:var(--font-eb-garamond)]">
                   Kleur & Uiterlijk
                 </h3>
                 <p className="text-gray-700 text-sm font-[family-name:var(--font-eb-garamond)]">
@@ -88,7 +124,7 @@ export default function MorganietRhodonietPage() {
                 </p>
               </div>
               <div>
-                <h3 className="text-lg font-bold text-gray-900 mb-2 font-[family-name:var(--font-eb-garamond)]">
+                <h3 className="text-base sm:text-lg font-bold text-gray-900 mb-2 font-[family-name:var(--font-eb-garamond)]">
                   Herkomst
                 </h3>
                 <p className="text-gray-700 text-sm font-[family-name:var(--font-eb-garamond)]">
@@ -98,7 +134,7 @@ export default function MorganietRhodonietPage() {
             </div>
           </div>
 
-          <h3 className="text-2xl font-bold text-gray-900 mb-4 font-[family-name:var(--font-eb-garamond)]">
+          <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-4 font-[family-name:var(--font-eb-garamond)]">
             Betekenis & Werking van Morganiet
           </h3>
           <p className="text-gray-700 leading-relaxed mb-4 font-[family-name:var(--font-eb-garamond)]">
@@ -106,7 +142,7 @@ export default function MorganietRhodonietPage() {
           </p>
 
           <div className="bg-white border border-pink-200 rounded-lg p-6 mb-8">
-            <h4 className="text-xl font-bold text-gray-900 mb-4 font-[family-name:var(--font-eb-garamond)]">
+            <h4 className="text-lg sm:text-xl font-bold text-gray-900 mb-4 font-[family-name:var(--font-eb-garamond)]">
               ✨ Krachten van Morganiet:
             </h4>
             <ul className="space-y-3 text-gray-700 font-[family-name:var(--font-eb-garamond)] pl-5 list-disc">
@@ -127,14 +163,14 @@ export default function MorganietRhodonietPage() {
           </div>
 
           {/* Section 2: Rhodoniet */}
-          <h2 id="rhodoniet" className="text-3xl font-bold text-gray-900 mt-16 mb-6 font-[family-name:var(--font-eb-garamond)] scroll-mt-24">
+          <h2 id="rhodoniet" className="text-xl sm:text-2xl font-bold text-gray-900 mt-16 mb-6 font-[family-name:var(--font-eb-garamond)] scroll-mt-24">
             ❤️‍🩹 Rhodoniet – De Steen van Heling & Vergeving
           </h2>
 
           <div className="bg-gradient-to-br from-red-50 to-rose-50 border-l-4 border-red-400 p-6 md:p-8 mb-8 rounded-lg">
             <div className="grid md:grid-cols-2 gap-6">
               <div>
-                <h3 className="text-lg font-bold text-gray-900 mb-2 font-[family-name:var(--font-eb-garamond)]">
+                <h3 className="text-base sm:text-lg font-bold text-gray-900 mb-2 font-[family-name:var(--font-eb-garamond)]">
                   Kleur & Uiterlijk
                 </h3>
                 <p className="text-gray-700 text-sm font-[family-name:var(--font-eb-garamond)]">
@@ -142,7 +178,7 @@ export default function MorganietRhodonietPage() {
                 </p>
               </div>
               <div>
-                <h3 className="text-lg font-bold text-gray-900 mb-2 font-[family-name:var(--font-eb-garamond)]">
+                <h3 className="text-base sm:text-lg font-bold text-gray-900 mb-2 font-[family-name:var(--font-eb-garamond)]">
                   Herkomst
                 </h3>
                 <p className="text-gray-700 text-sm font-[family-name:var(--font-eb-garamond)]">
@@ -152,7 +188,7 @@ export default function MorganietRhodonietPage() {
             </div>
           </div>
 
-          <h3 className="text-2xl font-bold text-gray-900 mb-4 font-[family-name:var(--font-eb-garamond)]">
+          <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-4 font-[family-name:var(--font-eb-garamond)]">
             Betekenis & Werking van Rhodoniet
           </h3>
           <p className="text-gray-700 leading-relaxed mb-4 font-[family-name:var(--font-eb-garamond)]">
@@ -160,7 +196,7 @@ export default function MorganietRhodonietPage() {
           </p>
 
           <div className="bg-white border border-red-200 rounded-lg p-6 mb-8">
-            <h4 className="text-xl font-bold text-gray-900 mb-4 font-[family-name:var(--font-eb-garamond)]">
+            <h4 className="text-lg sm:text-xl font-bold text-gray-900 mb-4 font-[family-name:var(--font-eb-garamond)]">
               🔥 Krachten van Rhodoniet:
             </h4>
             <ul className="space-y-3 text-gray-700 font-[family-name:var(--font-eb-garamond)] pl-5 list-disc">
@@ -181,7 +217,7 @@ export default function MorganietRhodonietPage() {
           </div>
 
           {/* Section 3: Combinatie */}
-          <h2 id="combinatie" className="text-3xl font-bold text-gray-900 mt-16 mb-6 font-[family-name:var(--font-eb-garamond)] scroll-mt-24">
+          <h2 id="combinatie" className="text-xl sm:text-2xl font-bold text-gray-900 mt-16 mb-6 font-[family-name:var(--font-eb-garamond)] scroll-mt-24">
             💞 De Combinatie: Zachte Liefde & Krachtige Heling
           </h2>
 
@@ -195,7 +231,7 @@ export default function MorganietRhodonietPage() {
               <div className="text-center mb-4">
                 <span className="text-5xl">💗</span>
               </div>
-              <h3 className="text-xl font-bold text-gray-900 mb-4 text-center font-[family-name:var(--font-eb-garamond)]">
+              <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-4 text-center font-[family-name:var(--font-eb-garamond)]">
                 Morganiet – Zachte Opener
               </h3>
               <ul className="space-y-2 text-gray-700 font-[family-name:var(--font-eb-garamond)]">
@@ -213,7 +249,7 @@ export default function MorganietRhodonietPage() {
               <div className="text-center mb-4">
                 <span className="text-5xl">❤️‍🩹</span>
               </div>
-              <h3 className="text-xl font-bold text-gray-900 mb-4 text-center font-[family-name:var(--font-eb-garamond)]">
+              <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-4 text-center font-[family-name:var(--font-eb-garamond)]">
                 Rhodoniet – Krachtige Heler
               </h3>
               <ul className="space-y-2 text-gray-700 font-[family-name:var(--font-eb-garamond)]">
@@ -228,7 +264,7 @@ export default function MorganietRhodonietPage() {
           </div>
 
           <div className="bg-gradient-to-r from-pink-50 via-white to-red-50 border-2 border-rose-300 rounded-xl p-8 my-12">
-            <h3 className="text-2xl font-bold text-gray-900 mb-4 text-center font-[family-name:var(--font-eb-garamond)]">
+            <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-4 text-center font-[family-name:var(--font-eb-garamond)]">
               🌸 Samen Creëren Ze Volledige Hartheling
             </h3>
             <p className="text-gray-700 leading-relaxed mb-6 text-center font-[family-name:var(--font-eb-garamond)]">
@@ -251,7 +287,7 @@ export default function MorganietRhodonietPage() {
           </div>
 
           <div className="bg-rose-50 border-l-4 border-rose-500 p-6 my-8 rounded">
-            <h3 className="text-lg font-bold text-gray-900 mb-2 font-[family-name:var(--font-eb-garamond)]">
+            <h3 className="text-base sm:text-lg font-bold text-gray-900 mb-2 font-[family-name:var(--font-eb-garamond)]">
               Het Proces van Hartheling
             </h3>
             <p className="text-gray-700 leading-relaxed font-[family-name:var(--font-eb-garamond)]">
@@ -260,7 +296,7 @@ export default function MorganietRhodonietPage() {
           </div>
 
           {/* Section 4: Hoe Gebruiken */}
-          <h2 id="hoe-gebruiken" className="text-3xl font-bold text-gray-900 mt-16 mb-6 font-[family-name:var(--font-eb-garamond)] scroll-mt-24">
+          <h2 id="hoe-gebruiken" className="text-xl sm:text-2xl font-bold text-gray-900 mt-16 mb-6 font-[family-name:var(--font-eb-garamond)] scroll-mt-24">
             Hoe Gebruik je Morganiet & Rhodoniet?
           </h2>
 
@@ -270,7 +306,7 @@ export default function MorganietRhodonietPage() {
 
           <div className="space-y-6 mb-12">
             <div className="border-l-4 border-pink-400 pl-6 bg-pink-50 py-4 rounded-r">
-              <h3 className="text-xl font-bold text-gray-900 mb-2 font-[family-name:var(--font-eb-garamond)]">
+              <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-2 font-[family-name:var(--font-eb-garamond)]">
                 1. Dragen als Sieraad
               </h3>
               <p className="text-gray-700 mb-2 font-[family-name:var(--font-eb-garamond)]">
@@ -282,7 +318,7 @@ export default function MorganietRhodonietPage() {
             </div>
 
             <div className="border-l-4 border-red-400 pl-6 bg-red-50 py-4 rounded-r">
-              <h3 className="text-xl font-bold text-gray-900 mb-2 font-[family-name:var(--font-eb-garamond)]">
+              <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-2 font-[family-name:var(--font-eb-garamond)]">
                 2. Hartchakra Meditatie
               </h3>
               <p className="text-gray-700 mb-3 font-[family-name:var(--font-eb-garamond)]">
@@ -299,7 +335,7 @@ export default function MorganietRhodonietPage() {
             </div>
 
             <div className="border-l-4 border-rose-400 pl-6 bg-rose-50 py-4 rounded-r">
-              <h3 className="text-xl font-bold text-gray-900 mb-2 font-[family-name:var(--font-eb-garamond)]">
+              <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-2 font-[family-name:var(--font-eb-garamond)]">
                 3. In de Slaapkamer Plaatsen
               </h3>
               <p className="text-gray-700 font-[family-name:var(--font-eb-garamond)]">
@@ -308,7 +344,7 @@ export default function MorganietRhodonietPage() {
             </div>
 
             <div className="border-l-4 border-pink-500 pl-6 bg-pink-50 py-4 rounded-r">
-              <h3 className="text-xl font-bold text-gray-900 mb-2 font-[family-name:var(--font-eb-garamond)]">
+              <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-2 font-[family-name:var(--font-eb-garamond)]">
                 4. Met Affirmaties Werken
               </h3>
               <p className="text-gray-700 mb-2 font-[family-name:var(--font-eb-garamond)]">
@@ -321,7 +357,7 @@ export default function MorganietRhodonietPage() {
             </div>
 
             <div className="border-l-4 border-red-500 pl-6 bg-red-50 py-4 rounded-r">
-              <h3 className="text-xl font-bold text-gray-900 mb-2 font-[family-name:var(--font-eb-garamond)]">
+              <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-2 font-[family-name:var(--font-eb-garamond)]">
                 5. Heling Ritueel
               </h3>
               <p className="text-gray-700 font-[family-name:var(--font-eb-garamond)]">
@@ -331,7 +367,7 @@ export default function MorganietRhodonietPage() {
           </div>
 
           {/* Section 5: Do's & Don'ts */}
-          <h2 id="dos-donts" className="text-3xl font-bold text-gray-900 mt-16 mb-6 font-[family-name:var(--font-eb-garamond)] scroll-mt-24">
+          <h2 id="dos-donts" className="text-xl sm:text-2xl font-bold text-gray-900 mt-16 mb-6 font-[family-name:var(--font-eb-garamond)] scroll-mt-24">
             Do's & Don'ts bij Morganiet & Rhodoniet
           </h2>
 
@@ -396,7 +432,7 @@ export default function MorganietRhodonietPage() {
           </div>
 
           <div className="bg-yellow-50 border-l-4 border-yellow-500 p-6 my-8 rounded">
-            <h3 className="text-lg font-bold text-gray-900 mb-2 font-[family-name:var(--font-eb-garamond)]">
+            <h3 className="text-base sm:text-lg font-bold text-gray-900 mb-2 font-[family-name:var(--font-eb-garamond)]">
               ⚠️ Let op: Emotionele Intensiteit
             </h3>
             <p className="text-gray-700 font-[family-name:var(--font-eb-garamond)]">
@@ -405,31 +441,31 @@ export default function MorganietRhodonietPage() {
           </div>
 
           {/* CTA */}
-          <div className="not-prose bg-gradient-to-br from-[#492c4a] to-[#6b4069] rounded-xl p-8 my-12 text-center">
-            <h3 className="text-2xl md:text-3xl font-bold mb-4 font-[family-name:var(--font-eb-garamond)] text-white">
+          <div className="border-2 border-gray-900 rounded-lg p-8 my-12">
+            <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-4">
               Open je Hart voor Liefde & Heling
             </h3>
-            <p className="text-lg mb-6 font-[family-name:var(--font-eb-garamond)] text-white">
+            <p className="text-base sm:text-lg text-gray-700 mb-6">
               Ontdek Morganiet en Rhodoniet in onze collectie hartchakra edelstenen bij StonesForHealth.
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link href="/alle-producten" className="bg-[#fbe022] hover:bg-[#e6cc1f] text-black px-8 py-3 rounded-lg font-bold transition-colors font-[family-name:var(--font-eb-garamond)]">
+            <div className="flex flex-col sm:flex-row gap-4">
+              <Link href="/alle-producten" className="inline-block text-center px-6 py-3 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition-colors font-semibold">
                 Shop Hartchakra Stenen
               </Link>
-              <Link href="/bestsellers" className="bg-white/10 hover:bg-white/20 text-white border-2 border-white px-8 py-3 rounded-lg font-bold transition-colors font-[family-name:var(--font-eb-garamond)]">
+              <Link href="/bestsellers" className="inline-block text-center px-6 py-3 border-2 border-gray-900 text-gray-900 rounded-lg hover:bg-gray-50 transition-colors font-semibold">
                 Bestsellers
               </Link>
             </div>
           </div>
 
           {/* FAQ Section */}
-          <h2 id="faq" className="text-3xl font-bold text-gray-900 mt-16 mb-8 font-[family-name:var(--font-eb-garamond)] scroll-mt-24">
+          <h2 id="faq" className="text-xl sm:text-2xl font-bold text-gray-900 mt-16 mb-8 font-[family-name:var(--font-eb-garamond)] scroll-mt-24">
             Veelgestelde Vragen
           </h2>
 
           <div className="space-y-6 mb-12">
             <div className="border border-gray-200 rounded-lg p-6">
-              <h3 className="text-xl font-bold text-gray-900 mb-3 font-[family-name:var(--font-eb-garamond)]">
+              <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-3 font-[family-name:var(--font-eb-garamond)]">
                 Welke steen moet ik kiezen: Morganiet of Rhodoniet?
               </h3>
               <p className="text-gray-700 font-[family-name:var(--font-eb-garamond)]">
@@ -438,7 +474,7 @@ export default function MorganietRhodonietPage() {
             </div>
 
             <div className="border border-gray-200 rounded-lg p-6">
-              <h3 className="text-xl font-bold text-gray-900 mb-3 font-[family-name:var(--font-eb-garamond)]">
+              <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-3 font-[family-name:var(--font-eb-garamond)]">
                 Kan ik Morganiet en Rhodoniet samen dragen?
               </h3>
               <p className="text-gray-700 font-[family-name:var(--font-eb-garamond)]">
@@ -447,7 +483,7 @@ export default function MorganietRhodonietPage() {
             </div>
 
             <div className="border border-gray-200 rounded-lg p-6">
-              <h3 className="text-xl font-bold text-gray-900 mb-3 font-[family-name:var(--font-eb-garamond)]">
+              <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-3 font-[family-name:var(--font-eb-garamond)]">
                 Hoe lang duurt het voordat ik resultaat zie?
               </h3>
               <p className="text-gray-700 font-[family-name:var(--font-eb-garamond)]">
@@ -456,7 +492,7 @@ export default function MorganietRhodonietPage() {
             </div>
 
             <div className="border border-gray-200 rounded-lg p-6">
-              <h3 className="text-xl font-bold text-gray-900 mb-3 font-[family-name:var(--font-eb-garamond)]">
+              <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-3 font-[family-name:var(--font-eb-garamond)]">
                 Zijn deze stenen geschikt voor relationele problemen?
               </h3>
               <p className="text-gray-700 font-[family-name:var(--font-eb-garamond)]">
@@ -465,7 +501,7 @@ export default function MorganietRhodonietPage() {
             </div>
 
             <div className="border border-gray-200 rounded-lg p-6">
-              <h3 className="text-xl font-bold text-gray-900 mb-3 font-[family-name:var(--font-eb-garamond)]">
+              <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-3 font-[family-name:var(--font-eb-garamond)]">
                 Hoe reinig ik Morganiet en Rhodoniet?
               </h3>
               <p className="text-gray-700 font-[family-name:var(--font-eb-garamond)]">
@@ -474,7 +510,7 @@ export default function MorganietRhodonietPage() {
             </div>
 
             <div className="border border-gray-200 rounded-lg p-6">
-              <h3 className="text-xl font-bold text-gray-900 mb-3 font-[family-name:var(--font-eb-garamond)]">
+              <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-3 font-[family-name:var(--font-eb-garamond)]">
                 Kan ik deze stenen combineren met Rozenkwarts?
               </h3>
               <p className="text-gray-700 font-[family-name:var(--font-eb-garamond)]">
@@ -483,7 +519,7 @@ export default function MorganietRhodonietPage() {
             </div>
 
             <div className="border border-gray-200 rounded-lg p-6">
-              <h3 className="text-xl font-bold text-gray-900 mb-3 font-[family-name:var(--font-eb-garamond)]">
+              <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-3 font-[family-name:var(--font-eb-garamond)]">
                 Zijn deze stenen geschikt voor kinderen?
               </h3>
               <p className="text-gray-700 font-[family-name:var(--font-eb-garamond)]">
@@ -493,7 +529,7 @@ export default function MorganietRhodonietPage() {
           </div>
 
           {/* Conclusion */}
-          <h2 className="text-3xl font-bold text-gray-900 mt-16 mb-6 font-[family-name:var(--font-eb-garamond)]">
+          <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mt-16 mb-6 font-[family-name:var(--font-eb-garamond)]">
             Laat Liefde & Heling je Hart Transformeren
           </h2>
           <p className="text-gray-700 leading-relaxed mb-6 font-[family-name:var(--font-eb-garamond)]">
@@ -508,10 +544,20 @@ export default function MorganietRhodonietPage() {
 
           {/* Related Articles */}
           <div className="mt-16 pt-12 border-t-2 border-gray-200">
-            <h2 className="text-2xl font-bold text-gray-900 mb-6 font-[family-name:var(--font-eb-garamond)]">
+            <h2 className="text-lg sm:text-xl font-bold text-gray-900 mb-6 font-[family-name:var(--font-eb-garamond)]">
               Gerelateerde Artikelen
             </h2>
             <div className="grid md:grid-cols-3 gap-6">
+              <Link href="/blog/rozenkwarts-steen-van-de-liefde" className="group">
+                <div className="border border-gray-200 rounded-lg p-4 hover:border-gray-900 transition-colors">
+                  <h3 className="font-bold text-gray-900 mb-2 group-hover:text-gray-700 transition-colors font-[family-name:var(--font-eb-garamond)]">
+                    Rozenkwarts: Steen van Liefde
+                  </h3>
+                  <p className="text-sm text-gray-600 font-[family-name:var(--font-eb-garamond)]">
+                    De meest geliefde hartchakra steen
+                  </p>
+                </div>
+              </Link>
               <Link href="/blog/gouden-driehoek-amethist-bergkristal-rozenkwarts" className="group">
                 <div className="border border-gray-200 rounded-lg p-4 hover:border-gray-900 transition-colors">
                   <h3 className="font-bold text-gray-900 mb-2 group-hover:text-gray-700 transition-colors font-[family-name:var(--font-eb-garamond)]">
@@ -532,13 +578,33 @@ export default function MorganietRhodonietPage() {
                   </p>
                 </div>
               </Link>
-              <Link href="/blog" className="group">
+              <Link href="/blog/amethist-soorten-werking-spirituele-tips" className="group">
                 <div className="border border-gray-200 rounded-lg p-4 hover:border-gray-900 transition-colors">
                   <h3 className="font-bold text-gray-900 mb-2 group-hover:text-gray-700 transition-colors font-[family-name:var(--font-eb-garamond)]">
-                    Kristallen voor Zelfliefde
+                    Amethist Complete Gids
                   </h3>
                   <p className="text-sm text-gray-600 font-[family-name:var(--font-eb-garamond)]">
-                    Meer stenen voor het hart
+                    Voor rust en spirituele heling
+                  </p>
+                </div>
+              </Link>
+              <Link href="/blog/bergkristal-koning-kristallen" className="group">
+                <div className="border border-gray-200 rounded-lg p-4 hover:border-gray-900 transition-colors">
+                  <h3 className="font-bold text-gray-900 mb-2 group-hover:text-gray-700 transition-colors font-[family-name:var(--font-eb-garamond)]">
+                    Bergkristal: De Koning
+                  </h3>
+                  <p className="text-sm text-gray-600 font-[family-name:var(--font-eb-garamond)]">
+                    Versterkt alle hartchakra stenen
+                  </p>
+                </div>
+              </Link>
+              <Link href="/blog/s4h-sieraden-spirituele-kracht-stijl" className="group">
+                <div className="border border-gray-200 rounded-lg p-4 hover:border-gray-900 transition-colors">
+                  <h3 className="font-bold text-gray-900 mb-2 group-hover:text-gray-700 transition-colors font-[family-name:var(--font-eb-garamond)]">
+                    S4H Sieraden Collectie
+                  </h3>
+                  <p className="text-sm text-gray-600 font-[family-name:var(--font-eb-garamond)]">
+                    Draag hartchakra stenen dagelijks
                   </p>
                 </div>
               </Link>
@@ -547,7 +613,7 @@ export default function MorganietRhodonietPage() {
 
           {/* Author Bio */}
           <div className="mt-12 bg-gray-50 border border-gray-200 rounded-lg p-8">
-            <h3 className="text-xl font-bold text-gray-900 mb-4 font-[family-name:var(--font-eb-garamond)]">
+            <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-4 font-[family-name:var(--font-eb-garamond)]">
               Over StonesForHealth
             </h3>
             <p className="text-gray-700 leading-relaxed font-[family-name:var(--font-eb-garamond)]">
@@ -555,7 +621,7 @@ export default function MorganietRhodonietPage() {
             </p>
           </div>
         </div>
-      </div>
-    </article>
+      </article>
+    </main>
   );
 }

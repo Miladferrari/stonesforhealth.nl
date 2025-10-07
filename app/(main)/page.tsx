@@ -2,12 +2,46 @@ import { Category, woocommerce } from '@/lib/woocommerce';
 import dynamicImport from 'next/dynamic';
 import Link from 'next/link';
 import Image from 'next/image';
+import type { Metadata } from 'next';
 import BestsellerGrid from '@/app/components/BestsellerGrid';
 import TrustpilotWidget from '@/app/components/TrustpilotWidget';
+import JsonLd from '@/app/components/JsonLd';
 
 // Force dynamic rendering to always fetch fresh data
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
+
+export const metadata: Metadata = {
+  title: 'Edelstenen & Kristallen Kopen | Authentiek & Ethisch | StonesForHealth',
+  description: 'Koop authentieke edelstenen en kristallen bij StonesForHealth ✓ 100% Ethisch Gewonnen ✓ Gratis Verzending €50+ ✓ 30 Dagen Retour ✓ 3000+ Tevreden Klanten',
+  keywords: [
+    'edelstenen kopen',
+    'kristallen kopen',
+    'edelstenen Nederland',
+    'kristallen webshop',
+    'chakra stenen',
+    'rozenkwarts kopen',
+    'amethist kopen',
+    'authentieke edelstenen',
+    'ethisch gewonnen kristallen'
+  ],
+  openGraph: {
+    title: 'Edelstenen & Kristallen Kopen | StonesForHealth',
+    description: 'Koop authentieke en ethisch gewonnen edelstenen en kristallen. Gratis verzending vanaf €50.',
+    url: 'https://stonesforhealth.nl',
+    siteName: 'Stones for Health',
+    locale: 'nl_NL',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Edelstenen & Kristallen Kopen | StonesForHealth',
+    description: 'Koop authentieke en ethisch gewonnen edelstenen en kristallen.',
+  },
+  alternates: {
+    canonical: 'https://stonesforhealth.nl',
+  },
+};
 
 export default async function Home() {
   let featuredProducts: any[] = [];
@@ -83,8 +117,31 @@ export default async function Home() {
     ];
   }
 
+  const organizationSchema = {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "Stones for Health",
+    "url": "https://stonesforhealth.nl",
+    "logo": "https://stonesforhealth.nl/logo.png",
+    "description": "Nederlandse webshop voor authentieke edelstenen en kristallen. 100% ethisch gewonnen, gratis verzending vanaf €50, 30 dagen retour.",
+    "address": {
+      "@type": "PostalAddress",
+      "addressCountry": "NL"
+    },
+    "contactPoint": {
+      "@type": "ContactPoint",
+      "contactType": "Customer Service",
+      "email": "info@stonesforhealth.nl"
+    },
+    "sameAs": [
+      "https://www.instagram.com/stonesforhealth.nl",
+      "https://www.facebook.com/stonesforhealth"
+    ]
+  };
+
   return (
     <div className="min-h-screen bg-[#F5F1E8]">
+      <JsonLd data={organizationSchema} />
       {/* Hero Section - Clean & Compact */}
       <section className="relative bg-[#faf8f4] overflow-hidden">
         {/* Subtle gradient overlay */}

@@ -1,0 +1,16 @@
+# *
+User-agent: *
+Allow: /
+Disallow: /checkout
+Disallow: /checkout/*
+Disallow: /cart
+Disallow: /api/*
+Disallow: /volg-je-bestelling
+Disallow: /thank-you
+
+# Host
+Host: https://stonesforhealth.nl
+
+# Sitemaps
+Sitemap: https://stonesforhealth.nl/sitemap.xml
+Sitemap: https://stonesforhealth.nl/server-sitemap.xml

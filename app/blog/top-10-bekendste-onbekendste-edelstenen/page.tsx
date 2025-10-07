@@ -1,6 +1,8 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import type { Metadata } from 'next';
+import JsonLd from '@/app/components/JsonLd';
+import Breadcrumbs from '@/app/components/Breadcrumbs';
 
 export const metadata: Metadata = {
   title: 'Top 10 Bekendste & Onbekendste Edelstenen Met Hun Werking | Complete Gids',
@@ -27,40 +29,91 @@ export const metadata: Metadata = {
     type: 'article',
     publishedTime: '2025-04-10',
   },
+  alternates: {
+    canonical: 'https://stonesforhealth.nl/blog/top-10-bekendste-onbekendste-edelstenen',
+  }
+};
+
+const blogPostingSchema = {
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Top 10 Bekendste & Onbekendste Edelstenen Met Hun Werking",
+  "description": "Ontdek de top 10 meest populaire edelstenen en de top 10 zeldzame geheimen met hun unieke spirituele krachten en toepassingen.",
+  "image": "https://stonesforhealth.nl/Blog images /Top 10 Bekendste & Onbekendste Edelstenen Met Hun Werking.jpeg",
+  "datePublished": "2025-04-10T09:00:00Z",
+  "dateModified": "2025-04-10T09:00:00Z",
+  "author": {
+    "@type": "Organization",
+    "name": "StonesForHealth"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Stones for Health",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://stonesforhealth.nl/logo.png"
+    }
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://stonesforhealth.nl/blog/top-10-bekendste-onbekendste-edelstenen"
+  }
 };
 
 export default function Top10EdelsteneBlog() {
   return (
-    <div className="min-h-screen bg-white">
-      {/* Hero Section */}
-      <div className="relative w-full h-[300px] md:h-[400px] lg:h-[500px]">
-        <Image
-          src="/images/banner.png"
-          alt="Top 10 Bekendste & Onbekendste Edelstenen"
-          fill
-          className="object-cover"
-          priority
-        />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/50 to-black/70" />
-        <div className="absolute inset-0 flex items-center justify-center">
-          <div className="text-center text-white px-4 max-w-4xl">
-            <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold mb-4 font-[family-name:var(--font-eb-garamond)]">
-              Top 10 Edelstenen
-            </h1>
-            <p className="text-lg md:text-2xl text-white/90 font-[family-name:var(--font-eb-garamond)]">
-              Bekendste & Onbekendste Edelstenen Met Hun Werking
-            </p>
+    <main className="min-h-screen bg-white">
+      <JsonLd data={blogPostingSchema} />
+      <Breadcrumbs />
+      <article className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+        <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-6 leading-tight">
+          Top 10 Bekendste & Onbekendste Edelstenen Met Hun Werking
+        </h1>
+        <div className="flex items-center gap-4 pb-8 border-b border-gray-200">
+          <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#492c4a] to-[#6b4069] flex items-center justify-center text-white font-bold text-lg">S4H</div>
+          <div>
+            <p className="font-semibold text-gray-900">StonesForHealth</p>
+            <p className="text-sm text-gray-600">10 april 2025 • 20 min read</p>
           </div>
         </div>
-      </div>
 
-      {/* Main Content */}
-      <article className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        {/* Banner Image */}
+        <div className="relative w-full h-[300px] md:h-[400px] lg:h-[500px] my-8 rounded-xl overflow-hidden">
+          <Image
+            src="/Blog images /Top 10 Bekendste & Onbekendste Edelstenen Met Hun Werking.jpeg"
+            alt="Top 10 Bekendste & Onbekendste Edelstenen"
+            fill
+            className="object-cover"
+            priority
+          />
+        </div>
         {/* Introduction */}
         <div className="prose prose-lg max-w-none mb-12">
-          <p className="text-xl text-gray-700 leading-relaxed font-[family-name:var(--font-eb-garamond)]">
+          <p className="text-base sm:text-lg text-gray-700 leading-relaxed font-[family-name:var(--font-eb-garamond)]">
             <Link href="/collections/all" className="text-[#492c4a] font-semibold hover:underline">Edelstenen</Link> worden al eeuwenlang gebruikt voor bescherming, heling en spirituele groei. Sommige stenen zijn wereldberoemd en worden vaak toegepast in <Link href="/blog/s4h-sieraden-spirituele-kracht-stijl" className="text-[#492c4a] font-semibold hover:underline">sieraden</Link> en spiritualiteit, terwijl andere minder bekend zijn, maar minstens zo krachtig. In deze blog ontdek je de top 10 meest bekende edelstenen en de top 10 minder bekende edelstenen, met hun werking en spirituele betekenis.
           </p>
+        </div>
+
+        {/* Lees Ook Section */}
+        <div className="bg-purple-50 border-l-4 border-purple-500 p-6 my-8 rounded">
+          <h3 className="text-lg font-bold text-gray-900 mb-3">📚 Lees Ook</h3>
+          <ul className="space-y-2">
+            <li>
+              <Link href="/blog/gouden-driehoek-amethist-bergkristal-rozenkwarts" className="text-purple-600 hover:text-purple-800 underline font-medium">
+                De Gouden Driehoek
+              </Link> - Begin met de 3 meest populaire edelstenen
+            </li>
+            <li>
+              <Link href="/blog/agaat-betekenis-soorten-kleuren-werking" className="text-purple-600 hover:text-purple-800 underline font-medium">
+                Agaat Complete Gids
+              </Link> - Ontdek de veelzijdigste edelsteen familie
+            </li>
+            <li>
+              <Link href="/blog/art-of-stones-s4h-edelstenen" className="text-purple-600 hover:text-purple-800 underline font-medium">
+                Art of Stones bij S4H
+              </Link> - Waar kun je deze edelstenen kopen?
+            </li>
+          </ul>
         </div>
 
         {/* Table of Contents */}
@@ -649,19 +702,13 @@ export default function Top10EdelsteneBlog() {
         </section>
 
         {/* CTA Section */}
-        <div className="bg-gradient-to-br from-[#492c4a] to-[#6b4069] rounded-2xl p-8 md:p-12 text-center text-white mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4 font-[family-name:var(--font-eb-garamond)]">
-            Ontdek Jouw Perfecte Edelsteen
-          </h2>
-          <p className="text-lg text-white/90 mb-6 font-[family-name:var(--font-eb-garamond)]">
-            Van bekende klassiekers tot zeldzame schatten - vind de steen die resoneert met jou
-          </p>
-          <Link
-            href="/collections/all"
-            className="inline-block bg-[#fbe022] hover:bg-[#e6cc1f] text-black px-8 py-4 rounded-lg font-bold transition-colors font-[family-name:var(--font-eb-garamond)] text-lg"
-          >
-            Bekijk Alle Edelstenen →
-          </Link>
+        <div className="border-2 border-gray-900 rounded-lg p-8 my-12">
+          <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-4">Ontdek Jouw Perfecte Edelsteen</h3>
+          <p className="text-base sm:text-lg text-gray-700 mb-6">Van bekende klassiekers tot zeldzame schatten - vind de steen die resoneert met jou</p>
+          <div className="flex flex-col sm:flex-row gap-4">
+            <Link href="/alle-producten" className="inline-block text-center px-6 py-3 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition-colors font-semibold">Bekijk Alle Edelstenen</Link>
+            <Link href="/bestsellers" className="inline-block text-center px-6 py-3 border-2 border-gray-900 text-gray-900 rounded-lg hover:bg-gray-50 transition-colors font-semibold">Bestsellers</Link>
+          </div>
         </div>
 
         {/* Related Articles */}
@@ -722,6 +769,6 @@ export default function Top10EdelsteneBlog() {
           </div>
         </div>
       </article>
-    </div>
+    </main>
   );
 }

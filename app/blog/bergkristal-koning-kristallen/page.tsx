@@ -1,6 +1,8 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { Metadata } from 'next';
+import JsonLd from '@/app/components/JsonLd';
+import Breadcrumbs from '@/app/components/Breadcrumbs';
 
 export const metadata: Metadata = {
   title: 'Bergkristal: De Koning onder de Kristallen | StonesForHealth',
@@ -12,38 +14,62 @@ export const metadata: Metadata = {
     type: 'article',
     publishedTime: '2025-03-22T09:00:00Z',
     authors: ['StonesForHealth'],
+  },
+  alternates: {
+    canonical: 'https://stonesforhealth.nl/blog/bergkristal-koning-kristallen',
+  }
+};
+
+const blogPostingSchema = {
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Bergkristal: De Koning onder de Kristallen",
+  "description": "Ontdek waarom Bergkristal de koning van alle kristallen is. Complete gids over helder kwarts, werking, soorten en gebruik.",
+  "image": "https://stonesforhealth.nl/Blog images /Bergkristal- De Koning onder de Kristallen .jpeg",
+  "datePublished": "2025-03-22T09:00:00Z",
+  "dateModified": "2025-03-22T09:00:00Z",
+  "author": {
+    "@type": "Organization",
+    "name": "StonesForHealth"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Stones for Health",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://stonesforhealth.nl/logo.png"
+    }
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://stonesforhealth.nl/blog/bergkristal-koning-kristallen"
   }
 };
 
 export default function BergkristalPage() {
   return (
-    <article className="min-h-screen bg-white">
-      {/* Hero Section */}
-      <div className="relative bg-gradient-to-br from-[#492c4a] to-[#6b4069] text-white py-16 md:py-24">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-wrap items-center gap-3 mb-6">
-            <span className="bg-[#fbe022] text-black px-4 py-1.5 rounded-full text-sm font-bold font-[family-name:var(--font-eb-garamond)]">
-              KRISTALLEN
-            </span>
-            <span className="text-white/80 text-sm font-[family-name:var(--font-eb-garamond)]">
-              22 maart 2025 • 9 min leestijd
-            </span>
-          </div>
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 font-[family-name:var(--font-eb-garamond)]">
-            Bergkristal: De Koning onder de Kristallen
-          </h1>
-          <p className="text-xl text-white/90 font-[family-name:var(--font-eb-garamond)]">
-            Ontdek waarom Bergkristal de koning van alle kristallen is. Zuivering, versterking, balans en bescherming - de meest veelzijdige en krachtige edelsteen.
-          </p>
-        </div>
-      </div>
+    <main className="min-h-screen bg-white">
+      <JsonLd data={blogPostingSchema} />
+      <Breadcrumbs />
+      <article className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+        {/* Header */}
+        <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-6 leading-tight">
+          Bergkristal: De Koning onder de Kristallen
+        </h1>
 
-      {/* Main Content */}
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
+        <div className="flex items-center gap-4 pb-8 border-b border-gray-200">
+          <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#492c4a] to-[#6b4069] flex items-center justify-center text-white font-bold text-lg">
+            S4H
+          </div>
+          <div>
+            <p className="font-semibold text-gray-900">StonesForHealth</p>
+            <p className="text-sm text-gray-600">22 maart 2025 • 9 min leestijd</p>
+          </div>
+        </div>
         {/* Featured Image */}
         <div className="relative h-96 mb-12 rounded-xl overflow-hidden">
           <Image
-            src="/images/banner.png"
+            src="/Blog images /Bergkristal- De Koning onder de Kristallen .jpeg"
             alt="Bergkristal - helder kwarts kristal, de koning van alle edelstenen"
             fill
             className="object-cover"
@@ -53,13 +79,35 @@ export default function BergkristalPage() {
 
         {/* Introduction */}
         <div className="prose prose-lg max-w-none">
-          <p className="text-xl text-gray-700 leading-relaxed mb-8 font-[family-name:var(--font-eb-garamond)]">
+          <p className="text-base sm:text-lg text-gray-700 leading-relaxed mb-8 font-[family-name:var(--font-eb-garamond)]">
             <strong>Bergkristal</strong>, ook wel <strong>helder kwarts</strong> of <strong>clear quartz</strong> genoemd, is één van de meest krachtige en veelzijdige edelstenen ter wereld. Het wordt gezien als de <strong>"koning van de kristallen"</strong>, omdat het zowel zuiverend als versterkend werkt en al duizenden jaren een belangrijke rol speelt in culturen over de hele wereld. Van oude Griekse filosofen tot moderne healers – iedereen erkent de bijzondere kracht van deze heldere kristal.
           </p>
 
+          {/* Lees Ook Section */}
+          <div className="bg-purple-50 border-l-4 border-purple-500 p-6 my-8 rounded">
+            <h3 className="text-lg font-bold text-gray-900 mb-3">Lees Ook</h3>
+            <ul className="space-y-2">
+              <li>
+                <Link href="/blog/gouden-driehoek-amethist-bergkristal-rozenkwarts" className="text-purple-600 hover:text-purple-800 underline font-medium">
+                  De Gouden Driehoek: Amethist, Bergkristal & Rozenkwarts
+                </Link> - Ontdek de krachtigste kristalcombinatie voor beginners
+              </li>
+              <li>
+                <Link href="/blog/chakra-kristallen-complete-gids" className="text-purple-600 hover:text-purple-800 underline font-medium">
+                  Chakra Kristallen Complete Gids
+                </Link> - Gebruik bergkristal voor alle chakra's
+              </li>
+              <li>
+                <Link href="/blog/amethist-soorten-werking-spirituele-tips" className="text-purple-600 hover:text-purple-800 underline font-medium">
+                  Amethist: De Spirituele Partner van Bergkristal
+                </Link> - Combineer deze twee krachtige kwartsen
+              </li>
+            </ul>
+          </div>
+
           {/* Table of Contents */}
           <div className="bg-gray-50 border-l-4 border-gray-900 p-6 my-12 rounded">
-            <h2 className="text-2xl font-bold text-gray-900 mb-4 mt-0 font-[family-name:var(--font-eb-garamond)]">
+            <h2 className="text-lg sm:text-xl font-bold text-gray-900 mb-4 mt-0 font-[family-name:var(--font-eb-garamond)]">
               Inhoudsopgave
             </h2>
             <ul className="space-y-2 font-[family-name:var(--font-eb-garamond)]">
@@ -74,7 +122,7 @@ export default function BergkristalPage() {
           </div>
 
           {/* Section 1: Werking */}
-          <h2 id="werking" className="text-3xl font-bold text-gray-900 mt-12 mb-6 font-[family-name:var(--font-eb-garamond)] scroll-mt-24">
+          <h2 id="werking" className="text-xl sm:text-2xl font-bold text-gray-900 mt-12 mb-6 font-[family-name:var(--font-eb-garamond)] scroll-mt-24">
             💎 Werking van Bergkristal
           </h2>
 
@@ -85,7 +133,7 @@ export default function BergkristalPage() {
           <div className="grid md:grid-cols-2 gap-6 mb-12">
             {/* Zuivering */}
             <div className="bg-blue-50 border-l-4 border-blue-400 p-6 rounded-lg">
-              <h3 className="text-xl font-bold text-gray-900 mb-3 font-[family-name:var(--font-eb-garamond)]">
+              <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-3 font-[family-name:var(--font-eb-garamond)]">
                 ✨ Zuivering
               </h3>
               <p className="text-gray-700 text-sm font-[family-name:var(--font-eb-garamond)]">
@@ -95,7 +143,7 @@ export default function BergkristalPage() {
 
             {/* Versterking */}
             <div className="bg-purple-50 border-l-4 border-purple-400 p-6 rounded-lg">
-              <h3 className="text-xl font-bold text-gray-900 mb-3 font-[family-name:var(--font-eb-garamond)]">
+              <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-3 font-[family-name:var(--font-eb-garamond)]">
                 🔋 Energieversterker
               </h3>
               <p className="text-gray-700 text-sm font-[family-name:var(--font-eb-garamond)]">
@@ -105,7 +153,7 @@ export default function BergkristalPage() {
 
             {/* Balans */}
             <div className="bg-green-50 border-l-4 border-green-400 p-6 rounded-lg">
-              <h3 className="text-xl font-bold text-gray-900 mb-3 font-[family-name:var(--font-eb-garamond)]">
+              <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-3 font-[family-name:var(--font-eb-garamond)]">
                 ☯️ Balans
               </h3>
               <p className="text-gray-700 text-sm font-[family-name:var(--font-eb-garamond)]">
@@ -115,7 +163,7 @@ export default function BergkristalPage() {
 
             {/* Helderheid */}
             <div className="bg-yellow-50 border-l-4 border-yellow-400 p-6 rounded-lg">
-              <h3 className="text-xl font-bold text-gray-900 mb-3 font-[family-name:var(--font-eb-garamond)]">
+              <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-3 font-[family-name:var(--font-eb-garamond)]">
                 🧠 Helderheid
               </h3>
               <p className="text-gray-700 text-sm font-[family-name:var(--font-eb-garamond)]">
@@ -125,7 +173,7 @@ export default function BergkristalPage() {
 
             {/* Bescherming */}
             <div className="bg-gray-50 border-l-4 border-gray-400 p-6 rounded-lg">
-              <h3 className="text-xl font-bold text-gray-900 mb-3 font-[family-name:var(--font-eb-garamond)]">
+              <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-3 font-[family-name:var(--font-eb-garamond)]">
                 🛡️ Bescherming
               </h3>
               <p className="text-gray-700 text-sm font-[family-name:var(--font-eb-garamond)]">
@@ -135,7 +183,7 @@ export default function BergkristalPage() {
 
             {/* Programmeerbaar */}
             <div className="bg-pink-50 border-l-4 border-pink-400 p-6 rounded-lg">
-              <h3 className="text-xl font-bold text-gray-900 mb-3 font-[family-name:var(--font-eb-garamond)]">
+              <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-3 font-[family-name:var(--font-eb-garamond)]">
                 🎯 Programmeerbaar
               </h3>
               <p className="text-gray-700 text-sm font-[family-name:var(--font-eb-garamond)]">
@@ -145,16 +193,16 @@ export default function BergkristalPage() {
           </div>
 
           <div className="bg-gradient-to-r from-blue-50 via-white to-purple-50 border-2 border-gray-300 rounded-xl p-8 my-12">
-            <h3 className="text-2xl font-bold text-gray-900 mb-4 text-center font-[family-name:var(--font-eb-garamond)]">
+            <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-4 text-center font-[family-name:var(--font-eb-garamond)]">
               👑 Waarom "Koning van de Kristallen"?
             </h3>
             <p className="text-gray-700 leading-relaxed text-center font-[family-name:var(--font-eb-garamond)]">
-              Bergkristal is dé steen voor iedereen die balans, zuiverheid en kracht zoekt. Het werkt <strong>universeel</strong> – geschikt voor alle doeleinden, alle chakra's en alle mensen. Geen andere steen is zo veelzijdig en krachtig tegelijk.
+              Bergkristal is dé steen voor iedereen die balans, zuiverheid en kracht zoekt. Het werkt <strong>universeel</strong> – geschikt voor alle doeleinden, <Link href="/blog/chakra-kristallen-complete-gids" className="text-purple-600 hover:text-purple-800 underline font-medium">alle chakra's</Link> en alle mensen. Geen andere steen is zo veelzijdig en krachtig tegelijk. Daarom wordt het vaak gecombineerd met <Link href="/blog/amethist-soorten-werking-spirituele-tips" className="text-purple-600 hover:text-purple-800 underline font-medium">amethist</Link> en <Link href="/blog/rozenkwarts-steen-van-de-liefde" className="text-purple-600 hover:text-purple-800 underline font-medium">rozenkwarts</Link> in <Link href="/blog/gouden-driehoek-amethist-bergkristal-rozenkwarts" className="text-purple-600 hover:text-purple-800 underline font-medium">de Gouden Driehoek</Link>.
             </p>
           </div>
 
           {/* Section 2: Soorten */}
-          <h2 id="soorten" className="text-3xl font-bold text-gray-900 mt-16 mb-6 font-[family-name:var(--font-eb-garamond)] scroll-mt-24">
+          <h2 id="soorten" className="text-xl sm:text-2xl font-bold text-gray-900 mt-16 mb-6 font-[family-name:var(--font-eb-garamond)] scroll-mt-24">
             🔮 Soorten Bergkristal
           </h2>
 
@@ -165,7 +213,7 @@ export default function BergkristalPage() {
           <div className="space-y-6 mb-12">
             {/* Heldere Kristallen */}
             <div className="border border-gray-200 rounded-lg p-6">
-              <h3 className="text-xl font-bold text-gray-900 mb-3 font-[family-name:var(--font-eb-garamond)]">
+              <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-3 font-[family-name:var(--font-eb-garamond)]">
                 💠 Heldere Kristallen (Single Points)
               </h3>
               <p className="text-gray-700 mb-3 font-[family-name:var(--font-eb-garamond)]">
@@ -181,7 +229,7 @@ export default function BergkristalPage() {
 
             {/* Clusters */}
             <div className="border border-gray-200 rounded-lg p-6">
-              <h3 className="text-xl font-bold text-gray-900 mb-3 font-[family-name:var(--font-eb-garamond)]">
+              <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-3 font-[family-name:var(--font-eb-garamond)]">
                 ✨ Cluster (Meerdere Punten)
               </h3>
               <p className="text-gray-700 mb-3 font-[family-name:var(--font-eb-garamond)]">
@@ -197,7 +245,7 @@ export default function BergkristalPage() {
 
             {/* Geodes */}
             <div className="border border-gray-200 rounded-lg p-6">
-              <h3 className="text-xl font-bold text-gray-900 mb-3 font-[family-name:var(--font-eb-garamond)]">
+              <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-3 font-[family-name:var(--font-eb-garamond)]">
                 🪨 Geodes
               </h3>
               <p className="text-gray-700 mb-3 font-[family-name:var(--font-eb-garamond)]">
@@ -213,7 +261,7 @@ export default function BergkristalPage() {
 
             {/* Ruwe Stukken */}
             <div className="border border-gray-200 rounded-lg p-6">
-              <h3 className="text-xl font-bold text-gray-900 mb-3 font-[family-name:var(--font-eb-garamond)]">
+              <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-3 font-[family-name:var(--font-eb-garamond)]">
                 ⛰️ Ruwe Stukken
               </h3>
               <p className="text-gray-700 mb-3 font-[family-name:var(--font-eb-garamond)]">
@@ -229,7 +277,7 @@ export default function BergkristalPage() {
 
             {/* Geslepen Vormen */}
             <div className="border border-gray-200 rounded-lg p-6">
-              <h3 className="text-xl font-bold text-gray-900 mb-3 font-[family-name:var(--font-eb-garamond)]">
+              <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-3 font-[family-name:var(--font-eb-garamond)]">
                 🔺 Geslepen Vormen
               </h3>
               <p className="text-gray-700 mb-3 font-[family-name:var(--font-eb-garamond)]">
@@ -245,7 +293,7 @@ export default function BergkristalPage() {
 
             {/* Insluitingen */}
             <div className="border border-gray-200 rounded-lg p-6">
-              <h3 className="text-xl font-bold text-gray-900 mb-3 font-[family-name:var(--font-eb-garamond)]">
+              <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-3 font-[family-name:var(--font-eb-garamond)]">
                 🌫️ Insluitingen (Speciale Varianten)
               </h3>
               <p className="text-gray-700 mb-3 font-[family-name:var(--font-eb-garamond)]">
@@ -261,7 +309,7 @@ export default function BergkristalPage() {
           </div>
 
           {/* Section 3: Vindplaatsen */}
-          <h2 id="vindplaatsen" className="text-3xl font-bold text-gray-900 mt-16 mb-6 font-[family-name:var(--font-eb-garamond)] scroll-mt-24">
+          <h2 id="vindplaatsen" className="text-xl sm:text-2xl font-bold text-gray-900 mt-16 mb-6 font-[family-name:var(--font-eb-garamond)] scroll-mt-24">
             🌍 Vindplaatsen Wereldwijd
           </h2>
 
@@ -271,7 +319,7 @@ export default function BergkristalPage() {
 
           <div className="grid md:grid-cols-2 gap-6 mb-12">
             <div className="bg-white border border-gray-200 rounded-lg p-6">
-              <h3 className="text-lg font-bold text-gray-900 mb-2 font-[family-name:var(--font-eb-garamond)]">
+              <h3 className="text-base sm:text-lg font-bold text-gray-900 mb-2 font-[family-name:var(--font-eb-garamond)]">
                 🇧🇷 Brazilië
               </h3>
               <p className="text-gray-700 text-sm font-[family-name:var(--font-eb-garamond)]">
@@ -280,7 +328,7 @@ export default function BergkristalPage() {
             </div>
 
             <div className="bg-white border border-gray-200 rounded-lg p-6">
-              <h3 className="text-lg font-bold text-gray-900 mb-2 font-[family-name:var(--font-eb-garamond)]">
+              <h3 className="text-base sm:text-lg font-bold text-gray-900 mb-2 font-[family-name:var(--font-eb-garamond)]">
                 🇨🇭 Zwitserland & de Alpen
               </h3>
               <p className="text-gray-700 text-sm font-[family-name:var(--font-eb-garamond)]">
@@ -289,7 +337,7 @@ export default function BergkristalPage() {
             </div>
 
             <div className="bg-white border border-gray-200 rounded-lg p-6">
-              <h3 className="text-lg font-bold text-gray-900 mb-2 font-[family-name:var(--font-eb-garamond)]">
+              <h3 className="text-base sm:text-lg font-bold text-gray-900 mb-2 font-[family-name:var(--font-eb-garamond)]">
                 🇲🇬 Madagaskar
               </h3>
               <p className="text-gray-700 text-sm font-[family-name:var(--font-eb-garamond)]">
@@ -298,7 +346,7 @@ export default function BergkristalPage() {
             </div>
 
             <div className="bg-white border border-gray-200 rounded-lg p-6">
-              <h3 className="text-lg font-bold text-gray-900 mb-2 font-[family-name:var(--font-eb-garamond)]">
+              <h3 className="text-base sm:text-lg font-bold text-gray-900 mb-2 font-[family-name:var(--font-eb-garamond)]">
                 🇮🇳 India & Tibet
               </h3>
               <p className="text-gray-700 text-sm font-[family-name:var(--font-eb-garamond)]">
@@ -307,7 +355,7 @@ export default function BergkristalPage() {
             </div>
 
             <div className="bg-white border border-gray-200 rounded-lg p-6">
-              <h3 className="text-lg font-bold text-gray-900 mb-2 font-[family-name:var(--font-eb-garamond)]">
+              <h3 className="text-base sm:text-lg font-bold text-gray-900 mb-2 font-[family-name:var(--font-eb-garamond)]">
                 🇺🇸 Arkansas (VS)
               </h3>
               <p className="text-gray-700 text-sm font-[family-name:var(--font-eb-garamond)]">
@@ -316,7 +364,7 @@ export default function BergkristalPage() {
             </div>
 
             <div className="bg-white border border-gray-200 rounded-lg p-6">
-              <h3 className="text-lg font-bold text-gray-900 mb-2 font-[family-name:var(--font-eb-garamond)]">
+              <h3 className="text-base sm:text-lg font-bold text-gray-900 mb-2 font-[family-name:var(--font-eb-garamond)]">
                 🌏 Andere Locaties
               </h3>
               <p className="text-gray-700 text-sm font-[family-name:var(--font-eb-garamond)]">
@@ -326,7 +374,7 @@ export default function BergkristalPage() {
           </div>
 
           {/* Section 4: Geschiedenis */}
-          <h2 id="geschiedenis" className="text-3xl font-bold text-gray-900 mt-16 mb-6 font-[family-name:var(--font-eb-garamond)] scroll-mt-24">
+          <h2 id="geschiedenis" className="text-xl sm:text-2xl font-bold text-gray-900 mt-16 mb-6 font-[family-name:var(--font-eb-garamond)] scroll-mt-24">
             📜 Bergkristal in Cultuur & Geschiedenis
           </h2>
 
@@ -336,7 +384,7 @@ export default function BergkristalPage() {
 
           <div className="space-y-6 mb-12">
             <div className="bg-blue-50 border-l-4 border-blue-500 p-6 rounded-r">
-              <h3 className="text-lg font-bold text-gray-900 mb-2 font-[family-name:var(--font-eb-garamond)]">
+              <h3 className="text-base sm:text-lg font-bold text-gray-900 mb-2 font-[family-name:var(--font-eb-garamond)]">
                 🏛️ Oude Grieken
               </h3>
               <p className="text-gray-700 font-[family-name:var(--font-eb-garamond)]">
@@ -345,7 +393,7 @@ export default function BergkristalPage() {
             </div>
 
             <div className="bg-red-50 border-l-4 border-red-500 p-6 rounded-r">
-              <h3 className="text-lg font-bold text-gray-900 mb-2 font-[family-name:var(--font-eb-garamond)]">
+              <h3 className="text-base sm:text-lg font-bold text-gray-900 mb-2 font-[family-name:var(--font-eb-garamond)]">
                 🏺 Romeinen
               </h3>
               <p className="text-gray-700 font-[family-name:var(--font-eb-garamond)]">
@@ -354,7 +402,7 @@ export default function BergkristalPage() {
             </div>
 
             <div className="bg-pink-50 border-l-4 border-pink-500 p-6 rounded-r">
-              <h3 className="text-lg font-bold text-gray-900 mb-2 font-[family-name:var(--font-eb-garamond)]">
+              <h3 className="text-base sm:text-lg font-bold text-gray-900 mb-2 font-[family-name:var(--font-eb-garamond)]">
                 🎌 Japan
               </h3>
               <p className="text-gray-700 font-[family-name:var(--font-eb-garamond)]">
@@ -363,7 +411,7 @@ export default function BergkristalPage() {
             </div>
 
             <div className="bg-orange-50 border-l-4 border-orange-500 p-6 rounded-r">
-              <h3 className="text-lg font-bold text-gray-900 mb-2 font-[family-name:var(--font-eb-garamond)]">
+              <h3 className="text-base sm:text-lg font-bold text-gray-900 mb-2 font-[family-name:var(--font-eb-garamond)]">
                 🕉️ India & Tibet
               </h3>
               <p className="text-gray-700 font-[family-name:var(--font-eb-garamond)]">
@@ -372,7 +420,7 @@ export default function BergkristalPage() {
             </div>
 
             <div className="bg-purple-50 border-l-4 border-purple-500 p-6 rounded-r">
-              <h3 className="text-lg font-bold text-gray-900 mb-2 font-[family-name:var(--font-eb-garamond)]">
+              <h3 className="text-base sm:text-lg font-bold text-gray-900 mb-2 font-[family-name:var(--font-eb-garamond)]">
                 🔮 Moderne Tijd
               </h3>
               <p className="text-gray-700 font-[family-name:var(--font-eb-garamond)]">
@@ -382,7 +430,7 @@ export default function BergkristalPage() {
           </div>
 
           {/* Section 5: Hoe Gebruiken */}
-          <h2 id="hoe-gebruiken" className="text-3xl font-bold text-gray-900 mt-16 mb-6 font-[family-name:var(--font-eb-garamond)] scroll-mt-24">
+          <h2 id="hoe-gebruiken" className="text-xl sm:text-2xl font-bold text-gray-900 mt-16 mb-6 font-[family-name:var(--font-eb-garamond)] scroll-mt-24">
             Hoe Gebruik je Bergkristal?
           </h2>
 
@@ -392,7 +440,7 @@ export default function BergkristalPage() {
 
           <div className="space-y-6 mb-12">
             <div className="border-l-4 border-blue-400 pl-6 bg-blue-50 py-4 rounded-r">
-              <h3 className="text-xl font-bold text-gray-900 mb-2 font-[family-name:var(--font-eb-garamond)]">
+              <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-2 font-[family-name:var(--font-eb-garamond)]">
                 1. In Huis voor Zuivering & Harmonie
               </h3>
               <p className="text-gray-700 font-[family-name:var(--font-eb-garamond)]">
@@ -401,7 +449,7 @@ export default function BergkristalPage() {
             </div>
 
             <div className="border-l-4 border-purple-400 pl-6 bg-purple-50 py-4 rounded-r">
-              <h3 className="text-xl font-bold text-gray-900 mb-2 font-[family-name:var(--font-eb-garamond)]">
+              <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-2 font-[family-name:var(--font-eb-garamond)]">
                 2. Tijdens Meditatie
               </h3>
               <p className="text-gray-700 font-[family-name:var(--font-eb-garamond)]">
@@ -410,16 +458,16 @@ export default function BergkristalPage() {
             </div>
 
             <div className="border-l-4 border-green-400 pl-6 bg-green-50 py-4 rounded-r">
-              <h3 className="text-xl font-bold text-gray-900 mb-2 font-[family-name:var(--font-eb-garamond)]">
+              <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-2 font-[family-name:var(--font-eb-garamond)]">
                 3. Combineren met Andere Edelstenen
               </h3>
               <p className="text-gray-700 font-[family-name:var(--font-eb-garamond)]">
-                Plaats bergkristal <strong>tussen andere kristallen</strong> om hun werking te versterken. Denk aan de Gouden Driehoek (Amethist-Bergkristal-Rozenkwarts).
+                Plaats bergkristal <strong>tussen andere kristallen</strong> om hun werking te versterken. Denk aan <Link href="/blog/gouden-driehoek-amethist-bergkristal-rozenkwarts" className="text-purple-600 hover:text-purple-800 underline font-medium">de Gouden Driehoek</Link> met <Link href="/blog/amethist-soorten-werking-spirituele-tips" className="text-purple-600 hover:text-purple-800 underline font-medium">Amethist</Link> en <Link href="/blog/rozenkwarts-steen-van-de-liefde" className="text-purple-600 hover:text-purple-800 underline font-medium">Rozenkwarts</Link>, of combineer met <Link href="/blog/citrien-amethist-zon-maan-edelstenen" className="text-purple-600 hover:text-purple-800 underline font-medium">Citrien</Link> voor manifestatie.
               </p>
             </div>
 
             <div className="border-l-4 border-yellow-400 pl-6 bg-yellow-50 py-4 rounded-r">
-              <h3 className="text-xl font-bold text-gray-900 mb-2 font-[family-name:var(--font-eb-garamond)]">
+              <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-2 font-[family-name:var(--font-eb-garamond)]">
                 4. Dragen als Sieraad
               </h3>
               <p className="text-gray-700 font-[family-name:var(--font-eb-garamond)]">
@@ -428,7 +476,7 @@ export default function BergkristalPage() {
             </div>
 
             <div className="border-l-4 border-pink-400 pl-6 bg-pink-50 py-4 rounded-r">
-              <h3 className="text-xl font-bold text-gray-900 mb-2 font-[family-name:var(--font-eb-garamond)]">
+              <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-2 font-[family-name:var(--font-eb-garamond)]">
                 5. Programmeren met Intenties
               </h3>
               <p className="text-gray-700 mb-2 font-[family-name:var(--font-eb-garamond)]">
@@ -443,7 +491,7 @@ export default function BergkristalPage() {
             </div>
 
             <div className="border-l-4 border-red-400 pl-6 bg-red-50 py-4 rounded-r">
-              <h3 className="text-xl font-bold text-gray-900 mb-2 font-[family-name:var(--font-eb-garamond)]">
+              <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-2 font-[family-name:var(--font-eb-garamond)]">
                 6. Opladen van Andere Kristallen
               </h3>
               <p className="text-gray-700 font-[family-name:var(--font-eb-garamond)]">
@@ -453,7 +501,7 @@ export default function BergkristalPage() {
           </div>
 
           {/* Section 6: Do's & Don'ts */}
-          <h2 id="dos-donts" className="text-3xl font-bold text-gray-900 mt-16 mb-6 font-[family-name:var(--font-eb-garamond)] scroll-mt-24">
+          <h2 id="dos-donts" className="text-xl sm:text-2xl font-bold text-gray-900 mt-16 mb-6 font-[family-name:var(--font-eb-garamond)] scroll-mt-24">
             Do's & Don'ts bij Bergkristal
           </h2>
 
@@ -518,7 +566,7 @@ export default function BergkristalPage() {
           </div>
 
           <div className="bg-yellow-50 border-l-4 border-yellow-500 p-6 my-8 rounded">
-            <h3 className="text-lg font-bold text-gray-900 mb-2 font-[family-name:var(--font-eb-garamond)]">
+            <h3 className="text-base sm:text-lg font-bold text-gray-900 mb-2 font-[family-name:var(--font-eb-garamond)]">
               ⚠️ Let op: Versterkend Effect
             </h3>
             <p className="text-gray-700 font-[family-name:var(--font-eb-garamond)]">
@@ -527,31 +575,31 @@ export default function BergkristalPage() {
           </div>
 
           {/* CTA */}
-          <div className="not-prose bg-gradient-to-br from-[#492c4a] to-[#6b4069] rounded-xl p-8 my-12 text-center">
-            <h3 className="text-2xl md:text-3xl font-bold mb-4 font-[family-name:var(--font-eb-garamond)] text-white">
+          <div className="border-2 border-gray-900 rounded-lg p-8 my-12">
+            <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-4">
               Ervaar de Kracht van de Koning
             </h3>
-            <p className="text-lg mb-6 font-[family-name:var(--font-eb-garamond)] text-white">
+            <p className="text-base sm:text-lg text-gray-700 mb-6">
               Ontdek onze collectie Bergkristal in alle vormen bij StonesForHealth.
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link href="/alle-producten" className="bg-[#fbe022] hover:bg-[#e6cc1f] text-black px-8 py-3 rounded-lg font-bold transition-colors font-[family-name:var(--font-eb-garamond)]">
+            <div className="flex flex-col sm:flex-row gap-4">
+              <Link href="/alle-producten" className="inline-block text-center px-6 py-3 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition-colors font-semibold">
                 Shop Bergkristal
               </Link>
-              <Link href="/bestsellers" className="bg-white/10 hover:bg-white/20 text-white border-2 border-white px-8 py-3 rounded-lg font-bold transition-colors font-[family-name:var(--font-eb-garamond)]">
+              <Link href="/bestsellers" className="inline-block text-center px-6 py-3 border-2 border-gray-900 text-gray-900 rounded-lg hover:bg-gray-50 transition-colors font-semibold">
                 Bestsellers
               </Link>
             </div>
           </div>
 
           {/* FAQ Section */}
-          <h2 id="faq" className="text-3xl font-bold text-gray-900 mt-16 mb-8 font-[family-name:var(--font-eb-garamond)] scroll-mt-24">
+          <h2 id="faq" className="text-xl sm:text-2xl font-bold text-gray-900 mt-16 mb-8 font-[family-name:var(--font-eb-garamond)] scroll-mt-24">
             Veelgestelde Vragen
           </h2>
 
           <div className="space-y-6 mb-12">
             <div className="border border-gray-200 rounded-lg p-6">
-              <h3 className="text-xl font-bold text-gray-900 mb-3 font-[family-name:var(--font-eb-garamond)]">
+              <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-3 font-[family-name:var(--font-eb-garamond)]">
                 Waarom heet bergkristal de "koning van de kristallen"?
               </h3>
               <p className="text-gray-700 font-[family-name:var(--font-eb-garamond)]">
@@ -560,7 +608,7 @@ export default function BergkristalPage() {
             </div>
 
             <div className="border border-gray-200 rounded-lg p-6">
-              <h3 className="text-xl font-bold text-gray-900 mb-3 font-[family-name:var(--font-eb-garamond)]">
+              <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-3 font-[family-name:var(--font-eb-garamond)]">
                 Hoe programmeer ik een bergkristal?
               </h3>
               <p className="text-gray-700 font-[family-name:var(--font-eb-garamond)]">
@@ -569,7 +617,7 @@ export default function BergkristalPage() {
             </div>
 
             <div className="border border-gray-200 rounded-lg p-6">
-              <h3 className="text-xl font-bold text-gray-900 mb-3 font-[family-name:var(--font-eb-garamond)]">
+              <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-3 font-[family-name:var(--font-eb-garamond)]">
                 Welke vorm bergkristal moet ik kiezen?
               </h3>
               <p className="text-gray-700 font-[family-name:var(--font-eb-garamond)]">
@@ -578,7 +626,7 @@ export default function BergkristalPage() {
             </div>
 
             <div className="border border-gray-200 rounded-lg p-6">
-              <h3 className="text-xl font-bold text-gray-900 mb-3 font-[family-name:var(--font-eb-garamond)]">
+              <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-3 font-[family-name:var(--font-eb-garamond)]">
                 Kan bergkristal andere kristallen opladen?
               </h3>
               <p className="text-gray-700 font-[family-name:var(--font-eb-garamond)]">
@@ -587,7 +635,7 @@ export default function BergkristalPage() {
             </div>
 
             <div className="border border-gray-200 rounded-lg p-6">
-              <h3 className="text-xl font-bold text-gray-900 mb-3 font-[family-name:var(--font-eb-garamond)]">
+              <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-3 font-[family-name:var(--font-eb-garamond)]">
                 Is bergkristal geschikt voor beginners?
               </h3>
               <p className="text-gray-700 font-[family-name:var(--font-eb-garamond)]">
@@ -596,7 +644,7 @@ export default function BergkristalPage() {
             </div>
 
             <div className="border border-gray-200 rounded-lg p-6">
-              <h3 className="text-xl font-bold text-gray-900 mb-3 font-[family-name:var(--font-eb-garamond)]">
+              <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-3 font-[family-name:var(--font-eb-garamond)]">
                 Hoe reinig ik bergkristal?
               </h3>
               <p className="text-gray-700 font-[family-name:var(--font-eb-garamond)]">
@@ -605,7 +653,7 @@ export default function BergkristalPage() {
             </div>
 
             <div className="border border-gray-200 rounded-lg p-6">
-              <h3 className="text-xl font-bold text-gray-900 mb-3 font-[family-name:var(--font-eb-garamond)]">
+              <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-3 font-[family-name:var(--font-eb-garamond)]">
                 Wat is het verschil tussen bergkristal en glas?
               </h3>
               <p className="text-gray-700 font-[family-name:var(--font-eb-garamond)]">
@@ -615,7 +663,7 @@ export default function BergkristalPage() {
           </div>
 
           {/* Conclusion */}
-          <h2 className="text-3xl font-bold text-gray-900 mt-16 mb-6 font-[family-name:var(--font-eb-garamond)]">
+          <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mt-16 mb-6 font-[family-name:var(--font-eb-garamond)]">
             De Tijdloze Kracht van Bergkristal
           </h2>
           <p className="text-gray-700 leading-relaxed mb-6 font-[family-name:var(--font-eb-garamond)]">
@@ -630,7 +678,7 @@ export default function BergkristalPage() {
 
           {/* Related Articles */}
           <div className="mt-16 pt-12 border-t-2 border-gray-200">
-            <h2 className="text-2xl font-bold text-gray-900 mb-6 font-[family-name:var(--font-eb-garamond)]">
+            <h2 className="text-lg sm:text-xl font-bold text-gray-900 mb-6 font-[family-name:var(--font-eb-garamond)]">
               Gerelateerde Artikelen
             </h2>
             <div className="grid md:grid-cols-3 gap-6">
@@ -644,23 +692,53 @@ export default function BergkristalPage() {
                   </p>
                 </div>
               </Link>
+              <Link href="/blog/amethist-soorten-werking-spirituele-tips" className="group">
+                <div className="border border-gray-200 rounded-lg p-4 hover:border-gray-900 transition-colors">
+                  <h3 className="font-bold text-gray-900 mb-2 group-hover:text-gray-700 transition-colors font-[family-name:var(--font-eb-garamond)]">
+                    Amethist: Spirituele Partner
+                  </h3>
+                  <p className="text-sm text-gray-600 font-[family-name:var(--font-eb-garamond)]">
+                    De krachtigste paarse edelsteen
+                  </p>
+                </div>
+              </Link>
+              <Link href="/blog/rozenkwarts-steen-van-de-liefde" className="group">
+                <div className="border border-gray-200 rounded-lg p-4 hover:border-gray-900 transition-colors">
+                  <h3 className="font-bold text-gray-900 mb-2 group-hover:text-gray-700 transition-colors font-[family-name:var(--font-eb-garamond)]">
+                    Rozenkwarts: Steen van Liefde
+                  </h3>
+                  <p className="text-sm text-gray-600 font-[family-name:var(--font-eb-garamond)]">
+                    Hartchakra opening met rozenkwarts
+                  </p>
+                </div>
+              </Link>
               <Link href="/blog/chakra-kristallen-complete-gids" className="group">
                 <div className="border border-gray-200 rounded-lg p-4 hover:border-gray-900 transition-colors">
                   <h3 className="font-bold text-gray-900 mb-2 group-hover:text-gray-700 transition-colors font-[family-name:var(--font-eb-garamond)]">
-                    Complete Gids: Chakra Kristallen
+                    Chakra Kristallen Gids
                   </h3>
                   <p className="text-sm text-gray-600 font-[family-name:var(--font-eb-garamond)]">
                     Bergkristal voor alle chakra's
                   </p>
                 </div>
               </Link>
-              <Link href="/blog" className="group">
+              <Link href="/blog/citrien-amethist-zon-maan-edelstenen" className="group">
                 <div className="border border-gray-200 rounded-lg p-4 hover:border-gray-900 transition-colors">
                   <h3 className="font-bold text-gray-900 mb-2 group-hover:text-gray-700 transition-colors font-[family-name:var(--font-eb-garamond)]">
-                    Kristallen Reinigen & Opladen
+                    Citrien & Amethist: Zon & Maan
                   </h3>
                   <p className="text-sm text-gray-600 font-[family-name:var(--font-eb-garamond)]">
-                    Hoe zorg je voor je bergkristal
+                    Balans tussen energie en rust
+                  </p>
+                </div>
+              </Link>
+              <Link href="/blog/top-10-bekendste-onbekendste-edelstenen" className="group">
+                <div className="border border-gray-200 rounded-lg p-4 hover:border-gray-900 transition-colors">
+                  <h3 className="font-bold text-gray-900 mb-2 group-hover:text-gray-700 transition-colors font-[family-name:var(--font-eb-garamond)]">
+                    Top 10 Edelstenen
+                  </h3>
+                  <p className="text-sm text-gray-600 font-[family-name:var(--font-eb-garamond)]">
+                    Bergkristal in de top edelstenen
                   </p>
                 </div>
               </Link>
@@ -669,7 +747,7 @@ export default function BergkristalPage() {
 
           {/* Author Bio */}
           <div className="mt-12 bg-gray-50 border border-gray-200 rounded-lg p-8">
-            <h3 className="text-xl font-bold text-gray-900 mb-4 font-[family-name:var(--font-eb-garamond)]">
+            <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-4 font-[family-name:var(--font-eb-garamond)]">
               Over StonesForHealth
             </h3>
             <p className="text-gray-700 leading-relaxed font-[family-name:var(--font-eb-garamond)]">
@@ -677,7 +755,7 @@ export default function BergkristalPage() {
             </p>
           </div>
         </div>
-      </div>
-    </article>
+      </article>
+    </main>
   );
 }

@@ -1,6 +1,8 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { Metadata } from 'next';
+import JsonLd from '@/app/components/JsonLd';
+import Breadcrumbs from '@/app/components/Breadcrumbs';
 
 export const metadata: Metadata = {
   title: 'Citrien & Amethist: Zon & Maan in Edelstenen | StonesForHealth',
@@ -12,38 +14,62 @@ export const metadata: Metadata = {
     type: 'article',
     publishedTime: '2025-03-12T09:00:00Z',
     authors: ['StonesForHealth'],
+  },
+  alternates: {
+    canonical: 'https://stonesforhealth.nl/blog/citrien-amethist-zon-maan-edelstenen',
+  }
+};
+
+const blogPostingSchema = {
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Citrien & Amethist: Zon & Maan in Edelstenen",
+  "description": "Ontdek de perfecte balans tussen Citrien en Amethist. Zon en maan energie, actie en rust, manifestatie en spiritualiteit.",
+  "image": "https://stonesforhealth.nl/Blog images /Citrien & Amethist- Zon & Maan in Edelstenen.jpeg",
+  "datePublished": "2025-03-12T09:00:00Z",
+  "dateModified": "2025-03-12T09:00:00Z",
+  "author": {
+    "@type": "Organization",
+    "name": "StonesForHealth"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Stones for Health",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://stonesforhealth.nl/logo.png"
+    }
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://stonesforhealth.nl/blog/citrien-amethist-zon-maan-edelstenen"
   }
 };
 
 export default function CitrienAmethistPage() {
   return (
-    <article className="min-h-screen bg-white">
-      {/* Hero Section */}
-      <div className="relative bg-gradient-to-br from-[#492c4a] to-[#6b4069] text-white py-16 md:py-24">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-wrap items-center gap-3 mb-6">
-            <span className="bg-[#fbe022] text-black px-4 py-1.5 rounded-full text-sm font-bold font-[family-name:var(--font-eb-garamond)]">
-              KRISTALLEN
-            </span>
-            <span className="text-white/80 text-sm font-[family-name:var(--font-eb-garamond)]">
-              12 maart 2025 • 7 min leestijd
-            </span>
-          </div>
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 font-[family-name:var(--font-eb-garamond)]">
-            Citrien & Amethist: Zon & Maan in Edelstenen
-          </h1>
-          <p className="text-xl text-white/90 font-[family-name:var(--font-eb-garamond)]">
-            Ontdek de perfecte balans tussen Citrien en Amethist. Zon en maan, energie en rust, actie en ontspanning - de krachtigste duo voor harmonie en succes.
-          </p>
-        </div>
-      </div>
+    <main className="min-h-screen bg-white">
+      <JsonLd data={blogPostingSchema} />
+      <Breadcrumbs />
+      <article className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+        {/* Header */}
+        <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-6 leading-tight">
+          Citrien & Amethist: Zon & Maan in Edelstenen
+        </h1>
 
-      {/* Main Content */}
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
+        <div className="flex items-center gap-4 pb-8 border-b border-gray-200">
+          <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#492c4a] to-[#6b4069] flex items-center justify-center text-white font-bold text-lg">
+            S4H
+          </div>
+          <div>
+            <p className="font-semibold text-gray-900">StonesForHealth</p>
+            <p className="text-sm text-gray-600">12 maart 2025 • 7 min leestijd</p>
+          </div>
+        </div>
         {/* Featured Image */}
         <div className="relative h-96 mb-12 rounded-xl overflow-hidden">
           <Image
-            src="/images/banner.png"
+            src="/Blog images /Citrien & Amethist- Zon & Maan in Edelstenen.jpeg"
             alt="Citrien en Amethist edelstenen - zon en maan energie in kristallen"
             fill
             className="object-cover"
@@ -53,13 +79,23 @@ export default function CitrienAmethistPage() {
 
         {/* Introduction */}
         <div className="prose prose-lg max-w-none">
-          <p className="text-xl text-gray-700 leading-relaxed mb-8 font-[family-name:var(--font-eb-garamond)]">
+          <p className="text-base sm:text-lg text-gray-700 leading-relaxed mb-8 font-[family-name:var(--font-eb-garamond)]">
             <strong>Citrien</strong> en <strong>Amethist</strong> zijn twee van de bekendste en meest geliefde edelstenen ter wereld. Ze worden vaak samen gebruikt, omdat hun energie elkaar prachtig aanvult: Citrien straalt de warmte en kracht van de <strong>zon</strong> uit, terwijl Amethist de rust en intuïtie van de <strong>maan</strong> belichaamt. Samen brengen ze balans tussen energie en kalmte, actie en ontspanning, vreugde en wijsheid.
           </p>
 
+          {/* Lees Ook Section */}
+          <div className="bg-purple-50 border-l-4 border-purple-500 p-6 my-8 rounded">
+            <h3 className="text-lg font-bold text-gray-900 mb-3">📚 Lees Ook</h3>
+            <ul className="space-y-2">
+              <li><Link href="/blog/amethist-soorten-werking-spirituele-tips" className="text-purple-600 hover:text-purple-800 underline font-medium">Amethist Complete Gids</Link> - Alle soorten en toepassingen van amethist</li>
+              <li><Link href="/blog/bergkristal-koning-kristallen" className="text-purple-600 hover:text-purple-800 underline font-medium">Bergkristal: De Koning</Link> - Versterkt citrien en amethist perfect</li>
+              <li><Link href="/blog/gouden-driehoek-amethist-bergkristal-rozenkwarts" className="text-purple-600 hover:text-purple-800 underline font-medium">De Gouden Driehoek</Link> - Amethist met bergkristal en rozenkwarts</li>
+            </ul>
+          </div>
+
           {/* Table of Contents */}
           <div className="bg-gray-50 border-l-4 border-gray-900 p-6 my-12 rounded">
-            <h2 className="text-2xl font-bold text-gray-900 mb-4 mt-0 font-[family-name:var(--font-eb-garamond)]">
+            <h2 className="text-lg sm:text-xl font-bold text-gray-900 mb-4 mt-0 font-[family-name:var(--font-eb-garamond)]">
               Inhoudsopgave
             </h2>
             <ul className="space-y-2 font-[family-name:var(--font-eb-garamond)]">
@@ -74,14 +110,14 @@ export default function CitrienAmethistPage() {
           </div>
 
           {/* Section 1: Citrien */}
-          <h2 id="citrien-zon" className="text-3xl font-bold text-gray-900 mt-12 mb-6 font-[family-name:var(--font-eb-garamond)] scroll-mt-24">
+          <h2 id="citrien-zon" className="text-xl sm:text-2xl font-bold text-gray-900 mt-12 mb-6 font-[family-name:var(--font-eb-garamond)] scroll-mt-24">
             ☀️ Citrien – De Zonnestraal onder de Edelstenen
           </h2>
 
           <div className="bg-gradient-to-br from-yellow-50 to-amber-50 border-l-4 border-yellow-500 p-6 md:p-8 mb-8 rounded-lg">
             <div className="grid md:grid-cols-2 gap-6">
               <div>
-                <h3 className="text-lg font-bold text-gray-900 mb-2 font-[family-name:var(--font-eb-garamond)]">
+                <h3 className="text-base sm:text-lg font-bold text-gray-900 mb-2 font-[family-name:var(--font-eb-garamond)]">
                   Kleur & Uiterlijk
                 </h3>
                 <p className="text-gray-700 text-sm font-[family-name:var(--font-eb-garamond)]">
@@ -89,7 +125,7 @@ export default function CitrienAmethistPage() {
                 </p>
               </div>
               <div>
-                <h3 className="text-lg font-bold text-gray-900 mb-2 font-[family-name:var(--font-eb-garamond)]">
+                <h3 className="text-base sm:text-lg font-bold text-gray-900 mb-2 font-[family-name:var(--font-eb-garamond)]">
                   Herkomst
                 </h3>
                 <p className="text-gray-700 text-sm font-[family-name:var(--font-eb-garamond)]">
@@ -99,7 +135,7 @@ export default function CitrienAmethistPage() {
             </div>
           </div>
 
-          <h3 className="text-2xl font-bold text-gray-900 mb-4 font-[family-name:var(--font-eb-garamond)]">
+          <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-4 font-[family-name:var(--font-eb-garamond)]">
             Betekenis & Werking van Citrien
           </h3>
           <p className="text-gray-700 leading-relaxed mb-4 font-[family-name:var(--font-eb-garamond)]">
@@ -107,7 +143,7 @@ export default function CitrienAmethistPage() {
           </p>
 
           <div className="bg-white border border-yellow-200 rounded-lg p-6 mb-8">
-            <h4 className="text-xl font-bold text-gray-900 mb-4 font-[family-name:var(--font-eb-garamond)]">
+            <h4 className="text-lg sm:text-xl font-bold text-gray-900 mb-4 font-[family-name:var(--font-eb-garamond)]">
               ✨ Krachten van Citrien:
             </h4>
             <ul className="space-y-3 text-gray-700 font-[family-name:var(--font-eb-garamond)] pl-5 list-disc">
@@ -127,14 +163,14 @@ export default function CitrienAmethistPage() {
           </div>
 
           {/* Section 2: Amethist */}
-          <h2 id="amethist-maan" className="text-3xl font-bold text-gray-900 mt-16 mb-6 font-[family-name:var(--font-eb-garamond)] scroll-mt-24">
+          <h2 id="amethist-maan" className="text-xl sm:text-2xl font-bold text-gray-900 mt-16 mb-6 font-[family-name:var(--font-eb-garamond)] scroll-mt-24">
             🌙 Amethist – De Steen van Spiritualiteit en Intuïtie
           </h2>
 
           <div className="bg-gradient-to-br from-purple-50 to-indigo-50 border-l-4 border-purple-500 p-6 md:p-8 mb-8 rounded-lg">
             <div className="grid md:grid-cols-2 gap-6">
               <div>
-                <h3 className="text-lg font-bold text-gray-900 mb-2 font-[family-name:var(--font-eb-garamond)]">
+                <h3 className="text-base sm:text-lg font-bold text-gray-900 mb-2 font-[family-name:var(--font-eb-garamond)]">
                   Kleur & Uiterlijk
                 </h3>
                 <p className="text-gray-700 text-sm font-[family-name:var(--font-eb-garamond)]">
@@ -142,7 +178,7 @@ export default function CitrienAmethistPage() {
                 </p>
               </div>
               <div>
-                <h3 className="text-lg font-bold text-gray-900 mb-2 font-[family-name:var(--font-eb-garamond)]">
+                <h3 className="text-base sm:text-lg font-bold text-gray-900 mb-2 font-[family-name:var(--font-eb-garamond)]">
                   Herkomst
                 </h3>
                 <p className="text-gray-700 text-sm font-[family-name:var(--font-eb-garamond)]">
@@ -152,7 +188,7 @@ export default function CitrienAmethistPage() {
             </div>
           </div>
 
-          <h3 className="text-2xl font-bold text-gray-900 mb-4 font-[family-name:var(--font-eb-garamond)]">
+          <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-4 font-[family-name:var(--font-eb-garamond)]">
             Betekenis & Werking van Amethist
           </h3>
           <p className="text-gray-700 leading-relaxed mb-4 font-[family-name:var(--font-eb-garamond)]">
@@ -160,7 +196,7 @@ export default function CitrienAmethistPage() {
           </p>
 
           <div className="bg-white border border-purple-200 rounded-lg p-6 mb-8">
-            <h4 className="text-xl font-bold text-gray-900 mb-4 font-[family-name:var(--font-eb-garamond)]">
+            <h4 className="text-lg sm:text-xl font-bold text-gray-900 mb-4 font-[family-name:var(--font-eb-garamond)]">
               🔮 Krachten van Amethist:
             </h4>
             <ul className="space-y-3 text-gray-700 font-[family-name:var(--font-eb-garamond)] pl-5 list-disc">
@@ -180,7 +216,7 @@ export default function CitrienAmethistPage() {
           </div>
 
           {/* Section 3: Combinatie */}
-          <h2 id="combinatie-balans" className="text-3xl font-bold text-gray-900 mt-16 mb-6 font-[family-name:var(--font-eb-garamond)] scroll-mt-24">
+          <h2 id="combinatie-balans" className="text-xl sm:text-2xl font-bold text-gray-900 mt-16 mb-6 font-[family-name:var(--font-eb-garamond)] scroll-mt-24">
             ☯️ De Combinatie: Zon & Maan in Balans
           </h2>
 
@@ -194,7 +230,7 @@ export default function CitrienAmethistPage() {
               <div className="text-center mb-4">
                 <span className="text-5xl">☀️</span>
               </div>
-              <h3 className="text-xl font-bold text-gray-900 mb-4 text-center font-[family-name:var(--font-eb-garamond)]">
+              <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-4 text-center font-[family-name:var(--font-eb-garamond)]">
                 Citrien – Yang Energie
               </h3>
               <ul className="space-y-2 text-gray-700 font-[family-name:var(--font-eb-garamond)]">
@@ -212,7 +248,7 @@ export default function CitrienAmethistPage() {
               <div className="text-center mb-4">
                 <span className="text-5xl">🌙</span>
               </div>
-              <h3 className="text-xl font-bold text-gray-900 mb-4 text-center font-[family-name:var(--font-eb-garamond)]">
+              <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-4 text-center font-[family-name:var(--font-eb-garamond)]">
                 Amethist – Yin Energie
               </h3>
               <ul className="space-y-2 text-gray-700 font-[family-name:var(--font-eb-garamond)]">
@@ -227,7 +263,7 @@ export default function CitrienAmethistPage() {
           </div>
 
           <div className="bg-gradient-to-r from-yellow-50 via-white to-purple-50 border-2 border-gray-300 rounded-xl p-8 my-12">
-            <h3 className="text-2xl font-bold text-gray-900 mb-4 text-center font-[family-name:var(--font-eb-garamond)]">
+            <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-4 text-center font-[family-name:var(--font-eb-garamond)]">
               🌟 Samen Creëren Ze Perfecte Harmonie
             </h3>
             <p className="text-gray-700 leading-relaxed text-center mb-6 font-[family-name:var(--font-eb-garamond)]">
@@ -250,7 +286,7 @@ export default function CitrienAmethistPage() {
           </div>
 
           {/* Section 4: Ametrien */}
-          <h2 id="ametrien" className="text-3xl font-bold text-gray-900 mt-16 mb-6 font-[family-name:var(--font-eb-garamond)] scroll-mt-24">
+          <h2 id="ametrien" className="text-xl sm:text-2xl font-bold text-gray-900 mt-16 mb-6 font-[family-name:var(--font-eb-garamond)] scroll-mt-24">
             💎 Ametrien: Zon en Maan Verenigd
           </h2>
 
@@ -259,7 +295,7 @@ export default function CitrienAmethistPage() {
           </p>
 
           <div className="bg-gradient-to-r from-purple-100 via-white to-yellow-100 border-2 border-gray-300 rounded-lg p-6 md:p-8 mb-8">
-            <h3 className="text-xl font-bold text-gray-900 mb-4 font-[family-name:var(--font-eb-garamond)]">
+            <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-4 font-[family-name:var(--font-eb-garamond)]">
               Wat maakt Ametrien zo bijzonder?
             </h3>
             <ul className="space-y-3 text-gray-700 font-[family-name:var(--font-eb-garamond)] pl-5 list-disc">
@@ -276,7 +312,7 @@ export default function CitrienAmethistPage() {
           </p>
 
           {/* Section 5: Hoe Gebruiken */}
-          <h2 id="hoe-gebruiken" className="text-3xl font-bold text-gray-900 mt-16 mb-6 font-[family-name:var(--font-eb-garamond)] scroll-mt-24">
+          <h2 id="hoe-gebruiken" className="text-xl sm:text-2xl font-bold text-gray-900 mt-16 mb-6 font-[family-name:var(--font-eb-garamond)] scroll-mt-24">
             Hoe Gebruik je Citrien & Amethist?
           </h2>
 
@@ -286,7 +322,7 @@ export default function CitrienAmethistPage() {
 
           <div className="space-y-6 mb-12">
             <div className="border-l-4 border-yellow-500 pl-6 bg-yellow-50 py-4 rounded-r">
-              <h3 className="text-xl font-bold text-gray-900 mb-2 font-[family-name:var(--font-eb-garamond)]">
+              <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-2 font-[family-name:var(--font-eb-garamond)]">
                 1. In Huis Plaatsen
               </h3>
               <p className="text-gray-700 mb-2 font-[family-name:var(--font-eb-garamond)]">
@@ -298,7 +334,7 @@ export default function CitrienAmethistPage() {
             </div>
 
             <div className="border-l-4 border-purple-500 pl-6 bg-purple-50 py-4 rounded-r">
-              <h3 className="text-xl font-bold text-gray-900 mb-2 font-[family-name:var(--font-eb-garamond)]">
+              <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-2 font-[family-name:var(--font-eb-garamond)]">
                 2. Tijdens Meditatie
               </h3>
               <p className="text-gray-700 mb-2 font-[family-name:var(--font-eb-garamond)]">
@@ -310,7 +346,7 @@ export default function CitrienAmethistPage() {
             </div>
 
             <div className="border-l-4 border-gray-500 pl-6 bg-gray-50 py-4 rounded-r">
-              <h3 className="text-xl font-bold text-gray-900 mb-2 font-[family-name:var(--font-eb-garamond)]">
+              <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-2 font-[family-name:var(--font-eb-garamond)]">
                 3. Dragen als Sieraad
               </h3>
               <p className="text-gray-700 font-[family-name:var(--font-eb-garamond)]">
@@ -319,7 +355,7 @@ export default function CitrienAmethistPage() {
             </div>
 
             <div className="border-l-4 border-indigo-500 pl-6 bg-indigo-50 py-4 rounded-r">
-              <h3 className="text-xl font-bold text-gray-900 mb-2 font-[family-name:var(--font-eb-garamond)]">
+              <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-2 font-[family-name:var(--font-eb-garamond)]">
                 4. Met Intenties Werken
               </h3>
               <p className="text-gray-700 mb-2 font-[family-name:var(--font-eb-garamond)]">
@@ -331,7 +367,7 @@ export default function CitrienAmethistPage() {
             </div>
 
             <div className="border-l-4 border-amber-500 pl-6 bg-amber-50 py-4 rounded-r">
-              <h3 className="text-xl font-bold text-gray-900 mb-2 font-[family-name:var(--font-eb-garamond)]">
+              <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-2 font-[family-name:var(--font-eb-garamond)]">
                 5. In Combinatie met Andere Kristallen
               </h3>
               <p className="text-gray-700 font-[family-name:var(--font-eb-garamond)]">
@@ -341,7 +377,7 @@ export default function CitrienAmethistPage() {
           </div>
 
           {/* Section 6: Do's & Don'ts */}
-          <h2 id="dos-donts" className="text-3xl font-bold text-gray-900 mt-16 mb-6 font-[family-name:var(--font-eb-garamond)] scroll-mt-24">
+          <h2 id="dos-donts" className="text-xl sm:text-2xl font-bold text-gray-900 mt-16 mb-6 font-[family-name:var(--font-eb-garamond)] scroll-mt-24">
             Do's & Don'ts bij Citrien & Amethist
           </h2>
 
@@ -406,7 +442,7 @@ export default function CitrienAmethistPage() {
           </div>
 
           <div className="bg-yellow-50 border-l-4 border-yellow-500 p-6 my-8 rounded">
-            <h3 className="text-lg font-bold text-gray-900 mb-2 font-[family-name:var(--font-eb-garamond)]">
+            <h3 className="text-base sm:text-lg font-bold text-gray-900 mb-2 font-[family-name:var(--font-eb-garamond)]">
               ⚠️ Let op: Amethist en Zonlicht
             </h3>
             <p className="text-gray-700 font-[family-name:var(--font-eb-garamond)]">
@@ -415,31 +451,31 @@ export default function CitrienAmethistPage() {
           </div>
 
           {/* CTA */}
-          <div className="not-prose bg-gradient-to-br from-[#492c4a] to-[#6b4069] rounded-xl p-8 my-12 text-center">
-            <h3 className="text-2xl md:text-3xl font-bold mb-4 font-[family-name:var(--font-eb-garamond)] text-white">
+          <div className="border-2 border-gray-900 rounded-lg p-8 my-12">
+            <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-4">
               Breng Zon & Maan in je Leven
             </h3>
-            <p className="text-lg mb-6 font-[family-name:var(--font-eb-garamond)] text-white">
+            <p className="text-base sm:text-lg text-gray-700 mb-6">
               Ontdek onze collectie Citrien, Amethist en zeldzame Ametrien bij StonesForHealth.
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link href="/alle-producten" className="bg-[#fbe022] hover:bg-[#e6cc1f] text-black px-8 py-3 rounded-lg font-bold transition-colors font-[family-name:var(--font-eb-garamond)]">
+            <div className="flex flex-col sm:flex-row gap-4">
+              <Link href="/alle-producten" className="inline-block text-center px-6 py-3 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition-colors font-semibold">
                 Shop Kristallen
               </Link>
-              <Link href="/bestsellers" className="bg-white/10 hover:bg-white/20 text-white border-2 border-white px-8 py-3 rounded-lg font-bold transition-colors font-[family-name:var(--font-eb-garamond)]">
+              <Link href="/bestsellers" className="inline-block text-center px-6 py-3 border-2 border-gray-900 text-gray-900 rounded-lg hover:bg-gray-50 transition-colors font-semibold">
                 Bestsellers
               </Link>
             </div>
           </div>
 
           {/* FAQ Section */}
-          <h2 id="faq" className="text-3xl font-bold text-gray-900 mt-16 mb-8 font-[family-name:var(--font-eb-garamond)] scroll-mt-24">
+          <h2 id="faq" className="text-xl sm:text-2xl font-bold text-gray-900 mt-16 mb-8 font-[family-name:var(--font-eb-garamond)] scroll-mt-24">
             Veelgestelde Vragen
           </h2>
 
           <div className="space-y-6 mb-12">
             <div className="border border-gray-200 rounded-lg p-6">
-              <h3 className="text-xl font-bold text-gray-900 mb-3 font-[family-name:var(--font-eb-garamond)]">
+              <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-3 font-[family-name:var(--font-eb-garamond)]">
                 Kan ik Citrien en Amethist samen dragen?
               </h3>
               <p className="text-gray-700 font-[family-name:var(--font-eb-garamond)]">
@@ -448,7 +484,7 @@ export default function CitrienAmethistPage() {
             </div>
 
             <div className="border border-gray-200 rounded-lg p-6">
-              <h3 className="text-xl font-bold text-gray-900 mb-3 font-[family-name:var(--font-eb-garamond)]">
+              <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-3 font-[family-name:var(--font-eb-garamond)]">
                 Welke steen moet ik kiezen als ik er maar één kan hebben?
               </h3>
               <p className="text-gray-700 font-[family-name:var(--font-eb-garamond)]">
@@ -457,7 +493,7 @@ export default function CitrienAmethistPage() {
             </div>
 
             <div className="border border-gray-200 rounded-lg p-6">
-              <h3 className="text-xl font-bold text-gray-900 mb-3 font-[family-name:var(--font-eb-garamond)]">
+              <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-3 font-[family-name:var(--font-eb-garamond)]">
                 Is Ametrien beter dan Citrien en Amethist apart?
               </h3>
               <p className="text-gray-700 font-[family-name:var(--font-eb-garamond)]">
@@ -466,7 +502,7 @@ export default function CitrienAmethistPage() {
             </div>
 
             <div className="border border-gray-200 rounded-lg p-6">
-              <h3 className="text-xl font-bold text-gray-900 mb-3 font-[family-name:var(--font-eb-garamond)]">
+              <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-3 font-[family-name:var(--font-eb-garamond)]">
                 Welk chakra hoort bij Citrien en Amethist?
               </h3>
               <p className="text-gray-700 font-[family-name:var(--font-eb-garamond)]">
@@ -475,7 +511,7 @@ export default function CitrienAmethistPage() {
             </div>
 
             <div className="border border-gray-200 rounded-lg p-6">
-              <h3 className="text-xl font-bold text-gray-900 mb-3 font-[family-name:var(--font-eb-garamond)]">
+              <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-3 font-[family-name:var(--font-eb-garamond)]">
                 Hoe reinig ik Citrien en Amethist?
               </h3>
               <p className="text-gray-700 font-[family-name:var(--font-eb-garamond)]">
@@ -484,7 +520,7 @@ export default function CitrienAmethistPage() {
             </div>
 
             <div className="border border-gray-200 rounded-lg p-6">
-              <h3 className="text-xl font-bold text-gray-900 mb-3 font-[family-name:var(--font-eb-garamond)]">
+              <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-3 font-[family-name:var(--font-eb-garamond)]">
                 Zijn deze stenen geschikt voor beginners?
               </h3>
               <p className="text-gray-700 font-[family-name:var(--font-eb-garamond)]">
@@ -493,7 +529,7 @@ export default function CitrienAmethistPage() {
             </div>
 
             <div className="border border-gray-200 rounded-lg p-6">
-              <h3 className="text-xl font-bold text-gray-900 mb-3 font-[family-name:var(--font-eb-garamond)]">
+              <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-3 font-[family-name:var(--font-eb-garamond)]">
                 Kan ik Citrien onder mijn kussen leggen?
               </h3>
               <p className="text-gray-700 font-[family-name:var(--font-eb-garamond)]">
@@ -503,7 +539,7 @@ export default function CitrienAmethistPage() {
           </div>
 
           {/* Conclusion */}
-          <h2 className="text-3xl font-bold text-gray-900 mt-16 mb-6 font-[family-name:var(--font-eb-garamond)]">
+          <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mt-16 mb-6 font-[family-name:var(--font-eb-garamond)]">
             Laat Zon & Maan je Pad Verlichten
           </h2>
           <p className="text-gray-700 leading-relaxed mb-6 font-[family-name:var(--font-eb-garamond)]">
@@ -518,10 +554,30 @@ export default function CitrienAmethistPage() {
 
           {/* Related Articles */}
           <div className="mt-16 pt-12 border-t-2 border-gray-200">
-            <h2 className="text-2xl font-bold text-gray-900 mb-6 font-[family-name:var(--font-eb-garamond)]">
+            <h2 className="text-lg sm:text-xl font-bold text-gray-900 mb-6 font-[family-name:var(--font-eb-garamond)]">
               Gerelateerde Artikelen
             </h2>
             <div className="grid md:grid-cols-3 gap-6">
+              <Link href="/blog/amethist-soorten-werking-spirituele-tips" className="group">
+                <div className="border border-gray-200 rounded-lg p-4 hover:border-gray-900 transition-colors">
+                  <h3 className="font-bold text-gray-900 mb-2 group-hover:text-gray-700 transition-colors font-[family-name:var(--font-eb-garamond)]">
+                    Amethist Complete Gids
+                  </h3>
+                  <p className="text-sm text-gray-600 font-[family-name:var(--font-eb-garamond)]">
+                    Alles over soorten, werking en vindplaatsen
+                  </p>
+                </div>
+              </Link>
+              <Link href="/blog/bergkristal-koning-kristallen" className="group">
+                <div className="border border-gray-200 rounded-lg p-4 hover:border-gray-900 transition-colors">
+                  <h3 className="font-bold text-gray-900 mb-2 group-hover:text-gray-700 transition-colors font-[family-name:var(--font-eb-garamond)]">
+                    Bergkristal: De Koning
+                  </h3>
+                  <p className="text-sm text-gray-600 font-[family-name:var(--font-eb-garamond)]">
+                    Versterkt beide stenen perfect
+                  </p>
+                </div>
+              </Link>
               <Link href="/blog/gouden-driehoek-amethist-bergkristal-rozenkwarts" className="group">
                 <div className="border border-gray-200 rounded-lg p-4 hover:border-gray-900 transition-colors">
                   <h3 className="font-bold text-gray-900 mb-2 group-hover:text-gray-700 transition-colors font-[family-name:var(--font-eb-garamond)]">
@@ -529,6 +585,16 @@ export default function CitrienAmethistPage() {
                   </h3>
                   <p className="text-sm text-gray-600 font-[family-name:var(--font-eb-garamond)]">
                     Amethist, Bergkristal & Rozenkwarts
+                  </p>
+                </div>
+              </Link>
+              <Link href="/blog/rozenkwarts-steen-van-de-liefde" className="group">
+                <div className="border border-gray-200 rounded-lg p-4 hover:border-gray-900 transition-colors">
+                  <h3 className="font-bold text-gray-900 mb-2 group-hover:text-gray-700 transition-colors font-[family-name:var(--font-eb-garamond)]">
+                    Rozenkwarts: Steen van Liefde
+                  </h3>
+                  <p className="text-sm text-gray-600 font-[family-name:var(--font-eb-garamond)]">
+                    Hartchakra steen voor emotionele balans
                   </p>
                 </div>
               </Link>
@@ -542,13 +608,13 @@ export default function CitrienAmethistPage() {
                   </p>
                 </div>
               </Link>
-              <Link href="/blog" className="group">
+              <Link href="/blog/volle-maan-oktober-2025" className="group">
                 <div className="border border-gray-200 rounded-lg p-4 hover:border-gray-900 transition-colors">
                   <h3 className="font-bold text-gray-900 mb-2 group-hover:text-gray-700 transition-colors font-[family-name:var(--font-eb-garamond)]">
-                    Kristallen voor Beginners
+                    Volle Maan Rituelen
                   </h3>
                   <p className="text-sm text-gray-600 font-[family-name:var(--font-eb-garamond)]">
-                    Start je kristalreis hier
+                    Gebruik amethist bij volle maan
                   </p>
                 </div>
               </Link>
@@ -557,7 +623,7 @@ export default function CitrienAmethistPage() {
 
           {/* Author Bio */}
           <div className="mt-12 bg-gray-50 border border-gray-200 rounded-lg p-8">
-            <h3 className="text-xl font-bold text-gray-900 mb-4 font-[family-name:var(--font-eb-garamond)]">
+            <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-4 font-[family-name:var(--font-eb-garamond)]">
               Over StonesForHealth
             </h3>
             <p className="text-gray-700 leading-relaxed font-[family-name:var(--font-eb-garamond)]">
@@ -565,7 +631,7 @@ export default function CitrienAmethistPage() {
             </p>
           </div>
         </div>
-      </div>
-    </article>
+      </article>
+    </main>
   );
 }

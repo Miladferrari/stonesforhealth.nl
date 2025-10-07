@@ -1,6 +1,8 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import type { Metadata } from 'next';
+import JsonLd from '@/app/components/JsonLd';
+import Breadcrumbs from '@/app/components/Breadcrumbs';
 
 export const metadata: Metadata = {
   title: 'Het Zilveren Koord, Slapen, Zoutlampen & Spirituele Tips | Complete Gids',
@@ -27,40 +29,91 @@ export const metadata: Metadata = {
     type: 'article',
     publishedTime: '2025-04-12',
   },
+  alternates: {
+    canonical: 'https://stonesforhealth.nl/blog/zilveren-koord-slapen-zoutlampen-spirituele-tips',
+  }
+};
+
+const blogPostingSchema = {
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Het Zilveren Koord: Slapen, Zoutlampen & Spirituele Tips",
+  "description": "Ontdek het zilveren koord - de energieverbinding tussen lichaam en ziel. Leer over dromen, astrale projectie, zoutlampen voor rust en edelstenen voor diepe spirituele slaap.",
+  "image": "https://stonesforhealth.nl/Blog images /Het Zilveren Koord, Slapen, Zoutlampen & Spirituele Tips.jpeg",
+  "datePublished": "2025-04-12T09:00:00Z",
+  "dateModified": "2025-04-12T09:00:00Z",
+  "author": {
+    "@type": "Organization",
+    "name": "StonesForHealth"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Stones for Health",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://stonesforhealth.nl/logo.png"
+    }
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://stonesforhealth.nl/blog/zilveren-koord-slapen-zoutlampen-spirituele-tips"
+  }
 };
 
 export default function ZilverenKoordBlog() {
   return (
-    <div className="min-h-screen bg-white">
-      {/* Hero Section */}
-      <div className="relative w-full h-[300px] md:h-[400px] lg:h-[500px]">
-        <Image
-          src="/images/banner.png"
-          alt="Het Zilveren Koord en Spirituele Slaap"
-          fill
-          className="object-cover"
-          priority
-        />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/50 to-black/70" />
-        <div className="absolute inset-0 flex items-center justify-center">
-          <div className="text-center text-white px-4 max-w-4xl">
-            <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold mb-4 font-[family-name:var(--font-eb-garamond)]">
-              Het Zilveren Koord
-            </h1>
-            <p className="text-lg md:text-2xl text-white/90 font-[family-name:var(--font-eb-garamond)]">
-              Slapen, Zoutlampen & Spirituele Tips voor Rust
-            </p>
+    <main className="min-h-screen bg-white">
+      <JsonLd data={blogPostingSchema} />
+      <Breadcrumbs />
+      <article className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+        <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-6 leading-tight">
+          Het Zilveren Koord: Slapen, Zoutlampen & Spirituele Tips
+        </h1>
+        <div className="flex items-center gap-4 pb-8 border-b border-gray-200">
+          <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#492c4a] to-[#6b4069] flex items-center justify-center text-white font-bold text-lg">S4H</div>
+          <div>
+            <p className="font-semibold text-gray-900">StonesForHealth</p>
+            <p className="text-sm text-gray-600">12 april 2025 • 14 min read</p>
           </div>
         </div>
-      </div>
 
-      {/* Main Content */}
-      <article className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        {/* Banner Image */}
+        <div className="relative w-full h-[300px] md:h-[400px] lg:h-[500px] my-8 rounded-xl overflow-hidden">
+          <Image
+            src="/Blog images /Het Zilveren Koord, Slapen, Zoutlampen & Spirituele Tips.jpeg"
+            alt="Het Zilveren Koord en Spirituele Slaap"
+            fill
+            className="object-cover"
+            priority
+          />
+        </div>
         {/* Introduction */}
         <div className="prose prose-lg max-w-none mb-12">
-          <p className="text-xl text-gray-700 leading-relaxed font-[family-name:var(--font-eb-garamond)]">
+          <p className="text-base sm:text-lg text-gray-700 leading-relaxed font-[family-name:var(--font-eb-garamond)]">
             Het zilveren koord is een spiritueel concept dat al duizenden jaren wordt beschreven in verschillende tradities. Het wordt gezien als de energieverbinding tussen lichaam en ziel. Tijdens dromen, diepe <Link href="/blog/chakra-kristallen-complete-gids" className="text-[#492c4a] font-semibold hover:underline">meditatie</Link> of uittredingservaringen kan de ziel "reizen", terwijl het zilveren koord de verbinding met het lichaam behoudt.
           </p>
+
+          {/* Lees Ook Section */}
+          <div className="bg-purple-50 border-l-4 border-purple-500 p-6 my-8 rounded">
+            <h3 className="text-lg font-bold text-gray-900 mb-3">📚 Lees Ook</h3>
+            <ul className="space-y-2">
+              <li>
+                <Link href="/blog/chakra-kristallen-complete-gids" className="text-purple-600 hover:text-purple-800 underline font-medium">
+                  Chakra Kristallen Complete Gids
+                </Link> - Balanceer je energiecentra voor betere slaap en bescherming
+              </li>
+              <li>
+                <Link href="/blog/amethist-soorten-werking-spirituele-tips" className="text-purple-600 hover:text-purple-800 underline font-medium">
+                  Amethist voor Slaap
+                </Link> - De #1 steen tegen nachtmerries en voor diepe rust
+              </li>
+              <li>
+                <Link href="/blog/gouden-driehoek-amethist-bergkristal-rozenkwarts" className="text-purple-600 hover:text-purple-800 underline font-medium">
+                  De Gouden Driehoek
+                </Link> - Complete balans voor lichaam, geest en ziel tijdens slaap
+              </li>
+            </ul>
+          </div>
         </div>
 
         {/* Table of Contents */}
@@ -536,6 +589,39 @@ export default function ZilverenKoordBlog() {
                 </p>
               </div>
             </Link>
+
+            <Link href="/blog/bergkristal-koning-kristallen" className="group">
+              <div className="bg-white border-2 border-[#492c4a]/20 rounded-xl p-6 hover:border-[#492c4a]/40 hover:shadow-lg transition-all">
+                <h3 className="text-xl font-bold text-[#492c4a] mb-2 group-hover:text-[#6b4069] font-[family-name:var(--font-eb-garamond)]">
+                  Bergkristal: De Koning
+                </h3>
+                <p className="text-gray-600 text-sm font-[family-name:var(--font-eb-garamond)]">
+                  Programmeer voor bescherming en zuivering tijdens slaap
+                </p>
+              </div>
+            </Link>
+
+            <Link href="/blog/rozenkwarts-steen-van-de-liefde" className="group">
+              <div className="bg-white border-2 border-[#492c4a]/20 rounded-xl p-6 hover:border-[#492c4a]/40 hover:shadow-lg transition-all">
+                <h3 className="text-xl font-bold text-[#492c4a] mb-2 group-hover:text-[#6b4069] font-[family-name:var(--font-eb-garamond)]">
+                  Rozenkwarts voor Rust
+                </h3>
+                <p className="text-gray-600 text-sm font-[family-name:var(--font-eb-garamond)]">
+                  Liefdevolle energie voor kinderen en volwassenen
+                </p>
+              </div>
+            </Link>
+
+            <Link href="/blog/chakras-en-hun-kleuren" className="group">
+              <div className="bg-white border-2 border-[#492c4a]/20 rounded-xl p-6 hover:border-[#492c4a]/40 hover:shadow-lg transition-all">
+                <h3 className="text-xl font-bold text-[#492c4a] mb-2 group-hover:text-[#6b4069] font-[family-name:var(--font-eb-garamond)]">
+                  Chakra's en Hun Kleuren
+                </h3>
+                <p className="text-gray-600 text-sm font-[family-name:var(--font-eb-garamond)]">
+                  Begrijp je energiecentra voor betere slaap
+                </p>
+              </div>
+            </Link>
           </div>
         </div>
 
@@ -556,6 +642,6 @@ export default function ZilverenKoordBlog() {
           </div>
         </div>
       </article>
-    </div>
+    </main>
   );
 }

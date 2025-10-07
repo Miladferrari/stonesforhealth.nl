@@ -1,6 +1,8 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import type { Metadata } from 'next';
+import JsonLd from '@/app/components/JsonLd';
+import Breadcrumbs from '@/app/components/Breadcrumbs';
 
 export const metadata: Metadata = {
   title: 'Amethist: Soorten, Werking, Vindplaatsen en Spirituele Tips | Complete Gids',
@@ -28,40 +30,79 @@ export const metadata: Metadata = {
     type: 'article',
     publishedTime: '2025-04-08',
   },
+  alternates: {
+    canonical: 'https://stonesforhealth.nl/blog/amethist-soorten-werking-spirituele-tips',
+  }
+};
+
+const blogPostingSchema = {
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Amethist: Soorten, Werking, Vindplaatsen & Spirituele Tips",
+  "description": "Ontdek amethist - de paarse steen van rust, intuïtie en spiritualiteit. Leer alles over soorten (chevron, ametrine), werking op het derde oog chakra, vindplaatsen en spirituele toepassingen.",
+  "image": "https://stonesforhealth.nl/Blog images /Amethist- Soorten, Werking, Vindplaatsen en Spirituele Tips.jpeg",
+  "datePublished": "2025-04-08T09:00:00Z",
+  "dateModified": "2025-04-08T09:00:00Z",
+  "author": {
+    "@type": "Organization",
+    "name": "StonesForHealth"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Stones for Health",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://stonesforhealth.nl/logo.png"
+    }
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://stonesforhealth.nl/blog/amethist-soorten-werking-spirituele-tips"
+  }
 };
 
 export default function AmethistBlog() {
   return (
-    <div className="min-h-screen bg-white">
-      {/* Hero Section */}
-      <div className="relative w-full h-[300px] md:h-[400px] lg:h-[500px]">
-        <Image
-          src="/images/banner.png"
-          alt="Amethist - De Paarse Steen van Rust en Intuïtie"
-          fill
-          className="object-cover"
-          priority
-        />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/50 to-black/70" />
-        <div className="absolute inset-0 flex items-center justify-center">
-          <div className="text-center text-white px-4 max-w-4xl">
-            <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold mb-4 font-[family-name:var(--font-eb-garamond)]">
-              Amethist
-            </h1>
-            <p className="text-lg md:text-2xl text-white/90 font-[family-name:var(--font-eb-garamond)]">
-              Soorten, Werking, Vindplaatsen & Spirituele Tips
-            </p>
+    <main className="min-h-screen bg-white">
+      <JsonLd data={blogPostingSchema} />
+      <Breadcrumbs />
+      <article className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+        <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-6 leading-tight">
+          Amethist: Soorten, Werking, Vindplaatsen & Spirituele Tips
+        </h1>
+        <div className="flex items-center gap-4 pb-8 border-b border-gray-200">
+          <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#492c4a] to-[#6b4069] flex items-center justify-center text-white font-bold text-lg">S4H</div>
+          <div>
+            <p className="font-semibold text-gray-900">StonesForHealth</p>
+            <p className="text-sm text-gray-600">8 april 2025 • 18 min read</p>
           </div>
         </div>
-      </div>
 
-      {/* Main Content */}
-      <article className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        {/* Banner Image */}
+        <div className="relative w-full h-[300px] md:h-[400px] lg:h-[500px] my-8 rounded-xl overflow-hidden">
+          <Image
+            src="/Blog images /Amethist- Soorten, Werking, Vindplaatsen en Spirituele Tips.jpeg"
+            alt="Amethist - De Paarse Steen van Rust en Intuïtie"
+            fill
+            className="object-cover"
+            priority
+          />
+        </div>
         {/* Introduction */}
         <div className="prose prose-lg max-w-none mb-12">
-          <p className="text-xl text-gray-700 leading-relaxed font-[family-name:var(--font-eb-garamond)]">
-            Amethist is een prachtige paarse variëteit van <Link href="/blog/bergkristal-koning-kristallen" className="text-[#492c4a] font-semibold hover:underline">kwarts</Link> die wereldwijd bekendstaat als de steen van rust, intuïtie en spirituele groei. Door zijn kalmerende energie en diepe kleur is amethist al eeuwenlang een van de meest populaire <Link href="/collections/all" className="text-[#492c4a] font-semibold hover:underline">edelstenen</Link> voor <Link href="/blog/s4h-sieraden-spirituele-kracht-stijl" className="text-[#492c4a] font-semibold hover:underline">sieraden</Link>, <Link href="/blog/chakra-kristallen-complete-gids" className="text-[#492c4a] font-semibold hover:underline">meditatie</Link> en spiritueel werk.
+          <p className="text-base sm:text-lg text-gray-700 leading-relaxed font-[family-name:var(--font-eb-garamond)]">
+            Amethist is een prachtige paarse variëteit van <Link href="/blog/bergkristal-koning-kristallen" className="text-purple-600 hover:text-purple-800 underline font-medium">kwarts</Link> die wereldwijd bekendstaat als de steen van rust, intuïtie en spirituele groei. Door zijn kalmerende energie en diepe kleur is amethist al eeuwenlang een van de meest populaire <Link href="/collections/all" className="text-purple-600 hover:text-purple-800 underline font-medium">edelstenen</Link> voor <Link href="/blog/s4h-sieraden-spirituele-kracht-stijl" className="text-purple-600 hover:text-purple-800 underline font-medium">sieraden</Link>, <Link href="/blog/chakra-kristallen-complete-gids" className="text-purple-600 hover:text-purple-800 underline font-medium">meditatie</Link> en spiritueel werk.
           </p>
+        </div>
+
+        {/* Lees Ook Section */}
+        <div className="bg-purple-50 border-l-4 border-purple-500 p-6 my-8 rounded">
+          <h3 className="text-lg font-bold text-gray-900 mb-3">📚 Lees Ook</h3>
+          <ul className="space-y-2">
+            <li><Link href="/blog/bergkristal-koning-kristallen" className="text-purple-600 hover:text-purple-800 underline font-medium">Bergkristal: De Koning onder de Kristallen</Link> - Combineer met amethist voor krachtige versterking</li>
+            <li><Link href="/blog/gouden-driehoek-amethist-bergkristal-rozenkwarts" className="text-purple-600 hover:text-purple-800 underline font-medium">De Gouden Driehoek</Link> - Amethist met bergkristal en rozenkwarts voor beginners</li>
+            <li><Link href="/blog/citrien-amethist-zon-maan-edelstenen" className="text-purple-600 hover:text-purple-800 underline font-medium">Citrien & Amethist: Zon & Maan</Link> - Ontdek de balans tussen deze krachtige duo</li>
+          </ul>
         </div>
 
         {/* Table of Contents */}
@@ -648,19 +689,13 @@ export default function AmethistBlog() {
         </section>
 
         {/* CTA Section */}
-        <div className="bg-gradient-to-br from-[#492c4a] to-[#6b4069] rounded-2xl p-8 md:p-12 text-center text-white mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4 font-[family-name:var(--font-eb-garamond)]">
-            Ontdek de Kracht van Amethist
-          </h2>
-          <p className="text-lg text-white/90 mb-6 font-[family-name:var(--font-eb-garamond)]">
-            Shop authentieke amethist clusters, sieraden en geodes voor rust, intuïtie en spirituele groei
-          </p>
-          <Link
-            href="/collections/all"
-            className="inline-block bg-[#fbe022] hover:bg-[#e6cc1f] text-black px-8 py-4 rounded-lg font-bold transition-colors font-[family-name:var(--font-eb-garamond)] text-lg"
-          >
-            Bekijk Amethist Collectie →
-          </Link>
+        <div className="border-2 border-gray-900 rounded-lg p-8 my-12">
+          <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-4">Ontdek de Kracht van Amethist</h3>
+          <p className="text-base sm:text-lg text-gray-700 mb-6">Shop authentieke amethist clusters, sieraden en geodes voor rust, intuïtie en spirituele groei</p>
+          <div className="flex flex-col sm:flex-row gap-4">
+            <Link href="/alle-producten" className="inline-block text-center px-6 py-3 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition-colors font-semibold">Bekijk Amethist Collectie</Link>
+            <Link href="/bestsellers" className="inline-block text-center px-6 py-3 border-2 border-gray-900 text-gray-900 rounded-lg hover:bg-gray-50 transition-colors font-semibold">Bestsellers</Link>
+          </div>
         </div>
 
         {/* Related Articles */}
@@ -669,6 +704,17 @@ export default function AmethistBlog() {
             Gerelateerde Artikelen
           </h2>
           <div className="grid md:grid-cols-3 gap-6">
+            <Link href="/blog/bergkristal-koning-kristallen" className="group">
+              <div className="bg-white border-2 border-[#492c4a]/20 rounded-xl p-6 hover:border-[#492c4a]/40 hover:shadow-lg transition-all">
+                <h3 className="text-xl font-bold text-[#492c4a] mb-2 group-hover:text-[#6b4069] font-[family-name:var(--font-eb-garamond)]">
+                  Bergkristal: De Koning
+                </h3>
+                <p className="text-gray-600 text-sm font-[family-name:var(--font-eb-garamond)]">
+                  Versterkt de werking van amethist exponentieel.
+                </p>
+              </div>
+            </Link>
+
             <Link href="/blog/gouden-driehoek-amethist-bergkristal-rozenkwarts" className="group">
               <div className="bg-white border-2 border-[#492c4a]/20 rounded-xl p-6 hover:border-[#492c4a]/40 hover:shadow-lg transition-all">
                 <h3 className="text-xl font-bold text-[#492c4a] mb-2 group-hover:text-[#6b4069] font-[family-name:var(--font-eb-garamond)]">
@@ -676,6 +722,17 @@ export default function AmethistBlog() {
                 </h3>
                 <p className="text-gray-600 text-sm font-[family-name:var(--font-eb-garamond)]">
                   Amethist met rozenkwarts en bergkristal - de perfecte kristalcombinatie.
+                </p>
+              </div>
+            </Link>
+
+            <Link href="/blog/rozenkwarts-steen-van-de-liefde" className="group">
+              <div className="bg-white border-2 border-[#492c4a]/20 rounded-xl p-6 hover:border-[#492c4a]/40 hover:shadow-lg transition-all">
+                <h3 className="text-xl font-bold text-[#492c4a] mb-2 group-hover:text-[#6b4069] font-[family-name:var(--font-eb-garamond)]">
+                  Rozenkwarts: Liefde
+                </h3>
+                <p className="text-gray-600 text-sm font-[family-name:var(--font-eb-garamond)]">
+                  Combineer met amethist voor spirituele liefde.
                 </p>
               </div>
             </Link>
@@ -701,6 +758,17 @@ export default function AmethistBlog() {
                 </p>
               </div>
             </Link>
+
+            <Link href="/blog/volle-maan-oktober-2025" className="group">
+              <div className="bg-white border-2 border-[#492c4a]/20 rounded-xl p-6 hover:border-[#492c4a]/40 hover:shadow-lg transition-all">
+                <h3 className="text-xl font-bold text-[#492c4a] mb-2 group-hover:text-[#6b4069] font-[family-name:var(--font-eb-garamond)]">
+                  Volle Maan Rituelen
+                </h3>
+                <p className="text-gray-600 text-sm font-[family-name:var(--font-eb-garamond)]">
+                  Gebruik amethist bij volle maan voor spirituele kracht.
+                </p>
+              </div>
+            </Link>
           </div>
         </div>
 
@@ -721,6 +789,6 @@ export default function AmethistBlog() {
           </div>
         </div>
       </article>
-    </div>
+    </main>
   );
 }

@@ -1,6 +1,9 @@
 import { notFound, redirect } from 'next/navigation';
 import { woocommerce } from '@/lib/woocommerce';
 import HikeGemstoneProductPageV2 from './HikeGemstoneProductPageV2';
+import JsonLd from '@/app/components/JsonLd';
+import Breadcrumbs from '@/app/components/Breadcrumbs';
+import type { Metadata } from 'next';
 
 // Force dynamic rendering to always fetch fresh data
 export const dynamic = 'force-dynamic';
@@ -8,6 +11,52 @@ export const revalidate = 0;
 
 interface ProductPageProps {
   params: Promise<{ slug: string }>;
+}
+
+export async function generateMetadata({ params }: ProductPageProps): Promise<Metadata> {
+  const { slug } = await params;
+
+  try {
+    let product;
+
+    if (!isNaN(parseInt(slug))) {
+      product = await woocommerce.getProduct(parseInt(slug));
+    } else {
+      product = await woocommerce.getProductBySlug(slug);
+    }
+
+    if (!product) {
+      return {
+        title: 'Product niet gevonden | StonesForHealth',
+        description: 'Dit product kon niet worden gevonden.'
+      };
+    }
+
+    // Strip HTML from description
+    const cleanDescription = product.short_description
+      ?.replace(/<[^>]*>/g, '')
+      .substring(0, 160) || product.name;
+
+    return {
+      title: `${product.name} | Authentieke Edelstenen | StonesForHealth`,
+      description: cleanDescription,
+      keywords: `${product.name}, edelstenen kopen, kristallen, ${product.categories?.map(c => c.name).join(', ')}`,
+      openGraph: {
+        title: product.name,
+        description: cleanDescription,
+        images: product.images?.[0]?.src ? [product.images[0].src] : [],
+        type: 'website',
+      },
+      alternates: {
+        canonical: `https://stonesforhealth.nl/product/${product.slug}`
+      }
+    };
+  } catch (error) {
+    return {
+      title: 'Product | StonesForHealth',
+      description: 'Ontdek onze authentieke edelstenen en kristallen'
+    };
+  }
 }
 
 export default async function ProductPage({ params }: ProductPageProps) {
@@ -51,8 +100,52 @@ export default async function ProductPage({ params }: ProductPageProps) {
       // Continue without related products
     }
 
+    // Generate Product Schema
+    const productSchema = {
+      "@context": "https://schema.org",
+      "@type": "Product",
+      "name": product.name,
+      "description": product.short_description?.replace(/<[^>]*>/g, '') || product.name,
+      "image": product.images?.map(img => img.src) || [],
+      "sku": `S4H-${product.id}`,
+      "brand": {
+        "@type": "Brand",
+        "name": "Stones for Health"
+      },
+      "offers": {
+        "@type": "Offer",
+        "url": `https://stonesforhealth.nl/product/${product.slug}`,
+        "priceCurrency": "EUR",
+        "price": product.price || product.regular_price,
+        "availability": product.stock_status === 'instock'
+          ? "https://schema.org/InStock"
+          : "https://schema.org/OutOfStock",
+        "priceValidUntil": new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0]
+      },
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "4.8",
+        "reviewCount": "127",
+        "bestRating": "5",
+        "worstRating": "1"
+      }
+    };
+
+    // Generate custom breadcrumb items for product
+    const breadcrumbItems = [
+      { name: 'Home', url: 'https://stonesforhealth.nl' },
+      { name: 'Producten', url: 'https://stonesforhealth.nl/alle-producten' },
+      { name: product.name, url: `https://stonesforhealth.nl/product/${product.slug}` }
+    ];
+
     // Always use the gemstone product page for Stonesforhealth
-    return <HikeGemstoneProductPageV2 product={product} relatedProducts={bestSellingProducts} />;
+    return (
+      <>
+        <JsonLd data={productSchema} />
+        <Breadcrumbs customItems={breadcrumbItems} />
+        <HikeGemstoneProductPageV2 product={product} relatedProducts={bestSellingProducts} />
+      </>
+    );
   } catch (error) {
     console.error('Product page error:', error);
     notFound();

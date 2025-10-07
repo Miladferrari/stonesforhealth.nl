@@ -1,6 +1,8 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import type { Metadata } from 'next';
+import JsonLd from '@/app/components/JsonLd';
+import Breadcrumbs from '@/app/components/Breadcrumbs';
 
 export const metadata: Metadata = {
   title: 'S4H Sieraden: Spirituele Kracht en Stijl in Één | Stonesforhealth.nl',
@@ -28,40 +30,91 @@ export const metadata: Metadata = {
     type: 'article',
     publishedTime: '2025-03-30',
   },
+  alternates: {
+    canonical: 'https://stonesforhealth.nl/blog/s4h-sieraden-spirituele-kracht-stijl',
+  }
+};
+
+const blogPostingSchema = {
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "S4H Sieraden: Spirituele Kracht en Stijl in Één",
+  "description": "Ontdek S4H sieraden - edelsteen armbanden, kettingen en ringen met echte spirituele werking. Combineer stijl met chakra balans, bescherming en liefde.",
+  "image": "https://stonesforhealth.nl/Blog images /S4H Sieraden- Spirituele Kracht en Stijl in Één.jpeg",
+  "datePublished": "2025-03-30T09:00:00Z",
+  "dateModified": "2025-03-30T09:00:00Z",
+  "author": {
+    "@type": "Organization",
+    "name": "StonesForHealth"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Stones for Health",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://stonesforhealth.nl/logo.png"
+    }
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://stonesforhealth.nl/blog/s4h-sieraden-spirituele-kracht-stijl"
+  }
 };
 
 export default function S4HSieradenBlog() {
   return (
-    <div className="min-h-screen bg-white">
-      {/* Hero Section */}
-      <div className="relative w-full h-[300px] md:h-[400px] lg:h-[500px]">
-        <Image
-          src="/images/banner.png"
-          alt="S4H Sieraden - Spirituele Kracht en Stijl"
-          fill
-          className="object-cover"
-          priority
-        />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/50 to-black/70" />
-        <div className="absolute inset-0 flex items-center justify-center">
-          <div className="text-center text-white px-4 max-w-4xl">
-            <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold mb-4 font-[family-name:var(--font-eb-garamond)]">
-              S4H Sieraden
-            </h1>
-            <p className="text-lg md:text-2xl text-white/90 font-[family-name:var(--font-eb-garamond)]">
-              Spirituele Kracht en Stijl in Één
-            </p>
+    <main className="min-h-screen bg-white">
+      <JsonLd data={blogPostingSchema} />
+      <Breadcrumbs />
+      <article className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+        <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-6 leading-tight">
+          S4H Sieraden: Spirituele Kracht en Stijl in Één
+        </h1>
+        <div className="flex items-center gap-4 pb-8 border-b border-gray-200">
+          <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#492c4a] to-[#6b4069] flex items-center justify-center text-white font-bold text-lg">S4H</div>
+          <div>
+            <p className="font-semibold text-gray-900">StonesForHealth</p>
+            <p className="text-sm text-gray-600">30 maart 2025 • 13 min read</p>
           </div>
         </div>
-      </div>
 
-      {/* Main Content */}
-      <article className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        {/* Banner Image */}
+        <div className="relative w-full h-[300px] md:h-[400px] lg:h-[500px] my-8 rounded-xl overflow-hidden">
+          <Image
+            src="/Blog images /S4H Sieraden- Spirituele Kracht en Stijl in Één.jpeg"
+            alt="S4H Sieraden - Spirituele Kracht en Stijl"
+            fill
+            className="object-cover"
+            priority
+          />
+        </div>
         {/* Introduction */}
         <div className="prose prose-lg max-w-none mb-12">
-          <p className="text-xl text-gray-700 leading-relaxed font-[family-name:var(--font-eb-garamond)]">
+          <p className="text-base sm:text-lg text-gray-700 leading-relaxed font-[family-name:var(--font-eb-garamond)]">
             Bij <Link href="/" className="text-[#492c4a] font-semibold hover:underline">Stonesforhealth.nl</Link> vind je niet alleen losse <Link href="/collections/all" className="text-[#492c4a] font-semibold hover:underline">edelstenen</Link> en <Link href="/blog/chakra-kristallen-complete-gids" className="text-[#492c4a] font-semibold hover:underline">kristalsets</Link>, maar ook onze eigen lijn <Link href="/collections/all" className="text-[#492c4a] font-semibold hover:underline">sieraden</Link> onder het label <Link href="/blog/art-of-stones-s4h-edelstenen" className="text-[#492c4a] font-semibold hover:underline">S4H (Stones for Health)</Link>. Deze collectie is ontworpen voor iedereen die stijl wil combineren met spirituele betekenis. In dit blog ontdek je waarom S4H sieraden uniek zijn, hoe ze worden gemaakt en welke spirituele werking ze hebben.
           </p>
+
+          {/* Lees Ook Section */}
+          <div className="bg-purple-50 border-l-4 border-purple-500 p-6 my-8 rounded">
+            <h3 className="text-lg font-bold text-gray-900 mb-3">📚 Lees Ook</h3>
+            <ul className="space-y-2">
+              <li>
+                <Link href="/blog/art-of-stones-s4h-edelstenen" className="text-purple-600 hover:text-purple-800 underline font-medium">
+                  Art of Stones: Het Verhaal achter S4H
+                </Link> - Ontdek het bedrijf achter onze sieraden collectie
+              </li>
+              <li>
+                <Link href="/blog/gouden-driehoek-amethist-bergkristal-rozenkwarts" className="text-purple-600 hover:text-purple-800 underline font-medium">
+                  De Gouden Driehoek
+                </Link> - Ook verkrijgbaar als elegante armband set
+              </li>
+              <li>
+                <Link href="/blog/chakra-kristallen-complete-gids" className="text-purple-600 hover:text-purple-800 underline font-medium">
+                  Chakra Kristallen Gids
+                </Link> - Kies je armband op chakra-werking
+              </li>
+            </ul>
+          </div>
         </div>
 
         {/* Table of Contents */}
@@ -550,19 +603,13 @@ export default function S4HSieradenBlog() {
         </section>
 
         {/* CTA Section */}
-        <div className="bg-gradient-to-br from-[#492c4a] to-[#6b4069] rounded-2xl p-8 md:p-12 text-center text-white mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4 font-[family-name:var(--font-eb-garamond)]">
-            Ontdek de S4H Sieraden Collectie
-          </h2>
-          <p className="text-lg text-white/90 mb-6 font-[family-name:var(--font-eb-garamond)]">
-            Stijl en spiritualiteit in één - shop edelsteen armbanden, kettingen en ringen
-          </p>
-          <Link
-            href="/collections/all"
-            className="inline-block bg-[#fbe022] hover:bg-[#e6cc1f] text-black px-8 py-4 rounded-lg font-bold transition-colors font-[family-name:var(--font-eb-garamond)] text-lg"
-          >
-            Bekijk Alle Sieraden →
-          </Link>
+        <div className="border-2 border-gray-900 rounded-lg p-8 my-12">
+          <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-4">Ontdek de S4H Sieraden Collectie</h3>
+          <p className="text-base sm:text-lg text-gray-700 mb-6">Stijl en spiritualiteit in één - shop edelsteen armbanden, kettingen en ringen</p>
+          <div className="flex flex-col sm:flex-row gap-4">
+            <Link href="/alle-producten" className="inline-block text-center px-6 py-3 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition-colors font-semibold">Bekijk Alle Sieraden</Link>
+            <Link href="/bestsellers" className="inline-block text-center px-6 py-3 border-2 border-gray-900 text-gray-900 rounded-lg hover:bg-gray-50 transition-colors font-semibold">Bestsellers</Link>
+          </div>
         </div>
 
         {/* Related Articles */}
@@ -582,24 +629,57 @@ export default function S4HSieradenBlog() {
               </div>
             </Link>
 
-            <Link href="/blog/chakra-kristallen-complete-gids" className="group">
-              <div className="bg-white border-2 border-[#492c4a]/20 rounded-xl p-6 hover:border-[#492c4a]/40 hover:shadow-lg transition-all">
-                <h3 className="text-xl font-bold text-[#492c4a] mb-2 group-hover:text-[#6b4069] font-[family-name:var(--font-eb-garamond)]">
-                  Chakra Kristallen Gids
-                </h3>
-                <p className="text-gray-600 text-sm font-[family-name:var(--font-eb-garamond)]">
-                  Ontdek welke kristallen bij welke chakra's horen en hoe je chakra sieraden gebruikt.
-                </p>
-              </div>
-            </Link>
-
             <Link href="/blog/gouden-driehoek-amethist-bergkristal-rozenkwarts" className="group">
               <div className="bg-white border-2 border-[#492c4a]/20 rounded-xl p-6 hover:border-[#492c4a]/40 hover:shadow-lg transition-all">
                 <h3 className="text-xl font-bold text-[#492c4a] mb-2 group-hover:text-[#6b4069] font-[family-name:var(--font-eb-garamond)]">
                   De Gouden Driehoek
                 </h3>
                 <p className="text-gray-600 text-sm font-[family-name:var(--font-eb-garamond)]">
-                  De krachtigste kristalcombinatie voor beginners en gevorderden.
+                  Ook verkrijgbaar als armband set
+                </p>
+              </div>
+            </Link>
+
+            <Link href="/blog/top-10-edelstenen-beginners" className="group">
+              <div className="bg-white border-2 border-[#492c4a]/20 rounded-xl p-6 hover:border-[#492c4a]/40 hover:shadow-lg transition-all">
+                <h3 className="text-xl font-bold text-[#492c4a] mb-2 group-hover:text-[#6b4069] font-[family-name:var(--font-eb-garamond)]">
+                  Top 10 Edelstenen
+                </h3>
+                <p className="text-gray-600 text-sm font-[family-name:var(--font-eb-garamond)]">
+                  Must-have kristallen in sieraden vorm
+                </p>
+              </div>
+            </Link>
+
+            <Link href="/blog/chakra-kristallen-complete-gids" className="group">
+              <div className="bg-white border-2 border-[#492c4a]/20 rounded-xl p-6 hover:border-[#492c4a]/40 hover:shadow-lg transition-all">
+                <h3 className="text-xl font-bold text-[#492c4a] mb-2 group-hover:text-[#6b4069] font-[family-name:var(--font-eb-garamond)]">
+                  Chakra Kristallen Gids
+                </h3>
+                <p className="text-gray-600 text-sm font-[family-name:var(--font-eb-garamond)]">
+                  Kies je armband op chakra-werking
+                </p>
+              </div>
+            </Link>
+
+            <Link href="/blog/bergkristal-koning-kristallen" className="group">
+              <div className="bg-white border-2 border-[#492c4a]/20 rounded-xl p-6 hover:border-[#492c4a]/40 hover:shadow-lg transition-all">
+                <h3 className="text-xl font-bold text-[#492c4a] mb-2 group-hover:text-[#6b4069] font-[family-name:var(--font-eb-garamond)]">
+                  Bergkristal Sieraden
+                </h3>
+                <p className="text-gray-600 text-sm font-[family-name:var(--font-eb-garamond)]">
+                  De koning der kristallen in armband vorm
+                </p>
+              </div>
+            </Link>
+
+            <Link href="/blog/rozenkwarts-steen-van-de-liefde" className="group">
+              <div className="bg-white border-2 border-[#492c4a]/20 rounded-xl p-6 hover:border-[#492c4a]/40 hover:shadow-lg transition-all">
+                <h3 className="text-xl font-bold text-[#492c4a] mb-2 group-hover:text-[#6b4069] font-[family-name:var(--font-eb-garamond)]">
+                  Rozenkwarts Sieraden
+                </h3>
+                <p className="text-gray-600 text-sm font-[family-name:var(--font-eb-garamond)]">
+                  Populairste liefdes sieraden collectie
                 </p>
               </div>
             </Link>
@@ -623,6 +703,6 @@ export default function S4HSieradenBlog() {
           </div>
         </div>
       </article>
-    </div>
+    </main>
   );
 }

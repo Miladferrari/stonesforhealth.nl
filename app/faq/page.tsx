@@ -1,12 +1,6 @@
 'use client';
 
-import { Metadata } from 'next';
 import { useState } from 'react';
-
-const metadata: Metadata = {
-  title: 'Veelgestelde Vragen | Stones for Health',
-  description: 'Antwoorden op veelgestelde vragen over kristallen, edelstenen, bestellingen, verzending en meer bij Stones for Health.',
-};
 
 interface FAQItem {
   question: string;
