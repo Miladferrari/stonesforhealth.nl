@@ -1,14 +1,13 @@
-import { getServerSideSitemap } from 'next-sitemap';
+import { getServerSideSitemap, ISitemapField } from 'next-sitemap';
 import { woocommerce } from '@/lib/woocommerce';
 
 export async function GET(request: Request) {
   try {
-    const fields = [];
+    const fields: ISitemapField[] = [];
 
     // Fetch all products from WooCommerce
     const productsResult = await woocommerce.getProducts({
-      per_page: 100,
-      status: 'publish'
+      per_page: 100
     });
 
     // Add product URLs
@@ -16,8 +15,8 @@ export async function GET(request: Request) {
       if (product.slug) {
         fields.push({
           loc: `https://stonesforhealth.nl/product/${product.slug}`,
-          lastmod: product.date_modified || new Date().toISOString(),
-          changefreq: 'weekly',
+          lastmod: new Date().toISOString(),
+          changefreq: 'weekly' as const,
           priority: 0.9,
         });
       }
@@ -30,7 +29,7 @@ export async function GET(request: Request) {
         fields.push({
           loc: `https://stonesforhealth.nl/collections/${category.slug}`,
           lastmod: new Date().toISOString(),
-          changefreq: 'daily',
+          changefreq: 'daily' as const,
           priority: 0.8,
         });
       }
