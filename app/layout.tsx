@@ -32,11 +32,6 @@ export const metadata: Metadata = {
   title: "Stonesforhealth - Natuurlijke Kristallen & Edelstenen",
   description: "Ontdek de helende kracht van natuurlijke kristallen en edelstenen. 100% authentiek, ethisch gewonnen, met liefde geselecteerd.",
   metadataBase: new URL('https://stonesforhealth.nl'),
-  icons: {
-    icon: '/favicon.ico',
-    shortcut: '/favicon.ico',
-    apple: '/apple-icon.png',
-  },
   openGraph: {
     title: 'Stonesforhealth - Natuurlijke Kristallen & Edelstenen',
     description: 'Ontdek de helende kracht van natuurlijke kristallen',
