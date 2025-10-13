@@ -21,7 +21,32 @@ export async function GET(request: NextRequest) {
       params.order = searchParams.get('order') as 'asc' | 'desc';
     }
     if (searchParams.get('category')) {
-      params.category = searchParams.get('category');
+      const categoryParam = searchParams.get('category')!;
+
+      // Check if category is a number (ID) or a slug
+      if (isNaN(Number(categoryParam))) {
+        // It's a slug, we need to convert it to an ID
+        try {
+          const categories = await woocommerce.getCategories({ per_page: 100 });
+          const matchedCategory = categories.find(cat => cat.slug === categoryParam);
+
+          if (matchedCategory) {
+            params.category = matchedCategory.id.toString();
+            console.log(`[Products API] Converted category slug "${categoryParam}" to ID ${matchedCategory.id}`);
+          } else {
+            console.warn(`[Products API] Category slug "${categoryParam}" not found, will return empty results`);
+            // Still set it, but WooCommerce will return empty results
+            params.category = categoryParam;
+          }
+        } catch (error) {
+          console.error('[Products API] Failed to fetch categories for slug conversion:', error);
+          // Fall back to using the slug as-is
+          params.category = categoryParam;
+        }
+      } else {
+        // It's already an ID
+        params.category = categoryParam;
+      }
     }
     if (searchParams.get('include')) {
       params.include = searchParams.get('include')!.split(',').map(id => parseInt(id));

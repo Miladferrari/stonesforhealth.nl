@@ -29,11 +29,10 @@ const Header = memo(function Header() {
         const response = await fetch('/api/categories');
         if (response.ok) {
           const data = await response.json();
-          const topCategories = data
+          const allCategories = data
             .filter((cat: any) => cat.parent === 0 && cat.slug !== 'uncategorized')
-            .sort((a: any, b: any) => (b.count || 0) - (a.count || 0))
-            .slice(0, 6); // Show top 6 categories in dropdown
-          setCategories(topCategories);
+            .sort((a: any, b: any) => (b.count || 0) - (a.count || 0));
+          setCategories(allCategories);
         }
       } catch (error) {
         console.error('Failed to fetch categories for header:', error);
@@ -90,7 +89,7 @@ const Header = memo(function Header() {
                 }}
                 className="flex items-center text-lg text-[#2D2D2D] hover:text-[#3b223b] font-normal transition-colors font-[family-name:var(--font-eb-garamond)]"
               >
-                Shop
+                Categorieën
                 <svg className="ml-1 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                 </svg>
@@ -273,7 +272,7 @@ const Header = memo(function Header() {
                 onClick={() => setShopDropdownOpen(!shopDropdownOpen)}
                 className="w-full flex items-center justify-between px-3 py-2 text-base font-light text-[#2D2D2D] hover:text-[#8B7355] transition-colors font-[family-name:var(--font-eb-garamond)]"
               >
-                <span>Shop</span>
+                <span>Categorieën</span>
                 <svg
                   className={`w-4 h-4 transition-transform ${shopDropdownOpen ? 'rotate-180' : ''}`}
                   fill="none"
@@ -290,22 +289,18 @@ const Header = memo(function Header() {
                     className="block px-3 py-2 text-base font-light text-[#2D2D2D] hover:text-[#8B7355] transition-colors font-[family-name:var(--font-eb-garamond)]"
                     onClick={() => setMobileMenuOpen(false)}
                   >
-                    Alle producten
+                    Alle Producten
                   </Link>
-                  <Link
-                    href="/bestsellers"
-                    className="block px-3 py-2 text-base font-light text-[#2D2D2D] hover:text-[#8B7355] transition-colors font-[family-name:var(--font-eb-garamond)]"
-                    onClick={() => setMobileMenuOpen(false)}
-                  >
-                    Bestsellers
-                  </Link>
-                  <Link
-                    href="/collections"
-                    className="block px-3 py-2 text-base font-light text-[#2D2D2D] hover:text-[#8B7355] transition-colors font-[family-name:var(--font-eb-garamond)]"
-                    onClick={() => setMobileMenuOpen(false)}
-                  >
-                    Collecties
-                  </Link>
+                  {categories.map((category) => (
+                    <Link
+                      key={category.id}
+                      href={category.slug === 'bestsellers' ? '/bestsellers' : `/alle-producten?category=${category.slug}`}
+                      className="block px-3 py-2 text-base font-light text-[#2D2D2D] hover:text-[#8B7355] transition-colors font-[family-name:var(--font-eb-garamond)]"
+                      onClick={() => setMobileMenuOpen(false)}
+                    >
+                      {category.name}
+                    </Link>
+                  ))}
                 </div>
               )}
             </div>
