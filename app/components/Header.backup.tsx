@@ -12,15 +12,11 @@ const Header = memo(function Header() {
   const [shopDropdownOpen, setShopDropdownOpen] = useState(false);
   const [searchModalOpen, setSearchModalOpen] = useState(false);
   const [categories, setCategories] = useState<any[]>([]);
-  const [hoveredCategory, setHoveredCategory] = useState<any>(null);
-  const [categoryProducts, setCategoryProducts] = useState<any[]>([]);
-  const [loadingProducts, setLoadingProducts] = useState(false);
   const { setIsCartOpen, getTotalItems } = useCart();
 
   // Timeout refs for dropdown delays
   const shopDropdownTimeout = useRef<NodeJS.Timeout | null>(null);
   const helpDropdownTimeout = useRef<NodeJS.Timeout | null>(null);
-  const productFetchTimeout = useRef<NodeJS.Timeout | null>(null);
 
   const toggleCart = () => {
     setIsCartOpen(true);
@@ -53,93 +49,9 @@ const Header = memo(function Header() {
     fetchCategories();
   }, []);
 
-  // Fetch products for a category when hovered
-  const fetchCategoryProducts = async (category: any) => {
-    if (productFetchTimeout.current) {
-      clearTimeout(productFetchTimeout.current);
-    }
-
-    // Add small delay to avoid fetching on quick hovers
-    productFetchTimeout.current = setTimeout(async () => {
-      setLoadingProducts(true);
-      try {
-        const url = category.slug === 'bestsellers'
-          ? `/api/products?per_page=5&category=20`
-          : `/api/products?per_page=5&category=${category.slug}`;
-
-        const response = await fetch(url);
-        if (response.ok) {
-          const data = await response.json();
-          setCategoryProducts(Array.isArray(data) ? data : []);
-        }
-      } catch (error) {
-        console.error('Failed to fetch products for category:', error);
-        setCategoryProducts([]);
-      } finally {
-        setLoadingProducts(false);
-      }
-    }, 200);
-  };
-
-  const handleCategoryHover = (category: any) => {
-    setHoveredCategory(category);
-    fetchCategoryProducts(category);
-  };
-
-  // Close dropdowns when clicking outside
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      const target = event.target as HTMLElement;
-
-      // Check if click is outside mega menu and categorieën button (desktop)
-      const megaMenu = document.querySelector('[data-mega-menu]');
-      const shopButton = document.querySelector('[data-shop-button]');
-
-      if (shopDropdownOpen &&
-          megaMenu &&
-          shopButton &&
-          !megaMenu.contains(target) &&
-          !shopButton.contains(target)) {
-        setShopDropdownOpen(false);
-      }
-
-      // Check if click is outside mobile menu and hamburger button
-      const mobileMenu = document.querySelector('[data-mobile-menu]');
-      const hamburgerButton = document.querySelector('[data-hamburger-button]');
-
-      if (mobileMenuOpen &&
-          mobileMenu &&
-          hamburgerButton &&
-          !mobileMenu.contains(target) &&
-          !hamburgerButton.contains(target)) {
-        setMobileMenuOpen(false);
-      }
-
-      // Check if click is outside helpcentrum dropdown
-      const helpDropdown = document.querySelector('[data-help-dropdown]');
-      const helpButton = document.querySelector('[data-help-button]');
-
-      if (helpDropdownOpen &&
-          helpDropdown &&
-          helpButton &&
-          !helpDropdown.contains(target) &&
-          !helpButton.contains(target)) {
-        setHelpDropdownOpen(false);
-      }
-    };
-
-    // Add event listener
-    document.addEventListener('mousedown', handleClickOutside);
-
-    // Cleanup
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, [shopDropdownOpen, mobileMenuOpen, helpDropdownOpen]);
-
   return (
     <>
-      <nav className="relative bg-white shadow-sm border-b border-gray-100 z-40 transition-all duration-300 ease-in-out">
+      <nav className="relative bg-white shadow-sm border-b border-gray-100 z-50 transition-all duration-300 ease-in-out">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex h-20 items-center justify-between">
           {/* Logo */}
@@ -163,7 +75,7 @@ const Header = memo(function Header() {
             {/* Shop Dropdown */}
             <div className="relative">
               <button
-                data-shop-button
+                onClick={() => setShopDropdownOpen(!shopDropdownOpen)}
                 onMouseEnter={() => {
                   if (shopDropdownTimeout.current) {
                     clearTimeout(shopDropdownTimeout.current);
@@ -182,6 +94,48 @@ const Header = memo(function Header() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                 </svg>
               </button>
+
+              {shopDropdownOpen && (
+                <div
+                  className="absolute left-0 w-[500px] bg-white shadow-xl border border-gray-100 rounded-lg z-50 p-4"
+                  style={{ top: 'calc(100% + 32px)' }}
+                  onMouseEnter={() => {
+                    if (shopDropdownTimeout.current) {
+                      clearTimeout(shopDropdownTimeout.current);
+                    }
+                    setShopDropdownOpen(true);
+                  }}
+                  onMouseLeave={() => {
+                    shopDropdownTimeout.current = setTimeout(() => {
+                      setShopDropdownOpen(false);
+                    }, 300);
+                  }}
+                >
+                  <div className="grid grid-cols-2 gap-2">
+                    <Link
+                      href="/alle-producten"
+                      className="px-4 py-3 text-[#2D2D2D] hover:bg-gray-50 hover:text-[#3b223b] transition-colors font-[family-name:var(--font-eb-garamond)] rounded-md"
+                      onClick={() => setShopDropdownOpen(false)}
+                    >
+                      <div className="font-medium">Alle Producten</div>
+                      <div className="text-sm text-gray-500 mt-0.5">Bekijk alles</div>
+                    </Link>
+                    {categories.map((category) => (
+                      <Link
+                        key={category.id}
+                        href={category.slug === 'bestsellers' ? '/bestsellers' : `/alle-producten?category=${category.slug}`}
+                        className="px-4 py-3 text-[#2D2D2D] hover:bg-gray-50 hover:text-[#3b223b] transition-colors font-[family-name:var(--font-eb-garamond)] rounded-md"
+                        onClick={() => setShopDropdownOpen(false)}
+                      >
+                        <div className="font-medium">{category.name}</div>
+                        {category.count && (
+                          <div className="text-sm text-gray-500 mt-0.5">{category.count} producten</div>
+                        )}
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
 
             <Link href="/bestsellers" className="text-lg text-[#2D2D2D] hover:text-[#3b223b] font-normal transition-colors font-[family-name:var(--font-eb-garamond)]">
@@ -191,7 +145,6 @@ const Header = memo(function Header() {
             {/* Helpcentrum Dropdown */}
             <div className="relative">
               <button
-                data-help-button
                 onClick={() => setHelpDropdownOpen(!helpDropdownOpen)}
                 onMouseEnter={() => {
                   if (helpDropdownTimeout.current) {
@@ -214,7 +167,6 @@ const Header = memo(function Header() {
 
               {helpDropdownOpen && (
                 <div
-                  data-help-dropdown
                   className="absolute left-0 w-56 bg-white shadow-xl border border-gray-100 rounded-lg z-50 py-2"
                   style={{ top: 'calc(100% + 32px)' }}
                   onMouseEnter={() => {
@@ -290,7 +242,6 @@ const Header = memo(function Header() {
             {/* Mobile menu button */}
             <button
               type="button"
-              data-hamburger-button
               className="lg:hidden rounded-md p-2 text-[#2D2D2D] hover:text-[#8B7355] transition-colors"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               aria-expanded={mobileMenuOpen}
@@ -311,159 +262,9 @@ const Header = memo(function Header() {
         </div>
       </div>
 
-      {/* Mega Menu Dropdown - positioned outside relative container (DESKTOP ONLY) */}
-      {shopDropdownOpen && (
-        <div
-          data-mega-menu
-          className="hidden lg:block absolute left-0 right-0 w-full bg-white shadow-2xl border-t border-gray-100"
-          style={{ top: '100%', zIndex: 50 }}
-          onMouseEnter={() => {
-            if (shopDropdownTimeout.current) {
-              clearTimeout(shopDropdownTimeout.current);
-            }
-            setShopDropdownOpen(true);
-          }}
-          onMouseLeave={() => {
-            shopDropdownTimeout.current = setTimeout(() => {
-              setShopDropdownOpen(false);
-            }, 300);
-          }}
-        >
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-            <div className="flex gap-8">
-              {/* Left Side - Categories List */}
-              <div className="w-80 border-r border-gray-200 pr-8">
-                <h3 className="text-sm font-bold text-gray-900 mb-4 pl-2 font-[family-name:var(--font-eb-garamond)]">
-                  Categorieën
-                </h3>
-                <ul className="space-y-1">
-                  <li>
-                    <Link
-                      href="/alle-producten"
-                      className="flex items-center gap-3 px-2 py-3 text-[#2D2D2D] hover:bg-[#f5f1e8] rounded-md transition-colors group"
-                      onClick={() => setShopDropdownOpen(false)}
-                    >
-                      <div className="w-10 h-10 bg-gradient-to-br from-[#492c4a] to-[#3b223b] rounded-md flex items-center justify-center flex-shrink-0">
-                        <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
-                        </svg>
-                      </div>
-                      <div className="flex-1 font-[family-name:var(--font-eb-garamond)]">
-                        <div className="font-medium text-base group-hover:text-[#3b223b]">Alle Producten</div>
-                        <div className="text-xs text-gray-500 mt-0.5">Bekijk alles</div>
-                      </div>
-                    </Link>
-                  </li>
-                  {categories.map((category) => (
-                    <li key={category.id}>
-                      <Link
-                        href={category.slug === 'bestsellers' ? '/bestsellers' : `/alle-producten?category=${category.slug}`}
-                        className="flex items-center gap-3 px-2 py-3 text-[#2D2D2D] hover:bg-[#f5f1e8] rounded-md transition-colors group"
-                        onClick={() => setShopDropdownOpen(false)}
-                        onMouseEnter={() => handleCategoryHover(category)}
-                      >
-                        {category.image?.src ? (
-                          <img
-                            src={category.image.src}
-                            alt={category.name}
-                            className="w-10 h-10 object-cover rounded-md flex-shrink-0"
-                          />
-                        ) : (
-                          <div className="w-10 h-10 bg-gradient-to-br from-[#8B7355] to-[#6d5943] rounded-md flex items-center justify-center flex-shrink-0">
-                            <span className="text-white text-sm font-bold">
-                              {category.name.charAt(0)}
-                            </span>
-                          </div>
-                        )}
-                        <div className="flex-1 font-[family-name:var(--font-eb-garamond)]">
-                          <div className="font-medium text-base group-hover:text-[#3b223b]">{category.name}</div>
-                          {category.count > 0 && (
-                            <div className="text-xs text-gray-500 mt-0.5">{category.count} producten</div>
-                          )}
-                        </div>
-                        <svg className="w-5 h-5 text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                        </svg>
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              {/* Right Side - Products from hovered category */}
-              <div className="flex-1">
-                {!hoveredCategory ? (
-                  <div className="text-center py-12 text-gray-500">
-                    <div className="mb-4">
-                      <svg className="w-16 h-16 mx-auto text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
-                      </svg>
-                    </div>
-                    <p className="text-sm font-[family-name:var(--font-eb-garamond)]">
-                      Hover over een categorie om producten te zien
-                    </p>
-                  </div>
-                ) : loadingProducts ? (
-                  <div className="flex items-center justify-center py-12">
-                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#492c4a]"></div>
-                  </div>
-                ) : categoryProducts.length > 0 ? (
-                  <div className="py-6 px-4">
-                    <h3 className="text-sm font-bold text-gray-900 mb-4 font-[family-name:var(--font-eb-garamond)]">
-                      Producten in {hoveredCategory.name}
-                    </h3>
-                    <div className="space-y-2">
-                      {categoryProducts.map((product) => (
-                        <Link
-                          key={product.id}
-                          href={`/product/${product.slug}`}
-                          className="flex items-center gap-3 p-2 hover:bg-[#f5f1e8] rounded-md transition-colors group"
-                          onClick={() => setShopDropdownOpen(false)}
-                        >
-                          {product.images?.[0]?.src ? (
-                            <img
-                              src={product.images[0].src}
-                              alt={product.name}
-                              className="w-12 h-12 object-cover rounded-md flex-shrink-0"
-                            />
-                          ) : (
-                            <div className="w-12 h-12 bg-gray-200 rounded-md flex-shrink-0"></div>
-                          )}
-                          <div className="flex-1 min-w-0">
-                            <div className="text-sm font-medium text-gray-900 group-hover:text-[#3b223b] truncate font-[family-name:var(--font-eb-garamond)]">
-                              {product.name}
-                            </div>
-                            <div className="text-xs text-[#492c4a] font-semibold mt-0.5 font-[family-name:var(--font-eb-garamond)]">
-                              €{product.price}
-                            </div>
-                          </div>
-                        </Link>
-                      ))}
-                    </div>
-                    <Link
-                      href={hoveredCategory.slug === 'bestsellers' ? '/bestsellers' : `/alle-producten?category=${hoveredCategory.slug}`}
-                      className="mt-4 block text-center text-sm text-[#492c4a] hover:text-[#3b223b] font-medium font-[family-name:var(--font-eb-garamond)]"
-                      onClick={() => setShopDropdownOpen(false)}
-                    >
-                      Bekijk alle {hoveredCategory.count} producten →
-                    </Link>
-                  </div>
-                ) : (
-                  <div className="text-center py-12 text-gray-500">
-                    <p className="text-sm font-[family-name:var(--font-eb-garamond)]">
-                      Geen producten gevonden in deze categorie
-                    </p>
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
       {/* Mobile menu */}
       {mobileMenuOpen && (
-        <div data-mobile-menu className="lg:hidden bg-white border-t border-gray-100">
+        <div className="lg:hidden bg-white border-t border-gray-100">
           <div className="space-y-1 px-4 pb-3 pt-2">
             {/* Shop with dropdown */}
             <div>

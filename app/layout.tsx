@@ -6,6 +6,7 @@ import { CartProvider } from "./contexts/CartContextStoreAPI";
 import { ToastProvider } from "./contexts/ToastContext";
 import ClientOnly from "./components/ClientOnly";
 import LayoutContent from "./components/LayoutContent";
+import GoogleAnalytics from "./components/GoogleAnalytics";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -66,6 +67,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} ${ebGaramond.variable} antialiased bg-white`}
         suppressHydrationWarning
       >
+        <GoogleAnalytics />
         <ToastProvider>
           <CartProvider>
             <LayoutContent>
