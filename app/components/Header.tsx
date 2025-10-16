@@ -48,7 +48,7 @@ const Header = memo(function Header() {
             .filter((cat: any) => cat.parent === 0 && cat.slug !== 'uncategorized')
             .sort((a: any, b: any) => (b.count || 0) - (a.count || 0));
 
-          console.log('Main categories:', mainCategories.length, mainCategories.map(c => c.name));
+          console.log('Main categories:', mainCategories.length, mainCategories.map((c: any) => c.name));
           setCategories(mainCategories);
         }
       } catch (error) {
