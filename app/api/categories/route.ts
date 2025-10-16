@@ -3,7 +3,7 @@ import { woocommerce } from '@/lib/woocommerce';
 
 export async function GET() {
   try {
-    const categories = await woocommerce.getCategories({ per_page: 20, hide_empty: false });
+    const categories = await woocommerce.getCategories({ per_page: 100, hide_empty: false });
     return NextResponse.json(categories);
   } catch (error) {
     console.error('Failed to fetch categories:', error);

@@ -12,7 +12,9 @@ const Header = memo(function Header() {
   const [shopDropdownOpen, setShopDropdownOpen] = useState(false);
   const [searchModalOpen, setSearchModalOpen] = useState(false);
   const [categories, setCategories] = useState<any[]>([]);
+  const [allCategories, setAllCategories] = useState<any[]>([]); // All categories including subcategories
   const [hoveredCategory, setHoveredCategory] = useState<any>(null);
+  const [hoveredSubcategory, setHoveredSubcategory] = useState<any>(null);
   const [categoryProducts, setCategoryProducts] = useState<any[]>([]);
   const [loadingProducts, setLoadingProducts] = useState(false);
   const { setIsCartOpen, getTotalItems } = useCart();
@@ -30,13 +32,24 @@ const Header = memo(function Header() {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const response = await fetch('/api/categories');
+        // Add cache-busting parameter to force fresh data
+        const response = await fetch('/api/categories?t=' + Date.now(), {
+          cache: 'no-store'
+        });
         if (response.ok) {
           const data = await response.json();
-          const allCategories = data
+          console.log('Fetched categories:', data.length, 'total');
+
+          // Store all categories (including subcategories)
+          setAllCategories(data);
+
+          // Filter main categories only (parent === 0, exclude uncategorized)
+          const mainCategories = data
             .filter((cat: any) => cat.parent === 0 && cat.slug !== 'uncategorized')
             .sort((a: any, b: any) => (b.count || 0) - (a.count || 0));
-          setCategories(allCategories);
+
+          console.log('Main categories:', mainCategories.length, mainCategories.map(c => c.name));
+          setCategories(mainCategories);
         }
       } catch (error) {
         console.error('Failed to fetch categories for header:', error);
@@ -81,9 +94,28 @@ const Header = memo(function Header() {
     }, 200);
   };
 
+  // Get subcategories for a parent category
+  const getSubcategories = (parentId: number) => {
+    return allCategories.filter((cat: any) => cat.parent === parentId);
+  };
+
   const handleCategoryHover = (category: any) => {
     setHoveredCategory(category);
-    fetchCategoryProducts(category);
+    setHoveredSubcategory(null);
+    setCategoryProducts([]);
+
+    // Check if this category has subcategories
+    const subcategories = getSubcategories(category.id);
+
+    // If no subcategories, fetch products directly (like before)
+    if (subcategories.length === 0) {
+      fetchCategoryProducts(category);
+    }
+  };
+
+  const handleSubcategoryHover = (subcategory: any) => {
+    setHoveredSubcategory(subcategory);
+    fetchCategoryProducts(subcategory);
   };
 
   // Close dropdowns when clicking outside
@@ -369,10 +401,10 @@ const Header = memo(function Header() {
                             className="w-10 h-10 object-cover rounded-md flex-shrink-0"
                           />
                         ) : (
-                          <div className="w-10 h-10 bg-gradient-to-br from-[#8B7355] to-[#6d5943] rounded-md flex items-center justify-center flex-shrink-0">
-                            <span className="text-white text-sm font-bold">
-                              {category.name.charAt(0)}
-                            </span>
+                          <div className="w-10 h-10 bg-gradient-to-br from-[#f5f1e8] to-[#e8dcc6] rounded-md flex items-center justify-center flex-shrink-0 border border-gray-200">
+                            <svg className="w-5 h-5 text-[#8B7355]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+                            </svg>
                           </div>
                         )}
                         <div className="flex-1 font-[family-name:var(--font-eb-garamond)]">
@@ -390,9 +422,55 @@ const Header = memo(function Header() {
                 </ul>
               </div>
 
-              {/* Right Side - Products from hovered category */}
+              {/* Middle - Subcategories */}
+              {hoveredCategory && getSubcategories(hoveredCategory.id).length > 0 ? (
+                <div className="w-80 border-r border-gray-200 pr-8">
+                  <div className="py-6 px-4">
+                    <h3 className="text-sm font-bold text-gray-900 mb-4 font-[family-name:var(--font-eb-garamond)]">
+                      Subcategorieën
+                    </h3>
+                    <div className="space-y-1">
+                      {getSubcategories(hoveredCategory.id).map((subcat) => (
+                        <Link
+                          key={subcat.id}
+                          href={`/alle-producten?category=${subcat.slug}`}
+                          className="flex items-center gap-3 px-2 py-3 text-[#2D2D2D] hover:bg-[#f5f1e8] rounded-md transition-colors group"
+                          onClick={() => setShopDropdownOpen(false)}
+                          onMouseEnter={() => handleSubcategoryHover(subcat)}
+                        >
+                          {subcat.image?.src ? (
+                            <img
+                              src={subcat.image.src}
+                              alt={subcat.name}
+                              className="w-10 h-10 object-cover rounded-md flex-shrink-0"
+                            />
+                          ) : (
+                            <div className="w-10 h-10 bg-gradient-to-br from-[#f5f1e8] to-[#e8dcc6] rounded-md flex items-center justify-center flex-shrink-0 border border-gray-200">
+                              <svg className="w-5 h-5 text-[#8B7355]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+                              </svg>
+                            </div>
+                          )}
+                          <div className="flex-1 font-[family-name:var(--font-eb-garamond)]">
+                            <div className="font-medium text-base group-hover:text-[#3b223b]">{subcat.name}</div>
+                            {subcat.count > 0 && (
+                              <div className="text-xs text-gray-500 mt-0.5">{subcat.count} producten</div>
+                            )}
+                          </div>
+                          <svg className="w-5 h-5 text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                          </svg>
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              ) : null}
+
+              {/* Right Side - Products */}
               <div className="flex-1">
                 {!hoveredCategory ? (
+                  // No category hovered - show placeholder
                   <div className="text-center py-12 text-gray-500">
                     <div className="mb-4">
                       <svg className="w-16 h-16 mx-auto text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -400,17 +478,19 @@ const Header = memo(function Header() {
                       </svg>
                     </div>
                     <p className="text-sm font-[family-name:var(--font-eb-garamond)]">
-                      Hover over een categorie om producten te zien
+                      Hover over een categorie om verder te navigeren
                     </p>
                   </div>
                 ) : loadingProducts ? (
+                  // Show loading state
                   <div className="flex items-center justify-center py-12">
                     <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#492c4a]"></div>
                   </div>
                 ) : categoryProducts.length > 0 ? (
+                  // Show products
                   <div className="py-6 px-4">
                     <h3 className="text-sm font-bold text-gray-900 mb-4 font-[family-name:var(--font-eb-garamond)]">
-                      Producten in {hoveredCategory.name}
+                      Producten in {(hoveredSubcategory || hoveredCategory).name}
                     </h3>
                     <div className="space-y-2">
                       {categoryProducts.map((product) => (
@@ -441,17 +521,30 @@ const Header = memo(function Header() {
                       ))}
                     </div>
                     <Link
-                      href={hoveredCategory.slug === 'bestsellers' ? '/bestsellers' : `/alle-producten?category=${hoveredCategory.slug}`}
+                      href={(hoveredSubcategory || hoveredCategory).slug === 'bestsellers' ? '/bestsellers' : `/alle-producten?category=${(hoveredSubcategory || hoveredCategory).slug}`}
                       className="mt-4 block text-center text-sm text-[#492c4a] hover:text-[#3b223b] font-medium font-[family-name:var(--font-eb-garamond)]"
                       onClick={() => setShopDropdownOpen(false)}
                     >
-                      Bekijk alle {hoveredCategory.count} producten →
+                      Bekijk alle {(hoveredSubcategory || hoveredCategory).count} producten →
                     </Link>
                   </div>
+                ) : getSubcategories(hoveredCategory.id).length > 0 ? (
+                  // Has subcategories but no subcategory hovered yet
+                  <div className="text-center py-12 text-gray-500">
+                    <div className="mb-4">
+                      <svg className="w-16 h-16 mx-auto text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+                      </svg>
+                    </div>
+                    <p className="text-sm font-[family-name:var(--font-eb-garamond)]">
+                      Hover over een subcategorie om producten te zien
+                    </p>
+                  </div>
                 ) : (
+                  // No products found
                   <div className="text-center py-12 text-gray-500">
                     <p className="text-sm font-[family-name:var(--font-eb-garamond)]">
-                      Geen producten gevonden in deze categorie
+                      Geen producten gevonden
                     </p>
                   </div>
                 )}

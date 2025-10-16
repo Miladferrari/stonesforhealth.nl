@@ -7,6 +7,7 @@ import { ToastProvider } from "./contexts/ToastContext";
 import ClientOnly from "./components/ClientOnly";
 import LayoutContent from "./components/LayoutContent";
 import GoogleAnalytics from "./components/GoogleAnalytics";
+import MetaPixel from "./components/MetaPixel";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -68,6 +69,7 @@ export default function RootLayout({
         suppressHydrationWarning
       >
         <GoogleAnalytics />
+        <MetaPixel />
         <ToastProvider>
           <CartProvider>
             <LayoutContent>
