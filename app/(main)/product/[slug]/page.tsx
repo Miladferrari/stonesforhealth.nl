@@ -4,9 +4,8 @@ import HikeGemstoneProductPageV2 from './HikeGemstoneProductPageV2';
 import JsonLd from '@/app/components/JsonLd';
 import type { Metadata } from 'next';
 
-// Force dynamic rendering to always fetch fresh data
-export const dynamic = 'force-dynamic';
-export const revalidate = 0;
+// Use ISR with 60 second revalidation for better performance
+export const revalidate = 60;
 
 interface ProductPageProps {
   params: Promise<{ slug: string }>;

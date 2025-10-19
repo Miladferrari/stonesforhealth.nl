@@ -112,18 +112,29 @@ export interface ShippingRate {
   free_shipping_min_amount?: number;
 }
 
-// Cache implementation - DISABLED for real-time updates
+// Cache implementation - 60 second cache for better performance
 class CacheManager {
   private cache: Map<string, { data: any; timestamp: number }> = new Map();
-  private readonly TTL = 0; // Disabled - always fetch fresh data
+  private readonly TTL = 60000; // 60 seconds cache
 
   set(key: string, data: any) {
-    // Caching disabled - do not store
+    this.cache.set(key, {
+      data,
+      timestamp: Date.now(),
+    });
   }
 
   get(key: string) {
-    // Caching disabled - always return null to force fresh fetch
-    return null;
+    const cached = this.cache.get(key);
+    if (!cached) return null;
+
+    const age = Date.now() - cached.timestamp;
+    if (age > this.TTL) {
+      this.cache.delete(key);
+      return null;
+    }
+
+    return cached.data;
   }
 
   clear() {
@@ -183,10 +194,19 @@ class WooCommerceAPI {
     endpoint: string,
     options?: RequestInit & { useCache?: boolean }
   ): Promise<{ products: T; total: number; totalPages: number }> {
-    // Caching disabled - always fetch fresh data
+    // Check cache first (unless explicitly disabled)
+    const shouldUseCache = options?.useCache !== false;
+    if (shouldUseCache) {
+      const cached = this.cache.get(endpoint);
+      if (cached) {
+        console.log(`[WooCommerce API] Cache hit for: ${endpoint}`);
+        return cached;
+      }
+    }
+
     const timestamp = new Date().toISOString();
     console.log(
-      `[WooCommerce API] ${timestamp} - Fetching fresh data with headers (no cache)`
+      `[WooCommerce API] ${timestamp} - Fetching fresh data with headers for: ${endpoint}`
     );
 
     // Build base URL
@@ -236,9 +256,8 @@ class WooCommerceAPI {
         mode: "cors",
         credentials: "omit",
         next: {
-          revalidate: 0,
+          revalidate: 60, // Revalidate every 60 seconds
         },
-        cache: "no-store",
       });
 
       console.log(`[WooCommerce API] Response status: ${response.status}`);
@@ -278,11 +297,18 @@ class WooCommerceAPI {
         `[WooCommerce API] Success: Found ${Array.isArray(data) ? data.length : 1} items, Total: ${total}, Pages: ${totalPages}`
       );
 
-      return {
+      const result = {
         products: data,
         total: total,
         totalPages: totalPages
       };
+
+      // Store in cache if caching is enabled
+      if (shouldUseCache) {
+        this.cache.set(endpoint, result);
+      }
+
+      return result;
     } catch (error: any) {
       console.error(`[WooCommerce API] Fetch error:`, error);
       return { products: [] as T, total: 0, totalPages: 0 };
@@ -293,10 +319,19 @@ class WooCommerceAPI {
     endpoint: string,
     options?: RequestInit & { useCache?: boolean }
   ): Promise<T> {
-    // Caching disabled - always fetch fresh data
+    // Check cache first (unless explicitly disabled)
+    const shouldUseCache = options?.useCache !== false;
+    if (shouldUseCache) {
+      const cached = this.cache.get(endpoint);
+      if (cached) {
+        console.log(`[WooCommerce API] Cache hit for: ${endpoint}`);
+        return cached;
+      }
+    }
+
     const timestamp = new Date().toISOString();
     console.log(
-      `[WooCommerce API] ${timestamp} - Fetching fresh data (no cache)`
+      `[WooCommerce API] ${timestamp} - Fetching fresh data for: ${endpoint}`
     );
 
     // Build base URL
@@ -345,11 +380,10 @@ class WooCommerceAPI {
         headers,
         mode: "cors",
         credentials: "omit", // Don't send cookies with API requests
-        // Next.js specific caching - DISABLED for real-time updates
+        // Next.js specific caching - 60 second revalidation
         next: {
-          revalidate: 0, // Always fetch fresh data
+          revalidate: 60, // Revalidate every 60 seconds
         },
-        cache: "no-store", // Disable Next.js caching
       });
 
       console.log(`[WooCommerce API] Response status: ${response.status}`);
@@ -453,7 +487,10 @@ class WooCommerceAPI {
         } items`
       );
 
-      // Caching disabled - don't store response
+      // Store in cache if caching is enabled
+      if (shouldUseCache) {
+        this.cache.set(endpoint, data);
+      }
 
       return data;
     } catch (error: any) {

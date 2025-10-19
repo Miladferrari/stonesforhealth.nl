@@ -6,9 +6,8 @@ import type { Metadata } from 'next';
 import BestsellerGrid from '@/app/components/BestsellerGrid';
 import JsonLd from '@/app/components/JsonLd';
 
-// Force dynamic rendering to always fetch fresh data
-export const dynamic = 'force-dynamic';
-export const revalidate = 0;
+// Use ISR with 60 second revalidation for better performance
+export const revalidate = 60;
 
 export const metadata: Metadata = {
   title: 'Edelstenen & Kristallen Kopen | Authentiek & Ethisch | StonesForHealth',
