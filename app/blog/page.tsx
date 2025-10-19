@@ -7,6 +7,16 @@ import Link from 'next/link';
 const sampleBlogs = [
   {
     id: 0,
+    title: 'Lapis Lazuli – De Hemelsteen van het Oude Egypte en Innerlijke Wijsheid',
+    excerpt: 'Ontdek de kracht van Lapis Lazuli: van de tempels van het oude Egypte tot moderne spiritualiteit. De steen van wijsheid, waarheid en innerlijke rust.',
+    image: '/logo.webp',
+    category: 'Kristallen',
+    date: '20 oktober 2025',
+    readTime: '7 min leestijd',
+    slug: 'lapis-lazuli-hemelsteen-egypte-innerlijke-wijsheid'
+  },
+  {
+    id: 1,
     title: 'Edelstenen om Geld, Rijkdom en Overvloed aan te Trekken',
     excerpt: 'Ontdek de krachtigste edelstenen voor financieel succes: citrien, pyriet, groene aventurijn en tijgeroog. Leer hoe je met kristallen rijkdom en overvloed kunt manifesteren.',
     image: '/logo.webp',
@@ -16,7 +26,7 @@ const sampleBlogs = [
     slug: 'edelstenen-geld-rijkdom-overvloed'
   },
   {
-    id: 1,
+    id: 2,
     title: 'Edelstenen met Betekenis en Kracht: Malachiet, Lavasteen, Onyx, Howliet, Sodaliet en Unakiet',
     excerpt: 'Ontdek de werking, herkomst en betekenis van zes krachtige edelstenen. Van transformatie tot rust, van bescherming tot balans - elke steen vertelt zijn eigen verhaal.',
     image: '/Blog images /Edelstenen met Betekenis en Kracht- Malachiet, Lavasteen, Onyx, Howliet, Sodaliet en Unakiet.jpeg',
@@ -26,7 +36,7 @@ const sampleBlogs = [
     slug: 'edelstenen-betekenis-kracht-malachiet-lavasteen-onyx-howliet-sodaliet-unakiet'
   },
   {
-    id: 2,
+    id: 3,
     title: 'S4H Koperen Armbanden met Magneten – Stijl, Balans en Natuurlijke Energie',
     excerpt: 'Ontdek de kracht van koperen armbanden met magneten. Eeuwenoude kennis gecombineerd met modern design voor balans, herstel en stijlvolle energie.',
     image: '/Blog images /S4H Koperen Armbanden met Magneten – Stijl, Balans en Natuurlijke Energie.jpeg',
@@ -36,7 +46,7 @@ const sampleBlogs = [
     slug: 's4h-koperen-armbanden-magneten'
   },
   {
-    id: 3,
+    id: 4,
     title: 'Chakra\'s Uitgelegd: Zo Werkt het Energiesysteem van je Lichaam',
     excerpt: 'Ontdek hoe het chakra-systeem werkt. Leer over de 7 hoofdchakra\'s, hun kleuren, betekenis en hoe je ze in balans brengt met edelstenen en meditatie.',
     image: '/Blog images /Chakra\'s Uitgelegd- Zo Werkt het Energiesysteem van je Lichaam.jpeg',
@@ -46,7 +56,7 @@ const sampleBlogs = [
     slug: 'chakras-uitgelegd-energiesysteem'
   },
   {
-    id: 4,
+    id: 5,
     title: 'Edelstenen Schoonmaken en Opladen in Maanlicht: Zo Doe Je Dat!',
     excerpt: 'Leer hoe je edelstenen reinigt en oplaadt met maanlicht. Complete gids met timing, methodes en welke stenen perfect reageren op maanenergie.',
     image: '/Blog images /Edelstenen Schoonmaken en Opladen in Maanlicht- Zo Doe Je Dat!.jpeg',
@@ -56,7 +66,7 @@ const sampleBlogs = [
     slug: 'edelstenen-opladen-maanlicht'
   },
   {
-    id: 5,
+    id: 6,
     title: 'Supermaan 7 Oktober 2025 – Krachtige Maanenergie voor Balans',
     excerpt: 'Ontdek de krachtige supermaan van 7 oktober 2025 in Ram. Rituelen, edelstenen en spirituele betekenis voor balans, vernieuwing en persoonlijke groei.',
     image: '/Blog images /Supermaan 7 Oktober 2025 – Krachtige Maanenergie voor Balans en Vernieuwing.jpeg',
@@ -66,7 +76,7 @@ const sampleBlogs = [
     slug: 'supermaan-oktober-2025'
   },
   {
-    id: 6,
+    id: 7,
     title: 'Complete Gids: Chakra\'s en Bijbehorende Kristallen',
     excerpt: 'Ontdek hoe chakra kristallen je energiecentra kunnen balanceren en harmoniseren. Leer welke stenen bij welke chakra\'s horen en hoe je ze het beste kunt gebruiken.',
     image: '/Blog images /Complete Gids- Chakra\'s en Bijbehorende Kristallen.webp',
@@ -76,7 +86,7 @@ const sampleBlogs = [
     slug: 'chakra-kristallen-complete-gids'
   },
   {
-    id: 7,
+    id: 8,
     title: 'Chakra\'s en hun Kleuren: De Energiepunten van je Lichaam',
     excerpt: 'Ontdek de 7 hoofdchakra\'s, hun unieke kleuren en energetische betekenis. Leer hoe je deze energiepunten in balans brengt voor optimaal welzijn.',
     image: '/Blog images /Chakra\'s en hun Kleuren- De Energiepunten van je Lichaam.webp',
@@ -86,7 +96,7 @@ const sampleBlogs = [
     slug: 'chakras-en-hun-kleuren'
   },
   {
-    id: 8,
+    id: 9,
     title: 'Edelstenen per Sterrenbeeld en Numerologie',
     excerpt: 'Ontdek welke edelsteen perfect bij jou past op basis van je westerse sterrenbeeld, Chinese dierenriem en numerologisch getal. Complete gids met alle edelstenen.',
     image: '/Blog images /Edelstenen per Sterrenbeeld en Numerologie.webp',
@@ -96,7 +106,7 @@ const sampleBlogs = [
     slug: 'edelstenen-per-sterrenbeeld-numerologie'
   },
   {
-    id: 9,
+    id: 10,
     title: 'Volle Maan Oktober 2025: Jagermaan in Ram',
     excerpt: 'Volle maan op 14 oktober 2025. Ontdek de betekenis van de Jagermaan, krachtige rituelen en welke edelstenen perfect passen bij deze transformerende energie.',
     image: '/Blog images /Volle Maan Oktober 2025- De Jagermaan in Ram .webp',
