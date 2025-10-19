@@ -372,25 +372,21 @@ const Header = memo(function Header() {
                   <li>
                     <Link
                       href="/alle-producten"
-                      className="block px-4 py-2.5 text-[#2D2D2D] hover:bg-[#f5f1e8] hover:text-[#3b223b] rounded-md transition-colors font-[family-name:var(--font-eb-garamond)]"
+                      className="block px-4 py-2 text-[#2D2D2D] hover:bg-[#f5f1e8] hover:text-[#3b223b] rounded-md transition-colors font-[family-name:var(--font-eb-garamond)]"
                       onClick={() => setShopDropdownOpen(false)}
                     >
                       <div className="font-medium text-base">Alle Producten</div>
-                      <div className="text-xs text-gray-500 mt-0.5">Bekijk alles</div>
                     </Link>
                   </li>
                   {categories.map((category) => (
                     <li key={category.id}>
                       <Link
                         href={category.slug === 'bestsellers' ? '/bestsellers' : `/alle-producten?category=${category.slug}`}
-                        className="block px-4 py-2.5 text-[#2D2D2D] hover:bg-[#f5f1e8] hover:text-[#3b223b] rounded-md transition-colors font-[family-name:var(--font-eb-garamond)]"
+                        className="block px-4 py-2 text-[#2D2D2D] hover:bg-[#f5f1e8] hover:text-[#3b223b] rounded-md transition-colors font-[family-name:var(--font-eb-garamond)]"
                         onClick={() => setShopDropdownOpen(false)}
                         onMouseEnter={() => handleCategoryHover(category)}
                       >
                         <div className="font-medium text-base">{category.name}</div>
-                        {category.count > 0 && (
-                          <div className="text-xs text-gray-500 mt-0.5">{category.count} producten</div>
-                        )}
                       </Link>
                     </li>
                   ))}
@@ -408,13 +404,10 @@ const Header = memo(function Header() {
                       <li key={subcat.id}>
                         <Link
                           href={`/alle-producten?category=${subcat.slug}`}
-                          className="block px-4 py-2.5 text-[#2D2D2D] hover:bg-[#f5f1e8] hover:text-[#3b223b] rounded-md transition-colors font-[family-name:var(--font-eb-garamond)]"
+                          className="block px-4 py-2 text-[#2D2D2D] hover:bg-[#f5f1e8] hover:text-[#3b223b] rounded-md transition-colors font-[family-name:var(--font-eb-garamond)]"
                           onClick={() => setShopDropdownOpen(false)}
                         >
                           <div className="font-medium text-sm">{subcat.name}</div>
-                          {subcat.count > 0 && (
-                            <div className="text-xs text-gray-500 mt-0.5">{subcat.count} producten</div>
-                          )}
                         </Link>
                       </li>
                     ))}
