@@ -6,6 +6,16 @@ import Link from 'next/link';
 // Sample blog data
 const sampleBlogs = [
   {
+    id: 0,
+    title: 'Edelstenen om Geld, Rijkdom en Overvloed aan te Trekken',
+    excerpt: 'Ontdek de krachtigste edelstenen voor financieel succes: citrien, pyriet, groene aventurijn en tijgeroog. Leer hoe je met kristallen rijkdom en overvloed kunt manifesteren.',
+    image: '/logo.webp',
+    category: 'Manifestatie',
+    date: '20 oktober 2025',
+    readTime: '8 min leestijd',
+    slug: 'edelstenen-geld-rijkdom-overvloed'
+  },
+  {
     id: 1,
     title: 'Edelstenen met Betekenis en Kracht: Malachiet, Lavasteen, Onyx, Howliet, Sodaliet en Unakiet',
     excerpt: 'Ontdek de werking, herkomst en betekenis van zes krachtige edelstenen. Van transformatie tot rust, van bescherming tot balans - elke steen vertelt zijn eigen verhaal.',
