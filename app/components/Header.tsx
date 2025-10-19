@@ -374,9 +374,24 @@ const Header = memo(function Header() {
                       href="/alle-producten"
                       className="block px-4 py-2 text-[#2D2D2D] hover:bg-[#f5f1e8] hover:text-[#3b223b] rounded-md transition-colors font-[family-name:var(--font-eb-garamond)]"
                       onClick={() => setShopDropdownOpen(false)}
-                      onMouseEnter={() => {
+                      onMouseEnter={async () => {
                         setHoveredCategory(null);
                         setHoveredSubcategory(null);
+
+                        // Load some general products for "Alle Producten"
+                        setLoadingProducts(true);
+                        try {
+                          const response = await fetch('/api/products?per_page=5');
+                          if (response.ok) {
+                            const data = await response.json();
+                            setCategoryProducts(data.products || data);
+                          }
+                        } catch (error) {
+                          console.error('Failed to fetch products:', error);
+                          setCategoryProducts([]);
+                        } finally {
+                          setLoadingProducts(false);
+                        }
                       }}
                     >
                       <div className="font-medium text-base">Alle Producten</div>
@@ -443,7 +458,9 @@ const Header = memo(function Header() {
                   // Show products
                   <div className="py-6 px-4">
                     <h3 className="text-sm font-bold text-gray-900 mb-4 font-[family-name:var(--font-eb-garamond)]">
-                      Producten in {(hoveredSubcategory || hoveredCategory).name}
+                      {hoveredSubcategory ? `Producten in ${hoveredSubcategory.name}` :
+                       hoveredCategory ? `Producten in ${hoveredCategory.name}` :
+                       'Alle Producten'}
                     </h3>
                     <div className="space-y-2">
                       {categoryProducts.map((product) => (
