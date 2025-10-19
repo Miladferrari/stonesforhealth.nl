@@ -116,7 +116,7 @@ const sampleBlogs = [
     slug: 'volle-maan-oktober-2025'
   },
   {
-    id: 10,
+    id: 11,
     title: 'Volle Maan November 2025: Beaver Moon Supermaan',
     excerpt: 'Supermaan op 5 november 2025. Ontdek de betekenis van de Beaver Moon, gronding rituelen en de beste edelstenen voor deze krachtige volle maan.',
     image: '/Blog images /Volle Maan November 2025- Beaver Moon Supermaan.webp',
@@ -126,7 +126,7 @@ const sampleBlogs = [
     slug: 'volle-maan-november-2025'
   },
   {
-    id: 11,
+    id: 12,
     title: 'Volle Maan December 2025: Cold Moon',
     excerpt: 'Laatste volle maan van 2025 op 26 december. Ontdek de betekenis van de Cold Moon, afrondingsrituelen en edelstenen voor reflectie en nieuw begin.',
     image: '/Blog images /Volle Maan December 2025- Cold Moon.webp',
@@ -136,7 +136,7 @@ const sampleBlogs = [
     slug: 'volle-maan-december-2025'
   },
   {
-    id: 12,
+    id: 13,
     title: '2026: Het Jaar van het Vuurpaard',
     excerpt: 'Chinese astrologie 2026: Ontdek wat het Jaar van het Vuurpaard betekent voor carrière, liefde, gezondheid en spiritualiteit. Inclusief gelukskleuren, nummers en beste edelstenen.',
     image: '/Blog images /2026- Het Jaar van het Vuurpaard.webp',
@@ -146,7 +146,7 @@ const sampleBlogs = [
     slug: 'jaar-van-het-vuurpaard-2026'
   },
   {
-    id: 13,
+    id: 14,
     title: '2025: Het Jaar van de Houten Slang',
     excerpt: 'Chinese astrologie 2025: Ontdek de wijsheid van het Jaar van de Houten Slang. Transformatie, intuïtie en spirituele groei met de beste edelstenen voor dit jaar.',
     image: '/Blog images /2025- Het Jaar van de Houten Slang.webp',
@@ -156,7 +156,7 @@ const sampleBlogs = [
     slug: 'jaar-van-de-houten-slang-2025'
   },
   {
-    id: 14,
+    id: 15,
     title: 'De Gouden Driehoek: Amethist, Bergkristal & Rozenkwarts',
     excerpt: 'Ontdek de kracht van de Gouden Driehoek - de meest populaire kristalcombinatie voor balans, liefde en helderheid. Complete gids met toepassingen en tips.',
     image: '/Blog images /De Gouden Driehoek- Amethist, Bergkristal & Rozenkwarts .webp',
@@ -166,7 +166,7 @@ const sampleBlogs = [
     slug: 'gouden-driehoek-amethist-bergkristal-rozenkwarts'
   },
   {
-    id: 15,
+    id: 16,
     title: 'Citrien & Amethist: Zon & Maan in Edelstenen',
     excerpt: 'Ontdek de perfecte balans tussen Citrien en Amethist. Zon en maan, energie en rust, actie en ontspanning - de krachtigste duo voor harmonie en succes.',
     image: '/Blog images /Citrien & Amethist- Zon & Maan in Edelstenen.webp',
@@ -176,7 +176,7 @@ const sampleBlogs = [
     slug: 'citrien-amethist-zon-maan-edelstenen'
   },
   {
-    id: 16,
+    id: 17,
     title: 'Morganiet & Rhodoniet: Edelstenen van Liefde & Heling',
     excerpt: 'Ontdek de kracht van Morganiet en Rhodoniet voor hartchakra heling. Zachte liefde meets krachtige emotionele transformatie - perfect voor relaties en zelfliefde.',
     image: '/Blog images /Morganiet & Rhodoniet- Edelstenen van Liefde & Heling.webp',
@@ -186,7 +186,7 @@ const sampleBlogs = [
     slug: 'morganiet-rhodoniet-liefde-heling'
   },
   {
-    id: 17,
+    id: 18,
     title: 'Bergkristal: De Koning onder de Kristallen',
     excerpt: 'Ontdek waarom Bergkristal de koning van alle kristallen is. Zuivering, versterking, balans en bescherming - de meest veelzijdige en krachtige edelsteen.',
     image: '/Blog images /Bergkristal- De Koning onder de Kristallen .webp',
@@ -196,7 +196,7 @@ const sampleBlogs = [
     slug: 'bergkristal-koning-kristallen'
   },
   {
-    id: 18,
+    id: 19,
     title: 'Masters of Shilajit: Pure Kracht uit de Himalaya',
     excerpt: 'Ontdek Masters of Shilajit - het beste Shilajit merk ter wereld. 100% pure Himalaya-hars voor energie, focus, herstel en spirituele balans. Zwart goud van de bergen.',
     image: '/Blog images /Masters of Shilajit- Pure Kracht uit de Himalaya.webp',
@@ -206,7 +206,7 @@ const sampleBlogs = [
     slug: 'masters-of-shilajit-himalaya'
   },
   {
-    id: 19,
+    id: 20,
     title: 'Art-of-Stones B.V.: Het Verhaal achter S4H Edelstenen',
     excerpt: 'Ontdek het krachtige bedrijf achter Stonesforhealth.nl. Art-of-Stones B.V. en het private label S4H brengen hoogwaardige edelstenen en sieraden naar 11 Europese landen.',
     image: '/Blog images /Art-of-Stones B.V.- Het Verhaal achter S4H Edelstenen.webp',
@@ -216,7 +216,7 @@ const sampleBlogs = [
     slug: 'art-of-stones-s4h-edelstenen'
   },
   {
-    id: 20,
+    id: 21,
     title: 'S4H Sieraden: Spirituele Kracht en Stijl in Één',
     excerpt: 'Ontdek S4H sieraden - de perfecte combinatie van schoonheid en spiritualiteit. Edelsteen armbanden, kettingen en ringen met echte energetische werking voor dagelijks gebruik.',
     image: '/Blog images /S4H Sieraden- Spirituele Kracht en Stijl in Één.webp',
@@ -226,7 +226,7 @@ const sampleBlogs = [
     slug: 's4h-sieraden-spirituele-kracht-stijl'
   },
   {
-    id: 21,
+    id: 22,
     title: 'Agaat: Betekenis, Soorten, Kleuren en Spirituele Werking',
     excerpt: 'Ontdek agaat - de veelzijdige edelsteen met duizenden jaren geschiedenis. Van blauwe agaat tot vuuragaat, elke kleur heeft unieke kracht voor balans, bescherming en heling.',
     image: '/Blog images /Agaat- Betekenis, Soorten, Kleuren en Spirituele Werking.webp',
@@ -236,7 +236,7 @@ const sampleBlogs = [
     slug: 'agaat-betekenis-soorten-kleuren-werking'
   },
   {
-    id: 22,
+    id: 23,
     title: 'Rozenkwarts: De Steen van de Liefde en het Hartchakra',
     excerpt: 'Ontdek rozenkwarts - de ultieme steen voor liefde, zelfliefde en emotioneel welzijn. Leer over de werking op het hartchakra, toepassingen en waarom deze roze steen al eeuwen geliefd is.',
     image: '/Blog images /Rozenkwarts- De Steen van de Liefde en het Hartchakra.webp',
@@ -246,7 +246,7 @@ const sampleBlogs = [
     slug: 'rozenkwarts-steen-van-de-liefde'
   },
   {
-    id: 23,
+    id: 24,
     title: 'Amethist: Soorten, Werking, Vindplaatsen en Spirituele Tips',
     excerpt: 'Ontdek amethist - de paarse steen van rust, intuïtie en spiritualiteit. Leer over alle soorten, werking op het derde oog chakra, vindplaatsen en hoe je amethist gebruikt voor meditatie.',
     image: '/Blog images /Amethist- Soorten, Werking, Vindplaatsen en Spirituele Tips.webp',
@@ -256,7 +256,7 @@ const sampleBlogs = [
     slug: 'amethist-soorten-werking-spirituele-tips'
   },
   {
-    id: 24,
+    id: 25,
     title: 'Top 10 Bekendste & Onbekendste Edelstenen Met Hun Werking',
     excerpt: 'Ontdek de top 10 meest populaire edelstenen (amethist, rozenkwarts, bergkristal) én de top 10 zeldzame geheimen (moldaviet, larimar, shungiet) met hun unieke spirituele krachten.',
     image: '/Blog images /Top 10 Bekendste & Onbekendste Edelstenen Met Hun Werking.webp',
