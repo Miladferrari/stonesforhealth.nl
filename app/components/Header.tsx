@@ -374,6 +374,10 @@ const Header = memo(function Header() {
                       href="/alle-producten"
                       className="block px-4 py-2 text-[#2D2D2D] hover:bg-[#f5f1e8] hover:text-[#3b223b] rounded-md transition-colors font-[family-name:var(--font-eb-garamond)]"
                       onClick={() => setShopDropdownOpen(false)}
+                      onMouseEnter={() => {
+                        setHoveredCategory(null);
+                        setHoveredSubcategory(null);
+                      }}
                     >
                       <div className="font-medium text-base">Alle Producten</div>
                     </Link>
