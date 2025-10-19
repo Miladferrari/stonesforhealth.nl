@@ -10,7 +10,7 @@ export default function CheckoutHeader() {
         <div className="flex items-center justify-between h-20">
           <Link href="/" className="flex items-center hover:opacity-80 transition-opacity">
             <Image
-              src="/logo.png"
+              src="/logo.webp"
               alt="Stonesforhealth Logo"
               width={112}
               height={32}

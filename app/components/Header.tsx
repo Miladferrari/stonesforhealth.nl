@@ -178,10 +178,10 @@ const Header = memo(function Header() {
           <div className="flex items-center">
             <Link href="/">
               <div className="flex items-center hover:opacity-80 transition-opacity">
-                <Image 
-                  src="/logo.png" 
-                  alt="Stonesforhealth Logo" 
-                  width={112} 
+                <Image
+                  src="/logo.webp"
+                  alt="Stonesforhealth Logo"
+                  width={112}
                   height={32}
                   className="h-10 w-auto"
                   priority

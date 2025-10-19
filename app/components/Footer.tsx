@@ -64,7 +64,7 @@ const Footer = memo(function Footer() {
             <Link href="/" className="block">
               <div className="relative w-[180px] h-[55px] md:-ml-3">
                 <Image
-                  src="/logo.png"
+                  src="/logo.webp"
                   alt="Stonesforhealth"
                   width={250}
                   height={100}
