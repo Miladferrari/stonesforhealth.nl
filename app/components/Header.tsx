@@ -393,8 +393,8 @@ const Header = memo(function Header() {
                 </ul>
               </div>
 
-              {/* Middle - Subcategories */}
-              {hoveredCategory && getSubcategories(hoveredCategory.id).length > 0 ? (
+              {/* Middle - Subcategories (only show if category has subcategories) */}
+              {hoveredCategory && getSubcategories(hoveredCategory.id).length > 0 && (
                 <div className="w-64">
                   <h3 className="text-sm font-bold text-gray-900 mb-4 pl-2 font-[family-name:var(--font-eb-garamond)]">
                     {hoveredCategory.name}
@@ -406,21 +406,13 @@ const Header = memo(function Header() {
                           href={`/alle-producten?category=${subcat.slug}`}
                           className="block px-4 py-2 text-[#2D2D2D] hover:bg-[#f5f1e8] hover:text-[#3b223b] rounded-md transition-colors font-[family-name:var(--font-eb-garamond)]"
                           onClick={() => setShopDropdownOpen(false)}
+                          onMouseEnter={() => handleSubcategoryHover(subcat)}
                         >
                           <div className="font-medium text-base">{subcat.name}</div>
                         </Link>
                       </li>
                     ))}
                   </ul>
-                </div>
-              ) : (
-                <div className="flex-1 flex items-center justify-center text-gray-400">
-                  <div className="text-center">
-                    <svg className="w-12 h-12 mx-auto mb-3 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
-                    </svg>
-                    <p className="text-sm font-[family-name:var(--font-eb-garamond)]">Hover over een categorie</p>
-                  </div>
                 </div>
               )}
 
