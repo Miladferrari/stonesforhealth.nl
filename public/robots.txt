@@ -12,5 +12,4 @@ Disallow: /thank-you
 Host: https://stonesforhealth.nl
 
 # Sitemaps
-Sitemap: https://stonesforhealth.nl/sitemap.xml
 Sitemap: https://stonesforhealth.nl/server-sitemap.xml

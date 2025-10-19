@@ -64,9 +64,9 @@ export default function BlogPost() {
           {/* Breadcrumbs */}
           <Breadcrumbs
             customItems={[
-              { name: 'Home', url: '/' },
-              { name: 'Blog', url: '/blog' },
-              { name: 'Lapis Lazuli – De Hemelsteen', url: '' }
+              { name: 'Home', url: 'https://stonesforhealth.nl' },
+              { name: 'Blog', url: 'https://stonesforhealth.nl/blog' },
+              { name: 'Lapis Lazuli – De Hemelsteen', url: 'https://stonesforhealth.nl/blog/lapis-lazuli-hemelsteen-egypte-innerlijke-wijsheid' }
             ]}
           />
 

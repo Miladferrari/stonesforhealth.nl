@@ -64,9 +64,9 @@ export default function BlogPost() {
           {/* Breadcrumbs */}
           <Breadcrumbs
             customItems={[
-              { name: 'Home', url: '/' },
-              { name: 'Blog', url: '/blog' },
-              { name: 'Edelstenen met Betekenis en Kracht', url: '' }
+              { name: 'Home', url: 'https://stonesforhealth.nl' },
+              { name: 'Blog', url: 'https://stonesforhealth.nl/blog' },
+              { name: 'Edelstenen met Betekenis en Kracht', url: 'https://stonesforhealth.nl/blog/edelstenen-betekenis-kracht-malachiet-lavasteen-onyx-howliet-sodaliet-unakiet' }
             ]}
           />
 

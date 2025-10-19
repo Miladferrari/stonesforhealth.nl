@@ -68,9 +68,9 @@ export default function BlogPost() {
           {/* Breadcrumbs */}
           <Breadcrumbs
             customItems={[
-              { name: 'Home', url: '/' },
-              { name: 'Blog', url: '/blog' },
-              { name: 'Edelstenen voor Geld en Overvloed', url: '' }
+              { name: 'Home', url: 'https://stonesforhealth.nl' },
+              { name: 'Blog', url: 'https://stonesforhealth.nl/blog' },
+              { name: 'Edelstenen voor Geld en Overvloed', url: 'https://stonesforhealth.nl/blog/edelstenen-geld-rijkdom-overvloed' }
             ]}
           />
 
