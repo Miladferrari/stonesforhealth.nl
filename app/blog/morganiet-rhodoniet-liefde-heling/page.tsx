@@ -99,8 +99,8 @@ export default function MorganietRhodonietPage() {
               Inhoudsopgave
             </h2>
             <ul className="space-y-2 font-[family-name:var(--font-eb-garamond)]">
-              <li><a href="#morganiet" className="text-gray-700 hover:text-gray-900 underline">Morganiet – De Steen van Onvoorwaardelijke Liefde</a></li>
-              <li><a href="#rhodoniet" className="text-gray-700 hover:text-gray-900 underline">Rhodoniet – De Steen van Heling & Vergeving</a></li>
+              <li><a href="#morganiet" className="text-gray-700 hover:text-gray-900 underline">Morganiet - De Steen van Onvoorwaardelijke Liefde</a></li>
+              <li><a href="#rhodoniet" className="text-gray-700 hover:text-gray-900 underline">Rhodoniet - De Steen van Heling & Vergeving</a></li>
               <li><a href="#combinatie" className="text-gray-700 hover:text-gray-900 underline">De Combinatie: Zachte Liefde & Krachtige Heling</a></li>
               <li><a href="#hoe-gebruiken" className="text-gray-700 hover:text-gray-900 underline">Hoe Gebruik je Morganiet & Rhodoniet?</a></li>
               <li><a href="#dos-donts" className="text-gray-700 hover:text-gray-900 underline">Do's & Don'ts</a></li>
@@ -110,7 +110,7 @@ export default function MorganietRhodonietPage() {
 
           {/* Section 1: Morganiet */}
           <h2 id="morganiet" className="text-xl sm:text-2xl font-bold text-gray-900 mt-12 mb-6 font-[family-name:var(--font-eb-garamond)] scroll-mt-24">
-            💗 Morganiet – De Steen van Onvoorwaardelijke Liefde
+            💗 Morganiet - De Steen van Onvoorwaardelijke Liefde
           </h2>
 
           <div className="bg-gradient-to-br from-pink-50 to-rose-50 border-l-4 border-pink-400 p-6 md:p-8 mb-8 rounded-lg">
@@ -164,7 +164,7 @@ export default function MorganietRhodonietPage() {
 
           {/* Section 2: Rhodoniet */}
           <h2 id="rhodoniet" className="text-xl sm:text-2xl font-bold text-gray-900 mt-16 mb-6 font-[family-name:var(--font-eb-garamond)] scroll-mt-24">
-            ❤️‍🩹 Rhodoniet – De Steen van Heling & Vergeving
+            ❤️‍🩹 Rhodoniet - De Steen van Heling & Vergeving
           </h2>
 
           <div className="bg-gradient-to-br from-red-50 to-rose-50 border-l-4 border-red-400 p-6 md:p-8 mb-8 rounded-lg">
@@ -192,7 +192,7 @@ export default function MorganietRhodonietPage() {
             Betekenis & Werking van Rhodoniet
           </h3>
           <p className="text-gray-700 leading-relaxed mb-4 font-[family-name:var(--font-eb-garamond)]">
-            <strong>Rhodoniet</strong> is een krachtige helingssteen voor emotionele trauma's en hartpijn. De naam komt van het Griekse woord "rhodon" (roos), wat zijn verbinding met liefde en heling symboliseert. De zwarte aders in Rhodoniet vertegenwoordigen de donkere momenten die we allemaal meemaken – maar ook de kracht om erdoorheen te groeien:
+            <strong>Rhodoniet</strong> is een krachtige helingssteen voor emotionele trauma's en hartpijn. De naam komt van het Griekse woord "rhodon" (roos), wat zijn verbinding met liefde en heling symboliseert. De zwarte aders in Rhodoniet vertegenwoordigen de donkere momenten die we allemaal meemaken - maar ook de kracht om erdoorheen te groeien:
           </p>
 
           <div className="bg-white border border-red-200 rounded-lg p-6 mb-8">
@@ -232,7 +232,7 @@ export default function MorganietRhodonietPage() {
                 <span className="text-5xl">💗</span>
               </div>
               <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-4 text-center font-[family-name:var(--font-eb-garamond)]">
-                Morganiet – Zachte Opener
+                Morganiet - Zachte Opener
               </h3>
               <ul className="space-y-2 text-gray-700 font-[family-name:var(--font-eb-garamond)]">
                 <li>✓ Opent het hart zachtzinnig</li>
@@ -250,7 +250,7 @@ export default function MorganietRhodonietPage() {
                 <span className="text-5xl">❤️‍🩹</span>
               </div>
               <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-4 text-center font-[family-name:var(--font-eb-garamond)]">
-                Rhodoniet – Krachtige Heler
+                Rhodoniet - Krachtige Heler
               </h3>
               <ul className="space-y-2 text-gray-700 font-[family-name:var(--font-eb-garamond)]">
                 <li>✓ Heelt oude wonden diepgaand</li>
@@ -291,7 +291,7 @@ export default function MorganietRhodonietPage() {
               Het Proces van Hartheling
             </h3>
             <p className="text-gray-700 leading-relaxed font-[family-name:var(--font-eb-garamond)]">
-              <strong>Rhodoniet</strong> helpt de oude blokkades los te laten die liefde in de weg staan – het ruimt op en heelt. <strong>Morganiet</strong> opent vervolgens het hart op een zachte, liefdevolle manier – het vult aan en herstelt. Samen zorgen ze ervoor dat er ruimte komt voor nieuwe liefde, harmonie en groei.
+              <strong>Rhodoniet</strong> helpt de oude blokkades los te laten die liefde in de weg staan - het ruimt op en heelt. <strong>Morganiet</strong> opent vervolgens het hart op een zachte, liefdevolle manier - het vult aan en herstelt. Samen zorgen ze ervoor dat er ruimte komt voor nieuwe liefde, harmonie en groei.
             </p>
           </div>
 
@@ -375,7 +375,7 @@ export default function MorganietRhodonietPage() {
             {/* DO's */}
             <div className="border-2 border-green-200 bg-green-50 rounded-lg p-6">
               <h3 className="text-2xl font-bold text-green-900 mb-4 font-[family-name:var(--font-eb-garamond)]">
-                ✅ DO's – Wat je WEL moet doen
+                ✅ DO's - Wat je WEL moet doen
               </h3>
               <ul className="space-y-3 text-gray-700 font-[family-name:var(--font-eb-garamond)]">
                 <li className="flex items-start gap-2">
@@ -404,7 +404,7 @@ export default function MorganietRhodonietPage() {
             {/* DON'Ts */}
             <div className="border-2 border-red-200 bg-red-50 rounded-lg p-6">
               <h3 className="text-2xl font-bold text-red-900 mb-4 font-[family-name:var(--font-eb-garamond)]">
-                ❌ DON'Ts – Wat je NIET moet doen
+                ❌ DON'Ts - Wat je NIET moet doen
               </h3>
               <ul className="space-y-3 text-gray-700 font-[family-name:var(--font-eb-garamond)]">
                 <li className="flex items-start gap-2">
@@ -417,11 +417,11 @@ export default function MorganietRhodonietPage() {
                 </li>
                 <li className="flex items-start gap-2">
                   <span className="text-red-600 font-bold">✗</span>
-                  <span>Verwacht geen instant resultaat – heling vraagt tijd</span>
+                  <span>Verwacht geen instant resultaat - heling vraagt tijd</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <span className="text-red-600 font-bold">✗</span>
-                  <span>Forceer GEEN emoties – laat het natuurlijk gebeuren</span>
+                  <span>Forceer GEEN emoties - laat het natuurlijk gebeuren</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <span className="text-red-600 font-bold">✗</span>
@@ -487,7 +487,7 @@ export default function MorganietRhodonietPage() {
                 Hoe lang duurt het voordat ik resultaat zie?
               </h3>
               <p className="text-gray-700 font-[family-name:var(--font-eb-garamond)]">
-                Dit verschilt per persoon en situatie. Sommigen voelen direct een <strong>zachtheid of emotionele release</strong>, anderen merken geleidelijke veranderingen over weken. Emotionele heling is een proces – wees geduldig en liefdevol met jezelf.
+                Dit verschilt per persoon en situatie. Sommigen voelen direct een <strong>zachtheid of emotionele release</strong>, anderen merken geleidelijke veranderingen over weken. Emotionele heling is een proces - wees geduldig en liefdevol met jezelf.
               </p>
             </div>
 
@@ -514,7 +514,7 @@ export default function MorganietRhodonietPage() {
                 Kan ik deze stenen combineren met Rozenkwarts?
               </h3>
               <p className="text-gray-700 font-[family-name:var(--font-eb-garamond)]">
-                Ja! <strong>Rozenkwarts</strong> past perfect bij zowel Morganiet als Rhodoniet. Alle drie werken op het hartchakra. Je kunt ze combineren voor extra krachtige hartchakra heling – bijvoorbeeld in een driehoek geplaatst of alle drie gedragen.
+                Ja! <strong>Rozenkwarts</strong> past perfect bij zowel Morganiet als Rhodoniet. Alle drie werken op het hartchakra. Je kunt ze combineren voor extra krachtige hartchakra heling - bijvoorbeeld in een driehoek geplaatst of alle drie gedragen.
               </p>
             </div>
 
@@ -523,7 +523,7 @@ export default function MorganietRhodonietPage() {
                 Zijn deze stenen geschikt voor kinderen?
               </h3>
               <p className="text-gray-700 font-[family-name:var(--font-eb-garamond)]">
-                <strong>Morganiet</strong> is zeer geschikt voor kinderen – het heeft een zachte, geruststellende energie. <strong>Rhodoniet</strong> kan intens zijn voor jonge kinderen. Voor kinderen boven de 12 jaar met emotionele uitdagingen kan Rhodoniet ondersteunend werken onder begeleiding.
+                <strong>Morganiet</strong> is zeer geschikt voor kinderen - het heeft een zachte, geruststellende energie. <strong>Rhodoniet</strong> kan intens zijn voor jonge kinderen. Voor kinderen boven de 12 jaar met emotionele uitdagingen kan Rhodoniet ondersteunend werken onder begeleiding.
               </p>
             </div>
           </div>
@@ -536,10 +536,10 @@ export default function MorganietRhodonietPage() {
             <strong>Morganiet en Rhodoniet</strong> zijn beide krachtige hartchakra stenen met unieke eigenschappen. Morganiet brengt zachtheid, onvoorwaardelijke liefde en emotionele balans. Rhodoniet heelt oude wonden, brengt vergeving en innerlijke kracht. Samen creëren ze een complete hartchakra transformatie.
           </p>
           <p className="text-gray-700 leading-relaxed mb-6 font-[family-name:var(--font-eb-garamond)]">
-            Of je nu werkt aan <strong>zelfliefde, relationele heling, het loslaten van oude pijn of het openen voor nieuwe liefde</strong> – deze stenen bieden krachtige ondersteuning. Rhodoniet ruimt op en heelt, Morganiet vult aan en herstelt. Dit is het proces van complete emotionele transformatie.
+            Of je nu werkt aan <strong>zelfliefde, relationele heling, het loslaten van oude pijn of het openen voor nieuwe liefde</strong> - deze stenen bieden krachtige ondersteuning. Rhodoniet ruimt op en heelt, Morganiet vult aan en herstelt. Dit is het proces van complete emotionele transformatie.
           </p>
           <p className="text-gray-700 leading-relaxed font-[family-name:var(--font-eb-garamond)]">
-            Bij <strong>StonesForHealth</strong> vind je hoogwaardige Morganiet en Rhodoniet – zowel afzonderlijk als in sets. Alle stenen zijn 100% authentiek en ethisch gewonnen. Gratis verzending vanaf €50. Laat deze prachtige hartstenen je pad naar liefde, vergeving en emotionele vrijheid ondersteunen!
+            Bij <strong>StonesForHealth</strong> vind je hoogwaardige Morganiet en Rhodoniet - zowel afzonderlijk als in sets. Alle stenen zijn 100% authentiek en ethisch gewonnen. Gratis verzending vanaf €50. Laat deze prachtige hartstenen je pad naar liefde, vergeving en emotionele vrijheid ondersteunen!
           </p>
 
           {/* Related Articles */}

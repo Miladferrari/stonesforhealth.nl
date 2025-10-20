@@ -4,7 +4,7 @@ import Image from 'next/image';
 import Breadcrumbs from '@/app/components/Breadcrumbs';
 
 export const metadata: Metadata = {
-  title: 'Edelstenen per Chinees Sterrenbeeld – Ontdek Jouw Gelukssteen | StonesForHealth',
+  title: 'Edelstenen per Chinees Sterrenbeeld - Ontdek Jouw Gelukssteen | StonesForHealth',
   description: 'Ontdek welke edelstenen perfect passen bij jouw Chinese dierenriemteken. Van Rat tot Varken - elke steen versterkt jouw unieke energie en brengt geluk.',
   keywords: [
     'chinese astrologie',
@@ -21,7 +21,7 @@ export const metadata: Metadata = {
     'sterrenbeeld stenen',
   ],
   openGraph: {
-    title: 'Edelstenen per Chinees Sterrenbeeld – Ontdek Jouw Gelukssteen | StonesForHealth',
+    title: 'Edelstenen per Chinees Sterrenbeeld - Ontdek Jouw Gelukssteen | StonesForHealth',
     description: 'Ontdek welke edelstenen perfect passen bij jouw Chinese dierenriemteken. Van Rat tot Varken - elke steen versterkt jouw unieke energie en brengt geluk.',
     type: 'article',
     publishedTime: '2025-10-20',
@@ -35,7 +35,7 @@ export default function EdelstenenChineeseSterrenbeeld() {
   const blogPostingSchema = {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
-    "headline": "Edelstenen per Chinees Sterrenbeeld – Ontdek Jouw Energie & Gelukssteen",
+    "headline": "Edelstenen per Chinees Sterrenbeeld - Ontdek Jouw Energie & Gelukssteen",
     "description": "Ontdek welke edelstenen perfect passen bij jouw Chinese dierenriemteken. Van Rat tot Varken - elk teken heeft unieke edelstenen die geluk, kracht en harmonie brengen.",
     "image": "https://stonesforhealth.nl/logo.webp",
     "datePublished": "2025-10-20T09:00:00Z",
@@ -72,7 +72,7 @@ export default function EdelstenenChineeseSterrenbeeld() {
 
         <header className="mb-8 pb-6 border-b border-gray-200">
           <h1 className="text-4xl md:text-5xl font-bold text-[#2D2D2D] mb-4 font-[family-name:var(--font-eb-garamond)]">
-            Edelstenen per Chinees Sterrenbeeld – Ontdek Jouw Energie & Gelukssteen
+            Edelstenen per Chinees Sterrenbeeld - Ontdek Jouw Energie & Gelukssteen
           </h1>
           <div className="flex items-center gap-4 text-sm text-gray-500">
             <time dateTime="2025-10-20">20 oktober 2025</time>
@@ -84,7 +84,7 @@ export default function EdelstenenChineeseSterrenbeeld() {
         {/* Blog Image */}
         <div className="relative w-full h-64 sm:h-96 mb-8 rounded-lg overflow-hidden">
           <Image
-            src="/blog-images/Edelstenen per Chinees Sterrenbeeld – Ontdek Jouw Energie & Gelukssteen.jpeg"
+            src="/blog-images/Edelstenen per Chinees Sterrenbeeld - Ontdek Jouw Energie & Gelukssteen.jpeg"
             alt="Edelstenen per Chinees Sterrenbeeld"
             fill
             className="object-cover"
@@ -417,7 +417,7 @@ export default function EdelstenenChineeseSterrenbeeld() {
               De Chinese astrologie biedt een rijk en eeuwenoud systeem om je persoonlijke energie te begrijpen en te versterken. Door de juiste edelstenen te kiezen die resoneren met jouw dierenriemteken en element, kun je je natuurlijke krachten versterken, uitdagingen verzachten en meer harmonie en geluk aantrekken.
             </p>
             <p className="text-base leading-relaxed text-gray-800 font-[family-name:var(--font-eb-garamond)] mb-4">
-              Of je nu geboren bent in het jaar van de wijze Slang, de loyale Hond of de charismatische Draak – elk teken heeft zijn eigen unieke geschenken en elke edelsteen biedt zijn eigen ondersteuning. Gebruik deze oude wijsheid om je levenspad met meer bewustzijn en voorspoed te bewandelen.
+              Of je nu geboren bent in het jaar van de wijze Slang, de loyale Hond of de charismatische Draak - elk teken heeft zijn eigen unieke geschenken en elke edelsteen biedt zijn eigen ondersteuning. Gebruik deze oude wijsheid om je levenspad met meer bewustzijn en voorspoed te bewandelen.
             </p>
             <p className="text-base leading-relaxed text-gray-800 font-[family-name:var(--font-eb-garamond)] mb-4">
               <strong>Onthoud:</strong> De kracht van edelstenen werkt het beste wanneer je ze kiest met intentie en ze gebruikt met respect voor hun natuurlijke energie.
@@ -473,7 +473,7 @@ export default function EdelstenenChineeseSterrenbeeld() {
             </li>
             <li>
               <Link href="/blog/edelstenen-per-levenspad-spirituele-gidssteen" className="text-[#8B7355] hover:underline">
-                Edelstenen per Levenspad – Ontdek Jouw Spirituele Gidssteen
+                Edelstenen per Levenspad - Ontdek Jouw Spirituele Gidssteen
               </Link>
             </li>
           </ul>

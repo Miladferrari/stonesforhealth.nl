@@ -5,7 +5,7 @@ import JsonLd from '@/app/components/JsonLd';
 import Breadcrumbs from '@/app/components/Breadcrumbs';
 
 export const metadata: Metadata = {
-  title: 'Lapis Lazuli – De Hemelsteen van het Oude Egypte en Innerlijke Wijsheid | StonesForHealth',
+  title: 'Lapis Lazuli - De Hemelsteen van het Oude Egypte en Innerlijke Wijsheid | StonesForHealth',
   description: 'Ontdek de kracht van Lapis Lazuli: van de tempels van het oude Egypte tot moderne spiritualiteit. Leer alles over de werking, chakra\'s, symboliek en gebruik van deze mystieke steen van wijsheid en waarheid.',
   keywords: [
     'lapis lazuli betekenis',
@@ -22,7 +22,7 @@ export const metadata: Metadata = {
     'hemelsteen egypte',
   ],
   openGraph: {
-    title: 'Lapis Lazuli – De Hemelsteen van het Oude Egypte en Innerlijke Wijsheid',
+    title: 'Lapis Lazuli - De Hemelsteen van het Oude Egypte en Innerlijke Wijsheid',
     description: 'Ontdek de kracht van Lapis Lazuli: van de tempels van het oude Egypte tot moderne spiritualiteit. De steen van wijsheid, waarheid en innerlijke rust.',
     type: 'article',
     publishedTime: '2025-10-20',
@@ -35,7 +35,7 @@ export const metadata: Metadata = {
 const blogPostingSchema = {
   "@context": "https://schema.org",
   "@type": "BlogPosting",
-  "headline": "Lapis Lazuli – De Hemelsteen van het Oude Egypte en Innerlijke Wijsheid",
+  "headline": "Lapis Lazuli - De Hemelsteen van het Oude Egypte en Innerlijke Wijsheid",
   "description": "Ontdek de kracht van Lapis Lazuli: van de tempels van het oude Egypte tot moderne spiritualiteit. Leer alles over de werking, chakra's, symboliek en gebruik van deze mystieke steen.",
   "image": "https://stonesforhealth.nl/logo.webp",
   "datePublished": "2025-10-20T09:00:00Z",
@@ -67,14 +67,14 @@ export default function BlogPost() {
             customItems={[
               { name: 'Home', url: 'https://stonesforhealth.nl' },
               { name: 'Blog', url: 'https://stonesforhealth.nl/blog' },
-              { name: 'Lapis Lazuli – De Hemelsteen', url: 'https://stonesforhealth.nl/blog/lapis-lazuli-hemelsteen-egypte-innerlijke-wijsheid' }
+              { name: 'Lapis Lazuli - De Hemelsteen', url: 'https://stonesforhealth.nl/blog/lapis-lazuli-hemelsteen-egypte-innerlijke-wijsheid' }
             ]}
           />
 
           {/* Header */}
           <header className="mb-8 pb-6 border-b border-gray-200">
             <h1 className="text-4xl md:text-5xl font-bold text-[#2D2D2D] mb-4 font-[family-name:var(--font-eb-garamond)]">
-              Lapis Lazuli – De Hemelsteen van het Oude Egypte en Innerlijke Wijsheid
+              Lapis Lazuli - De Hemelsteen van het Oude Egypte en Innerlijke Wijsheid
             </h1>
             <div className="flex items-center gap-4 text-sm text-gray-500">
               <time dateTime="2025-10-20">20 oktober 2025</time>
@@ -86,8 +86,8 @@ export default function BlogPost() {
           {/* Blog Image */}
           <div className="relative w-full h-64 sm:h-96 mb-8 rounded-lg overflow-hidden">
             <Image
-              src="/blog-images/Lapis Lazuli – De Hemelsteen van het Oude Egypte en Innerlijke Wijsheid.jpeg"
-              alt="Lapis Lazuli – De Hemelsteen"
+              src="/blog-images/Lapis Lazuli - De Hemelsteen van het Oude Egypte en Innerlijke Wijsheid.jpeg"
+              alt="Lapis Lazuli - De Hemelsteen"
               fill
               className="object-cover"
               priority
@@ -97,7 +97,7 @@ export default function BlogPost() {
           {/* Introductie */}
           <section className="mb-8">
             <p className="text-base leading-relaxed text-gray-800 font-[family-name:var(--font-eb-garamond)] mb-4">
-              Lapis Lazuli is een van de meest mystieke en gewaardeerde edelstenen uit de geschiedenis. Van de tempels van het oude Egypte tot hedendaagse spiritualiteit – deze diepe blauwe steen met gouden spikkels blijft fascineren door zijn krachtige energie en symbolische betekenis. Ontdek de werking, geschiedenis en spirituele kracht van deze hemelsteen.
+              Lapis Lazuli is een van de meest mystieke en gewaardeerde edelstenen uit de geschiedenis. Van de tempels van het oude Egypte tot hedendaagse spiritualiteit - deze diepe blauwe steen met gouden spikkels blijft fascineren door zijn krachtige energie en symbolische betekenis. Ontdek de werking, geschiedenis en spirituele kracht van deze hemelsteen.
             </p>
           </section>
 
@@ -282,10 +282,10 @@ export default function BlogPost() {
                 Conclusie
               </h2>
               <p className="text-base leading-relaxed text-gray-800 font-[family-name:var(--font-eb-garamond)] mb-4">
-                Lapis Lazuli is een poort naar wijsheid, intuïtie en innerlijke rust. Van de tempels van Egypte tot hedendaagse spiritualiteit – deze steen blijft een symbool van waarheid en inzicht. Door zijn krachtige werking op het keelchakra en derde oog chakra helpt Lapis Lazuli je om je authentieke zelf te zijn, je waarheid te spreken en je innerlijke wijsheid te ontdekken.
+                Lapis Lazuli is een poort naar wijsheid, intuïtie en innerlijke rust. Van de tempels van Egypte tot hedendaagse spiritualiteit - deze steen blijft een symbool van waarheid en inzicht. Door zijn krachtige werking op het keelchakra en derde oog chakra helpt Lapis Lazuli je om je authentieke zelf te zijn, je waarheid te spreken en je innerlijke wijsheid te ontdekken.
               </p>
               <p className="text-base leading-relaxed text-gray-800 font-[family-name:var(--font-eb-garamond)] mb-4">
-                Of je hem draagt als sieraad, gebruikt tijdens meditatie of simpelweg bij je hebt voor spirituele ondersteuning – Lapis Lazuli brengt helderheid, rust en verbinding met je hogere bewustzijn.
+                Of je hem draagt als sieraad, gebruikt tijdens meditatie of simpelweg bij je hebt voor spirituele ondersteuning - Lapis Lazuli brengt helderheid, rust en verbinding met je hogere bewustzijn.
               </p>
             </section>
 

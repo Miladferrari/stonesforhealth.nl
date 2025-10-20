@@ -23,9 +23,9 @@ export const metadata: Metadata = {
 const blogPostingSchema = {
   "@context": "https://schema.org",
   "@type": "BlogPosting",
-  "headline": "S4H Koperen Armbanden met Magneten – Stijl, Balans en Natuurlijke Energie",
+  "headline": "S4H Koperen Armbanden met Magneten - Stijl, Balans en Natuurlijke Energie",
   "description": "Ontdek de kracht van koperen armbanden met magneten. Eeuwenoude kennis gecombineerd met modern design voor balans, herstel en stijlvolle energie.",
-  "image": "https://stonesforhealth.nl/blog-images/S4H Koperen Armbanden met Magneten – Stijl, Balans en Natuurlijke Energie.jpeg",
+  "image": "https://stonesforhealth.nl/blog-images/S4H Koperen Armbanden met Magneten - Stijl, Balans en Natuurlijke Energie.jpeg",
   "datePublished": "2025-10-01T09:00:00Z",
   "dateModified": "2025-10-01T09:00:00Z",
   "author": {
@@ -59,7 +59,7 @@ export default function S4HKoperenArmbanden() {
 
         {/* Title */}
         <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 mb-4 leading-tight" style={{ fontFamily: 'var(--font-eb-garamond)' }}>
-          S4H Koperen Armbanden met Magneten – Stijl, Balans en Natuurlijke Energie
+          S4H Koperen Armbanden met Magneten - Stijl, Balans en Natuurlijke Energie
         </h1>
 
         {/* Metadata */}
@@ -72,7 +72,7 @@ export default function S4HKoperenArmbanden() {
         {/* Blog Image */}
         <div className="relative w-full h-64 sm:h-96 mb-8 rounded-lg overflow-hidden">
           <Image
-            src="/blog-images/S4H Koperen Armbanden met Magneten – Stijl, Balans en Natuurlijke Energie.jpeg"
+            src="/blog-images/S4H Koperen Armbanden met Magneten - Stijl, Balans en Natuurlijke Energie.jpeg"
             alt="S4H Koperen armbanden met magneten voor balans en natuurlijke energie"
             fill
             className="object-cover"
@@ -191,7 +191,7 @@ export default function S4HKoperenArmbanden() {
           <ol className="space-y-2 text-lg text-gray-700 mb-6 list-decimal pl-6">
             <li>Reinig het koper af en toe met een zachte doek en een beetje citroensap of azijn</li>
             <li>Vermijd langdurig contact met water of parfum</li>
-            <li>Draag de armband regelmatig – de natuurlijke huidoliën helpen het koper mooi te houden</li>
+            <li>Draag de armband regelmatig - de natuurlijke huidoliën helpen het koper mooi te houden</li>
           </ol>
 
           <p className="text-lg text-gray-700 leading-relaxed bg-gray-50 border-l-4 border-gray-400 pl-4 py-3 rounded">
@@ -224,7 +224,7 @@ export default function S4HKoperenArmbanden() {
           </h2>
 
           <p className="text-lg text-gray-700 leading-relaxed mb-6">
-            Bij <Link href="/" className="text-[#8B7355] hover:underline font-semibold">Stonesforhealth.nl</Link> vind je de exclusieve <strong>S4H-collectie koperen armbanden met magneten</strong> – handgemaakt, krachtig en stijlvol. Elk ontwerp combineert eeuwenoude kennis met moderne elegantie.
+            Bij <Link href="/" className="text-[#8B7355] hover:underline font-semibold">Stonesforhealth.nl</Link> vind je de exclusieve <strong>S4H-collectie koperen armbanden met magneten</strong> - handgemaakt, krachtig en stijlvol. Elk ontwerp combineert eeuwenoude kennis met moderne elegantie.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 mb-8">

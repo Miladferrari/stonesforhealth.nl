@@ -82,7 +82,7 @@ export default function ChakrasUitgelegPage() {
         {/* Introduction */}
         <div className="prose prose-lg max-w-none">
           <p className="text-base sm:text-lg text-gray-700 leading-relaxed mb-8 font-[family-name:var(--font-eb-garamond)]">
-            Alles in het universum bestaat uit energie – ook jij. Binnen de oosterse en spirituele tradities wordt die levensenergie ook wel <strong>prana</strong> of <strong>chi</strong> genoemd. Deze energie stroomt door je lichaam via energiebanen (nadi's) en komt samen in energiecentra, de <strong>chakra's</strong>.
+            Alles in het universum bestaat uit energie - ook jij. Binnen de oosterse en spirituele tradities wordt die levensenergie ook wel <strong>prana</strong> of <strong>chi</strong> genoemd. Deze energie stroomt door je lichaam via energiebanen (nadi's) en komt samen in energiecentra, de <strong>chakra's</strong>.
           </p>
 
           <p className="text-base sm:text-lg text-gray-700 leading-relaxed mb-8 font-[family-name:var(--font-eb-garamond)]">
@@ -223,7 +223,7 @@ export default function ChakrasUitgelegPage() {
           </div>
 
           <p className="text-base sm:text-lg text-gray-700 leading-relaxed mb-8 font-[family-name:var(--font-eb-garamond)]">
-            Je kunt ook kiezen voor een <strong>chakra set</strong> – met zeven stenen, elk afgestemd op één chakra. Bekijk onze <Link href="/alle-producten?search=chakra" className="text-[#492c4a] hover:underline">chakra collectie</Link>.
+            Je kunt ook kiezen voor een <strong>chakra set</strong> - met zeven stenen, elk afgestemd op één chakra. Bekijk onze <Link href="/alle-producten?search=chakra" className="text-[#492c4a] hover:underline">chakra collectie</Link>.
           </p>
 
           {/* Chakras in Balans */}

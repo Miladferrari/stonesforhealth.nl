@@ -146,7 +146,7 @@ export default function EdelstenenOpladenMaanlichtPage() {
           </div>
 
           <p className="text-base sm:text-lg text-gray-700 leading-relaxed mb-8 font-[family-name:var(--font-eb-garamond)]">
-            Het <strong>maanlicht</strong> – vooral tijdens de volle maan – is hiervoor ideaal omdat het een zachte maar krachtige vrouwelijke energie heeft. Het helpt stenen hun natuurlijke trilling te herstellen zonder ze te beschadigen.
+            Het <strong>maanlicht</strong> - vooral tijdens de volle maan - is hiervoor ideaal omdat het een zachte maar krachtige vrouwelijke energie heeft. Het helpt stenen hun natuurlijke trilling te herstellen zonder ze te beschadigen.
           </p>
 
           {/* Beste Moment */}
@@ -160,7 +160,7 @@ export default function EdelstenenOpladenMaanlichtPage() {
 
           <div className="border-l-4 border-[#492c4a] pl-6 my-8">
             <p className="text-base sm:text-lg text-gray-700 font-[family-name:var(--font-eb-garamond)]">
-              <strong>Perfecte timing:</strong> De <Link href="/blog/supermaan-oktober-2025" className="text-[#492c4a] hover:underline">volle maan in oktober 2025</Link> valt op <strong>7 oktober</strong> – ook een supermaan! Dit is een extra krachtig moment om je kristallen op te laden.
+              <strong>Perfecte timing:</strong> De <Link href="/blog/supermaan-oktober-2025" className="text-[#492c4a] hover:underline">volle maan in oktober 2025</Link> valt op <strong>7 oktober</strong> - ook een supermaan! Dit is een extra krachtig moment om je kristallen op te laden.
             </p>
           </div>
 
@@ -248,7 +248,7 @@ export default function EdelstenenOpladenMaanlichtPage() {
               ⚠️ Let Op: Stenen die NIET met Water Kunnen
             </h3>
             <p className="text-base sm:text-lg text-gray-700 mb-3 font-[family-name:var(--font-eb-garamond)]">
-              Deze stenen kun je beter niet met water reinigen – gebruik hiervoor liever rook van salie, palo santo of enkel het maanlicht zelf:
+              Deze stenen kun je beter niet met water reinigen - gebruik hiervoor liever rook van salie, palo santo of enkel het maanlicht zelf:
             </p>
             <ul className="space-y-1 text-base sm:text-lg text-gray-700 pl-5 list-disc font-[family-name:var(--font-eb-garamond)]">
               <li>Seleniet (lost op in water)</li>
@@ -334,7 +334,7 @@ export default function EdelstenenOpladenMaanlichtPage() {
           </h2>
 
           <p className="text-base sm:text-lg text-gray-700 leading-relaxed mb-6 font-[family-name:var(--font-eb-garamond)]">
-            Het opladen van edelstenen in maanlicht is een <strong>liefdevolle manier</strong> om verbinding te maken met de natuur en je eigen energie te herstellen. Of je nu werkt met <Link href="/alle-producten?search=rozenkwarts" className="text-[#492c4a] hover:underline">rozenkwarts</Link> voor liefde, <Link href="/alle-producten?search=amethist" className="text-[#492c4a] hover:underline">amethist</Link> voor rust of <Link href="/alle-producten?search=bergkristal" className="text-[#492c4a] hover:underline">bergkristal</Link> voor helderheid – het maanlicht helpt elke steen zijn natuurlijke kracht terug te vinden.
+            Het opladen van edelstenen in maanlicht is een <strong>liefdevolle manier</strong> om verbinding te maken met de natuur en je eigen energie te herstellen. Of je nu werkt met <Link href="/alle-producten?search=rozenkwarts" className="text-[#492c4a] hover:underline">rozenkwarts</Link> voor liefde, <Link href="/alle-producten?search=amethist" className="text-[#492c4a] hover:underline">amethist</Link> voor rust of <Link href="/alle-producten?search=bergkristal" className="text-[#492c4a] hover:underline">bergkristal</Link> voor helderheid - het maanlicht helpt elke steen zijn natuurlijke kracht terug te vinden.
           </p>
 
           <p className="text-base sm:text-lg text-gray-700 leading-relaxed font-[family-name:var(--font-eb-garamond)]">

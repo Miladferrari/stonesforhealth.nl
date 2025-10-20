@@ -80,7 +80,7 @@ export default function BergkristalPage() {
         {/* Introduction */}
         <div className="prose prose-lg max-w-none">
           <p className="text-base sm:text-lg text-gray-700 leading-relaxed mb-8 font-[family-name:var(--font-eb-garamond)]">
-            <strong>Bergkristal</strong>, ook wel <strong>helder kwarts</strong> of <strong>clear quartz</strong> genoemd, is één van de meest krachtige en veelzijdige edelstenen ter wereld. Het wordt gezien als de <strong>"koning van de kristallen"</strong>, omdat het zowel zuiverend als versterkend werkt en al duizenden jaren een belangrijke rol speelt in culturen over de hele wereld. Van oude Griekse filosofen tot moderne healers – iedereen erkent de bijzondere kracht van deze heldere kristal.
+            <strong>Bergkristal</strong>, ook wel <strong>helder kwarts</strong> of <strong>clear quartz</strong> genoemd, is één van de meest krachtige en veelzijdige edelstenen ter wereld. Het wordt gezien als de <strong>"koning van de kristallen"</strong>, omdat het zowel zuiverend als versterkend werkt en al duizenden jaren een belangrijke rol speelt in culturen over de hele wereld. Van oude Griekse filosofen tot moderne healers - iedereen erkent de bijzondere kracht van deze heldere kristal.
           </p>
 
           {/* Lees Ook Section */}
@@ -127,7 +127,7 @@ export default function BergkristalPage() {
           </h2>
 
           <p className="text-gray-700 leading-relaxed mb-8 font-[family-name:var(--font-eb-garamond)]">
-            Bergkristal staat bekend als een <strong>universele genezer</strong> en een krachtige <strong>energieversterker</strong>. Het is de meest veelzijdige steen in de kristalwereld omdat het op alle niveaus werkt – fysiek, emotioneel, mentaal en spiritueel.
+            Bergkristal staat bekend als een <strong>universele genezer</strong> en een krachtige <strong>energieversterker</strong>. Het is de meest veelzijdige steen in de kristalwereld omdat het op alle niveaus werkt - fysiek, emotioneel, mentaal en spiritueel.
           </p>
 
           <div className="grid md:grid-cols-2 gap-6 mb-12">
@@ -147,7 +147,7 @@ export default function BergkristalPage() {
                 🔋 Energieversterker
               </h3>
               <p className="text-gray-700 text-sm font-[family-name:var(--font-eb-garamond)]">
-                Versterkt intenties, gedachten en de werking van andere stenen. Zoals een vergrootglas voor energie – amplifies alles.
+                Versterkt intenties, gedachten en de werking van andere stenen. Zoals een vergrootglas voor energie - amplifies alles.
               </p>
             </div>
 
@@ -197,7 +197,7 @@ export default function BergkristalPage() {
               👑 Waarom "Koning van de Kristallen"?
             </h3>
             <p className="text-gray-700 leading-relaxed text-center font-[family-name:var(--font-eb-garamond)]">
-              Bergkristal is dé steen voor iedereen die balans, zuiverheid en kracht zoekt. Het werkt <strong>universeel</strong> – geschikt voor alle doeleinden, <Link href="/blog/chakra-kristallen-complete-gids" className="text-purple-600 hover:text-purple-800 underline font-medium">alle chakra's</Link> en alle mensen. Geen andere steen is zo veelzijdig en krachtig tegelijk. Daarom wordt het vaak gecombineerd met <Link href="/blog/amethist-soorten-werking-spirituele-tips" className="text-purple-600 hover:text-purple-800 underline font-medium">amethist</Link> en <Link href="/blog/rozenkwarts-steen-van-de-liefde" className="text-purple-600 hover:text-purple-800 underline font-medium">rozenkwarts</Link> in <Link href="/blog/gouden-driehoek-amethist-bergkristal-rozenkwarts" className="text-purple-600 hover:text-purple-800 underline font-medium">de Gouden Driehoek</Link>.
+              Bergkristal is dé steen voor iedereen die balans, zuiverheid en kracht zoekt. Het werkt <strong>universeel</strong> - geschikt voor alle doeleinden, <Link href="/blog/chakra-kristallen-complete-gids" className="text-purple-600 hover:text-purple-800 underline font-medium">alle chakra's</Link> en alle mensen. Geen andere steen is zo veelzijdig en krachtig tegelijk. Daarom wordt het vaak gecombineerd met <Link href="/blog/amethist-soorten-werking-spirituele-tips" className="text-purple-600 hover:text-purple-800 underline font-medium">amethist</Link> en <Link href="/blog/rozenkwarts-steen-van-de-liefde" className="text-purple-600 hover:text-purple-800 underline font-medium">rozenkwarts</Link> in <Link href="/blog/gouden-driehoek-amethist-bergkristal-rozenkwarts" className="text-purple-600 hover:text-purple-800 underline font-medium">de Gouden Driehoek</Link>.
             </p>
           </div>
 
@@ -368,7 +368,7 @@ export default function BergkristalPage() {
                 🌏 Andere Locaties
               </h3>
               <p className="text-gray-700 text-sm font-[family-name:var(--font-eb-garamond)]">
-                China, Rusland, Australië, Afrika – bergkristal is één van de meest voorkomende mineralen op aarde.
+                China, Rusland, Australië, Afrika - bergkristal is één van de meest voorkomende mineralen op aarde.
               </p>
             </div>
           </div>
@@ -509,7 +509,7 @@ export default function BergkristalPage() {
             {/* DO's */}
             <div className="border-2 border-green-200 bg-green-50 rounded-lg p-6">
               <h3 className="text-2xl font-bold text-green-900 mb-4 font-[family-name:var(--font-eb-garamond)]">
-                ✅ DO's – Wat je WEL moet doen
+                ✅ DO's - Wat je WEL moet doen
               </h3>
               <ul className="space-y-3 text-gray-700 font-[family-name:var(--font-eb-garamond)]">
                 <li className="flex items-start gap-2">
@@ -538,7 +538,7 @@ export default function BergkristalPage() {
             {/* DON'Ts */}
             <div className="border-2 border-red-200 bg-red-50 rounded-lg p-6">
               <h3 className="text-2xl font-bold text-red-900 mb-4 font-[family-name:var(--font-eb-garamond)]">
-                ❌ DON'Ts – Wat je NIET moet doen
+                ❌ DON'Ts - Wat je NIET moet doen
               </h3>
               <ul className="space-y-3 text-gray-700 font-[family-name:var(--font-eb-garamond)]">
                 <li className="flex items-start gap-2">
@@ -555,7 +555,7 @@ export default function BergkristalPage() {
                 </li>
                 <li className="flex items-start gap-2">
                   <span className="text-red-600 font-bold">✗</span>
-                  <span>Laat NIET vallen – kwarts is breekbaar ondanks hardheid</span>
+                  <span>Laat NIET vallen - kwarts is breekbaar ondanks hardheid</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <span className="text-red-600 font-bold">✗</span>
@@ -570,7 +570,7 @@ export default function BergkristalPage() {
               ⚠️ Let op: Versterkend Effect
             </h3>
             <p className="text-gray-700 font-[family-name:var(--font-eb-garamond)]">
-              Bergkristal <strong>versterkt alles</strong> – zowel positieve als negatieve energie. Als je je onrustig of angstig voelt, kan bergkristal dit versterken. Gebruik in dat geval eerst <strong>grounding stenen</strong> (Zwarte Toermalijn, Rookkwarts) voordat je met bergkristal werkt.
+              Bergkristal <strong>versterkt alles</strong> - zowel positieve als negatieve energie. Als je je onrustig of angstig voelt, kan bergkristal dit versterken. Gebruik in dat geval eerst <strong>grounding stenen</strong> (Zwarte Toermalijn, Rookkwarts) voordat je met bergkristal werkt.
             </p>
           </div>
 
@@ -639,7 +639,7 @@ export default function BergkristalPage() {
                 Is bergkristal geschikt voor beginners?
               </h3>
               <p className="text-gray-700 font-[family-name:var(--font-eb-garamond)]">
-                Absoluut! Bergkristal is <strong>perfect voor beginners</strong> omdat het veelzijdig, veilig en krachtig is. Het is vaak de eerste steen die kristalliefhebbers kopen. Let wel op bij slapeloosheid – kies dan voor Amethist.
+                Absoluut! Bergkristal is <strong>perfect voor beginners</strong> omdat het veelzijdig, veilig en krachtig is. Het is vaak de eerste steen die kristalliefhebbers kopen. Let wel op bij slapeloosheid - kies dan voor Amethist.
               </p>
             </div>
 
@@ -667,13 +667,13 @@ export default function BergkristalPage() {
             De Tijdloze Kracht van Bergkristal
           </h2>
           <p className="text-gray-700 leading-relaxed mb-6 font-[family-name:var(--font-eb-garamond)]">
-            <strong>Bergkristal</strong> is terecht de koning van de kristallen. Deze tijdloze edelsteen brengt zuiverheid, kracht, balans en spiritueel inzicht – eigenschappen die al duizenden jaren door culturen wereldwijd worden gewaardeerd. Of je nu zoekt naar mentale helderheid, energetische zuivering, spirituele groei of simpelweg een krachtige basis voor je kristalcollectie – bergkristal is de ultieme keuze.
+            <strong>Bergkristal</strong> is terecht de koning van de kristallen. Deze tijdloze edelsteen brengt zuiverheid, kracht, balans en spiritueel inzicht - eigenschappen die al duizenden jaren door culturen wereldwijd worden gewaardeerd. Of je nu zoekt naar mentale helderheid, energetische zuivering, spirituele groei of simpelweg een krachtige basis voor je kristalcollectie - bergkristal is de ultieme keuze.
           </p>
           <p className="text-gray-700 leading-relaxed mb-6 font-[family-name:var(--font-eb-garamond)]">
-            De veelzijdigheid van bergkristal is ongeëvenaard. Het werkt op <strong>alle chakra's, versterkt alle intenties en past bij iedereen</strong>. Van heldere punten voor meditatie tot grote geodes voor ruimtezuivering – elke vorm heeft zijn eigen krachtige toepassingen.
+            De veelzijdigheid van bergkristal is ongeëvenaard. Het werkt op <strong>alle chakra's, versterkt alle intenties en past bij iedereen</strong>. Van heldere punten voor meditatie tot grote geodes voor ruimtezuivering - elke vorm heeft zijn eigen krachtige toepassingen.
           </p>
           <p className="text-gray-700 leading-relaxed font-[family-name:var(--font-eb-garamond)]">
-            Bij <strong>StonesForHealth</strong> vind je hoogwaardige bergkristal in alle vormen – clusters, geodes, punten, bollen en meer. Alle kristallen zijn 100% authentiek en ethisch gewonnen. Gratis verzending vanaf €50. Ervaar zelf waarom bergkristal al eeuwenlang de koning van alle edelstenen is!
+            Bij <strong>StonesForHealth</strong> vind je hoogwaardige bergkristal in alle vormen - clusters, geodes, punten, bollen en meer. Alle kristallen zijn 100% authentiek en ethisch gewonnen. Gratis verzending vanaf €50. Ervaar zelf waarom bergkristal al eeuwenlang de koning van alle edelstenen is!
           </p>
 
           {/* Related Articles */}
@@ -751,7 +751,7 @@ export default function BergkristalPage() {
               Over StonesForHealth
             </h3>
             <p className="text-gray-700 leading-relaxed font-[family-name:var(--font-eb-garamond)]">
-              Bij StonesForHealth geloven we in de universele kracht van natuurlijke kristallen. Onze missie is om hoogwaardige, ethisch gewonnen edelstenen toegankelijk te maken voor iedereen. Bergkristal vormt de basis van onze collectie – de koning van alle kristallen die iedereen kan helpen met zuivering, versterking en spirituele groei. Alle kristallen zijn 100% authentiek en met zorg geselecteerd.
+              Bij StonesForHealth geloven we in de universele kracht van natuurlijke kristallen. Onze missie is om hoogwaardige, ethisch gewonnen edelstenen toegankelijk te maken voor iedereen. Bergkristal vormt de basis van onze collectie - de koning van alle kristallen die iedereen kan helpen met zuivering, versterking en spirituele groei. Alle kristallen zijn 100% authentiek en met zorg geselecteerd.
             </p>
           </div>
         </div>

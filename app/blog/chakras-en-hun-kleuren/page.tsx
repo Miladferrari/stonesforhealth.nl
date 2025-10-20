@@ -145,7 +145,7 @@ export default function ChakraKleurenPage() {
           {/* 1. Wortelchakra */}
           <div id="wortelchakra" className="border border-gray-200 rounded-lg p-6 md:p-8 mb-6 scroll-mt-24">
             <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-2 font-[family-name:var(--font-eb-garamond)]">
-              1. Wortelchakra – Muladhara
+              1. Wortelchakra - Muladhara
             </h3>
             <p className="text-base sm:text-lg text-gray-600 mb-6 font-[family-name:var(--font-eb-garamond)]">
               <strong>Kleur:</strong> Rood • <strong>Locatie:</strong> Stuitje • <strong>Element:</strong> Aarde
@@ -179,7 +179,7 @@ export default function ChakraKleurenPage() {
           {/* 2. Sacraalchakra */}
           <div id="sacraalchakra" className="border border-gray-200 rounded-lg p-6 md:p-8 mb-6 scroll-mt-24">
             <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-2 font-[family-name:var(--font-eb-garamond)]">
-              2. Sacraalchakra – Svadhisthana
+              2. Sacraalchakra - Svadhisthana
             </h3>
             <p className="text-base sm:text-lg text-gray-600 mb-6 font-[family-name:var(--font-eb-garamond)]">
               <strong>Kleur:</strong> Oranje • <strong>Locatie:</strong> Onderbuik • <strong>Element:</strong> Water
@@ -213,7 +213,7 @@ export default function ChakraKleurenPage() {
           {/* 3. Zonnevlechtchakra */}
           <div id="zonnevlechtchakra" className="border border-gray-200 rounded-lg p-6 md:p-8 mb-6 scroll-mt-24">
             <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-2 font-[family-name:var(--font-eb-garamond)]">
-              3. Zonnevlechtchakra – Manipura
+              3. Zonnevlechtchakra - Manipura
             </h3>
             <p className="text-base sm:text-lg text-gray-600 mb-6 font-[family-name:var(--font-eb-garamond)]">
               <strong>Kleur:</strong> Geel • <strong>Locatie:</strong> Maagstreek • <strong>Element:</strong> Vuur
@@ -247,7 +247,7 @@ export default function ChakraKleurenPage() {
           {/* 4. Hartchakra */}
           <div id="hartchakra" className="border border-gray-200 rounded-lg p-6 md:p-8 mb-6 scroll-mt-24">
             <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-2 font-[family-name:var(--font-eb-garamond)]">
-              4. Hartchakra – Anahata
+              4. Hartchakra - Anahata
             </h3>
             <p className="text-base sm:text-lg text-gray-600 mb-6 font-[family-name:var(--font-eb-garamond)]">
               <strong>Kleur:</strong> Groen of Roze • <strong>Locatie:</strong> Hart • <strong>Element:</strong> Lucht
@@ -281,7 +281,7 @@ export default function ChakraKleurenPage() {
           {/* 5. Keelchakra */}
           <div id="keelchakra" className="border border-gray-200 rounded-lg p-6 md:p-8 mb-6 scroll-mt-24">
             <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-2 font-[family-name:var(--font-eb-garamond)]">
-              5. Keelchakra – Vishuddha
+              5. Keelchakra - Vishuddha
             </h3>
             <p className="text-base sm:text-lg text-gray-600 mb-6 font-[family-name:var(--font-eb-garamond)]">
               <strong>Kleur:</strong> Lichtblauw • <strong>Locatie:</strong> Keel • <strong>Element:</strong> Ether
@@ -315,7 +315,7 @@ export default function ChakraKleurenPage() {
           {/* 6. Derde Oog Chakra */}
           <div id="derde-oogchakra" className="border border-gray-200 rounded-lg p-6 md:p-8 mb-6 scroll-mt-24">
             <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-2 font-[family-name:var(--font-eb-garamond)]">
-              6. Derde Oog Chakra – Ajna
+              6. Derde Oog Chakra - Ajna
             </h3>
             <p className="text-base sm:text-lg text-gray-600 mb-6 font-[family-name:var(--font-eb-garamond)]">
               <strong>Kleur:</strong> Indigo • <strong>Locatie:</strong> Voorhoofd • <strong>Element:</strong> Licht
@@ -349,7 +349,7 @@ export default function ChakraKleurenPage() {
           {/* 7. Kroonchakra */}
           <div id="kroonchakra" className="border border-gray-200 rounded-lg p-6 md:p-8 mb-6 scroll-mt-24">
             <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-2 font-[family-name:var(--font-eb-garamond)]">
-              7. Kroonchakra – Sahasrara
+              7. Kroonchakra - Sahasrara
             </h3>
             <p className="text-base sm:text-lg text-gray-600 mb-6 font-[family-name:var(--font-eb-garamond)]">
               <strong>Kleur:</strong> Violet of Wit • <strong>Locatie:</strong> Kruin • <strong>Element:</strong> Universele energie

@@ -5,7 +5,7 @@ import JsonLd from '@/app/components/JsonLd';
 import Breadcrumbs from '@/app/components/Breadcrumbs';
 
 export const metadata: Metadata = {
-  title: 'Edelstenen per Levenspad – Ontdek Jouw Spirituele Gidssteen | StonesForHealth',
+  title: 'Edelstenen per Levenspad - Ontdek Jouw Spirituele Gidssteen | StonesForHealth',
   description: 'Ontdek welke edelstenen perfect bij jouw levenspadnummer passen. Van Levenspad 1 tot 9 en meestergetallen 11 en 22 - bereken je getal en vind je spirituele gidsstenen voor balans en groei.',
   keywords: [
     'levenspadnummer berekenen',
@@ -22,7 +22,7 @@ export const metadata: Metadata = {
     'persoonlijke edelsteen',
   ],
   openGraph: {
-    title: 'Edelstenen per Levenspad – Ontdek Jouw Spirituele Gidssteen',
+    title: 'Edelstenen per Levenspad - Ontdek Jouw Spirituele Gidssteen',
     description: 'Ontdek welke edelstenen perfect bij jouw levenspadnummer passen. Bereken je getal en vind je spirituele gidsstenen voor balans en groei.',
     type: 'article',
     publishedTime: '2025-10-20',
@@ -35,7 +35,7 @@ export const metadata: Metadata = {
 const blogPostingSchema = {
   "@context": "https://schema.org",
   "@type": "BlogPosting",
-  "headline": "Edelstenen per Levenspad – Ontdek Jouw Spirituele Gidssteen",
+  "headline": "Edelstenen per Levenspad - Ontdek Jouw Spirituele Gidssteen",
   "description": "Ontdek welke edelstenen perfect bij jouw levenspadnummer passen. Van Levenspad 1 tot 9 en meestergetallen 11 en 22 - complete gids met berekening en aanbevelingen.",
   "image": "https://stonesforhealth.nl/logo.webp",
   "datePublished": "2025-10-20T09:00:00Z",
@@ -74,7 +74,7 @@ export default function BlogPost() {
           {/* Header */}
           <header className="mb-8 pb-6 border-b border-gray-200">
             <h1 className="text-4xl md:text-5xl font-bold text-[#2D2D2D] mb-4 font-[family-name:var(--font-eb-garamond)]">
-              Edelstenen per Levenspad – Ontdek Jouw Spirituele Gidssteen
+              Edelstenen per Levenspad - Ontdek Jouw Spirituele Gidssteen
             </h1>
             <div className="flex items-center gap-4 text-sm text-gray-500">
               <time dateTime="2025-10-20">20 oktober 2025</time>
@@ -86,7 +86,7 @@ export default function BlogPost() {
           {/* Blog Image */}
           <div className="relative w-full h-64 sm:h-96 mb-8 rounded-lg overflow-hidden">
             <Image
-              src="/blog-images/Edelstenen per Levenspad – Ontdek Jouw Spirituele Gidssteen.jpeg"
+              src="/blog-images/Edelstenen per Levenspad - Ontdek Jouw Spirituele Gidssteen.jpeg"
               alt="Edelstenen per Levenspad"
               fill
               className="object-cover"
@@ -131,7 +131,7 @@ export default function BlogPost() {
             {/* Levenspad 1 */}
             <section id="levenspad-1">
               <h2 className="text-2xl font-bold text-[#2D2D2D] mb-4 font-[family-name:var(--font-eb-garamond)] border-b border-gray-200 pb-2">
-                Levenspad 1 – De Leider
+                Levenspad 1 - De Leider
               </h2>
               <p className="text-base leading-relaxed text-gray-800 font-[family-name:var(--font-eb-garamond)] mb-4">
                 <strong>Eigenschappen:</strong> Onafhankelijk, doelgericht, moedig, pioniersgeest<br />
@@ -150,7 +150,7 @@ export default function BlogPost() {
             {/* Levenspad 2 */}
             <section id="levenspad-2">
               <h2 className="text-2xl font-bold text-[#2D2D2D] mb-4 font-[family-name:var(--font-eb-garamond)] border-b border-gray-200 pb-2">
-                Levenspad 2 – De Diplomaat
+                Levenspad 2 - De Diplomaat
               </h2>
               <p className="text-base leading-relaxed text-gray-800 font-[family-name:var(--font-eb-garamond)] mb-4">
                 <strong>Eigenschappen:</strong> Gevoelig, vredelievend, empathisch, samenwerkend<br />
@@ -169,7 +169,7 @@ export default function BlogPost() {
             {/* Levenspad 3 */}
             <section id="levenspad-3">
               <h2 className="text-2xl font-bold text-[#2D2D2D] mb-4 font-[family-name:var(--font-eb-garamond)] border-b border-gray-200 pb-2">
-                Levenspad 3 – De Communicator
+                Levenspad 3 - De Communicator
               </h2>
               <p className="text-base leading-relaxed text-gray-800 font-[family-name:var(--font-eb-garamond)] mb-4">
                 <strong>Eigenschappen:</strong> Creatief, expressief, positief, sociaal<br />
@@ -188,7 +188,7 @@ export default function BlogPost() {
             {/* Levenspad 4 */}
             <section id="levenspad-4">
               <h2 className="text-2xl font-bold text-[#2D2D2D] mb-4 font-[family-name:var(--font-eb-garamond)] border-b border-gray-200 pb-2">
-                Levenspad 4 – De Bouwer
+                Levenspad 4 - De Bouwer
               </h2>
               <p className="text-base leading-relaxed text-gray-800 font-[family-name:var(--font-eb-garamond)] mb-4">
                 <strong>Eigenschappen:</strong> Betrouwbaar, praktisch, stabiel, gedisciplineerd<br />
@@ -207,7 +207,7 @@ export default function BlogPost() {
             {/* Levenspad 5 */}
             <section id="levenspad-5">
               <h2 className="text-2xl font-bold text-[#2D2D2D] mb-4 font-[family-name:var(--font-eb-garamond)] border-b border-gray-200 pb-2">
-                Levenspad 5 – De Vrijheidszoeker
+                Levenspad 5 - De Vrijheidszoeker
               </h2>
               <p className="text-base leading-relaxed text-gray-800 font-[family-name:var(--font-eb-garamond)] mb-4">
                 <strong>Eigenschappen:</strong> Avontuurlijk, leergierig, energiek, flexibel<br />
@@ -226,7 +226,7 @@ export default function BlogPost() {
             {/* Levenspad 6 */}
             <section id="levenspad-6">
               <h2 className="text-2xl font-bold text-[#2D2D2D] mb-4 font-[family-name:var(--font-eb-garamond)] border-b border-gray-200 pb-2">
-                Levenspad 6 – De Verzorger
+                Levenspad 6 - De Verzorger
               </h2>
               <p className="text-base leading-relaxed text-gray-800 font-[family-name:var(--font-eb-garamond)] mb-4">
                 <strong>Eigenschappen:</strong> Liefdevol, zorgzaam, harmonieus, verantwoordelijk<br />
@@ -245,7 +245,7 @@ export default function BlogPost() {
             {/* Levenspad 7 */}
             <section id="levenspad-7">
               <h2 className="text-2xl font-bold text-[#2D2D2D] mb-4 font-[family-name:var(--font-eb-garamond)] border-b border-gray-200 pb-2">
-                Levenspad 7 – De Zoeker van Wijsheid
+                Levenspad 7 - De Zoeker van Wijsheid
               </h2>
               <p className="text-base leading-relaxed text-gray-800 font-[family-name:var(--font-eb-garamond)] mb-4">
                 <strong>Eigenschappen:</strong> Spiritueel, analytisch, intuïtief, contemplatief<br />
@@ -264,7 +264,7 @@ export default function BlogPost() {
             {/* Levenspad 8 */}
             <section id="levenspad-8">
               <h2 className="text-2xl font-bold text-[#2D2D2D] mb-4 font-[family-name:var(--font-eb-garamond)] border-b border-gray-200 pb-2">
-                Levenspad 8 – De Manifestor
+                Levenspad 8 - De Manifestor
               </h2>
               <p className="text-base leading-relaxed text-gray-800 font-[family-name:var(--font-eb-garamond)] mb-4">
                 <strong>Eigenschappen:</strong> Ambitieus, krachtig, vastberaden, succesgericht<br />
@@ -283,7 +283,7 @@ export default function BlogPost() {
             {/* Levenspad 9 */}
             <section id="levenspad-9">
               <h2 className="text-2xl font-bold text-[#2D2D2D] mb-4 font-[family-name:var(--font-eb-garamond)] border-b border-gray-200 pb-2">
-                Levenspad 9 – De Humanist
+                Levenspad 9 - De Humanist
               </h2>
               <p className="text-base leading-relaxed text-gray-800 font-[family-name:var(--font-eb-garamond)] mb-4">
                 <strong>Eigenschappen:</strong> Empathisch, spiritueel, idealistisch, altruïstisch<br />
@@ -308,7 +308,7 @@ export default function BlogPost() {
                 Meestergetallen hebben een hogere spirituele trilling en brengen zowel grotere gaven als grotere uitdagingen met zich mee.
               </p>
               <h3 className="text-xl font-semibold text-[#2D2D2D] mt-5 mb-3 font-[family-name:var(--font-eb-garamond)]">
-                Levenspad 11 – De Verlichte Inspirator
+                Levenspad 11 - De Verlichte Inspirator
               </h3>
               <p className="text-base leading-relaxed text-gray-800 font-[family-name:var(--font-eb-garamond)] mb-4">
                 <strong>Eigenschappen:</strong> Zeer intuïtief, spiritueel geleid, inspirerend<br />
@@ -320,7 +320,7 @@ export default function BlogPost() {
                 <li><strong>Bergkristal:</strong> Amplifier van intuïtie en helderheid</li>
               </ul>
               <h3 className="text-xl font-semibold text-[#2D2D2D] mt-5 mb-3 font-[family-name:var(--font-eb-garamond)]">
-                Levenspad 22 – De Meesterbouwer
+                Levenspad 22 - De Meesterbouwer
               </h3>
               <p className="text-base leading-relaxed text-gray-800 font-[family-name:var(--font-eb-garamond)] mb-4">
                 <strong>Eigenschappen:</strong> Visionaire bouwer, krachtige manifestor<br />
@@ -372,7 +372,7 @@ export default function BlogPost() {
                 Elke ziel heeft een unieke trilling en levenspad. Door te werken met edelstenen die resoneren met jouw persoonlijke nummer, versterk je je natuurlijke talenten, vind je balans in uitdagingen en creëer je een diepere verbinding met je spirituele pad.
               </p>
               <p className="text-base leading-relaxed text-gray-800 font-[family-name:var(--font-eb-garamond)] mb-4">
-                Of je nu Levenspad 1 bent met je leiderschapsenergie, of Levenspad 9 met je humanitaire missie – de juiste kristallen kunnen je helpen om jouw hoogste potentieel te bereiken en in harmonie te leven met je levensdoel.
+                Of je nu Levenspad 1 bent met je leiderschapsenergie, of Levenspad 9 met je humanitaire missie - de juiste kristallen kunnen je helpen om jouw hoogste potentieel te bereiken en in harmonie te leven met je levensdoel.
               </p>
             </section>
 

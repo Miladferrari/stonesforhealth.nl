@@ -177,7 +177,7 @@ export default function GoudenDriehoekPage() {
           {/* Amethist */}
           <div className="border border-gray-200 rounded-lg p-6 md:p-8 mb-6">
             <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-4 font-[family-name:var(--font-eb-garamond)]">
-              💜 Amethist – De Steen van Spiritualiteit
+              💜 Amethist - De Steen van Spiritualiteit
             </h3>
             <p className="text-base sm:text-lg text-gray-700 leading-relaxed mb-4 font-[family-name:var(--font-eb-garamond)]">
               <strong>Amethist</strong> is de steen van rust, spiritualiteit en intuïtie. Deze prachtige paarse kristal:
@@ -200,7 +200,7 @@ export default function GoudenDriehoekPage() {
           {/* Bergkristal */}
           <div className="border border-gray-200 rounded-lg p-6 md:p-8 mb-6">
             <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-4 font-[family-name:var(--font-eb-garamond)]">
-              🤍 Bergkristal – De Steen van Zuiverheid
+              🤍 Bergkristal - De Steen van Zuiverheid
             </h3>
             <p className="text-base sm:text-lg text-gray-700 leading-relaxed mb-4 font-[family-name:var(--font-eb-garamond)]">
               <strong>Bergkristal</strong> is de meester-healer en versterker van alle kristallen:
@@ -223,7 +223,7 @@ export default function GoudenDriehoekPage() {
           {/* Rozenkwarts */}
           <div className="border border-gray-200 rounded-lg p-6 md:p-8 mb-6">
             <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-4 font-[family-name:var(--font-eb-garamond)]">
-              🩷 Rozenkwarts – De Steen van Liefde
+              🩷 Rozenkwarts - De Steen van Liefde
             </h3>
             <p className="text-base sm:text-lg text-gray-700 leading-relaxed mb-4 font-[family-name:var(--font-eb-garamond)]">
               <strong>Rozenkwarts</strong> is dé steen van onvoorwaardelijke liefde en emotionele heling:
@@ -393,7 +393,7 @@ export default function GoudenDriehoekPage() {
             {/* DO's */}
             <div className="border-2 border-green-200 bg-green-50 rounded-lg p-6">
               <h3 className="text-lg sm:text-xl font-bold text-green-900 mb-4 font-[family-name:var(--font-eb-garamond)]">
-                ✅ DO's – Wat je WEL moet doen
+                ✅ DO's - Wat je WEL moet doen
               </h3>
               <ul className="space-y-3 text-gray-700 font-[family-name:var(--font-eb-garamond)]">
                 <li className="flex items-start gap-2">
@@ -426,7 +426,7 @@ export default function GoudenDriehoekPage() {
             {/* DON'Ts */}
             <div className="border-2 border-red-200 bg-red-50 rounded-lg p-6">
               <h3 className="text-lg sm:text-xl font-bold text-red-900 mb-4 font-[family-name:var(--font-eb-garamond)]">
-                ❌ DON'Ts – Wat je NIET moet doen
+                ❌ DON'Ts - Wat je NIET moet doen
               </h3>
               <ul className="space-y-3 text-gray-700 font-[family-name:var(--font-eb-garamond)]">
                 <li className="flex items-start gap-2">
@@ -443,7 +443,7 @@ export default function GoudenDriehoekPage() {
                 </li>
                 <li className="flex items-start gap-2">
                   <span className="text-red-600 font-bold">✗</span>
-                  <span>Vergeet NIET te reinigen – stenen absorberen energie</span>
+                  <span>Vergeet NIET te reinigen - stenen absorberen energie</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <span className="text-red-600 font-bold">✗</span>
@@ -504,7 +504,7 @@ export default function GoudenDriehoekPage() {
                 💍 Draag als Sieraad
               </h3>
               <p className="text-base sm:text-lg text-gray-700 font-[family-name:var(--font-eb-garamond)]">
-                Draag Amethist, Rozenkwarts of Bergkristal als <strong>sieraad</strong> (armband, ketting of oorbellen) voor balans onderweg. Je hoeft niet alle drie tegelijk te dragen – kies degene die je op dat moment het meest nodig hebt.
+                Draag Amethist, Rozenkwarts of Bergkristal als <strong>sieraad</strong> (armband, ketting of oorbellen) voor balans onderweg. Je hoeft niet alle drie tegelijk te dragen - kies degene die je op dat moment het meest nodig hebt.
               </p>
             </div>
 
@@ -565,7 +565,7 @@ export default function GoudenDriehoekPage() {
                 Welke kant moet de top van de driehoek op wijzen?
               </h3>
               <p className="text-base sm:text-lg text-gray-700 font-[family-name:var(--font-eb-garamond)]">
-                Traditioneel wordt de <strong>Amethist aan de top</strong> geplaatst (wijzend naar boven/noorden voor spirituele verbinding). Maar vertrouw vooral op je intuïtie – sommigen draaien de driehoek anders voor specifieke intenties.
+                Traditioneel wordt de <strong>Amethist aan de top</strong> geplaatst (wijzend naar boven/noorden voor spirituele verbinding). Maar vertrouw vooral op je intuïtie - sommigen draaien de driehoek anders voor specifieke intenties.
               </p>
             </div>
 
@@ -610,7 +610,7 @@ export default function GoudenDriehoekPage() {
                 Kan ik de stenen in mijn broekzak dragen?
               </h3>
               <p className="text-base sm:text-lg text-gray-700 font-[family-name:var(--font-eb-garamond)]">
-                Ja, je kunt <strong>één of alle drie de stenen</strong> bij je dragen in een zakje. Ze werken ook individueel krachtig. Kies Amethist voor rust, Bergkristal voor helderheid of Rozenkwarts voor liefde – afhankelijk van wat je op dat moment nodig hebt.
+                Ja, je kunt <strong>één of alle drie de stenen</strong> bij je dragen in een zakje. Ze werken ook individueel krachtig. Kies Amethist voor rust, Bergkristal voor helderheid of Rozenkwarts voor liefde - afhankelijk van wat je op dat moment nodig hebt.
               </p>
             </div>
           </div>
@@ -620,13 +620,13 @@ export default function GoudenDriehoekPage() {
             Ervaar de Magie van de Gouden Driehoek
           </h2>
           <p className="text-base sm:text-lg text-gray-700 leading-relaxed mb-6 font-[family-name:var(--font-eb-garamond)]">
-            De <strong>Gouden Driehoek van Amethist, Bergkristal en Rozenkwarts</strong> is een krachtige en toegankelijke manier om liefde, rust en balans in je leven te brengen. Of je de combinatie nu in je woonkamer plaatst, bij meditatie gebruikt of meeneemt naar je slaapkamer – deze drie edelstenen vormen samen een harmonieus energieveld dat je dagelijks ondersteunt.
+            De <strong>Gouden Driehoek van Amethist, Bergkristal en Rozenkwarts</strong> is een krachtige en toegankelijke manier om liefde, rust en balans in je leven te brengen. Of je de combinatie nu in je woonkamer plaatst, bij meditatie gebruikt of meeneemt naar je slaapkamer - deze drie edelstenen vormen samen een harmonieus energieveld dat je dagelijks ondersteunt.
           </p>
           <p className="text-base sm:text-lg text-gray-700 leading-relaxed mb-6 font-[family-name:var(--font-eb-garamond)]">
             De schoonheid van de Gouden Driehoek ligt in zijn <strong>eenvoud en effectiviteit</strong>. Het vereist geen complexe rituelen of uitgebreide kennis. Alles wat je nodig hebt is intentie, de drie kristallen en een open hart.
           </p>
           <p className="text-base sm:text-lg text-gray-700 leading-relaxed font-[family-name:var(--font-eb-garamond)]">
-            Bij <strong>StonesForHealth</strong> vind je hoogwaardige Amethist, Bergkristal en Rozenkwarts – zowel afzonderlijk als in complete sets. Alle stenen zijn 100% authentiek en ethisch gewonnen. Gratis verzending vanaf €50. Creëer vandaag je eigen Gouden Driehoek en ervaar de transformerende kracht!
+            Bij <strong>StonesForHealth</strong> vind je hoogwaardige Amethist, Bergkristal en Rozenkwarts - zowel afzonderlijk als in complete sets. Alle stenen zijn 100% authentiek en ethisch gewonnen. Gratis verzending vanaf €50. Creëer vandaag je eigen Gouden Driehoek en ervaar de transformerende kracht!
           </p>
 
           {/* Related Articles */}
@@ -704,7 +704,7 @@ export default function GoudenDriehoekPage() {
               Over StonesForHealth
             </h3>
             <p className="text-base sm:text-lg text-gray-700 leading-relaxed font-[family-name:var(--font-eb-garamond)]">
-              Bij StonesForHealth geloven we in de kracht van natuurlijke kristallen voor holistisch welzijn. Onze missie is om hoogwaardige, ethisch gewonnen edelstenen toegankelijk te maken voor iedereen – van beginners tot ervaren gebruikers. Alle kristallen in onze collectie zijn 100% authentiek en met liefde geselecteerd om jou te ondersteunen in je reis naar balans en harmonie.
+              Bij StonesForHealth geloven we in de kracht van natuurlijke kristallen voor holistisch welzijn. Onze missie is om hoogwaardige, ethisch gewonnen edelstenen toegankelijk te maken voor iedereen - van beginners tot ervaren gebruikers. Alle kristallen in onze collectie zijn 100% authentiek en met liefde geselecteerd om jou te ondersteunen in je reis naar balans en harmonie.
             </p>
           </div>
         </div>

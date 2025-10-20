@@ -107,12 +107,12 @@ export default function BlogPost() {
               Inhoudsopgave
             </h2>
             <ol className="list-decimal list-inside space-y-2 text-gray-800 font-[family-name:var(--font-eb-garamond)]">
-              <li><a href="#malachiet" className="text-[#8B7355] hover:underline">Malachiet – Steen van Transformatie en Bescherming</a></li>
-              <li><a href="#lavasteen" className="text-[#8B7355] hover:underline">Lavasteen – Kracht uit het Hart van de Aarde</a></li>
-              <li><a href="#onyx" className="text-[#8B7355] hover:underline">Onyx – De Steen van Bescherming en Focus</a></li>
-              <li><a href="#howliet" className="text-[#8B7355] hover:underline">Howliet – Rust, Kalmte en Inzicht</a></li>
-              <li><a href="#sodaliet" className="text-[#8B7355] hover:underline">Sodaliet – Helderheid en Communicatie</a></li>
-              <li><a href="#unakiet" className="text-[#8B7355] hover:underline">Unakiet – Balans tussen Hart en Ziel</a></li>
+              <li><a href="#malachiet" className="text-[#8B7355] hover:underline">Malachiet - Steen van Transformatie en Bescherming</a></li>
+              <li><a href="#lavasteen" className="text-[#8B7355] hover:underline">Lavasteen - Kracht uit het Hart van de Aarde</a></li>
+              <li><a href="#onyx" className="text-[#8B7355] hover:underline">Onyx - De Steen van Bescherming en Focus</a></li>
+              <li><a href="#howliet" className="text-[#8B7355] hover:underline">Howliet - Rust, Kalmte en Inzicht</a></li>
+              <li><a href="#sodaliet" className="text-[#8B7355] hover:underline">Sodaliet - Helderheid en Communicatie</a></li>
+              <li><a href="#unakiet" className="text-[#8B7355] hover:underline">Unakiet - Balans tussen Hart en Ziel</a></li>
               <li><a href="#samenvatting" className="text-[#8B7355] hover:underline">Samenvatting</a></li>
             </ol>
           </section>
@@ -123,7 +123,7 @@ export default function BlogPost() {
             {/* Malachiet */}
             <section id="malachiet">
               <h2 className="text-2xl font-bold text-[#2D2D2D] mb-4 font-[family-name:var(--font-eb-garamond)] border-b border-gray-200 pb-2">
-                Malachiet – Steen van Transformatie en Bescherming
+                Malachiet - Steen van Transformatie en Bescherming
               </h2>
               <p className="text-base leading-relaxed text-gray-800 font-[family-name:var(--font-eb-garamond)] mb-4">
                 <strong>Kleur:</strong> Diepgroen met golvende lijnen<br />
@@ -149,7 +149,7 @@ export default function BlogPost() {
             {/* Lavasteen */}
             <section id="lavasteen">
               <h2 className="text-2xl font-bold text-[#2D2D2D] mb-4 font-[family-name:var(--font-eb-garamond)] border-b border-gray-200 pb-2">
-                Lavasteen – Kracht uit het Hart van de Aarde
+                Lavasteen - Kracht uit het Hart van de Aarde
               </h2>
               <p className="text-base leading-relaxed text-gray-800 font-[family-name:var(--font-eb-garamond)] mb-4">
                 <strong>Kleur:</strong> Zwart of donkergrijs<br />
@@ -175,7 +175,7 @@ export default function BlogPost() {
             {/* Onyx */}
             <section id="onyx">
               <h2 className="text-2xl font-bold text-[#2D2D2D] mb-4 font-[family-name:var(--font-eb-garamond)] border-b border-gray-200 pb-2">
-                Onyx – De Steen van Bescherming en Focus
+                Onyx - De Steen van Bescherming en Focus
               </h2>
               <p className="text-base leading-relaxed text-gray-800 font-[family-name:var(--font-eb-garamond)] mb-4">
                 <strong>Kleur:</strong> Diepzwart met glans<br />
@@ -200,7 +200,7 @@ export default function BlogPost() {
             {/* Howliet */}
             <section id="howliet">
               <h2 className="text-2xl font-bold text-[#2D2D2D] mb-4 font-[family-name:var(--font-eb-garamond)] border-b border-gray-200 pb-2">
-                Howliet – Rust, Kalmte en Inzicht
+                Howliet - Rust, Kalmte en Inzicht
               </h2>
               <p className="text-base leading-relaxed text-gray-800 font-[family-name:var(--font-eb-garamond)] mb-4">
                 <strong>Kleur:</strong> Wit met grijze aders<br />
@@ -225,7 +225,7 @@ export default function BlogPost() {
             {/* Sodaliet */}
             <section id="sodaliet">
               <h2 className="text-2xl font-bold text-[#2D2D2D] mb-4 font-[family-name:var(--font-eb-garamond)] border-b border-gray-200 pb-2">
-                Sodaliet – Helderheid en Communicatie
+                Sodaliet - Helderheid en Communicatie
               </h2>
               <p className="text-base leading-relaxed text-gray-800 font-[family-name:var(--font-eb-garamond)] mb-4">
                 <strong>Kleur:</strong> Diepblauw met witte aders<br />
@@ -250,7 +250,7 @@ export default function BlogPost() {
             {/* Unakiet */}
             <section id="unakiet">
               <h2 className="text-2xl font-bold text-[#2D2D2D] mb-4 font-[family-name:var(--font-eb-garamond)] border-b border-gray-200 pb-2">
-                Unakiet – Balans tussen Hart en Ziel
+                Unakiet - Balans tussen Hart en Ziel
               </h2>
               <p className="text-base leading-relaxed text-gray-800 font-[family-name:var(--font-eb-garamond)] mb-4">
                 <strong>Kleur:</strong> Groen-roze gemengd<br />

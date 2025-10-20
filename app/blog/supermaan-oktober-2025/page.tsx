@@ -23,9 +23,9 @@ export const metadata: Metadata = {
 const blogPostingSchema = {
   "@context": "https://schema.org",
   "@type": "BlogPosting",
-  "headline": "Supermaan 7 Oktober 2025 – Krachtige Maanenergie voor Balans en Vernieuwing",
+  "headline": "Supermaan 7 Oktober 2025 - Krachtige Maanenergie voor Balans en Vernieuwing",
   "description": "Ontdek de krachtige supermaan van 7 oktober 2025 in Ram. Rituelen, edelstenen en spirituele betekenis voor balans, vernieuwing en persoonlijke groei.",
-  "image": "https://stonesforhealth.nl/blog-images/Supermaan 7 Oktober 2025 – Krachtige Maanenergie voor Balans en Vernieuwing.jpeg",
+  "image": "https://stonesforhealth.nl/blog-images/Supermaan 7 Oktober 2025 - Krachtige Maanenergie voor Balans en Vernieuwing.jpeg",
   "datePublished": "2025-10-07T09:00:00Z",
   "dateModified": "2025-10-07T09:00:00Z",
   "author": {
@@ -54,7 +54,7 @@ export default function SupermaanOktober2025Page() {
       <article className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
         {/* Title */}
         <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-6 leading-tight">
-          Supermaan 7 Oktober 2025 – Krachtige Maanenergie voor Balans en Vernieuwing
+          Supermaan 7 Oktober 2025 - Krachtige Maanenergie voor Balans en Vernieuwing
         </h1>
 
         {/* Meta Info */}
@@ -71,7 +71,7 @@ export default function SupermaanOktober2025Page() {
         {/* Featured Image */}
         <div className="relative w-full h-64 sm:h-96 my-8 rounded-xl overflow-hidden bg-gradient-to-br from-gray-50 to-gray-100 border border-gray-200">
           <Image
-            src="/blog-images/Supermaan 7 Oktober 2025 – Krachtige Maanenergie voor Balans en Vernieuwing.jpeg"
+            src="/blog-images/Supermaan 7 Oktober 2025 - Krachtige Maanenergie voor Balans en Vernieuwing.jpeg"
             alt="Supermaan 7 oktober 2025 - Krachtige maanenergie in Ram met edelstenen"
             fill
             className="object-cover"
@@ -82,7 +82,7 @@ export default function SupermaanOktober2025Page() {
         {/* Introduction */}
         <div className="prose prose-lg max-w-none">
           <p className="text-base sm:text-lg text-gray-700 leading-relaxed mb-8 font-[family-name:var(--font-eb-garamond)]">
-            Op <strong>7 oktober 2025</strong> mogen we opnieuw genieten van een betoverende <strong>supermaan</strong>. De maan staat op haar dichtste punt bij de aarde, waardoor ze groter, helderder en energetisch krachtiger lijkt dan gewoonlijk. Deze volle maan valt in het <strong>vuur-teken Ram</strong>, tegenover de zon in Weegschaal – een krachtige combinatie die balans, passie en persoonlijke groei activeert.
+            Op <strong>7 oktober 2025</strong> mogen we opnieuw genieten van een betoverende <strong>supermaan</strong>. De maan staat op haar dichtste punt bij de aarde, waardoor ze groter, helderder en energetisch krachtiger lijkt dan gewoonlijk. Deze volle maan valt in het <strong>vuur-teken Ram</strong>, tegenover de zon in Weegschaal - een krachtige combinatie die balans, passie en persoonlijke groei activeert.
           </p>
 
           <p className="text-base sm:text-lg text-gray-700 leading-relaxed mb-8 font-[family-name:var(--font-eb-garamond)]">
@@ -118,7 +118,7 @@ export default function SupermaanOktober2025Page() {
             </h2>
             <ul className="space-y-2 text-base sm:text-lg font-[family-name:var(--font-eb-garamond)]">
               <li><a href="#wat-is-supermaan" className="text-gray-700 hover:text-gray-900 underline">Wat is een Supermaan?</a></li>
-              <li><a href="#ram-energie" className="text-gray-700 hover:text-gray-900 underline">Supermaan in Ram – Het Vuur in Jou Ontwaakt</a></li>
+              <li><a href="#ram-energie" className="text-gray-700 hover:text-gray-900 underline">Supermaan in Ram - Het Vuur in Jou Ontwaakt</a></li>
               <li><a href="#edelstenen" className="text-gray-700 hover:text-gray-900 underline">Edelstenen en Kristallen voor de Supermaan</a></li>
               <li><a href="#rituelen" className="text-gray-700 hover:text-gray-900 underline">Rituelen voor de Supermaan van 7 Oktober</a></li>
               <li><a href="#spirituele-betekenis" className="text-gray-700 hover:text-gray-900 underline">Spirituele Betekenis</a></li>
@@ -132,20 +132,20 @@ export default function SupermaanOktober2025Page() {
           </h2>
 
           <p className="text-base sm:text-lg text-gray-700 leading-relaxed mb-6 font-[family-name:var(--font-eb-garamond)]">
-            Een <strong>supermaan</strong> ontstaat wanneer de volle maan samenvalt met het <strong>perigeum</strong> – het moment waarop de maan het dichtst bij de aarde staat. Hierdoor lijkt ze tot wel <strong>14% groter</strong> en <strong>30% helderder</strong> aan de hemel.
+            Een <strong>supermaan</strong> ontstaat wanneer de volle maan samenvalt met het <strong>perigeum</strong> - het moment waarop de maan het dichtst bij de aarde staat. Hierdoor lijkt ze tot wel <strong>14% groter</strong> en <strong>30% helderder</strong> aan de hemel.
           </p>
 
           <p className="text-base sm:text-lg text-gray-700 leading-relaxed mb-6 font-[family-name:var(--font-eb-garamond)]">
-            Hoewel dit een astronomisch fenomeen is, voelt de energie vaak intenser. Veel mensen ervaren tijdens een supermaan meer emoties, levendige dromen, inzichten of onrust. Dit komt omdat de maan het water op aarde beïnvloedt – en ook ons lichaam bestaat grotendeels uit water. De maan weerspiegelt dus letterlijk en figuurlijk onze innerlijke stroming.
+            Hoewel dit een astronomisch fenomeen is, voelt de energie vaak intenser. Veel mensen ervaren tijdens een supermaan meer emoties, levendige dromen, inzichten of onrust. Dit komt omdat de maan het water op aarde beïnvloedt - en ook ons lichaam bestaat grotendeels uit water. De maan weerspiegelt dus letterlijk en figuurlijk onze innerlijke stroming.
           </p>
 
           {/* Ram Energie */}
           <h2 id="ram-energie" className="text-xl sm:text-2xl font-bold text-gray-900 mt-16 mb-6 font-[family-name:var(--font-eb-garamond)] scroll-mt-24">
-            Supermaan in Ram – Het Vuur in Jou Ontwaakt
+            Supermaan in Ram - Het Vuur in Jou Ontwaakt
           </h2>
 
           <p className="text-base sm:text-lg text-gray-700 leading-relaxed mb-6 font-[family-name:var(--font-eb-garamond)]">
-            De volle supermaan in <strong>Ram</strong> brengt vurige, vernieuwende energie. Ram symboliseert actie, moed, initiatief en zelfvertrouwen. Toch staat deze maan tegenover de zon in <strong>Weegschaal</strong> – het teken van balans, harmonie en relaties.
+            De volle supermaan in <strong>Ram</strong> brengt vurige, vernieuwende energie. Ram symboliseert actie, moed, initiatief en zelfvertrouwen. Toch staat deze maan tegenover de zon in <strong>Weegschaal</strong> - het teken van balans, harmonie en relaties.
           </p>
 
           <p className="text-base sm:text-lg text-gray-700 leading-relaxed mb-8 font-[family-name:var(--font-eb-garamond)]">
@@ -199,7 +199,7 @@ export default function SupermaanOktober2025Page() {
               <strong>Energie:</strong> Stimuleert daadkracht en motivatie
             </p>
             <p className="text-base sm:text-lg text-gray-700 leading-relaxed mb-4 font-[family-name:var(--font-eb-garamond)]">
-              <strong>Carneool</strong> is de steen van actie en moed – perfect voor de vurige Ram energie. Deze oranje-rode steen activeert je sacrale chakra en helpt je om je doelen met passie na te jagen.
+              <strong>Carneool</strong> is de steen van actie en moed - perfect voor de vurige Ram energie. Deze oranje-rode steen activeert je sacrale chakra en helpt je om je doelen met passie na te jagen.
             </p>
             <p className="text-base sm:text-lg text-gray-700 font-[family-name:var(--font-eb-garamond)]">
               <strong>Gebruik:</strong> Draag als armband of mediteer ermee voor actie en motivatie.
@@ -215,7 +215,7 @@ export default function SupermaanOktober2025Page() {
               <strong>Energie:</strong> Herstelt harmonie tussen hart en hoofd
             </p>
             <p className="text-base sm:text-lg text-gray-700 leading-relaxed mb-4 font-[family-name:var(--font-eb-garamond)]">
-              <strong>Rozenkwarts</strong> brengt de zachte Weegschaal energie – liefde, compassie en emotionele balans. Deze steen helpt je om de vurige Ram energie te temperen met zelfliefde en acceptatie. Ontdek meer in ons artikel over <Link href="/blog/rozenkwarts-steen-van-de-liefde" className="text-[#492c4a] hover:underline">Rozenkwarts als steen van de liefde</Link>.
+              <strong>Rozenkwarts</strong> brengt de zachte Weegschaal energie - liefde, compassie en emotionele balans. Deze steen helpt je om de vurige Ram energie te temperen met zelfliefde en acceptatie. Ontdek meer in ons artikel over <Link href="/blog/rozenkwarts-steen-van-de-liefde" className="text-[#492c4a] hover:underline">Rozenkwarts als steen van de liefde</Link>.
             </p>
             <p className="text-base sm:text-lg text-gray-700 font-[family-name:var(--font-eb-garamond)]">
               <strong>Gebruik:</strong> Plaats op je hartchakra tijdens meditatie.
@@ -266,7 +266,7 @@ export default function SupermaanOktober2025Page() {
           {/* Ritueel 1 */}
           <div className="border border-gray-200 rounded-lg p-6 md:p-8 mb-6">
             <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-4 font-[family-name:var(--font-eb-garamond)]">
-              1. Loslaten – Schrijf en Verbrand
+              1. Loslaten - Schrijf en Verbrand
             </h3>
             <p className="text-base sm:text-lg text-gray-700 leading-relaxed mb-4 font-[family-name:var(--font-eb-garamond)]">
               Schrijf op wat je wilt loslaten en verbrand het symbolisch onder het maanlicht. Laat de rook je oude energie meenemen en maak ruimte voor het nieuwe.

@@ -156,7 +156,7 @@ export default function JaarVanDeHoutenSlang2025Page() {
           </h2>
 
           <p className="text-base sm:text-lg text-gray-700 leading-relaxed mb-6 font-[family-name:var(--font-eb-garamond)]">
-            Het element <strong>Hout</strong> brengt een extra dimensie aan dit Slangenjaar. Hout staat voor groei, vernieuwing, creativiteit en ontwikkeling – vergelijkbaar met de energie van de lente wanneer alles tot leven komt.
+            Het element <strong>Hout</strong> brengt een extra dimensie aan dit Slangenjaar. Hout staat voor groei, vernieuwing, creativiteit en ontwikkeling - vergelijkbaar met de energie van de lente wanneer alles tot leven komt.
           </p>
 
           <div className="grid md:grid-cols-2 gap-6 mb-8">
@@ -189,7 +189,7 @@ export default function JaarVanDeHoutenSlang2025Page() {
 
           <div className="bg-gray-50 border-l-4 border-gray-900 p-6 my-8 rounded">
             <p className="text-base sm:text-lg text-gray-700 leading-relaxed font-[family-name:var(--font-eb-garamond)]">
-              <strong>Het Jaar van de Houten Slang</strong> nodigt ons uit om oude huiden af te werpen, spirituele inzichten om te zetten in creatieve stappen en ons innerlijk weten meer te vertrouwen. Dit is een tijd van <strong>zachte transformatie</strong> – niet dramatisch of plotseling, maar geleidelijk en diepgaand.
+              <strong>Het Jaar van de Houten Slang</strong> nodigt ons uit om oude huiden af te werpen, spirituele inzichten om te zetten in creatieve stappen en ons innerlijk weten meer te vertrouwen. Dit is een tijd van <strong>zachte transformatie</strong> - niet dramatisch of plotseling, maar geleidelijk en diepgaand.
             </p>
           </div>
 
@@ -215,7 +215,7 @@ export default function JaarVanDeHoutenSlang2025Page() {
             </ul>
             <div className="bg-gray-50 border-l-4 border-gray-300 p-4 rounded mt-4">
               <p className="text-sm text-gray-700 font-[family-name:var(--font-eb-garamond)]">
-                <strong>Let op:</strong> De Slang neigt naar perfectionisme en kan te lang wachten op het "perfecte moment". Vermijd analyse-verlamming – soms is actie belangrijker dan perfectie.
+                <strong>Let op:</strong> De Slang neigt naar perfectionisme en kan te lang wachten op het "perfecte moment". Vermijd analyse-verlamming - soms is actie belangrijker dan perfectie.
               </p>
             </div>
           </div>
@@ -232,7 +232,7 @@ export default function JaarVanDeHoutenSlang2025Page() {
               <li>Onuitgesproken gevoelens en waarheidsmomentjes komen aan het licht</li>
               <li>Diepere emotionele verbindingen worden mogelijk</li>
               <li>Communicatie over gevoelens wordt belangrijker</li>
-              <li>Transformatie in bestaande relaties – ten goede of ten kwade</li>
+              <li>Transformatie in bestaande relaties - ten goede of ten kwade</li>
               <li>Singles: Magnetische aantrekkingskracht, maar wees selectief</li>
             </ul>
             <div className="bg-gray-50 border-l-4 border-gray-300 p-4 rounded mt-4">
@@ -297,7 +297,7 @@ export default function JaarVanDeHoutenSlang2025Page() {
           {/* Obsidiaan */}
           <div className="border border-gray-200 rounded-lg p-6 md:p-8 mb-6">
             <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-4 font-[family-name:var(--font-eb-garamond)]">
-              1. Obsidiaan – Bescherming & Waarheid
+              1. Obsidiaan - Bescherming & Waarheid
             </h3>
             <p className="text-base sm:text-lg text-gray-700 leading-relaxed mb-4 font-[family-name:var(--font-eb-garamond)]">
               <strong>Obsidiaan</strong> is een krachtige beschermingssteen die je helpt de waarheid te zien, ook als die oncomfortabel is. Perfect voor het Slangenjaar omdat het:
@@ -317,7 +317,7 @@ export default function JaarVanDeHoutenSlang2025Page() {
           {/* Amethist */}
           <div className="border border-gray-200 rounded-lg p-6 md:p-8 mb-6">
             <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-4 font-[family-name:var(--font-eb-garamond)]">
-              2. Amethist – Intuïtie & Spiritueel Inzicht
+              2. Amethist - Intuïtie & Spiritueel Inzicht
             </h3>
             <p className="text-base sm:text-lg text-gray-700 leading-relaxed mb-4 font-[family-name:var(--font-eb-garamond)]">
               <strong>Amethist</strong> is dé steen van spiritualiteit en intuïtie. In 2025 ondersteunt het:
@@ -338,7 +338,7 @@ export default function JaarVanDeHoutenSlang2025Page() {
           {/* Malachiet */}
           <div className="border border-gray-200 rounded-lg p-6 md:p-8 mb-6">
             <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-4 font-[family-name:var(--font-eb-garamond)]">
-              3. Malachiet – Diepe Transformatie
+              3. Malachiet - Diepe Transformatie
             </h3>
             <p className="text-base sm:text-lg text-gray-700 leading-relaxed mb-4 font-[family-name:var(--font-eb-garamond)]">
               <strong>Malachiet</strong> is een krachtige transformatiesteen die oude patronen doorbreekt:
@@ -358,7 +358,7 @@ export default function JaarVanDeHoutenSlang2025Page() {
           {/* Rookkwarts */}
           <div className="border border-gray-200 rounded-lg p-6 md:p-8 mb-6">
             <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-4 font-[family-name:var(--font-eb-garamond)]">
-              4. Rookkwarts – Aarding & Loslaten
+              4. Rookkwarts - Aarding & Loslaten
             </h3>
             <p className="text-base sm:text-lg text-gray-700 leading-relaxed mb-4 font-[family-name:var(--font-eb-garamond)]">
               <strong>Rookkwarts</strong> zorgt voor grounding tijdens spirituele transformatie:
@@ -378,7 +378,7 @@ export default function JaarVanDeHoutenSlang2025Page() {
           {/* Labradoriet */}
           <div className="border border-gray-200 rounded-lg p-6 md:p-8 mb-6">
             <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-4 font-[family-name:var(--font-eb-garamond)]">
-              5. Labradoriet – Bescherming & Intuïtie
+              5. Labradoriet - Bescherming & Intuïtie
             </h3>
             <p className="text-base sm:text-lg text-gray-700 leading-relaxed mb-4 font-[family-name:var(--font-eb-garamond)]">
               <strong>Labradoriet</strong> is de mystieke steen bij uitstek voor het Slangenjaar:
@@ -398,7 +398,7 @@ export default function JaarVanDeHoutenSlang2025Page() {
           {/* Jade */}
           <div className="border border-gray-200 rounded-lg p-6 md:p-8 mb-6">
             <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-4 font-[family-name:var(--font-eb-garamond)]">
-              6. Jade – Balans & Harmonie
+              6. Jade - Balans & Harmonie
             </h3>
             <p className="text-base sm:text-lg text-gray-700 leading-relaxed mb-4 font-[family-name:var(--font-eb-garamond)]">
               <strong>Jade</strong> is een traditionele Chinese gelukssteen die past bij het Hout-element:
@@ -453,7 +453,7 @@ export default function JaarVanDeHoutenSlang2025Page() {
                 2. Doe aan Introspectie
               </h3>
               <p className="text-base sm:text-lg text-gray-700 font-[family-name:var(--font-eb-garamond)]">
-                Journaling, meditatie en droomwerk zijn krachtige tools in 2025. Schrijf dagelijks je gedachten en dromen op – de Slang communiceert vaak via symboliek en dromen.
+                Journaling, meditatie en droomwerk zijn krachtige tools in 2025. Schrijf dagelijks je gedachten en dromen op - de Slang communiceert vaak via symboliek en dromen.
               </p>
             </div>
 
@@ -462,7 +462,7 @@ export default function JaarVanDeHoutenSlang2025Page() {
                 3. Durf Oude Huiden af te Werpen
               </h3>
               <p className="text-base sm:text-lg text-gray-700 font-[family-name:var(--font-eb-garamond)]">
-                Laat los wat niet meer bij je past – oude overtuigingen, relaties, banen of gewoontes. Gebruik Malachiet of Obsidiaan om dit transformatieproces te ondersteunen.
+                Laat los wat niet meer bij je past - oude overtuigingen, relaties, banen of gewoontes. Gebruik Malachiet of Obsidiaan om dit transformatieproces te ondersteunen.
               </p>
             </div>
 
@@ -480,7 +480,7 @@ export default function JaarVanDeHoutenSlang2025Page() {
                 5. Werk met Edelstenen en Rituelen
               </h3>
               <p className="text-base sm:text-lg text-gray-700 font-[family-name:var(--font-eb-garamond)]">
-                Creëer een dagelijkse praktijk met edelstenen – meditatie met Amethist, bescherming met Obsidiaan, of manifestatie met Jade. Consistentie versterkt de transformatie.
+                Creëer een dagelijkse praktijk met edelstenen - meditatie met Amethist, bescherming met Obsidiaan, of manifestatie met Jade. Consistentie versterkt de transformatie.
               </p>
             </div>
 
@@ -526,7 +526,7 @@ export default function JaarVanDeHoutenSlang2025Page() {
             <ul className="space-y-2 pl-5 list-disc text-gray-700 font-[family-name:var(--font-eb-garamond)]">
               <li>Mediteer 20 minuten met Amethist of Labradoriet op je derde oog</li>
               <li>Stel een vraag aan je hogere zelf en schrijf het eerste wat opkomt</li>
-              <li>Observeer je dromen die nacht – noteer ze meteen bij ontwaken</li>
+              <li>Observeer je dromen die nacht - noteer ze meteen bij ontwaken</li>
               <li>Reflecteer na een week op de inzichten die je ontving</li>
             </ul>
           </div>
@@ -603,7 +603,7 @@ export default function JaarVanDeHoutenSlang2025Page() {
             Met de juiste mindset, edelstenen en rituelen kan dit een jaar worden van <strong>spirituele doorbraak en innerlijke rijkdom</strong>. Vertrouw op je intuïtie, omarm het mysterie en laat transformatie zijn werk doen.
           </p>
           <p className="text-base sm:text-lg text-gray-700 leading-relaxed font-[family-name:var(--font-eb-garamond)]">
-            Bij <strong>StonesForHealth</strong> vind je alle edelstenen die je nodig hebt om de energie van de Houten Slang te omarmen – van Obsidiaan voor waarheid tot Amethist voor intuïtie. Elke steen wordt ethisch gewonnen en met zorg geselecteerd. Gratis verzending vanaf €50. Maak 2025 jouw jaar van wijsheid en transformatie!
+            Bij <strong>StonesForHealth</strong> vind je alle edelstenen die je nodig hebt om de energie van de Houten Slang te omarmen - van Obsidiaan voor waarheid tot Amethist voor intuïtie. Elke steen wordt ethisch gewonnen en met zorg geselecteerd. Gratis verzending vanaf €50. Maak 2025 jouw jaar van wijsheid en transformatie!
           </p>
 
           {/* Related Articles */}

@@ -149,7 +149,7 @@ export default function EdelstenenSterrenbeeldPage() {
           {/* Ram */}
           <div className="border border-gray-200 rounded-lg p-6 md:p-8 mb-6">
             <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-2 font-[family-name:var(--font-eb-garamond)]">
-              ♈ Ram (21 maart – 19 april)
+              ♈ Ram (21 maart - 19 april)
             </h3>
             <p className="text-base sm:text-lg text-gray-600 mb-4 font-[family-name:var(--font-eb-garamond)]">
               <strong>Eigenschappen:</strong> Moed, actie, leiderschap, passie
@@ -170,7 +170,7 @@ export default function EdelstenenSterrenbeeldPage() {
           {/* Stier */}
           <div className="border border-gray-200 rounded-lg p-6 md:p-8 mb-6">
             <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-2 font-[family-name:var(--font-eb-garamond)]">
-              ♉ Stier (20 april – 20 mei)
+              ♉ Stier (20 april - 20 mei)
             </h3>
             <p className="text-base sm:text-lg text-gray-600 mb-4 font-[family-name:var(--font-eb-garamond)]">
               <strong>Eigenschappen:</strong> Stabiliteit, genieten, volharding, betrouwbaarheid
@@ -191,7 +191,7 @@ export default function EdelstenenSterrenbeeldPage() {
           {/* Tweelingen */}
           <div className="border border-gray-200 rounded-lg p-6 md:p-8 mb-6">
             <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-2 font-[family-name:var(--font-eb-garamond)]">
-              ♊ Tweelingen (21 mei – 20 juni)
+              ♊ Tweelingen (21 mei - 20 juni)
             </h3>
             <p className="text-base sm:text-lg text-gray-600 mb-4 font-[family-name:var(--font-eb-garamond)]">
               <strong>Eigenschappen:</strong> Communicatie, nieuwsgierigheid, flexibiliteit, intelligentie
@@ -212,7 +212,7 @@ export default function EdelstenenSterrenbeeldPage() {
           {/* Kreeft */}
           <div className="border border-gray-200 rounded-lg p-6 md:p-8 mb-6">
             <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-2 font-[family-name:var(--font-eb-garamond)]">
-              ♋ Kreeft (21 juni – 22 juli)
+              ♋ Kreeft (21 juni - 22 juli)
             </h3>
             <p className="text-base sm:text-lg text-gray-600 mb-4 font-[family-name:var(--font-eb-garamond)]">
               <strong>Eigenschappen:</strong> Gevoel, bescherming, zorgzaamheid, intuïtie
@@ -233,7 +233,7 @@ export default function EdelstenenSterrenbeeldPage() {
           {/* Leeuw */}
           <div className="border border-gray-200 rounded-lg p-6 md:p-8 mb-6">
             <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-2 font-[family-name:var(--font-eb-garamond)]">
-              ♌ Leeuw (23 juli – 22 augustus)
+              ♌ Leeuw (23 juli - 22 augustus)
             </h3>
             <p className="text-base sm:text-lg text-gray-600 mb-4 font-[family-name:var(--font-eb-garamond)]">
               <strong>Eigenschappen:</strong> Zelfvertrouwen, warmte, charisma, creativiteit
@@ -254,7 +254,7 @@ export default function EdelstenenSterrenbeeldPage() {
           {/* Maagd */}
           <div className="border border-gray-200 rounded-lg p-6 md:p-8 mb-6">
             <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-2 font-[family-name:var(--font-eb-garamond)]">
-              ♍ Maagd (23 augustus – 22 september)
+              ♍ Maagd (23 augustus - 22 september)
             </h3>
             <p className="text-base sm:text-lg text-gray-600 mb-4 font-[family-name:var(--font-eb-garamond)]">
               <strong>Eigenschappen:</strong> Analyse, dienstbaarheid, zuiverheid, perfectie
@@ -275,7 +275,7 @@ export default function EdelstenenSterrenbeeldPage() {
           {/* Weegschaal */}
           <div className="border border-gray-200 rounded-lg p-6 md:p-8 mb-6">
             <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-2 font-[family-name:var(--font-eb-garamond)]">
-              ♎ Weegschaal (23 september – 22 oktober)
+              ♎ Weegschaal (23 september - 22 oktober)
             </h3>
             <p className="text-base sm:text-lg text-gray-600 mb-4 font-[family-name:var(--font-eb-garamond)]">
               <strong>Eigenschappen:</strong> Balans, liefde, schoonheid, harmonie
@@ -296,7 +296,7 @@ export default function EdelstenenSterrenbeeldPage() {
           {/* Schorpioen */}
           <div className="border border-gray-200 rounded-lg p-6 md:p-8 mb-6">
             <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-2 font-[family-name:var(--font-eb-garamond)]">
-              ♏ Schorpioen (23 oktober – 21 november)
+              ♏ Schorpioen (23 oktober - 21 november)
             </h3>
             <p className="text-base sm:text-lg text-gray-600 mb-4 font-[family-name:var(--font-eb-garamond)]">
               <strong>Eigenschappen:</strong> Transformatie, intensiteit, mystiek, passie
@@ -317,7 +317,7 @@ export default function EdelstenenSterrenbeeldPage() {
           {/* Boogschutter */}
           <div className="border border-gray-200 rounded-lg p-6 md:p-8 mb-6">
             <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-2 font-[family-name:var(--font-eb-garamond)]">
-              ♐ Boogschutter (22 november – 21 december)
+              ♐ Boogschutter (22 november - 21 december)
             </h3>
             <p className="text-base sm:text-lg text-gray-600 mb-4 font-[family-name:var(--font-eb-garamond)]">
               <strong>Eigenschappen:</strong> Vrijheid, optimisme, wijsheid, avontuur
@@ -338,7 +338,7 @@ export default function EdelstenenSterrenbeeldPage() {
           {/* Steenbok */}
           <div className="border border-gray-200 rounded-lg p-6 md:p-8 mb-6">
             <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-2 font-[family-name:var(--font-eb-garamond)]">
-              ♑ Steenbok (22 december – 19 januari)
+              ♑ Steenbok (22 december - 19 januari)
             </h3>
             <p className="text-base sm:text-lg text-gray-600 mb-4 font-[family-name:var(--font-eb-garamond)]">
               <strong>Eigenschappen:</strong> Discipline, ambitie, structuur, doorzettingsvermogen
@@ -359,7 +359,7 @@ export default function EdelstenenSterrenbeeldPage() {
           {/* Waterman */}
           <div className="border border-gray-200 rounded-lg p-6 md:p-8 mb-6">
             <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-2 font-[family-name:var(--font-eb-garamond)]">
-              ♒ Waterman (20 januari – 18 februari)
+              ♒ Waterman (20 januari - 18 februari)
             </h3>
             <p className="text-base sm:text-lg text-gray-600 mb-4 font-[family-name:var(--font-eb-garamond)]">
               <strong>Eigenschappen:</strong> Onafhankelijkheid, originaliteit, idealisme, innovatie
@@ -380,7 +380,7 @@ export default function EdelstenenSterrenbeeldPage() {
           {/* Vissen */}
           <div className="border border-gray-200 rounded-lg p-6 md:p-8 mb-6">
             <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-2 font-[family-name:var(--font-eb-garamond)]">
-              ♓ Vissen (19 februari – 20 maart)
+              ♓ Vissen (19 februari - 20 maart)
             </h3>
             <p className="text-base sm:text-lg text-gray-600 mb-4 font-[family-name:var(--font-eb-garamond)]">
               <strong>Eigenschappen:</strong> Empathie, spiritualiteit, dromen, creativiteit
@@ -586,7 +586,7 @@ export default function EdelstenenSterrenbeeldPage() {
           <div className="space-y-6 mb-12">
             <div className="border-l-4 border-gray-900 pl-6">
               <h3 className="text-xl font-bold text-gray-900 mb-2 font-[family-name:var(--font-eb-garamond)]">
-                Getal 1 – Leider, Initiatiefnemer
+                Getal 1 - Leider, Initiatiefnemer
               </h3>
               <p className="text-base sm:text-lg text-gray-700 mb-2 font-[family-name:var(--font-eb-garamond)]">
                 Onafhankelijk, ambitieus, pionier
@@ -598,7 +598,7 @@ export default function EdelstenenSterrenbeeldPage() {
 
             <div className="border-l-4 border-gray-900 pl-6">
               <h3 className="text-xl font-bold text-gray-900 mb-2 font-[family-name:var(--font-eb-garamond)]">
-                Getal 2 – Harmonie, Gevoeligheid
+                Getal 2 - Harmonie, Gevoeligheid
               </h3>
               <p className="text-base sm:text-lg text-gray-700 mb-2 font-[family-name:var(--font-eb-garamond)]">
                 Diplomatiek, intuïtief, samenwerkend
@@ -610,7 +610,7 @@ export default function EdelstenenSterrenbeeldPage() {
 
             <div className="border-l-4 border-gray-900 pl-6">
               <h3 className="text-xl font-bold text-gray-900 mb-2 font-[family-name:var(--font-eb-garamond)]">
-                Getal 3 – Creativiteit, Communicatie
+                Getal 3 - Creativiteit, Communicatie
               </h3>
               <p className="text-base sm:text-lg text-gray-700 mb-2 font-[family-name:var(--font-eb-garamond)]">
                 Expressief, optimistisch, sociaal
@@ -622,7 +622,7 @@ export default function EdelstenenSterrenbeeldPage() {
 
             <div className="border-l-4 border-gray-900 pl-6">
               <h3 className="text-xl font-bold text-gray-900 mb-2 font-[family-name:var(--font-eb-garamond)]">
-                Getal 4 – Stabiliteit, Structuur
+                Getal 4 - Stabiliteit, Structuur
               </h3>
               <p className="text-base sm:text-lg text-gray-700 mb-2 font-[family-name:var(--font-eb-garamond)]">
                 Praktisch, betrouwbaar, hard werkend
@@ -634,7 +634,7 @@ export default function EdelstenenSterrenbeeldPage() {
 
             <div className="border-l-4 border-gray-900 pl-6">
               <h3 className="text-xl font-bold text-gray-900 mb-2 font-[family-name:var(--font-eb-garamond)]">
-                Getal 5 – Vrijheid, Avontuur
+                Getal 5 - Vrijheid, Avontuur
               </h3>
               <p className="text-base sm:text-lg text-gray-700 mb-2 font-[family-name:var(--font-eb-garamond)]">
                 Veranderlijk, nieuwsgierig, vrijheidslievend
@@ -646,7 +646,7 @@ export default function EdelstenenSterrenbeeldPage() {
 
             <div className="border-l-4 border-gray-900 pl-6">
               <h3 className="text-xl font-bold text-gray-900 mb-2 font-[family-name:var(--font-eb-garamond)]">
-                Getal 6 – Liefde, Zorgzaamheid
+                Getal 6 - Liefde, Zorgzaamheid
               </h3>
               <p className="text-base sm:text-lg text-gray-700 mb-2 font-[family-name:var(--font-eb-garamond)]">
                 Verantwoordelijk, zorgzaam, harmonieus
@@ -658,7 +658,7 @@ export default function EdelstenenSterrenbeeldPage() {
 
             <div className="border-l-4 border-gray-900 pl-6">
               <h3 className="text-xl font-bold text-gray-900 mb-2 font-[family-name:var(--font-eb-garamond)]">
-                Getal 7 – Spiritualiteit, Wijsheid
+                Getal 7 - Spiritualiteit, Wijsheid
               </h3>
               <p className="text-base sm:text-lg text-gray-700 mb-2 font-[family-name:var(--font-eb-garamond)]">
                 Analytisch, spiritueel, introspectief
@@ -670,7 +670,7 @@ export default function EdelstenenSterrenbeeldPage() {
 
             <div className="border-l-4 border-gray-900 pl-6">
               <h3 className="text-xl font-bold text-gray-900 mb-2 font-[family-name:var(--font-eb-garamond)]">
-                Getal 8 – Kracht, Materieel Succes
+                Getal 8 - Kracht, Materieel Succes
               </h3>
               <p className="text-base sm:text-lg text-gray-700 mb-2 font-[family-name:var(--font-eb-garamond)]">
                 Ambitieus, krachtig, zakelijk
@@ -682,7 +682,7 @@ export default function EdelstenenSterrenbeeldPage() {
 
             <div className="border-l-4 border-gray-900 pl-6">
               <h3 className="text-xl font-bold text-gray-900 mb-2 font-[family-name:var(--font-eb-garamond)]">
-                Getal 9 – Universele Liefde, Idealisme
+                Getal 9 - Universele Liefde, Idealisme
               </h3>
               <p className="text-base sm:text-lg text-gray-700 mb-2 font-[family-name:var(--font-eb-garamond)]">
                 Humanitair, compassievol, wijs
@@ -694,7 +694,7 @@ export default function EdelstenenSterrenbeeldPage() {
 
             <div className="border-l-4 border-gray-900 pl-6 bg-gray-50 rounded">
               <h3 className="text-xl font-bold text-gray-900 mb-2 font-[family-name:var(--font-eb-garamond)]">
-                Getal 11 – Intuïtie, Verlichting (Meestergetal)
+                Getal 11 - Intuïtie, Verlichting (Meestergetal)
               </h3>
               <p className="text-base sm:text-lg text-gray-700 mb-2 font-[family-name:var(--font-eb-garamond)]">
                 Spiritueel, intuïtief, inspirerend
@@ -706,7 +706,7 @@ export default function EdelstenenSterrenbeeldPage() {
 
             <div className="border-l-4 border-gray-900 pl-6 bg-gray-50 rounded">
               <h3 className="text-xl font-bold text-gray-900 mb-2 font-[family-name:var(--font-eb-garamond)]">
-                Getal 22 – Meesterbouwer, Visie (Meestergetal)
+                Getal 22 - Meesterbouwer, Visie (Meestergetal)
               </h3>
               <p className="text-base sm:text-lg text-gray-700 mb-2 font-[family-name:var(--font-eb-garamond)]">
                 Praktisch, visionair, manifestator
@@ -718,7 +718,7 @@ export default function EdelstenenSterrenbeeldPage() {
 
             <div className="border-l-4 border-gray-900 pl-6 bg-gray-50 rounded">
               <h3 className="text-xl font-bold text-gray-900 mb-2 font-[family-name:var(--font-eb-garamond)]">
-                Getal 33 – Universele Leraar, Compassie (Meestergetal)
+                Getal 33 - Universele Leraar, Compassie (Meestergetal)
               </h3>
               <p className="text-base sm:text-lg text-gray-700 mb-2 font-[family-name:var(--font-eb-garamond)]">
                 Zelfopofferend, dienend, liefdevol

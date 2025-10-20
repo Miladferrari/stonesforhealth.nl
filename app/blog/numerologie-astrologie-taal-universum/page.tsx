@@ -4,7 +4,7 @@ import Image from 'next/image';
 import Breadcrumbs from '@/app/components/Breadcrumbs';
 
 export const metadata: Metadata = {
-  title: 'Numerologie & Astrologie – De Taal van het Universum | StonesForHealth',
+  title: 'Numerologie & Astrologie - De Taal van het Universum | StonesForHealth',
   description: 'Ontdek hoe numerologie en astrologie samen je levensdoel onthullen. Van Pythagoras tot Vedische wijsheid - leer de taal van het universum en jouw zielsmissie.',
   keywords: [
     'numerologie',
@@ -21,7 +21,7 @@ export const metadata: Metadata = {
     'edelstenen numerologie',
   ],
   openGraph: {
-    title: 'Numerologie & Astrologie – De Taal van het Universum | StonesForHealth',
+    title: 'Numerologie & Astrologie - De Taal van het Universum | StonesForHealth',
     description: 'Ontdek hoe numerologie en astrologie samen je levensdoel onthullen. Van Pythagoras tot Vedische wijsheid - leer de taal van het universum en jouw zielsmissie.',
     type: 'article',
     publishedTime: '2025-10-20',
@@ -35,7 +35,7 @@ export default function NumerologieAstrologie() {
   const blogPostingSchema = {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
-    "headline": "Numerologie & Astrologie – De Taal van het Universum",
+    "headline": "Numerologie & Astrologie - De Taal van het Universum",
     "description": "Ontdek hoe numerologie en astrologie samen je levensdoel onthullen. Een complete gids over verschillende systemen en hun samenhang met edelstenen.",
     "image": "https://stonesforhealth.nl/logo.webp",
     "datePublished": "2025-10-20T09:00:00Z",
@@ -72,7 +72,7 @@ export default function NumerologieAstrologie() {
 
         <header className="mb-8 pb-6 border-b border-gray-200">
           <h1 className="text-4xl md:text-5xl font-bold text-[#2D2D2D] mb-4 font-[family-name:var(--font-eb-garamond)]">
-            Numerologie & Astrologie – De Taal van het Universum
+            Numerologie & Astrologie - De Taal van het Universum
           </h1>
           <div className="flex items-center gap-4 text-sm text-gray-500">
             <time dateTime="2025-10-20">20 oktober 2025</time>
@@ -84,8 +84,8 @@ export default function NumerologieAstrologie() {
         {/* Blog Image */}
         <div className="relative w-full h-64 sm:h-96 mb-8 rounded-lg overflow-hidden">
           <Image
-            src="/blog-images/Numerologie & Astrologie – De Taal van het Universum.jpeg"
-            alt="Numerologie & Astrologie – De Taal van het Universum"
+            src="/blog-images/Numerologie & Astrologie - De Taal van het Universum.jpeg"
+            alt="Numerologie & Astrologie - De Taal van het Universum"
             fill
             className="object-cover"
             priority
@@ -427,12 +427,12 @@ export default function NumerologieAstrologie() {
           <ul className="list-disc list-inside space-y-2 text-gray-800 font-[family-name:var(--font-eb-garamond)]">
             <li>
               <Link href="/blog/edelstenen-per-levenspad-spirituele-gidssteen" className="text-[#8B7355] hover:underline">
-                Edelstenen per Levenspad – Ontdek Jouw Spirituele Gidssteen
+                Edelstenen per Levenspad - Ontdek Jouw Spirituele Gidssteen
               </Link>
             </li>
             <li>
               <Link href="/blog/edelstenen-chinees-sterrenbeeld-gelukssteen" className="text-[#8B7355] hover:underline">
-                Edelstenen per Chinees Sterrenbeeld – Ontdek Jouw Gelukssteen
+                Edelstenen per Chinees Sterrenbeeld - Ontdek Jouw Gelukssteen
               </Link>
             </li>
             <li>

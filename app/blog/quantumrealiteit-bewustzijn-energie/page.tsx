@@ -4,7 +4,7 @@ import Image from 'next/image';
 import Breadcrumbs from '@/app/components/Breadcrumbs';
 
 export const metadata: Metadata = {
-  title: 'De Quantumrealiteit – Hoe Bewustzijn en Energie Jouw Wereld Vormgeven | StonesForHealth',
+  title: 'De Quantumrealiteit - Hoe Bewustzijn en Energie Jouw Wereld Vormgeven | StonesForHealth',
   description: 'Ontdek hoe quantumfysica en spiritualiteit samenkomen. Leer over het waarnemerseffect, trillingen, manifestatie en hoe bewustzijn werkelijkheid creëert.',
   keywords: [
     'quantumfysica',
@@ -21,7 +21,7 @@ export const metadata: Metadata = {
     'hoger bewustzijn',
   ],
   openGraph: {
-    title: 'De Quantumrealiteit – Hoe Bewustzijn en Energie Jouw Wereld Vormgeven | StonesForHealth',
+    title: 'De Quantumrealiteit - Hoe Bewustzijn en Energie Jouw Wereld Vormgeven | StonesForHealth',
     description: 'Ontdek hoe quantumfysica en spiritualiteit samenkomen. Leer over het waarnemerseffect, trillingen, manifestatie en hoe bewustzijn werkelijkheid creëert.',
     type: 'article',
     publishedTime: '2025-10-20',
@@ -35,7 +35,7 @@ export default function Quantumrealiteit() {
   const blogPostingSchema = {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
-    "headline": "De Quantumrealiteit – Hoe Bewustzijn en Energie Jouw Wereld Vormgeven",
+    "headline": "De Quantumrealiteit - Hoe Bewustzijn en Energie Jouw Wereld Vormgeven",
     "description": "Ontdek hoe quantumfysica en spiritualiteit samenkomen. Een diepgaande gids over bewustzijn, energie, manifestatie en de rol van edelstenen in het quantumveld.",
     "image": "https://stonesforhealth.nl/logo.webp",
     "datePublished": "2025-10-20T09:00:00Z",
@@ -72,7 +72,7 @@ export default function Quantumrealiteit() {
 
         <header className="mb-8 pb-6 border-b border-gray-200">
           <h1 className="text-4xl md:text-5xl font-bold text-[#2D2D2D] mb-4 font-[family-name:var(--font-eb-garamond)]">
-            De Quantumrealiteit – Hoe Bewustzijn en Energie Jouw Wereld Vormgeven
+            De Quantumrealiteit - Hoe Bewustzijn en Energie Jouw Wereld Vormgeven
           </h1>
           <div className="flex items-center gap-4 text-sm text-gray-500">
             <time dateTime="2025-10-20">20 oktober 2025</time>
@@ -84,8 +84,8 @@ export default function Quantumrealiteit() {
         {/* Blog Image */}
         <div className="relative w-full h-64 sm:h-96 mb-8 rounded-lg overflow-hidden">
           <Image
-            src="/blog-images/De Quantumrealiteit – Hoe Bewustzijn en Energie Jouw Wereld Vormgeven.jpeg"
-            alt="De Quantumrealiteit – Hoe Bewustzijn en Energie Jouw Wereld Vormgeven"
+            src="/blog-images/De Quantumrealiteit - Hoe Bewustzijn en Energie Jouw Wereld Vormgeven.jpeg"
+            alt="De Quantumrealiteit - Hoe Bewustzijn en Energie Jouw Wereld Vormgeven"
             fill
             className="object-cover"
             priority
@@ -431,7 +431,7 @@ export default function Quantumrealiteit() {
             </li>
             <li>
               <Link href="/blog/edelstenen-per-levenspad-spirituele-gidssteen" className="text-[#8B7355] hover:underline">
-                Edelstenen per Levenspad – Ontdek Jouw Spirituele Gidssteen
+                Edelstenen per Levenspad - Ontdek Jouw Spirituele Gidssteen
               </Link>
             </li>
             <li>

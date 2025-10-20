@@ -99,8 +99,8 @@ export default function CitrienAmethistPage() {
               Inhoudsopgave
             </h2>
             <ul className="space-y-2 font-[family-name:var(--font-eb-garamond)]">
-              <li><a href="#citrien-zon" className="text-gray-700 hover:text-gray-900 underline">Citrien – De Zonnestraal onder de Edelstenen</a></li>
-              <li><a href="#amethist-maan" className="text-gray-700 hover:text-gray-900 underline">Amethist – De Steen van Spiritualiteit</a></li>
+              <li><a href="#citrien-zon" className="text-gray-700 hover:text-gray-900 underline">Citrien - De Zonnestraal onder de Edelstenen</a></li>
+              <li><a href="#amethist-maan" className="text-gray-700 hover:text-gray-900 underline">Amethist - De Steen van Spiritualiteit</a></li>
               <li><a href="#combinatie-balans" className="text-gray-700 hover:text-gray-900 underline">De Combinatie: Zon & Maan in Balans</a></li>
               <li><a href="#ametrien" className="text-gray-700 hover:text-gray-900 underline">Ametrien: Zon en Maan Verenigd</a></li>
               <li><a href="#hoe-gebruiken" className="text-gray-700 hover:text-gray-900 underline">Hoe Gebruik je Citrien & Amethist?</a></li>
@@ -111,7 +111,7 @@ export default function CitrienAmethistPage() {
 
           {/* Section 1: Citrien */}
           <h2 id="citrien-zon" className="text-xl sm:text-2xl font-bold text-gray-900 mt-12 mb-6 font-[family-name:var(--font-eb-garamond)] scroll-mt-24">
-            ☀️ Citrien – De Zonnestraal onder de Edelstenen
+            ☀️ Citrien - De Zonnestraal onder de Edelstenen
           </h2>
 
           <div className="bg-gradient-to-br from-yellow-50 to-amber-50 border-l-4 border-yellow-500 p-6 md:p-8 mb-8 rounded-lg">
@@ -164,7 +164,7 @@ export default function CitrienAmethistPage() {
 
           {/* Section 2: Amethist */}
           <h2 id="amethist-maan" className="text-xl sm:text-2xl font-bold text-gray-900 mt-16 mb-6 font-[family-name:var(--font-eb-garamond)] scroll-mt-24">
-            🌙 Amethist – De Steen van Spiritualiteit en Intuïtie
+            🌙 Amethist - De Steen van Spiritualiteit en Intuïtie
           </h2>
 
           <div className="bg-gradient-to-br from-purple-50 to-indigo-50 border-l-4 border-purple-500 p-6 md:p-8 mb-8 rounded-lg">
@@ -231,7 +231,7 @@ export default function CitrienAmethistPage() {
                 <span className="text-5xl">☀️</span>
               </div>
               <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-4 text-center font-[family-name:var(--font-eb-garamond)]">
-                Citrien – Yang Energie
+                Citrien - Yang Energie
               </h3>
               <ul className="space-y-2 text-gray-700 font-[family-name:var(--font-eb-garamond)]">
                 <li>✓ Actie & Daadkracht</li>
@@ -249,7 +249,7 @@ export default function CitrienAmethistPage() {
                 <span className="text-5xl">🌙</span>
               </div>
               <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-4 text-center font-[family-name:var(--font-eb-garamond)]">
-                Amethist – Yin Energie
+                Amethist - Yin Energie
               </h3>
               <ul className="space-y-2 text-gray-700 font-[family-name:var(--font-eb-garamond)]">
                 <li>✓ Rust & Ontspanning</li>
@@ -291,7 +291,7 @@ export default function CitrienAmethistPage() {
           </h2>
 
           <p className="text-gray-700 leading-relaxed mb-6 font-[family-name:var(--font-eb-garamond)]">
-            In zeldzame gevallen komen Citrien en Amethist samen voor in <strong>één enkele steen</strong>. Deze bijzondere kristal wordt <strong>Ametrien</strong> genoemd – een letterlijke fusie van beide namen en energieën.
+            In zeldzame gevallen komen Citrien en Amethist samen voor in <strong>één enkele steen</strong>. Deze bijzondere kristal wordt <strong>Ametrien</strong> genoemd - een letterlijke fusie van beide namen en energieën.
           </p>
 
           <div className="bg-gradient-to-r from-purple-100 via-white to-yellow-100 border-2 border-gray-300 rounded-lg p-6 md:p-8 mb-8">
@@ -308,7 +308,7 @@ export default function CitrienAmethistPage() {
           </div>
 
           <p className="text-gray-700 leading-relaxed mb-8 font-[family-name:var(--font-eb-garamond)]">
-            Ametrien is de ultieme balans-steen – het draagt letterlijk <strong>zon en maan</strong> in zich. Als je op zoek bent naar één enkele steen die de krachten van Citrien en Amethist verenigt, is Ametrien de perfecte keuze.
+            Ametrien is de ultieme balans-steen - het draagt letterlijk <strong>zon en maan</strong> in zich. Als je op zoek bent naar één enkele steen die de krachten van Citrien en Amethist verenigt, is Ametrien de perfecte keuze.
           </p>
 
           {/* Section 5: Hoe Gebruiken */}
@@ -385,7 +385,7 @@ export default function CitrienAmethistPage() {
             {/* DO's */}
             <div className="border-2 border-green-200 bg-green-50 rounded-lg p-6">
               <h3 className="text-2xl font-bold text-green-900 mb-4 font-[family-name:var(--font-eb-garamond)]">
-                ✅ DO's – Wat je WEL moet doen
+                ✅ DO's - Wat je WEL moet doen
               </h3>
               <ul className="space-y-3 text-gray-700 font-[family-name:var(--font-eb-garamond)]">
                 <li className="flex items-start gap-2">
@@ -414,7 +414,7 @@ export default function CitrienAmethistPage() {
             {/* DON'Ts */}
             <div className="border-2 border-red-200 bg-red-50 rounded-lg p-6">
               <h3 className="text-2xl font-bold text-red-900 mb-4 font-[family-name:var(--font-eb-garamond)]">
-                ❌ DON'Ts – Wat je NIET moet doen
+                ❌ DON'Ts - Wat je NIET moet doen
               </h3>
               <ul className="space-y-3 text-gray-700 font-[family-name:var(--font-eb-garamond)]">
                 <li className="flex items-start gap-2">
@@ -435,7 +435,7 @@ export default function CitrienAmethistPage() {
                 </li>
                 <li className="flex items-start gap-2">
                   <span className="text-red-600 font-bold">✗</span>
-                  <span>Laat ze NIET vallen – beide zijn kwarts en kunnen breken</span>
+                  <span>Laat ze NIET vallen - beide zijn kwarts en kunnen breken</span>
                 </li>
               </ul>
             </div>
@@ -515,7 +515,7 @@ export default function CitrienAmethistPage() {
                 Hoe reinig ik Citrien en Amethist?
               </h3>
               <p className="text-gray-700 font-[family-name:var(--font-eb-garamond)]">
-                <strong>Beide:</strong> Maanlicht, salie, palo santo, seleniet oplaadplaat. <strong>Alleen Citrien:</strong> Ook veilig in (indirect) zonlicht. <strong>Amethist:</strong> Vermijd langdurig direct zonlicht – gebruik liever maanlicht.
+                <strong>Beide:</strong> Maanlicht, salie, palo santo, seleniet oplaadplaat. <strong>Alleen Citrien:</strong> Ook veilig in (indirect) zonlicht. <strong>Amethist:</strong> Vermijd langdurig direct zonlicht - gebruik liever maanlicht.
               </p>
             </div>
 
@@ -546,10 +546,10 @@ export default function CitrienAmethistPage() {
             <strong>Citrien en Amethist</strong> zijn twee edelstenen die elkaar perfect aanvullen. Citrien brengt de warmte, vreugde en manifestatiekracht van de zon, terwijl Amethist de rust, intuïtie en spiritualiteit van de maan draagt. Samen creëren ze een harmonieuze balans die je ondersteunt in alle aspecten van het leven.
           </p>
           <p className="text-gray-700 leading-relaxed mb-6 font-[family-name:var(--font-eb-garamond)]">
-            Of je nu kiest voor beide stenen afzonderlijk om flexibel te kunnen wisselen, of voor de zeldzame <strong>Ametrien</strong> waarin zon en maan al verenigd zijn – deze kristallen brengen krachtige transformatie in je dagelijks leven.
+            Of je nu kiest voor beide stenen afzonderlijk om flexibel te kunnen wisselen, of voor de zeldzame <strong>Ametrien</strong> waarin zon en maan al verenigd zijn - deze kristallen brengen krachtige transformatie in je dagelijks leven.
           </p>
           <p className="text-gray-700 leading-relaxed font-[family-name:var(--font-eb-garamond)]">
-            Bij <strong>StonesForHealth</strong> vind je hoogwaardige Citrien, Amethist en zeldzame Ametrien – alle 100% authentiek en ethisch gewonnen. Gratis verzending vanaf €50. Laat deze prachtige zon en maan stenen je pad verlichten naar succes, vreugde én innerlijke vrede!
+            Bij <strong>StonesForHealth</strong> vind je hoogwaardige Citrien, Amethist en zeldzame Ametrien - alle 100% authentiek en ethisch gewonnen. Gratis verzending vanaf €50. Laat deze prachtige zon en maan stenen je pad verlichten naar succes, vreugde én innerlijke vrede!
           </p>
 
           {/* Related Articles */}

@@ -129,7 +129,7 @@ export default function BlogPost() {
             {/* Citrien */}
             <section>
               <h2 className="text-2xl font-bold text-[#2D2D2D] mb-4 font-[family-name:var(--font-eb-garamond)] border-b border-gray-200 pb-2">
-                Citrien – De Steen van Rijkdom en Succes
+                Citrien - De Steen van Rijkdom en Succes
               </h2>
               <p className="text-base leading-relaxed text-gray-800 font-[family-name:var(--font-eb-garamond)] mb-4">
                 <strong>Citrien</strong> is dé klassieker onder de geldstenen en wordt niet voor niets de
@@ -163,7 +163,7 @@ export default function BlogPost() {
             {/* Groene Aventurijn */}
             <section>
               <h2 className="text-2xl font-bold text-[#2D2D2D] mb-4 font-[family-name:var(--font-eb-garamond)] border-b border-gray-200 pb-2">
-                Groene Aventurijn – Gelukssteen voor Financiële Groei
+                Groene Aventurijn - Gelukssteen voor Financiële Groei
               </h2>
               <p className="text-base leading-relaxed text-gray-800 font-[family-name:var(--font-eb-garamond)] mb-4">
                 <strong>Groene aventurijn</strong> wordt ook wel de <em>"steen van het geluk en succes"</em> genoemd.
@@ -197,7 +197,7 @@ export default function BlogPost() {
             {/* Pyriet */}
             <section>
               <h2 className="text-2xl font-bold text-[#2D2D2D] mb-4 font-[family-name:var(--font-eb-garamond)] border-b border-gray-200 pb-2">
-                Pyriet – De Steen van Goud en Manifestatie
+                Pyriet - De Steen van Goud en Manifestatie
               </h2>
               <p className="text-base leading-relaxed text-gray-800 font-[family-name:var(--font-eb-garamond)] mb-4">
                 <strong>Pyriet</strong>, ook wel "dwaalgoud" genoemd, is een krachtige beschermsteen en gelukssteen
@@ -231,7 +231,7 @@ export default function BlogPost() {
             {/* Tijgeroog */}
             <section>
               <h2 className="text-2xl font-bold text-[#2D2D2D] mb-4 font-[family-name:var(--font-eb-garamond)] border-b border-gray-200 pb-2">
-                Tijgeroog – Voor Focus en Succes
+                Tijgeroog - Voor Focus en Succes
               </h2>
               <p className="text-base leading-relaxed text-gray-800 font-[family-name:var(--font-eb-garamond)] mb-4">
                 <strong>Tijgeroog</strong> is een krachtige aardende steen die helpt bij het behouden van
@@ -266,7 +266,7 @@ export default function BlogPost() {
             {/* Bergkristal */}
             <section>
               <h2 className="text-2xl font-bold text-[#2D2D2D] mb-4 font-[family-name:var(--font-eb-garamond)] border-b border-gray-200 pb-2">
-                Bergkristal – De Universele Versterker
+                Bergkristal - De Universele Versterker
               </h2>
               <p className="text-base leading-relaxed text-gray-800 font-[family-name:var(--font-eb-garamond)] mb-4">
                 <strong>Bergkristal</strong> is de ultieme versterker van energie en intenties. Deze heldere, pure steen
@@ -309,11 +309,11 @@ export default function BlogPost() {
                 De Ultieme Geld & Overvloed Set
               </h3>
               <ul className="list-disc list-inside space-y-2 text-gray-800 font-[family-name:var(--font-eb-garamond)] mb-4">
-                <li><strong>Citrien</strong> – Voor welvaart en succes</li>
-                <li><strong>Pyriet</strong> – Voor rijkdom en manifestatie</li>
-                <li><strong>Groene Aventurijn</strong> – Voor geluk en kansen</li>
-                <li><strong>Tijgeroog</strong> – Voor focus en daadkracht</li>
-                <li><strong>Bergkristal</strong> – Voor versterking van alle energie</li>
+                <li><strong>Citrien</strong> - Voor welvaart en succes</li>
+                <li><strong>Pyriet</strong> - Voor rijkdom en manifestatie</li>
+                <li><strong>Groene Aventurijn</strong> - Voor geluk en kansen</li>
+                <li><strong>Tijgeroog</strong> - Voor focus en daadkracht</li>
+                <li><strong>Bergkristal</strong> - Voor versterking van alle energie</li>
               </ul>
               <h3 className="text-xl font-semibold text-[#2D2D2D] mt-5 mb-3 font-[family-name:var(--font-eb-garamond)]">
                 Hoe te gebruiken

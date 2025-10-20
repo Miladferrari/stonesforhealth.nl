@@ -277,35 +277,35 @@ export default function DromenTechnologieSimulatie() {
             </p>
 
             <h3 className="text-xl font-semibold text-[#2D2D2D] mt-5 mb-3 font-[family-name:var(--font-eb-garamond)]">
-              Amethist – Helder Dromen en Intuïtie
+              Amethist - Helder Dromen en Intuïtie
             </h3>
             <p className="text-base leading-relaxed text-gray-800 font-[family-name:var(--font-eb-garamond)] mb-4">
               Amethist activeert het derde oog en kroonchakra, waardoor je toegang krijgt tot hogere bewustzijnslagen. Hij bevordert lucide dromen (bewust dromen), verhoogt droomherinnering en beschermt tegen nachtmerries. Plaats hem onder je kussen of op je nachtkastje.
             </p>
 
             <h3 className="text-xl font-semibold text-[#2D2D2D] mt-5 mb-3 font-[family-name:var(--font-eb-garamond)]">
-              Labradoriet – Bescherming Tijdens Droomreizen
+              Labradoriet - Bescherming Tijdens Droomreizen
             </h3>
             <p className="text-base leading-relaxed text-gray-800 font-[family-name:var(--font-eb-garamond)] mb-4">
               Labradoriet is de steen van de mysticus en droomreiziger. Hij beschermt je energieveld tijdens astrale projectie en droomwerk, filtert negatieve entiteiten en versterkt je psychische vermogens. Ideaal voor wie diep droomwerk doet.
             </p>
 
             <h3 className="text-xl font-semibold text-[#2D2D2D] mt-5 mb-3 font-[family-name:var(--font-eb-garamond)]">
-              Seleniet – Verbinding met Hogere Energie
+              Seleniet - Verbinding met Hogere Energie
             </h3>
             <p className="text-base leading-relaxed text-gray-800 font-[family-name:var(--font-eb-garamond)] mb-4">
               Seleniet heeft een extreem hoge trilling die directe toegang geeft tot engelen, gidsen en hogere dimensies. In dromen faciliteert het spirituele ontmoetingen en boodschappen van je hogere zelf. Leg een seleniet staaf naast je bed voor verhoogde spirituele dromen.
             </p>
 
             <h3 className="text-xl font-semibold text-[#2D2D2D] mt-5 mb-3 font-[family-name:var(--font-eb-garamond)]">
-              Lapis Lazuli – Inzicht in Dromen
+              Lapis Lazuli - Inzicht in Dromen
             </h3>
             <p className="text-base leading-relaxed text-gray-800 font-[family-name:var(--font-eb-garamond)] mb-4">
               Lapis Lazuli is de steen van wijsheid en waarheid. Hij helpt je droomsymbolen te begrijpen en de diepere betekenis van je dromen te ontrafelen. Ook bevordert hij droomherinnering en het opschrijven van dromen. Perfect voor droomdagboek-werk.
             </p>
 
             <h3 className="text-xl font-semibold text-[#2D2D2D] mt-5 mb-3 font-[family-name:var(--font-eb-garamond)]">
-              Maansteen – Intuïtieve Helderheid
+              Maansteen - Intuïtieve Helderheid
             </h3>
             <p className="text-base leading-relaxed text-gray-800 font-[family-name:var(--font-eb-garamond)] mb-4">
               Maansteen is verbonden met de maan, cycli en het vrouwelijke principe. Hij versterkt intuïtie, emotionele helderheid en de verbinding met het onderbewustzijn. Bijzonder krachtig tijdens volle maan voor profetische dromen.
@@ -389,7 +389,7 @@ export default function DromenTechnologieSimulatie() {
           <ul className="list-disc list-inside space-y-2 text-gray-800 font-[family-name:var(--font-eb-garamond)]">
             <li>
               <Link href="/blog/quantumrealiteit-bewustzijn-energie" className="text-[#8B7355] hover:underline">
-                De Quantumrealiteit – Hoe Bewustzijn en Energie Jouw Wereld Vormgeven
+                De Quantumrealiteit - Hoe Bewustzijn en Energie Jouw Wereld Vormgeven
               </Link>
             </li>
             <li>
@@ -399,7 +399,7 @@ export default function DromenTechnologieSimulatie() {
             </li>
             <li>
               <Link href="/blog/lapis-lazuli-hemelsteen-egypte-innerlijke-wijsheid" className="text-[#8B7355] hover:underline">
-                Lapis Lazuli – De Hemelsteen van het Oude Egypte en Innerlijke Wijsheid
+                Lapis Lazuli - De Hemelsteen van het Oude Egypte en Innerlijke Wijsheid
               </Link>
             </li>
             <li>

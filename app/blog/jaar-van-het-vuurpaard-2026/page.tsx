@@ -82,7 +82,7 @@ export default function JaarVanHetVuurpaard2026Page() {
         {/* Introduction */}
         <div className="prose prose-lg max-w-none">
           <p className="text-base sm:text-lg text-gray-700 leading-relaxed mb-8 font-[family-name:var(--font-eb-garamond)]">
-            In de <strong>Chinese astrologie</strong> is ieder jaar verbonden met een dier uit de dierenriem én een van de vijf elementen. Voor 2026 valt dit op het <strong>Vuurpaard</strong>, een zeldzame en krachtige combinatie die staat voor passie, energie, verandering en daadkracht. Het Jaar van het Vuurpaard loopt van <strong>17 februari 2026 tot 5 februari 2027</strong>. Dit jaar belooft vol beweging te zijn – vol kansen om te groeien, maar ook uitdagingen die moed en doorzettingsvermogen vragen.
+            In de <strong>Chinese astrologie</strong> is ieder jaar verbonden met een dier uit de dierenriem én een van de vijf elementen. Voor 2026 valt dit op het <strong>Vuurpaard</strong>, een zeldzame en krachtige combinatie die staat voor passie, energie, verandering en daadkracht. Het Jaar van het Vuurpaard loopt van <strong>17 februari 2026 tot 5 februari 2027</strong>. Dit jaar belooft vol beweging te zijn - vol kansen om te groeien, maar ook uitdagingen die moed en doorzettingsvermogen vragen.
           </p>
 
           {/* Lees Ook Section */}
@@ -160,7 +160,7 @@ export default function JaarVanHetVuurpaard2026Page() {
               ⚠️ Let op: De Schaduwzijde van het Vuur
             </h4>
             <p className="text-base sm:text-lg text-gray-700 font-[family-name:var(--font-eb-garamond)]">
-              Teveel vuurenergie kan leiden tot oververmoeidheid, impulsiviteit, driftigheid en uitputting. Balans is de sleutel – gebruik de energie om vooruit te komen, maar vergeet rust en aarding niet.
+              Teveel vuurenergie kan leiden tot oververmoeidheid, impulsiviteit, driftigheid en uitputting. Balans is de sleutel - gebruik de energie om vooruit te komen, maar vergeet rust en aarding niet.
             </p>
           </div>
 
@@ -185,7 +185,7 @@ export default function JaarVanHetVuurpaard2026Page() {
             </ul>
             <div className="bg-gray-50 border-l-4 border-gray-300 p-4 rounded mt-4">
               <p className="text-sm text-gray-700 font-[family-name:var(--font-eb-garamond)]">
-                <strong>Waarschuwing:</strong> Pas op voor roekeloze financiële beslissingen. De vuurenergie kan impulsief maken – neem de tijd om belangrijke keuzes goed te overwegen.
+                <strong>Waarschuwing:</strong> Pas op voor roekeloze financiële beslissingen. De vuurenergie kan impulsief maken - neem de tijd om belangrijke keuzes goed te overwegen.
               </p>
             </div>
           </div>
@@ -298,7 +298,7 @@ export default function JaarVanHetVuurpaard2026Page() {
           {/* Citrien */}
           <div className="border border-gray-200 rounded-lg p-6 md:p-8 mb-6">
             <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-4 font-[family-name:var(--font-eb-garamond)]">
-              1. Citrien – Manifestatie & Overvloed
+              1. Citrien - Manifestatie & Overvloed
             </h3>
             <p className="text-base sm:text-lg text-gray-700 leading-relaxed mb-4 font-[family-name:var(--font-eb-garamond)]">
               <strong>Citrien</strong> is dé steen van overvloed, succes en manifestatie. Perfect voor 2026 omdat het:
@@ -317,7 +317,7 @@ export default function JaarVanHetVuurpaard2026Page() {
           {/* Pyriet */}
           <div className="border border-gray-200 rounded-lg p-6 md:p-8 mb-6">
             <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-4 font-[family-name:var(--font-eb-garamond)]">
-              2. Pyriet – Zelfvertrouwen & Bescherming
+              2. Pyriet - Zelfvertrouwen & Bescherming
             </h3>
             <p className="text-base sm:text-lg text-gray-700 leading-relaxed mb-4 font-[family-name:var(--font-eb-garamond)]">
               <strong>Pyriet</strong>, ook wel "Fool's Gold" genoemd, is een krachtige beschermingssteen die:
@@ -336,7 +336,7 @@ export default function JaarVanHetVuurpaard2026Page() {
           {/* Rode Jaspis */}
           <div className="border border-gray-200 rounded-lg p-6 md:p-8 mb-6">
             <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-4 font-[family-name:var(--font-eb-garamond)]">
-              3. Rode Jaspis – Aarding & Stabiliteit
+              3. Rode Jaspis - Aarding & Stabiliteit
             </h3>
             <p className="text-base sm:text-lg text-gray-700 leading-relaxed mb-4 font-[family-name:var(--font-eb-garamond)]">
               <strong>Rode Jaspis</strong> is essentieel om de intense vuurenergie te balanceren. Deze steen:
@@ -355,7 +355,7 @@ export default function JaarVanHetVuurpaard2026Page() {
           {/* Granaat */}
           <div className="border border-gray-200 rounded-lg p-6 md:p-8 mb-6">
             <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-4 font-[family-name:var(--font-eb-garamond)]">
-              4. Granaat – Passie & Vitaliteit
+              4. Granaat - Passie & Vitaliteit
             </h3>
             <p className="text-base sm:text-lg text-gray-700 leading-relaxed mb-4 font-[family-name:var(--font-eb-garamond)]">
               <strong>Granaat</strong> resoneert perfect met de vuurenergie van 2026. Deze dieprode steen:
@@ -374,7 +374,7 @@ export default function JaarVanHetVuurpaard2026Page() {
           {/* Bergkristal */}
           <div className="border border-gray-200 rounded-lg p-6 md:p-8 mb-6">
             <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-4 font-[family-name:var(--font-eb-garamond)]">
-              5. Bergkristal – Helderheid & Versterking
+              5. Bergkristal - Helderheid & Versterking
             </h3>
             <p className="text-base sm:text-lg text-gray-700 leading-relaxed mb-4 font-[family-name:var(--font-eb-garamond)]">
               <strong>Bergkristal</strong> is de ultieme meester-healer en versterker. In 2026 helpt het om:
@@ -526,7 +526,7 @@ export default function JaarVanHetVuurpaard2026Page() {
                 Is het Jaar van het Vuurpaard goed of slecht?
               </h3>
               <p className="text-base sm:text-lg text-gray-700 font-[family-name:var(--font-eb-garamond)]">
-                Het Jaar van het Vuurpaard is <strong>niet goed of slecht</strong> – het is wat je ervan maakt. Het brengt intense energie die kan leiden tot grote doorbraken, maar vraagt ook om bewustzijn en balans. Met de juiste intenties en tools (zoals edelstenen) kun je deze energie optimaal benutten.
+                Het Jaar van het Vuurpaard is <strong>niet goed of slecht</strong> - het is wat je ervan maakt. Het brengt intense energie die kan leiden tot grote doorbraken, maar vraagt ook om bewustzijn en balans. Met de juiste intenties en tools (zoals edelstenen) kun je deze energie optimaal benutten.
               </p>
             </div>
 
@@ -544,7 +544,7 @@ export default function JaarVanHetVuurpaard2026Page() {
                 Kan ik in 2026 een baby krijgen volgens Chinese astrologie?
               </h3>
               <p className="text-base sm:text-lg text-gray-700 font-[family-name:var(--font-eb-garamond)]">
-                Traditioneel werd het Vuurpaard jaar gezien als uitdagend voor baby's vanwege de intense energie. Moderne interpretaties benadrukken echter dat kinderen geboren in dit jaar <strong>charismatisch, dapper en gedreven</strong> zijn. Uiteindelijk is het een persoonlijke keuze – laat liefde en intuïtie je leiden.
+                Traditioneel werd het Vuurpaard jaar gezien als uitdagend voor baby's vanwege de intense energie. Moderne interpretaties benadrukken echter dat kinderen geboren in dit jaar <strong>charismatisch, dapper en gedreven</strong> zijn. Uiteindelijk is het een persoonlijke keuze - laat liefde en intuïtie je leiden.
               </p>
             </div>
 
@@ -562,7 +562,7 @@ export default function JaarVanHetVuurpaard2026Page() {
                 Hoe vaak komt het Jaar van het Vuurpaard voor?
               </h3>
               <p className="text-base sm:text-lg text-gray-700 font-[family-name:var(--font-eb-garamond)]">
-                Het Jaar van het Vuurpaard komt maar <strong>eens per 60 jaar</strong> voor! De vorige keer was in 1966, en de volgende keer zal pas in 2086 zijn. Dit maakt 2026 extra bijzonder en krachtig – een zeldzame kans voor transformatie.
+                Het Jaar van het Vuurpaard komt maar <strong>eens per 60 jaar</strong> voor! De vorige keer was in 1966, en de volgende keer zal pas in 2086 zijn. Dit maakt 2026 extra bijzonder en krachtig - een zeldzame kans voor transformatie.
               </p>
             </div>
           </div>
@@ -578,7 +578,7 @@ export default function JaarVanHetVuurpaard2026Page() {
             Vergeet niet: deze krachtige energie komt maar eens per 60 jaar voor. Grijp deze unieke kans om je dromen waar te maken, jezelf opnieuw uit te vinden en je waarheid te leven.
           </p>
           <p className="text-base sm:text-lg text-gray-700 leading-relaxed font-[family-name:var(--font-eb-garamond)]">
-            Bij <strong>StonesForHealth</strong> vind je alle edelstenen die je nodig hebt om optimaal door 2026 te navigeren. Van Citrien voor manifestatie tot Rode Jaspis voor grounding – elke steen wordt ethisch gewonnen en met zorg geselecteerd. Gratis verzending vanaf €50. Maak 2026 jouw jaar van vuur en transformatie!
+            Bij <strong>StonesForHealth</strong> vind je alle edelstenen die je nodig hebt om optimaal door 2026 te navigeren. Van Citrien voor manifestatie tot Rode Jaspis voor grounding - elke steen wordt ethisch gewonnen en met zorg geselecteerd. Gratis verzending vanaf €50. Maak 2026 jouw jaar van vuur en transformatie!
           </p>
 
           {/* Related Articles */}

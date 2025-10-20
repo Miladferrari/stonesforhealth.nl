@@ -35,7 +35,7 @@ export default function EdelstenenLiefdeZelfliefde() {
   const blogPostingSchema = {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
-    "headline": "Edelstenen voor Liefde en Zelfliefde – Open Je Hart en Trek Liefde Aan",
+    "headline": "Edelstenen voor Liefde en Zelfliefde - Open Je Hart en Trek Liefde Aan",
     "description": "Ontdek de krachtigste edelstenen voor liefde en zelfliefde: rozenkwarts, rhodoniet, smaragd, kunziet en meer. Leer hoe je met hartchakra kristallen liefde aantrekt en zelfacceptatie versterkt.",
     "image": "https://stonesforhealth.nl/logo.webp",
     "datePublished": "2025-10-20T09:00:00Z",
@@ -72,7 +72,7 @@ export default function EdelstenenLiefdeZelfliefde() {
 
         <header className="mb-8 pb-6 border-b border-gray-200">
           <h1 className="text-4xl md:text-5xl font-bold text-[#2D2D2D] mb-4 font-[family-name:var(--font-eb-garamond)]">
-            Edelstenen voor Liefde en Zelfliefde – Open Je Hart en Trek Liefde Aan
+            Edelstenen voor Liefde en Zelfliefde - Open Je Hart en Trek Liefde Aan
           </h1>
           <div className="flex items-center gap-4 text-sm text-gray-500">
             <time dateTime="2025-10-20">20 oktober 2025</time>
@@ -84,7 +84,7 @@ export default function EdelstenenLiefdeZelfliefde() {
         {/* Blog Image */}
         <div className="relative w-full h-64 sm:h-96 mb-8 rounded-lg overflow-hidden">
           <Image
-            src="/blog-images/Edelstenen voor Liefde en Zelfliefde – Open Je Hart en Trek Liefde Aan.jpeg"
+            src="/blog-images/Edelstenen voor Liefde en Zelfliefde - Open Je Hart en Trek Liefde Aan.jpeg"
             alt="Edelstenen voor Liefde en Zelfliefde"
             fill
             className="object-cover"
@@ -107,7 +107,7 @@ export default function EdelstenenLiefdeZelfliefde() {
               Waarom Edelstenen Werken bij Liefde
             </h2>
             <p className="text-base leading-relaxed text-gray-800 font-[family-name:var(--font-eb-garamond)] mb-4">
-              Edelstenen dragen een natuurlijke trilling die invloed kan hebben op onze energievelden. Stenen die resoneren met het hartchakra – meestal roze en groene kristallen – helpen bij het helen van oude wonden, het aantrekken van liefde en het versterken van zelfacceptatie.
+              Edelstenen dragen een natuurlijke trilling die invloed kan hebben op onze energievelden. Stenen die resoneren met het hartchakra - meestal roze en groene kristallen - helpen bij het helen van oude wonden, het aantrekken van liefde en het versterken van zelfacceptatie.
             </p>
             <p className="text-base leading-relaxed text-gray-800 font-[family-name:var(--font-eb-garamond)] mb-4">
               Het hartchakra (Anahata) is het energetische centrum van liefde, compassie en verbinding. Wanneer dit chakra geblokkeerd is door pijn, verdriet of angst, kan het moeilijk zijn om liefde te geven en te ontvangen. Hartchakra-stenen helpen deze blokkades op te heffen en de natuurlijke flow van liefde te herstellen.
@@ -116,7 +116,7 @@ export default function EdelstenenLiefdeZelfliefde() {
 
           <section id="rozenkwarts">
             <h2 className="text-2xl font-bold text-[#2D2D2D] mb-4 font-[family-name:var(--font-eb-garamond)] border-b border-gray-200 pb-2">
-              Rozenkwarts – De Steen van Onvoorwaardelijke Liefde
+              Rozenkwarts - De Steen van Onvoorwaardelijke Liefde
             </h2>
             <p className="text-base leading-relaxed text-gray-800 font-[family-name:var(--font-eb-garamond)] mb-4">
               <strong>Rozenkwarts</strong> is dé steen van liefde en het meest bekende kristal voor het hartchakra. Zijn zachte roze energie opent het hart en verzacht emoties. Hij helpt bij liefdesverdriet, versterkt eigenwaarde en brengt harmonie in relaties.
@@ -145,7 +145,7 @@ export default function EdelstenenLiefdeZelfliefde() {
 
           <section id="aventurijn">
             <h2 className="text-2xl font-bold text-[#2D2D2D] mb-4 font-[family-name:var(--font-eb-garamond)] border-b border-gray-200 pb-2">
-              Groene Aventurijn – Voor Hartelijke Harmonie
+              Groene Aventurijn - Voor Hartelijke Harmonie
             </h2>
             <p className="text-base leading-relaxed text-gray-800 font-[family-name:var(--font-eb-garamond)] mb-4">
               <strong>Groene Aventurijn</strong> is de steen van geluk, groei en emotionele kalmte. Hij kalmeert emoties en bevordert vergeving. Hij helpt bij het loslaten van angst en jaloezie en brengt rust in het hart.
@@ -174,7 +174,7 @@ export default function EdelstenenLiefdeZelfliefde() {
 
           <section id="rhodoniet">
             <h2 className="text-2xl font-bold text-[#2D2D2D] mb-4 font-[family-name:var(--font-eb-garamond)] border-b border-gray-200 pb-2">
-              Rhodoniet – Voor Vergeving en Innerlijke Genezing
+              Rhodoniet - Voor Vergeving en Innerlijke Genezing
             </h2>
             <p className="text-base leading-relaxed text-gray-800 font-[family-name:var(--font-eb-garamond)] mb-4">
               <strong>Rhodoniet</strong> is de steen van compassie en vergeving. Met zijn roze en zwarte aders combineert hij liefde met gronding. Hij helpt oude pijn los te laten en bevordert innerlijke balans en zelfliefde.
@@ -203,7 +203,7 @@ export default function EdelstenenLiefdeZelfliefde() {
 
           <section id="rhodochrosiet">
             <h2 className="text-2xl font-bold text-[#2D2D2D] mb-4 font-[family-name:var(--font-eb-garamond)] border-b border-gray-200 pb-2">
-              Rhodochrosiet – De Steen van Zelfliefde
+              Rhodochrosiet - De Steen van Zelfliefde
             </h2>
             <p className="text-base leading-relaxed text-gray-800 font-[family-name:var(--font-eb-garamond)] mb-4">
               <strong>Rhodochrosiet</strong> straalt warmte en tederheid uit met zijn prachtige roze en witte banden. Hij versterkt eigenwaarde en helpt negatieve patronen te doorbreken. Dit is een krachtige steen voor wie worstelt met zelfkritiek of lage eigenwaarde.
@@ -232,7 +232,7 @@ export default function EdelstenenLiefdeZelfliefde() {
 
           <section id="smaragd">
             <h2 className="text-2xl font-bold text-[#2D2D2D] mb-4 font-[family-name:var(--font-eb-garamond)] border-b border-gray-200 pb-2">
-              Smaragd – Voor Echte, Duurzame Liefde
+              Smaragd - Voor Echte, Duurzame Liefde
             </h2>
             <p className="text-base leading-relaxed text-gray-800 font-[family-name:var(--font-eb-garamond)] mb-4">
               <strong>Smaragd</strong> is de edelsteen van diepe, oprechte liefde en spirituele verbondenheid. Door de eeuwen heen beschouwd als de steen van trouw en eeuwige liefde. Hij bevordert vertrouwen, eerlijkheid en spirituele verbondenheid tussen partners.
@@ -261,7 +261,7 @@ export default function EdelstenenLiefdeZelfliefde() {
 
           <section id="kunziet">
             <h2 className="text-2xl font-bold text-[#2D2D2D] mb-4 font-[family-name:var(--font-eb-garamond)] border-b border-gray-200 pb-2">
-              Kunziet – Liefde vanuit het Hart
+              Kunziet - Liefde vanuit het Hart
             </h2>
             <p className="text-base leading-relaxed text-gray-800 font-[family-name:var(--font-eb-garamond)] mb-4">
               <strong>Kunziet</strong> heeft een zachte, troostende energie die helpt om liefde en compassie te voelen. Met zijn delicate roze tot lila kleur verbindt hij je met universele liefde en geeft rust en vertrouwen. Perfect voor wie emotioneel afstand heeft genomen en opnieuw wil leren voelen.
@@ -396,7 +396,7 @@ export default function EdelstenenLiefdeZelfliefde() {
               Liefde begint bij jezelf. Wanneer je liefde en zachtheid voelt van binnenuit, trek je automatisch meer liefde aan in je leven. Edelstenen zijn geen magische oplossing, maar krachtige ondersteuners op je reis naar meer zelfacceptatie, compassie en verbinding.
             </p>
             <p className="text-base leading-relaxed text-gray-800 font-[family-name:var(--font-eb-garamond)] mb-4">
-              Of je nu werkt aan het helen van oude pijn met Rhodoniet, je hart opent met Rozenkwarts, of diepe liefde cultiveert met Smaragd – elk kristal biedt zijn eigen unieke ondersteuning. Vertrouw je intuïtie bij het kiezen van jouw liefdesstenen en laat de energie van het hartchakra stromen.
+              Of je nu werkt aan het helen van oude pijn met Rhodoniet, je hart opent met Rozenkwarts, of diepe liefde cultiveert met Smaragd - elk kristal biedt zijn eigen unieke ondersteuning. Vertrouw je intuïtie bij het kiezen van jouw liefdesstenen en laat de energie van het hartchakra stromen.
             </p>
             <p className="text-base leading-relaxed text-gray-800 font-[family-name:var(--font-eb-garamond)] mb-4">
               <strong>Onthoud:</strong> Je bent al liefde. De kristallen helpen je alleen herinneren aan wat altijd al in je aanwezig was.
@@ -409,7 +409,7 @@ export default function EdelstenenLiefdeZelfliefde() {
             Ontdek Edelstenen voor Liefde bij StonesForHealth
           </h2>
           <p className="text-base text-gray-800 mb-6 font-[family-name:var(--font-eb-garamond)]">
-            Bij <strong>StonesForHealth.nl</strong> vind je een ruime collectie Rozenkwarts, Rhodoniet, Groene Aventurijn, Smaragd en Kunziet. Elk stuk is zorgvuldig geselecteerd om jouw hart te openen en liefde te versterken. Van armbanden en kettingen tot losse stenen en meditatie-sets – alles om je reis naar meer zelfliefde en verbinding te ondersteunen.
+            Bij <strong>StonesForHealth.nl</strong> vind je een ruime collectie Rozenkwarts, Rhodoniet, Groene Aventurijn, Smaragd en Kunziet. Elk stuk is zorgvuldig geselecteerd om jouw hart te openen en liefde te versterken. Van armbanden en kettingen tot losse stenen en meditatie-sets - alles om je reis naar meer zelfliefde en verbinding te ondersteunen.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 mb-4">
             <Link

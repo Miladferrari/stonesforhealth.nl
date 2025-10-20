@@ -77,7 +77,7 @@ export default function MastersOfShilajitPage() {
         {/* Introduction */}
         <div className="prose prose-lg max-w-none">
           <p className="text-base sm:text-lg text-gray-700 leading-relaxed mb-8 font-[family-name:var(--font-eb-garamond)]">
-            Bij <strong>StonesForHealth.nl</strong> vind je alleen producten waarvan we zeker weten dat ze bijdragen aan gezondheid, energie en spirituele balans. Eén van die producten is <strong>Shilajit</strong>, en wij werken met het merk <strong>Masters of Shilajit</strong> – dé specialist in pure, natuurlijke Shilajit-hars uit de Himalaya. In dit blog lees je alles over Masters of Shilajit, waarom dit merk wereldwijd toonaangevend is, en wat Shilajit voor jouw lichaam, geest en spirituele energie kan betekenen.
+            Bij <strong>StonesForHealth.nl</strong> vind je alleen producten waarvan we zeker weten dat ze bijdragen aan gezondheid, energie en spirituele balans. Eén van die producten is <strong>Shilajit</strong>, en wij werken met het merk <strong>Masters of Shilajit</strong> - dé specialist in pure, natuurlijke Shilajit-hars uit de Himalaya. In dit blog lees je alles over Masters of Shilajit, waarom dit merk wereldwijd toonaangevend is, en wat Shilajit voor jouw lichaam, geest en spirituele energie kan betekenen.
           </p>
 
           {/* Lees Ook Section */}
@@ -494,7 +494,7 @@ export default function MastersOfShilajitPage() {
                 Is Shilajit geschikt voor vrouwen?
               </h3>
               <p className="text-gray-700 font-[family-name:var(--font-eb-garamond)]">
-                Absoluut! Hoewel Shilajit vaak geassocieerd wordt met mannen (testosteron), biedt het <strong>evenveel voordelen voor vrouwen</strong> – energie, hormoonbalans, anti-aging en immuunondersteuning.
+                Absoluut! Hoewel Shilajit vaak geassocieerd wordt met mannen (testosteron), biedt het <strong>evenveel voordelen voor vrouwen</strong> - energie, hormoonbalans, anti-aging en immuunondersteuning.
               </p>
             </div>
 
@@ -503,7 +503,7 @@ export default function MastersOfShilajitPage() {
                 Wat is het verschil tussen hars, capsules en poeder?
               </h3>
               <p className="text-gray-700 font-[family-name:var(--font-eb-garamond)]">
-                <strong>Hars</strong> (wat Masters of Shilajit levert) is de meest pure en krachtige vorm – geen verwerking of toevoegingen. <strong>Capsules en poeders</strong> zijn vaak verdund met vulstoffen en minder potent.
+                <strong>Hars</strong> (wat Masters of Shilajit levert) is de meest pure en krachtige vorm - geen verwerking of toevoegingen. <strong>Capsules en poeders</strong> zijn vaak verdund met vulstoffen en minder potent.
               </p>
             </div>
 
@@ -534,7 +534,7 @@ export default function MastersOfShilajitPage() {
             <strong>Masters of Shilajit</strong> staat wereldwijd bekend als hét merk voor pure, veilige en krachtige Shilajit. Met transparantie, strenge kwaliteitscontroles en traditionele verwerking krijg je bij dit merk de garantie dat je het allerbeste uit de Himalaya in handen hebt.
           </p>
           <p className="text-gray-700 leading-relaxed mb-6 font-[family-name:var(--font-eb-garamond)]">
-            Of je nu zoekt naar <strong>meer energie, focus, herstel, hormoonbalans of spirituele diepgang</strong> – Masters of Shilajit maakt het verschil. Dit eeuwenoude "zwarte goud" wordt al duizenden jaren gebruikt in de Ayurveda en bewijst keer op keer zijn waarde voor moderne gebruikers.
+            Of je nu zoekt naar <strong>meer energie, focus, herstel, hormoonbalans of spirituele diepgang</strong> - Masters of Shilajit maakt het verschil. Dit eeuwenoude "zwarte goud" wordt al duizenden jaren gebruikt in de Ayurveda en bewijst keer op keer zijn waarde voor moderne gebruikers.
           </p>
           <p className="text-gray-700 leading-relaxed font-[family-name:var(--font-eb-garamond)]">
             Ontdek dit unieke product nu bij <strong>StonesForHealth.nl</strong> en ervaar zelf de kracht van pure Himalaya Shilajit. Gratis verzending vanaf €50. Investeer in je vitaliteit, energie en welzijn met het beste Shilajit ter wereld!
