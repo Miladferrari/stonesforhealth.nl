@@ -86,7 +86,7 @@ export default function BlogPost() {
           {/* Blog Image */}
           <div className="relative w-full h-64 sm:h-96 mb-8 rounded-lg overflow-hidden">
             <Image
-              src="/Blog images /Lapis Lazuli – De Hemelsteen van het Oude Egypte en Innerlijke Wijsheid.jpeg"
+              src="/blog-images/Lapis Lazuli – De Hemelsteen van het Oude Egypte en Innerlijke Wijsheid.jpeg"
               alt="Lapis Lazuli – De Hemelsteen"
               fill
               className="object-cover"

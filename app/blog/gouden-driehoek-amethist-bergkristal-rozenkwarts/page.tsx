@@ -25,7 +25,7 @@ const blogPostingSchema = {
   "@type": "BlogPosting",
   "headline": "De Gouden Driehoek: Amethist, Bergkristal & Rozenkwarts",
   "description": "Ontdek de kracht van de Gouden Driehoek - de meest populaire kristalcombinatie. Amethist, Bergkristal en Rozenkwarts voor balans en harmonie.",
-  "image": "https://stonesforhealth.nl/Blog images /De Gouden Driehoek- Amethist, Bergkristal & Rozenkwarts .webp",
+  "image": "https://stonesforhealth.nl/blog-images/De Gouden Driehoek- Amethist, Bergkristal & Rozenkwarts .webp",
   "datePublished": "2025-03-05T09:00:00Z",
   "dateModified": "2025-03-05T09:00:00Z",
   "author": {
@@ -71,7 +71,7 @@ export default function GoudenDriehoekPage() {
         {/* Featured Image */}
         <div className="relative w-full h-64 sm:h-96 my-8 rounded-xl overflow-hidden bg-gradient-to-br from-gray-50 to-gray-100 border border-gray-200">
           <Image
-            src="/Blog images /De Gouden Driehoek- Amethist, Bergkristal & Rozenkwarts .webp"
+            src="/blog-images/De Gouden Driehoek- Amethist, Bergkristal & Rozenkwarts .webp"
             alt="De Gouden Driehoek - Amethist, Bergkristal en Rozenkwarts kristallen arrangement"
             fill
             className="object-cover"

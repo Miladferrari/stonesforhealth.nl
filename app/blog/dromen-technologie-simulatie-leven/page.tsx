@@ -84,7 +84,7 @@ export default function DromenTechnologieSimulatie() {
         {/* Blog Image */}
         <div className="relative w-full h-64 sm:h-96 mb-8 rounded-lg overflow-hidden">
           <Image
-            src="/Blog images /Dromen, Technologie & De Simulatie van het Leven.jpeg"
+            src="/blog-images/Dromen, Technologie & De Simulatie van het Leven.jpeg"
             alt="Dromen, Technologie & De Simulatie van het Leven"
             fill
             className="object-cover"

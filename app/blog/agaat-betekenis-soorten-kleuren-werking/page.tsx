@@ -42,7 +42,7 @@ const blogPostingSchema = {
   "@type": "BlogPosting",
   "headline": "Agaat: Betekenis, Soorten, Kleuren en Spirituele Werking",
   "description": "Ontdek alles over agaat - van blauwe agaat tot vuuragaat. Leer over de betekenis, werking, soorten, kleuren en geschiedenis van deze veelzijdige edelsteen.",
-  "image": "https://stonesforhealth.nl/Blog images /Agaat- Betekenis, Soorten, Kleuren en Spirituele Werking.webp",
+  "image": "https://stonesforhealth.nl/blog-images/Agaat- Betekenis, Soorten, Kleuren en Spirituele Werking.webp",
   "datePublished": "2025-04-02T09:00:00Z",
   "dateModified": "2025-04-02T09:00:00Z",
   "author": {
@@ -83,7 +83,7 @@ export default function AgaatBlog() {
         {/* Banner Image */}
         <div className="relative w-full h-[300px] md:h-[400px] lg:h-[500px] my-8 rounded-xl overflow-hidden">
           <Image
-            src="/Blog images /Agaat- Betekenis, Soorten, Kleuren en Spirituele Werking.webp"
+            src="/blog-images/Agaat- Betekenis, Soorten, Kleuren en Spirituele Werking.webp"
             alt="Agaat - Betekenis, Soorten en Werking"
             fill
             className="object-cover"

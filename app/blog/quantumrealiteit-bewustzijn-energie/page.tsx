@@ -84,7 +84,7 @@ export default function Quantumrealiteit() {
         {/* Blog Image */}
         <div className="relative w-full h-64 sm:h-96 mb-8 rounded-lg overflow-hidden">
           <Image
-            src="/Blog images /De Quantumrealiteit – Hoe Bewustzijn en Energie Jouw Wereld Vormgeven.jpeg"
+            src="/blog-images/De Quantumrealiteit – Hoe Bewustzijn en Energie Jouw Wereld Vormgeven.jpeg"
             alt="De Quantumrealiteit – Hoe Bewustzijn en Energie Jouw Wereld Vormgeven"
             fill
             className="object-cover"

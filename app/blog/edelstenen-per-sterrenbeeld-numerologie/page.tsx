@@ -25,7 +25,7 @@ const blogPostingSchema = {
   "@type": "BlogPosting",
   "headline": "Edelstenen per Sterrenbeeld en Numerologie",
   "description": "Ontdek welke edelsteen perfect bij jou past op basis van je sterrenbeeld, Chinese dierenriem en numerologie getal.",
-  "image": "https://stonesforhealth.nl/Blog images /Edelstenen per Sterrenbeeld en Numerologie.webp",
+  "image": "https://stonesforhealth.nl/blog-images/Edelstenen per Sterrenbeeld en Numerologie.webp",
   "datePublished": "2025-03-08T09:00:00Z",
   "dateModified": "2025-03-08T09:00:00Z",
   "author": {
@@ -71,7 +71,7 @@ export default function EdelstenenSterrenbeeldPage() {
         {/* Featured Image */}
         <div className="relative w-full h-64 sm:h-96 my-8 rounded-xl overflow-hidden bg-gradient-to-br from-gray-50 to-gray-100 border border-gray-200">
           <Image
-            src="/Blog images /Edelstenen per Sterrenbeeld en Numerologie.webp"
+            src="/blog-images/Edelstenen per Sterrenbeeld en Numerologie.webp"
             alt="Edelstenen per sterrenbeeld en numerologie - vind jouw perfecte kristal"
             fill
             className="object-cover"

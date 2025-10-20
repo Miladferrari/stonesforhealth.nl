@@ -25,7 +25,7 @@ const blogPostingSchema = {
   "@type": "BlogPosting",
   "headline": "2026: Het Jaar van het Vuurpaard",
   "description": "Chinese astrologie 2026: Ontdek wat het Jaar van het Vuurpaard betekent voor carrière, liefde, gezondheid en spiritualiteit.",
-  "image": "https://stonesforhealth.nl/Blog images /2026- Het Jaar van het Vuurpaard.webp",
+  "image": "https://stonesforhealth.nl/blog-images/2026- Het Jaar van het Vuurpaard.webp",
   "datePublished": "2026-01-01T09:00:00Z",
   "dateModified": "2026-01-01T09:00:00Z",
   "author": {
@@ -71,7 +71,7 @@ export default function JaarVanHetVuurpaard2026Page() {
         {/* Featured Image */}
         <div className="relative w-full h-64 sm:h-96 my-8 rounded-xl overflow-hidden bg-gradient-to-br from-gray-50 to-gray-100 border border-gray-200">
           <Image
-            src="/Blog images /2026- Het Jaar van het Vuurpaard.webp"
+            src="/blog-images/2026- Het Jaar van het Vuurpaard.webp"
             alt="Jaar van het Vuurpaard 2026 - Chinese astrologie symbool met rode vuurenergie"
             fill
             className="object-cover"

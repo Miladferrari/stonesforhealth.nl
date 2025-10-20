@@ -86,7 +86,7 @@ export default function BlogPost() {
           {/* Blog Image */}
           <div className="relative w-full h-64 sm:h-96 mb-8 rounded-lg overflow-hidden">
             <Image
-              src="/Blog images /Edelstenen met Betekenis en Kracht- Malachiet, Lavasteen, Onyx, Howliet, Sodaliet en Unakiet.jpeg"
+              src="/blog-images/Edelstenen met Betekenis en Kracht- Malachiet, Lavasteen, Onyx, Howliet, Sodaliet en Unakiet.jpeg"
               alt="Edelstenen met Betekenis en Kracht"
               fill
               className="object-cover"

@@ -25,7 +25,7 @@ const blogPostingSchema = {
   "@type": "BlogPosting",
   "headline": "2025: Het Jaar van de Houten Slang",
   "description": "Chinese astrologie 2025: Ontdek de wijsheid van het Jaar van de Houten Slang. Transformatie, intuïtie en spirituele groei.",
-  "image": "https://stonesforhealth.nl/Blog images /2025- Het Jaar van de Houten Slang.webp",
+  "image": "https://stonesforhealth.nl/blog-images/2025- Het Jaar van de Houten Slang.webp",
   "datePublished": "2025-01-29T09:00:00Z",
   "dateModified": "2025-01-29T09:00:00Z",
   "author": {
@@ -71,7 +71,7 @@ export default function JaarVanDeHoutenSlang2025Page() {
         {/* Featured Image */}
         <div className="relative w-full h-64 sm:h-96 my-8 rounded-xl overflow-hidden bg-gradient-to-br from-gray-50 to-gray-100 border border-gray-200">
           <Image
-            src="/Blog images /2025- Het Jaar van de Houten Slang.webp"
+            src="/blog-images/2025- Het Jaar van de Houten Slang.webp"
             alt="Jaar van de Houten Slang 2025 - Chinese astrologie symbool met groene houten energie"
             fill
             className="object-cover"

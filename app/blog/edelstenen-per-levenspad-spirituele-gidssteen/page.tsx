@@ -86,7 +86,7 @@ export default function BlogPost() {
           {/* Blog Image */}
           <div className="relative w-full h-64 sm:h-96 mb-8 rounded-lg overflow-hidden">
             <Image
-              src="/Blog images /Edelstenen per Levenspad – Ontdek Jouw Spirituele Gidssteen.jpeg"
+              src="/blog-images/Edelstenen per Levenspad – Ontdek Jouw Spirituele Gidssteen.jpeg"
               alt="Edelstenen per Levenspad"
               fill
               className="object-cover"

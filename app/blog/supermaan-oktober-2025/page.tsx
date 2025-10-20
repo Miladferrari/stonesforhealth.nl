@@ -25,7 +25,7 @@ const blogPostingSchema = {
   "@type": "BlogPosting",
   "headline": "Supermaan 7 Oktober 2025 – Krachtige Maanenergie voor Balans en Vernieuwing",
   "description": "Ontdek de krachtige supermaan van 7 oktober 2025 in Ram. Rituelen, edelstenen en spirituele betekenis voor balans, vernieuwing en persoonlijke groei.",
-  "image": "https://stonesforhealth.nl/Blog images /Supermaan 7 Oktober 2025 – Krachtige Maanenergie voor Balans en Vernieuwing.jpeg",
+  "image": "https://stonesforhealth.nl/blog-images/Supermaan 7 Oktober 2025 – Krachtige Maanenergie voor Balans en Vernieuwing.jpeg",
   "datePublished": "2025-10-07T09:00:00Z",
   "dateModified": "2025-10-07T09:00:00Z",
   "author": {
@@ -71,7 +71,7 @@ export default function SupermaanOktober2025Page() {
         {/* Featured Image */}
         <div className="relative w-full h-64 sm:h-96 my-8 rounded-xl overflow-hidden bg-gradient-to-br from-gray-50 to-gray-100 border border-gray-200">
           <Image
-            src="/Blog images /Supermaan 7 Oktober 2025 – Krachtige Maanenergie voor Balans en Vernieuwing.jpeg"
+            src="/blog-images/Supermaan 7 Oktober 2025 – Krachtige Maanenergie voor Balans en Vernieuwing.jpeg"
             alt="Supermaan 7 oktober 2025 - Krachtige maanenergie in Ram met edelstenen"
             fill
             className="object-cover"

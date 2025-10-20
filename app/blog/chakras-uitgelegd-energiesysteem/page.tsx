@@ -25,7 +25,7 @@ const blogPostingSchema = {
   "@type": "BlogPosting",
   "headline": "Chakra's Uitgelegd: Zo Werkt het Energiesysteem van je Lichaam",
   "description": "Ontdek hoe het chakra-systeem werkt. Leer over de 7 hoofdchakra's, hun kleuren, betekenis en hoe je ze in balans brengt met edelstenen en meditatie.",
-  "image": "https://stonesforhealth.nl/Blog images /Chakra's Uitgelegd- Zo Werkt het Energiesysteem van je Lichaam.jpeg",
+  "image": "https://stonesforhealth.nl/blog-images/Chakra's Uitgelegd- Zo Werkt het Energiesysteem van je Lichaam.jpeg",
   "datePublished": "2025-10-03T09:00:00Z",
   "dateModified": "2025-10-03T09:00:00Z",
   "author": {
@@ -71,7 +71,7 @@ export default function ChakrasUitgelegPage() {
         {/* Featured Image */}
         <div className="relative w-full h-64 sm:h-96 my-8 rounded-xl overflow-hidden bg-gradient-to-br from-gray-50 to-gray-100 border border-gray-200">
           <Image
-            src="/Blog images /Chakra's Uitgelegd- Zo Werkt het Energiesysteem van je Lichaam.jpeg"
+            src="/blog-images/Chakra's Uitgelegd- Zo Werkt het Energiesysteem van je Lichaam.jpeg"
             alt="Chakra's uitgelegd - Het energiesysteem van je lichaam met de 7 hoofdchakra's"
             fill
             className="object-cover"

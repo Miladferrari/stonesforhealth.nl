@@ -25,7 +25,7 @@ const blogPostingSchema = {
   "@type": "BlogPosting",
   "headline": "Edelstenen Schoonmaken en Opladen in Maanlicht: Zo Doe Je Dat!",
   "description": "Leer hoe je edelstenen reinigt en oplaadt met maanlicht. Complete gids met timing, methodes en welke stenen perfect reageren op maanenergie.",
-  "image": "https://stonesforhealth.nl/Blog images /Edelstenen Schoonmaken en Opladen in Maanlicht- Zo Doe Je Dat!.jpeg",
+  "image": "https://stonesforhealth.nl/blog-images/Edelstenen Schoonmaken en Opladen in Maanlicht- Zo Doe Je Dat!.jpeg",
   "datePublished": "2025-10-05T09:00:00Z",
   "dateModified": "2025-10-05T09:00:00Z",
   "author": {
@@ -71,7 +71,7 @@ export default function EdelstenenOpladenMaanlichtPage() {
         {/* Featured Image */}
         <div className="relative w-full h-64 sm:h-96 my-8 rounded-xl overflow-hidden bg-gradient-to-br from-gray-50 to-gray-100 border border-gray-200">
           <Image
-            src="/Blog images /Edelstenen Schoonmaken en Opladen in Maanlicht- Zo Doe Je Dat!.jpeg"
+            src="/blog-images/Edelstenen Schoonmaken en Opladen in Maanlicht- Zo Doe Je Dat!.jpeg"
             alt="Edelstenen opladen in maanlicht - Complete gids voor kristallen reinigen"
             fill
             className="object-cover"

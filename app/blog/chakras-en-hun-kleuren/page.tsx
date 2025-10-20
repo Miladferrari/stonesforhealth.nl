@@ -25,7 +25,7 @@ const blogPostingSchema = {
   "@type": "BlogPosting",
   "headline": "Chakra's en hun Kleuren: De Energiepunten van je Lichaam",
   "description": "Ontdek alles over de 7 chakra's en hun kleuren. Leer welke energiepunten er zijn, hoe ze je beïnvloeden en hoe je ze in balans brengt.",
-  "image": "https://stonesforhealth.nl/Blog images /Chakra's en hun Kleuren- De Energiepunten van je Lichaam.webp",
+  "image": "https://stonesforhealth.nl/blog-images/Chakra's en hun Kleuren- De Energiepunten van je Lichaam.webp",
   "datePublished": "2025-03-10T09:00:00Z",
   "dateModified": "2025-03-10T09:00:00Z",
   "author": {
@@ -71,7 +71,7 @@ export default function ChakraKleurenPage() {
         {/* Featured Image */}
         <div className="relative w-full h-64 sm:h-96 my-8 rounded-xl overflow-hidden bg-gradient-to-br from-gray-50 to-gray-100 border border-gray-200">
           <Image
-            src="/Blog images /Chakra's en hun Kleuren- De Energiepunten van je Lichaam.webp"
+            src="/blog-images/Chakra's en hun Kleuren- De Energiepunten van je Lichaam.webp"
             alt="De 7 chakra's en hun kleuren - energiepunten van het lichaam"
             fill
             className="object-cover"

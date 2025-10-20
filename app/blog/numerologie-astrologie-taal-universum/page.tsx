@@ -84,7 +84,7 @@ export default function NumerologieAstrologie() {
         {/* Blog Image */}
         <div className="relative w-full h-64 sm:h-96 mb-8 rounded-lg overflow-hidden">
           <Image
-            src="/Blog images /Numerologie & Astrologie – De Taal van het Universum.jpeg"
+            src="/blog-images/Numerologie & Astrologie – De Taal van het Universum.jpeg"
             alt="Numerologie & Astrologie – De Taal van het Universum"
             fill
             className="object-cover"

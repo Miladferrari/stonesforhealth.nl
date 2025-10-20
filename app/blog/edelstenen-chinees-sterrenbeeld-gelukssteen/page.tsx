@@ -84,7 +84,7 @@ export default function EdelstenenChineeseSterrenbeeld() {
         {/* Blog Image */}
         <div className="relative w-full h-64 sm:h-96 mb-8 rounded-lg overflow-hidden">
           <Image
-            src="/Blog images /Edelstenen per Chinees Sterrenbeeld – Ontdek Jouw Energie & Gelukssteen.jpeg"
+            src="/blog-images/Edelstenen per Chinees Sterrenbeeld – Ontdek Jouw Energie & Gelukssteen.jpeg"
             alt="Edelstenen per Chinees Sterrenbeeld"
             fill
             className="object-cover"

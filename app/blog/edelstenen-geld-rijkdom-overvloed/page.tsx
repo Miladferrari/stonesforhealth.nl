@@ -89,7 +89,7 @@ export default function BlogPost() {
           {/* Blog Image */}
           <div className="relative w-full h-64 sm:h-96 mb-8 rounded-lg overflow-hidden">
             <Image
-              src="/Blog images /Edelstenen om Geld, Rijkdom en Overvloed aan te Trekken.jpeg"
+              src="/blog-images/Edelstenen om Geld, Rijkdom en Overvloed aan te Trekken.jpeg"
               alt="Edelstenen voor Geld en Overvloed"
               fill
               className="object-cover"

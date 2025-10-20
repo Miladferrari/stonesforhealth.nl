@@ -40,7 +40,7 @@ const blogPostingSchema = {
   "@type": "BlogPosting",
   "headline": "Art-of-Stones B.V.: Het Verhaal achter S4H Edelstenen",
   "description": "Ontdek Art-of-Stones B.V., het bedrijf achter het private label S4H (Stones for Health). Hoogwaardige edelstenen en sieraden in 11 Europese landen.",
-  "image": "https://stonesforhealth.nl/Blog images /Art-of-Stones B.V.- Het Verhaal achter S4H Edelstenen.webp",
+  "image": "https://stonesforhealth.nl/blog-images/Art-of-Stones B.V.- Het Verhaal achter S4H Edelstenen.webp",
   "datePublished": "2025-03-28T09:00:00Z",
   "dateModified": "2025-03-28T09:00:00Z",
   "author": {
@@ -81,7 +81,7 @@ export default function ArtOfStonesBlog() {
         {/* Banner Image */}
         <div className="relative w-full h-[300px] md:h-[400px] lg:h-[500px] my-8 rounded-xl overflow-hidden">
           <Image
-            src="/Blog images /Art-of-Stones B.V.- Het Verhaal achter S4H Edelstenen.webp"
+            src="/blog-images/Art-of-Stones B.V.- Het Verhaal achter S4H Edelstenen.webp"
             alt="Art-of-Stones B.V. - S4H Edelstenen & Sieraden"
             fill
             className="object-cover"

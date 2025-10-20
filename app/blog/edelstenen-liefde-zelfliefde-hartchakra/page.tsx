@@ -84,7 +84,7 @@ export default function EdelstenenLiefdeZelfliefde() {
         {/* Blog Image */}
         <div className="relative w-full h-64 sm:h-96 mb-8 rounded-lg overflow-hidden">
           <Image
-            src="/Blog images /Edelstenen voor Liefde en Zelfliefde – Open Je Hart en Trek Liefde Aan.jpeg"
+            src="/blog-images/Edelstenen voor Liefde en Zelfliefde – Open Je Hart en Trek Liefde Aan.jpeg"
             alt="Edelstenen voor Liefde en Zelfliefde"
             fill
             className="object-cover"

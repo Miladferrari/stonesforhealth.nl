@@ -25,7 +25,7 @@ const blogPostingSchema = {
   "@type": "BlogPosting",
   "headline": "Morganiet & Rhodoniet: Edelstenen van Liefde & Heling",
   "description": "Ontdek Morganiet en Rhodoniet voor hartchakra heling. Onvoorwaardelijke liefde, emotionele heling, vergeving en compassie.",
-  "image": "https://stonesforhealth.nl/Blog images /Morganiet & Rhodoniet- Edelstenen van Liefde & Heling.webp",
+  "image": "https://stonesforhealth.nl/blog-images/Morganiet & Rhodoniet- Edelstenen van Liefde & Heling.webp",
   "datePublished": "2025-03-18T09:00:00Z",
   "dateModified": "2025-03-18T09:00:00Z",
   "author": {
@@ -69,7 +69,7 @@ export default function MorganietRhodonietPage() {
         {/* Featured Image */}
         <div className="relative h-96 mb-12 rounded-xl overflow-hidden">
           <Image
-            src="/Blog images /Morganiet & Rhodoniet- Edelstenen van Liefde & Heling.webp"
+            src="/blog-images/Morganiet & Rhodoniet- Edelstenen van Liefde & Heling.webp"
             alt="Morganiet en Rhodoniet edelstenen - hartchakra kristallen voor liefde en emotionele heling"
             fill
             className="object-cover"

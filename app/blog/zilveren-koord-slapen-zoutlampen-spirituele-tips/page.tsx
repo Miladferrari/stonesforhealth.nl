@@ -39,7 +39,7 @@ const blogPostingSchema = {
   "@type": "BlogPosting",
   "headline": "Het Zilveren Koord: Slapen, Zoutlampen & Spirituele Tips",
   "description": "Ontdek het zilveren koord - de energieverbinding tussen lichaam en ziel. Leer over dromen, astrale projectie, zoutlampen voor rust en edelstenen voor diepe spirituele slaap.",
-  "image": "https://stonesforhealth.nl/Blog images /Het Zilveren Koord, Slapen, Zoutlampen & Spirituele Tips.webp",
+  "image": "https://stonesforhealth.nl/blog-images/Het Zilveren Koord, Slapen, Zoutlampen & Spirituele Tips.webp",
   "datePublished": "2025-04-12T09:00:00Z",
   "dateModified": "2025-04-12T09:00:00Z",
   "author": {
@@ -80,7 +80,7 @@ export default function ZilverenKoordBlog() {
         {/* Banner Image */}
         <div className="relative w-full h-[300px] md:h-[400px] lg:h-[500px] my-8 rounded-xl overflow-hidden">
           <Image
-            src="/Blog images /Het Zilveren Koord, Slapen, Zoutlampen & Spirituele Tips.webp"
+            src="/blog-images/Het Zilveren Koord, Slapen, Zoutlampen & Spirituele Tips.webp"
             alt="Het Zilveren Koord en Spirituele Slaap"
             fill
             className="object-cover"
