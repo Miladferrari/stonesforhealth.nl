@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono, EB_Garamond } from "next/font/google";
 import "./globals.css";
 // Using Store API enhanced CartContext for proper tax and session management
+
 import { CartProvider } from "./contexts/CartContextStoreAPI";
 import { ToastProvider } from "./contexts/ToastContext";
 import ClientOnly from "./components/ClientOnly";
