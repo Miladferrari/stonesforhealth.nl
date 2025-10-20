@@ -86,6 +86,17 @@ export default function BlogPost() {
             </div>
           </header>
 
+          {/* Blog Image */}
+          <div className="relative w-full h-64 sm:h-96 mb-8 rounded-lg overflow-hidden">
+            <Image
+              src="/Blog images /Edelstenen om Geld, Rijkdom en Overvloed aan te Trekken.jpeg"
+              alt="Edelstenen voor Geld en Overvloed"
+              fill
+              className="object-cover"
+              priority
+            />
+          </div>
+
           {/* Introductie */}
           <section className="mb-8">
             <p className="text-base leading-relaxed text-gray-800 font-[family-name:var(--font-eb-garamond)] mb-4">

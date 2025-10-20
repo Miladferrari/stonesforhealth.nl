@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import Image from 'next/image';
 import Breadcrumbs from '@/app/components/Breadcrumbs';
 
 export const metadata: Metadata = {
@@ -79,6 +80,17 @@ export default function Quantumrealiteit() {
             <span>12 min leestijd</span>
           </div>
         </header>
+
+        {/* Blog Image */}
+        <div className="relative w-full h-64 sm:h-96 mb-8 rounded-lg overflow-hidden">
+          <Image
+            src="/Blog images /De Quantumrealiteit – Hoe Bewustzijn en Energie Jouw Wereld Vormgeven.jpeg"
+            alt="De Quantumrealiteit – Hoe Bewustzijn en Energie Jouw Wereld Vormgeven"
+            fill
+            className="object-cover"
+            priority
+          />
+        </div>
 
         <section className="mb-8">
           <p className="text-base leading-relaxed text-gray-800 font-[family-name:var(--font-eb-garamond)] mb-4">

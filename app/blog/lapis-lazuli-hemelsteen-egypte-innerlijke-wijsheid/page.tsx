@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import Image from 'next/image';
 import JsonLd from '@/app/components/JsonLd';
 import Breadcrumbs from '@/app/components/Breadcrumbs';
 
@@ -81,6 +82,17 @@ export default function BlogPost() {
               <span>7 min leestijd</span>
             </div>
           </header>
+
+          {/* Blog Image */}
+          <div className="relative w-full h-64 sm:h-96 mb-8 rounded-lg overflow-hidden">
+            <Image
+              src="/Blog images /Lapis Lazuli – De Hemelsteen van het Oude Egypte en Innerlijke Wijsheid.jpeg"
+              alt="Lapis Lazuli – De Hemelsteen"
+              fill
+              className="object-cover"
+              priority
+            />
+          </div>
 
           {/* Introductie */}
           <section className="mb-8">
