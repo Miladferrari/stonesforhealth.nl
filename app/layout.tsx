@@ -9,6 +9,7 @@ import ClientOnly from "./components/ClientOnly";
 import LayoutContent from "./components/LayoutContent";
 import GoogleAnalytics from "./components/GoogleAnalytics";
 import MetaPixel from "./components/MetaPixel";
+import MicrosoftClarity from "./components/MicrosoftClarity";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -72,6 +73,7 @@ export default function RootLayout({
       >
         <GoogleAnalytics />
         <MetaPixel />
+        <MicrosoftClarity />
         <ToastProvider>
           <CartProvider>
             <LayoutContent>
