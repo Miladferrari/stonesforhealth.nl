@@ -5,11 +5,9 @@ import "./globals.css";
 
 import { CartProvider } from "./contexts/CartContextStoreAPI";
 import { ToastProvider } from "./contexts/ToastContext";
-import ClientOnly from "./components/ClientOnly";
 import LayoutContent from "./components/LayoutContent";
 import GoogleAnalytics from "./components/GoogleAnalytics";
 import MetaPixel from "./components/MetaPixel";
-import MicrosoftClarity from "./components/MicrosoftClarity";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -66,6 +64,18 @@ export default function RootLayout({
         <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
         <meta name="theme-color" content="#ffffff" />
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet" />
+        <script
+          type="text/javascript"
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function(c,l,a,r,i,t,y){
+                c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+                t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+                y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+              })(window, document, "clarity", "script", "ttu5iu9lg1");
+            `,
+          }}
+        />
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${ebGaramond.variable} antialiased bg-white`}
@@ -73,7 +83,6 @@ export default function RootLayout({
       >
         <GoogleAnalytics />
         <MetaPixel />
-        <MicrosoftClarity />
         <ToastProvider>
           <CartProvider>
             <LayoutContent>
