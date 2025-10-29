@@ -17,10 +17,12 @@ export async function generateMetadata({ params }: ProductPageProps): Promise<Me
   try {
     let product;
 
-    if (!isNaN(parseInt(slug))) {
+    // Always try by slug first (supports both text slugs and EAN barcode slugs)
+    product = await woocommerce.getProductBySlug(slug);
+
+    // If not found and slug is numeric, try as product ID (backward compatibility)
+    if (!product && !isNaN(parseInt(slug))) {
       product = await woocommerce.getProduct(parseInt(slug));
-    } else {
-      product = await woocommerce.getProductBySlug(slug);
     }
 
     if (!product) {
@@ -63,8 +65,11 @@ export default async function ProductPage({ params }: ProductPageProps) {
   try {
     let product;
 
-    // Check if slug is actually a numeric ID (backward compatibility)
-    if (!isNaN(parseInt(slug))) {
+    // Always try by slug first (supports both text slugs and EAN barcode slugs)
+    product = await woocommerce.getProductBySlug(slug);
+
+    // If not found and slug is numeric, try as product ID (backward compatibility)
+    if (!product && !isNaN(parseInt(slug))) {
       const productId = parseInt(slug);
       product = await woocommerce.getProduct(productId);
 
@@ -72,9 +77,6 @@ export default async function ProductPage({ params }: ProductPageProps) {
         // Redirect old ID-based URL to new slug-based URL
         redirect(`/product/${product.slug}`);
       }
-    } else {
-      // Fetch by slug (new method)
-      product = await woocommerce.getProductBySlug(slug);
     }
 
     if (!product) {

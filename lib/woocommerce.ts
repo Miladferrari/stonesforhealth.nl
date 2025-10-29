@@ -1,5 +1,6 @@
 import { getWooCommerceConfig } from './woocommerce-config';
 import { createOAuthHeader, requiresOAuth } from './woocommerce-oauth';
+import { wooLogger } from './logger';
 
 interface WooCommerceConfig {
   baseUrl: string;
@@ -144,6 +145,7 @@ class CacheManager {
 
 class WooCommerceAPI {
   private cache = new CacheManager();
+  private pendingRequests = new Map<string, Promise<any>>();
 
   // Get config dynamically for each request
   private get config(): WooCommerceConfig {
@@ -154,165 +156,195 @@ class WooCommerceAPI {
     endpoint: string,
     options?: RequestInit & { useCache?: boolean; retries?: number }
   ): Promise<T> {
-    const maxRetries = options?.retries ?? 2;
-    let lastError: any;
-    
-    for (let attempt = 0; attempt <= maxRetries; attempt++) {
-      try {
-        return await this.fetchAPIInternal<T>(endpoint, options);
-      } catch (error: any) {
-        lastError = error;
-        
-        // Don't retry on certain errors
-        if (error.message?.includes('authentication failed') ||
-            error.message?.includes('access denied') ||
-            error.message?.includes('Cannot view this resource')) {
-          throw error;
-        }
-        
-        // Only retry on network/server errors
-        if (attempt < maxRetries && 
-            (error.message?.includes('HTML page instead of JSON') ||
-             error.message?.includes('fetch failed') ||
-             error.message?.includes('ETIMEDOUT') ||
-             error.message?.includes('ECONNREFUSED'))) {
-          if (process.env.NODE_ENV === 'development') {
-            console.warn(`[WooCommerce API] Attempt ${attempt + 1} failed, retrying...`);
+    // Check if this exact request is already in flight
+    const requestKey = `${endpoint}:${options?.method || 'GET'}`;
+
+    if (this.pendingRequests.has(requestKey)) {
+      wooLogger.debug(`Deduplicating request: ${endpoint}`);
+      return this.pendingRequests.get(requestKey)! as Promise<T>;
+    }
+
+    // Create the request promise with retry logic
+    const requestPromise = (async () => {
+      const maxRetries = options?.retries ?? 2;
+      let lastError: any;
+
+      for (let attempt = 0; attempt <= maxRetries; attempt++) {
+        try {
+          return await this.fetchAPIInternal<T>(endpoint, options);
+        } catch (error: any) {
+          lastError = error;
+
+          // Don't retry on certain errors
+          if (error.message?.includes('authentication failed') ||
+              error.message?.includes('access denied') ||
+              error.message?.includes('Cannot view this resource')) {
+            throw error;
           }
-          // Wait a bit before retrying (exponential backoff)
-          await new Promise(resolve => setTimeout(resolve, Math.pow(2, attempt) * 1000));
-        } else {
-          throw error;
+
+          // Only retry on network/server errors
+          if (attempt < maxRetries &&
+              (error.message?.includes('HTML page instead of JSON') ||
+               error.message?.includes('fetch failed') ||
+               error.message?.includes('ETIMEDOUT') ||
+               error.message?.includes('ECONNREFUSED'))) {
+            if (process.env.NODE_ENV === 'development') {
+              wooLogger.debug(`Attempt ${attempt + 1} failed, retrying...`);
+            }
+            // Wait a bit before retrying (exponential backoff)
+            await new Promise(resolve => setTimeout(resolve, Math.pow(2, attempt) * 1000));
+          } else {
+            throw error;
+          }
         }
       }
-    }
-    
-    throw lastError;
+
+      throw lastError;
+    })();
+
+    // Store the promise in the pending requests map
+    this.pendingRequests.set(requestKey, requestPromise);
+
+    // Clean up the map entry when the request completes (success or failure)
+    requestPromise.finally(() => {
+      this.pendingRequests.delete(requestKey);
+    });
+
+    return requestPromise;
   }
 
   private async fetchAPIWithHeaders<T>(
     endpoint: string,
     options?: RequestInit & { useCache?: boolean }
   ): Promise<{ products: T; total: number; totalPages: number }> {
-    // Check cache first (unless explicitly disabled)
-    const shouldUseCache = options?.useCache !== false;
-    if (shouldUseCache) {
-      const cached = this.cache.get(endpoint);
-      if (cached) {
-        console.log(`[WooCommerce API] Cache hit for: ${endpoint}`);
-        return cached;
-      }
+    // Check if this exact request is already in flight
+    const requestKey = `${endpoint}:headers:${options?.method || 'GET'}`;
+
+    if (this.pendingRequests.has(requestKey)) {
+      wooLogger.debug(`Deduplicating request with headers: ${endpoint}`);
+      return this.pendingRequests.get(requestKey)! as Promise<{ products: T; total: number; totalPages: number }>;
     }
 
-    const timestamp = new Date().toISOString();
-    console.log(
-      `[WooCommerce API] ${timestamp} - Fetching fresh data with headers for: ${endpoint}`
-    );
-
-    // Build base URL
-    const baseUrl = `${this.config.baseUrl}/${endpoint}`;
-    let fullUrl: string;
-    let headers: Record<string, string> = {
-      "Content-Type": "application/json",
-      Accept: "application/json",
-      "Cache-Control": "no-cache, no-store, must-revalidate",
-      Pragma: "no-cache",
-    };
-
-    // Check if we need OAuth (HTTP) or can use query params (HTTPS)
-    if (requiresOAuth(this.config.baseUrl)) {
-      console.log(`[WooCommerce API] Using OAuth 1.0a for HTTP connection`);
-      fullUrl = baseUrl;
-
-      // Add OAuth headers
-      const oauthHeaders = createOAuthHeader(
-        fullUrl,
-        options?.method || 'GET',
-        this.config.consumerKey,
-        this.config.consumerSecret
-      );
-
-      headers = { ...headers, ...oauthHeaders };
-    } else {
-      console.log(`[WooCommerce API] Using query parameters for HTTPS connection`);
-      // Add consumer key and secret as query parameters for HTTPS
-      const separator = endpoint.includes("?") ? "&" : "?";
-      const authParams = `${separator}consumer_key=${this.config.consumerKey}&consumer_secret=${this.config.consumerSecret}`;
-      fullUrl = `${baseUrl}${authParams}`;
-    }
-
-    console.log(`[WooCommerce API] Fetching with headers: ${endpoint}`);
-    console.log(
-      `[WooCommerce API] Full URL: ${fullUrl.replace(
-        this.config.consumerSecret,
-        "HIDDEN"
-      )}`
-    );
-
-    try {
-      const response = await fetch(fullUrl, {
-        ...options,
-        headers,
-        mode: "cors",
-        credentials: "omit",
-        next: {
-          revalidate: 60, // Revalidate every 60 seconds
-        },
-      });
-
-      console.log(`[WooCommerce API] Response status: ${response.status}`);
-
-      if (!response.ok) {
-        const errorText = await response.text();
-        if (response.status === 404) {
-          console.debug(`[WooCommerce API] Resource not found: ${endpoint}`);
-        } else {
-          console.error(`[WooCommerce API] Error: ${response.status} ${response.statusText}`, errorText);
+    // Create the request promise
+    const requestPromise = (async () => {
+      // Check cache first (unless explicitly disabled)
+      const shouldUseCache = options?.useCache !== false;
+      if (shouldUseCache) {
+        const cached = this.cache.get(endpoint);
+        if (cached) {
+          wooLogger.debug(`Cache hit: ${endpoint}`);
+          return cached;
         }
-
-        // Return empty result with pagination
-        return { products: [] as T, total: 0, totalPages: 0 };
       }
 
-      // Check if response is JSON
-      const contentType = response.headers.get("content-type");
-      if (!contentType || !contentType.includes("application/json")) {
-        console.warn('[WooCommerce API] Returning empty data due to non-JSON response');
-        return { products: [] as T, total: 0, totalPages: 0 };
-      }
-
-      let data;
-      try {
-        data = await response.json();
-      } catch (jsonError) {
-        console.warn('[WooCommerce API] Failed to parse JSON response, returning empty data');
-        return { products: [] as T, total: 0, totalPages: 0 };
-      }
-
-      // Get pagination headers
-      const total = parseInt(response.headers.get('X-WP-Total') || '0');
-      const totalPages = parseInt(response.headers.get('X-WP-TotalPages') || '0');
-
+      const timestamp = new Date().toISOString();
       console.log(
-        `[WooCommerce API] Success: Found ${Array.isArray(data) ? data.length : 1} items, Total: ${total}, Pages: ${totalPages}`
+        `[WooCommerce API] ${timestamp} - Fetching fresh data with headers for: ${endpoint}`
       );
 
-      const result = {
-        products: data,
-        total: total,
-        totalPages: totalPages
+      // Build base URL
+      const baseUrl = `${this.config.baseUrl}/${endpoint}`;
+      let fullUrl: string;
+      let headers: Record<string, string> = {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        "Cache-Control": "no-cache, no-store, must-revalidate",
+        Pragma: "no-cache",
       };
 
-      // Store in cache if caching is enabled
-      if (shouldUseCache) {
-        this.cache.set(endpoint, result);
+      // Check if we need OAuth (HTTP) or can use query params (HTTPS)
+      if (requiresOAuth(this.config.baseUrl)) {
+        fullUrl = baseUrl;
+
+        // Add OAuth headers
+        const oauthHeaders = createOAuthHeader(
+          fullUrl,
+          options?.method || 'GET',
+          this.config.consumerKey,
+          this.config.consumerSecret
+        );
+
+        headers = { ...headers, ...oauthHeaders };
+      } else {
+        // Add consumer key and secret as query parameters for HTTPS
+        const separator = endpoint.includes("?") ? "&" : "?";
+        const authParams = `${separator}consumer_key=${this.config.consumerKey}&consumer_secret=${this.config.consumerSecret}`;
+        fullUrl = `${baseUrl}${authParams}`;
       }
 
-      return result;
-    } catch (error: any) {
-      console.error(`[WooCommerce API] Fetch error:`, error);
-      return { products: [] as T, total: 0, totalPages: 0 };
-    }
+      wooLogger.debug(`Fetching with headers: ${endpoint}`);
+
+      try {
+        const response = await fetch(fullUrl, {
+          ...options,
+          headers,
+          mode: "cors",
+          credentials: "omit",
+          next: {
+            revalidate: 60, // Revalidate every 60 seconds
+          },
+        });
+
+        if (!response.ok) {
+          const errorText = await response.text();
+          if (response.status === 404) {
+            wooLogger.debug(`Resource not found: ${endpoint}`);
+          } else {
+            wooLogger.error(`Error ${response.status}: ${endpoint}`, errorText);
+          }
+
+          // Return empty result with pagination
+          return { products: [] as T, total: 0, totalPages: 0 };
+        }
+
+        // Check if response is JSON
+        const contentType = response.headers.get("content-type");
+        if (!contentType || !contentType.includes("application/json")) {
+          wooLogger.warn('Non-JSON response, returning empty data');
+          return { products: [] as T, total: 0, totalPages: 0 };
+        }
+
+        let data;
+        try {
+          data = await response.json();
+        } catch (jsonError) {
+          wooLogger.warn('Failed to parse JSON, returning empty data');
+          return { products: [] as T, total: 0, totalPages: 0 };
+        }
+
+        // Get pagination headers
+        const total = parseInt(response.headers.get('X-WP-Total') || '0');
+        const totalPages = parseInt(response.headers.get('X-WP-TotalPages') || '0');
+
+        wooLogger.debug(`Success: ${Array.isArray(data) ? data.length : 1} items, Total: ${total}`);
+
+        const result = {
+          products: data,
+          total: total,
+          totalPages: totalPages
+        };
+
+        // Store in cache if caching is enabled
+        if (shouldUseCache) {
+          this.cache.set(endpoint, result);
+        }
+
+        return result;
+      } catch (error: any) {
+        wooLogger.error('Fetch error:', error.message);
+        return { products: [] as T, total: 0, totalPages: 0 };
+      }
+    })();
+
+    // Store the promise in the pending requests map
+    this.pendingRequests.set(requestKey, requestPromise);
+
+    // Clean up the map entry when the request completes (success or failure)
+    requestPromise.finally(() => {
+      this.pendingRequests.delete(requestKey);
+    });
+
+    return requestPromise;
   }
 
   private async fetchAPIInternal<T>(
@@ -324,15 +356,12 @@ class WooCommerceAPI {
     if (shouldUseCache) {
       const cached = this.cache.get(endpoint);
       if (cached) {
-        console.log(`[WooCommerce API] Cache hit for: ${endpoint}`);
+        wooLogger.debug(`Cache hit: ${endpoint}`);
         return cached;
       }
     }
 
-    const timestamp = new Date().toISOString();
-    console.log(
-      `[WooCommerce API] ${timestamp} - Fetching fresh data for: ${endpoint}`
-    );
+    wooLogger.debug(`Fetching: ${endpoint}`);
 
     // Build base URL
     const baseUrl = `${this.config.baseUrl}/${endpoint}`;
@@ -346,9 +375,8 @@ class WooCommerceAPI {
 
     // Check if we need OAuth (HTTP) or can use query params (HTTPS)
     if (requiresOAuth(this.config.baseUrl)) {
-      console.log(`[WooCommerce API] Using OAuth 1.0a for HTTP connection`);
       fullUrl = baseUrl;
-      
+
       // Add OAuth headers
       const oauthHeaders = createOAuthHeader(
         fullUrl,
@@ -356,23 +384,14 @@ class WooCommerceAPI {
         this.config.consumerKey,
         this.config.consumerSecret
       );
-      
+
       headers = { ...headers, ...oauthHeaders };
     } else {
-      console.log(`[WooCommerce API] Using query parameters for HTTPS connection`);
       // Add consumer key and secret as query parameters for HTTPS
       const separator = endpoint.includes("?") ? "&" : "?";
       const authParams = `${separator}consumer_key=${this.config.consumerKey}&consumer_secret=${this.config.consumerSecret}`;
       fullUrl = `${baseUrl}${authParams}`;
     }
-
-    console.log(`[WooCommerce API] Fetching: ${endpoint}`);
-    console.log(
-      `[WooCommerce API] Full URL: ${fullUrl.replace(
-        this.config.consumerSecret,
-        "HIDDEN"
-      )}`
-    );
 
     try {
       const response = await fetch(fullUrl, {
@@ -386,20 +405,13 @@ class WooCommerceAPI {
         },
       });
 
-      console.log(`[WooCommerce API] Response status: ${response.status}`);
-
       if (!response.ok) {
         const errorText = await response.text();
         // Only log non-404 errors as errors, 404s are expected sometimes
         if (response.status === 404) {
-          console.debug(
-            `[WooCommerce API] Resource not found: ${endpoint}`
-          );
+          wooLogger.debug(`Resource not found: ${endpoint}`);
         } else {
-          console.error(
-            `[WooCommerce API] Error: ${response.status} ${response.statusText}`,
-            errorText
-          );
+          wooLogger.error(`Error ${response.status}: ${endpoint}`, errorText);
         }
 
         // Try to parse error details
@@ -444,28 +456,15 @@ class WooCommerceAPI {
       // Check if response is JSON
       const contentType = response.headers.get("content-type");
       if (!contentType || !contentType.includes("application/json")) {
-        // Log to console only in development for debugging
-        if (process.env.NODE_ENV === 'development') {
-          console.warn(`[WooCommerce API] Non-JSON response received. Content-Type: ${contentType}`);
-        }
-        
-        // Try to get the text content for debugging
         const textContent = await response.text();
-        
+
         // Check if it's HTML (common error page)
         if (textContent.includes("<!DOCTYPE") || textContent.includes("<html")) {
-          // Only log HTML preview in development
-          if (process.env.NODE_ENV === 'development') {
-            console.warn(`[WooCommerce API] Received HTML instead of JSON. WordPress may not be installed or API endpoint is incorrect.`);
-          }
-          // Return empty array as fallback for any HTML response
-          // This prevents the app from crashing when WordPress is not installed
-          console.warn('[WooCommerce API] Returning empty data due to HTML response');
+          wooLogger.warn('Received HTML instead of JSON - WordPress may not be installed');
           return [] as T;
         }
-        
-        // For other non-JSON responses, also return empty data
-        console.warn('[WooCommerce API] Returning empty data due to non-JSON response');
+
+        wooLogger.warn('Returning empty data due to non-JSON response');
         return [] as T;
       }
 
@@ -473,19 +472,11 @@ class WooCommerceAPI {
       try {
         data = await response.json();
       } catch (jsonError) {
-        // Only log in development
-        if (process.env.NODE_ENV === 'development') {
-          console.warn(`[WooCommerce API] Failed to parse JSON:`, jsonError);
-        }
-        console.warn('[WooCommerce API] Failed to parse JSON response, returning empty data');
+        wooLogger.warn('Failed to parse JSON response, returning empty data');
         return [] as T;
       }
 
-      console.log(
-        `[WooCommerce API] Success: Found ${
-          Array.isArray(data) ? data.length : 1
-        } items`
-      );
+      wooLogger.debug(`Success: ${Array.isArray(data) ? data.length : 1} items`);
 
       // Store in cache if caching is enabled
       if (shouldUseCache) {
@@ -494,28 +485,23 @@ class WooCommerceAPI {
 
       return data;
     } catch (error: any) {
-      // Only log errors in development
-      if (process.env.NODE_ENV === 'development') {
-        console.warn(`[WooCommerce API] Fetch error:`, error.message);
-      }
-      
       // Handle connection errors gracefully - return empty data instead of throwing
       if (error.code === 'ENOTFOUND' || error.message?.includes('ENOTFOUND')) {
-        console.warn('[WooCommerce API] Cannot connect - API URL not found, returning empty data');
+        wooLogger.warn('Cannot connect - API URL not found, returning empty data');
         return [] as T;
       } else if (error.code === 'ECONNREFUSED' || error.message?.includes('ECONNREFUSED')) {
-        console.warn('[WooCommerce API] Connection refused, returning empty data');
+        wooLogger.warn('Connection refused, returning empty data');
         return [] as T;
       } else if (error.code === 'ETIMEDOUT' || error.message?.includes('ETIMEDOUT')) {
-        console.warn('[WooCommerce API] Connection timed out, returning empty data');
+        wooLogger.warn('Connection timed out, returning empty data');
         return [] as T;
       } else if (error.message?.includes('fetch failed')) {
-        console.warn('[WooCommerce API] Fetch failed, returning empty data');
+        wooLogger.warn('Fetch failed, returning empty data');
         return [] as T;
       }
-      
+
       // For any other errors, also return empty data to prevent crashes
-      console.warn('[WooCommerce API] Unexpected error, returning empty data:', error.message);
+      wooLogger.error('Unexpected error:', error.message);
       return [] as T;
     }
   }
@@ -633,7 +619,7 @@ class WooCommerceAPI {
       "[WooCommerce API] Creating order with data:",
       JSON.stringify(orderData, null, 2)
     );
-    console.log("[WooCommerce API] API URL:", this.config.baseUrl);
+    wooLogger.info("API URL:", this.config.baseUrl);
     console.log(
       "[WooCommerce API] Using consumer key:",
       this.config.consumerKey.substring(0, 10) + "..."

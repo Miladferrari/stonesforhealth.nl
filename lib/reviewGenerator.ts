@@ -991,6 +991,9 @@ function generateIndividualReviews(productId: number, count: number, distributio
   const reviews: Review[] = [];
   let reviewId = 1;
 
+  // Ensure productId is valid
+  const safeProductId = Math.abs(productId || 1);
+
   // Create a pool of ratings based on distribution
   const ratingPool: number[] = [];
   distribution.forEach(d => {
@@ -1001,28 +1004,34 @@ function generateIndividualReviews(productId: number, count: number, distributio
 
   // Shuffle rating pool deterministically based on productId
   for (let i = ratingPool.length - 1; i > 0; i--) {
-    const j = Math.floor(((productId + i * 13) % (i + 1)));
+    const j = Math.floor(((safeProductId + i * 13) % (i + 1)));
     [ratingPool[i], ratingPool[j]] = [ratingPool[j], ratingPool[i]];
   }
 
   // Generate reviews
   for (let i = 0; i < count; i++) {
     const rating = ratingPool[i] || 5;
-    const nameIndex = (productId + i * 7) % firstNames.length;
-    const lastNameIndex = (productId + i * 5) % lastNames.length;
-    const cityIndex = (productId + i * 3) % cities.length;
+    // Ensure positive indices by using Math.abs and adding array length before modulo
+    const nameIndex = Math.abs((safeProductId + i * 7)) % firstNames.length;
+    const lastNameIndex = Math.abs((safeProductId + i * 5)) % lastNames.length;
+    const cityIndex = Math.abs((safeProductId + i * 3)) % cities.length;
     const timeIndex = i % timeAgo.length;
 
     const possibleTexts = reviewTexts[rating as keyof typeof reviewTexts] || reviewTexts[5];
-    const textIndex = (productId + i) % possibleTexts.length;
+    const textIndex = Math.abs((safeProductId + i)) % possibleTexts.length;
+
+    // Defensive: ensure we have valid data
+    const firstName = firstNames[nameIndex] || firstNames[0];
+    const lastName = lastNames[lastNameIndex] || lastNames[0];
+    const city = cities[cityIndex] || cities[0];
 
     reviews.push({
       id: reviewId++,
-      name: `${firstNames[nameIndex]} ${lastNames[lastNameIndex].charAt(0)}.`,
-      location: cities[cityIndex],
+      name: `${firstName} ${lastName.charAt(0)}.`,
+      location: city,
       rating: rating,
       date: timeAgo[timeIndex],
-      verified: ((productId + i * 11) % 10) > 2, // 80% verified, deterministic
+      verified: ((safeProductId + i * 11) % 10) > 2, // 80% verified, deterministic
       text: possibleTexts[textIndex]
     });
   }
