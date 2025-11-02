@@ -58,3 +58,6 @@ next-env.d.ts
 *.zip
 *.rar
 *.7z
+
+# purchase notification cache
+/data

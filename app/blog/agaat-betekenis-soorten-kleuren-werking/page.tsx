@@ -54,7 +54,7 @@ const blogPostingSchema = {
     "name": "Stones for Health",
     "logo": {
       "@type": "ImageObject",
-      "url": "https://stonesforhealth.nl/logo.png"
+      "url": "https://stonesforhealth.nl/logo.webp"
     }
   },
   "mainEntityOfPage": {

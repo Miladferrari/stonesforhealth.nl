@@ -5,6 +5,8 @@ import Footer from "./Footer";
 import SlideInCart from "./SlideInCart";
 import ClientOnly from "./ClientOnly";
 import StickyHeader from "./StickyHeader";
+import { PurchaseNotificationProvider } from "../contexts/PurchaseNotificationContext";
+import PurchaseNotificationContainer from "./PurchaseNotificationContainer";
 
 export default function LayoutContent({
   children,
@@ -24,7 +26,7 @@ export default function LayoutContent({
 
   // For all other pages, show navbar and footer
   return (
-    <>
+    <PurchaseNotificationProvider>
       <ClientOnly>
         <StickyHeader />
       </ClientOnly>
@@ -33,6 +35,7 @@ export default function LayoutContent({
       <ClientOnly>
         <SlideInCart />
       </ClientOnly>
-    </>
+      <PurchaseNotificationContainer />
+    </PurchaseNotificationProvider>
   );
 }

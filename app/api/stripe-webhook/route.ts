@@ -1,5 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
 import Stripe from 'stripe';
+import { addNotification } from '@/app/utils/purchaseNotificationCache';
+// TODO: Re-enable after implementing Vercel KV for failed order cache
+// import { registerFailedOrder, markOrderAsSuccessful } from '@/app/utils/failedOrderCache';
+import { Resend } from 'resend';
+import { OrderConfirmationEmail } from '@/app/emails/OrderConfirmation';
+import { NewOrderNotificationEmail } from '@/app/emails/NewOrderNotification';
+
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 /**
  * Initialize Stripe with the secret key from environment variables
@@ -107,6 +115,211 @@ async function updateOrderStatus(
 }
 
 /**
+ * Verstuur order emails naar klant en shop eigenaar
+ * @param orderId - The WooCommerce order ID
+ */
+async function sendOrderEmails(orderId: string): Promise<void> {
+  try {
+    // Check if WooCommerce is configured
+    if (!WC_URL || !WC_CONSUMER_KEY || !WC_CONSUMER_SECRET) {
+      console.error('[Email] WooCommerce API not configured properly');
+      return;
+    }
+
+    // Haal order details op van WooCommerce
+    const endpoint = `${WC_URL}/orders/${orderId}`;
+    const response = await fetch(endpoint, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Basic ' + Buffer.from(`${WC_CONSUMER_KEY}:${WC_CONSUMER_SECRET}`).toString('base64'),
+      },
+    });
+
+    if (!response.ok) {
+      console.error(`[Email] Failed to fetch order ${orderId}: ${response.status}`);
+      return;
+    }
+
+    const order = await response.json();
+
+    // Bereid order data voor emails
+    const orderDate = new Date(order.date_created).toLocaleString('nl-NL', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+    });
+
+    const items = order.line_items.map((item: any) => ({
+      name: item.name,
+      quantity: item.quantity,
+      price: parseFloat(item.price).toFixed(2),
+      total: parseFloat(item.total).toFixed(2),
+    }));
+
+    const shippingAddress = {
+      firstName: order.shipping.first_name,
+      lastName: order.shipping.last_name,
+      address1: order.shipping.address_1,
+      address2: order.shipping.address_2,
+      city: order.shipping.city,
+      postcode: order.shipping.postcode,
+      country: order.shipping.country,
+    };
+
+    const billingAddress = {
+      firstName: order.billing.first_name,
+      lastName: order.billing.last_name,
+      address1: order.billing.address_1,
+      address2: order.billing.address_2,
+      city: order.billing.city,
+      postcode: order.billing.postcode,
+      country: order.billing.country,
+    };
+
+    const subtotal = (parseFloat(order.total) - parseFloat(order.shipping_total) - parseFloat(order.total_tax || '0')).toFixed(2);
+    const shippingCost = parseFloat(order.shipping_total).toFixed(2);
+    const discount = order.discount_total && parseFloat(order.discount_total) > 0
+      ? parseFloat(order.discount_total).toFixed(2)
+      : undefined;
+    const total = parseFloat(order.total).toFixed(2);
+
+    const paymentMethodLabels: { [key: string]: string } = {
+      'stripe': 'iDEAL / Bancontact / Creditcard',
+      'bacs': 'Bankoverschrijving',
+      'cheque': 'Cheque',
+      'cod': 'Rembours',
+    };
+    const paymentMethod = paymentMethodLabels[order.payment_method] || order.payment_method_title || 'Online betaling';
+
+    // Verstuur klant email
+    try {
+      const customerEmailHtml = OrderConfirmationEmail({
+        orderNumber: order.number.toString(),
+        orderDate,
+        customerName: `${order.billing.first_name} ${order.billing.last_name}`,
+        customerEmail: order.billing.email,
+        items,
+        shippingAddress,
+        billingAddress,
+        subtotal,
+        shippingCost,
+        discount,
+        total,
+        paymentMethod,
+      });
+
+      await resend.emails.send({
+        from: 'Stones for Health <noreply@stonesforhealth.nl>',
+        to: order.billing.email,
+        subject: `Bestelbevestiging #${order.number} - Stones for Health`,
+        html: customerEmailHtml,
+      });
+
+      console.log(`[Email] Order confirmation sent to customer: ${order.billing.email}`);
+    } catch (error) {
+      console.error('[Email] Failed to send customer email:', error);
+    }
+
+    // Verstuur shop eigenaar email
+    try {
+      const ownerEmailHtml = NewOrderNotificationEmail({
+        orderNumber: order.number.toString(),
+        orderDate,
+        customerName: `${order.billing.first_name} ${order.billing.last_name}`,
+        customerEmail: order.billing.email,
+        customerPhone: order.billing.phone,
+        items,
+        shippingAddress,
+        billingAddress,
+        subtotal,
+        shippingCost,
+        discount,
+        total,
+        paymentMethod,
+      });
+
+      await resend.emails.send({
+        from: 'Stones for Health <noreply@stonesforhealth.nl>',
+        to: 'info@stonesforhealth.nl',
+        subject: `🎉 Nieuwe Bestelling #${order.number} - stonesforhealth.nl`,
+        html: ownerEmailHtml,
+      });
+
+      console.log(`[Email] New order notification sent to shop owner`);
+    } catch (error) {
+      console.error('[Email] Failed to send owner email:', error);
+    }
+
+  } catch (error) {
+    console.error(`[Email] Failed to send emails for order ${orderId}:`, error);
+    // Don't throw - we don't want to fail the webhook if email sending fails
+  }
+}
+
+/**
+ * Haalt order details op van WooCommerce en maakt een purchase notification
+ * @param orderId - The WooCommerce order ID
+ */
+async function createPurchaseNotification(orderId: string): Promise<void> {
+  try {
+    // Check if WooCommerce is configured
+    if (!WC_URL || !WC_CONSUMER_KEY || !WC_CONSUMER_SECRET) {
+      console.error('[Notification] WooCommerce API not configured properly');
+      return;
+    }
+
+    // Haal order details op van WooCommerce
+    const endpoint = `${WC_URL}/orders/${orderId}`;
+    const response = await fetch(endpoint, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Basic ' + Buffer.from(`${WC_CONSUMER_KEY}:${WC_CONSUMER_SECRET}`).toString('base64'),
+      },
+    });
+
+    if (!response.ok) {
+      console.error(`[Notification] Failed to fetch order ${orderId}: ${response.status}`);
+      return;
+    }
+
+    const order = await response.json();
+
+    // Haal klantnaam op (alleen voornaam)
+    const customerName = order.billing?.first_name || 'Een klant';
+
+    // Haal eerste product op (of meerdere producten samenvatten)
+    let productName = 'een product';
+    if (order.line_items && order.line_items.length > 0) {
+      if (order.line_items.length === 1) {
+        // Eén product
+        productName = order.line_items[0].name;
+      } else {
+        // Meerdere producten - toon eerste product + aantal extra
+        const firstProduct = order.line_items[0].name;
+        const extraCount = order.line_items.length - 1;
+        productName = `${firstProduct} + ${extraCount} andere`;
+      }
+    }
+
+    // Maak de notificatie
+    await addNotification({
+      orderId: parseInt(orderId, 10),
+      customerName,
+      productName,
+    });
+
+    console.log(`[Notification] Created purchase notification for order ${orderId}`);
+  } catch (error) {
+    console.error(`[Notification] Failed to create notification for order ${orderId}:`, error);
+    // Don't throw - we don't want to fail the webhook if notification creation fails
+  }
+}
+
+/**
  * POST /api/stripe-webhook
  * Handles incoming Stripe webhook events
  */
@@ -163,14 +376,24 @@ export async function POST(request: NextRequest) {
         
         if (orderId) {
           console.log(`Processing successful payment for order ${orderId}`);
-          
+
+          // TODO: Re-enable after implementing Vercel KV
+          // Verwijder uit failed orders lijst (als de klant alsnog heeft betaald)
+          // markOrderAsSuccessful(orderId);
+
           // Update order status to processing (payment successful, awaiting fulfillment)
           await updateOrderStatus(
             orderId,
             'processing',
             paymentIntent.id
           );
-          
+
+          // Maak purchase notification voor real-time display
+          await createPurchaseNotification(orderId);
+
+          // Verstuur order emails naar klant en shop eigenaar
+          await sendOrderEmails(orderId);
+
           // Log additional payment details for debugging
           console.log(`Payment details - Amount: ${paymentIntent.amount/100} ${paymentIntent.currency.toUpperCase()}, Customer: ${paymentIntent.metadata.customerEmail}`);
         } else {
@@ -183,16 +406,44 @@ export async function POST(request: NextRequest) {
         // Payment failed
         const failedPaymentIntent = event.data.object as Stripe.PaymentIntent;
         const failedOrderId = failedPaymentIntent.metadata.orderId || failedPaymentIntent.metadata.order_id;
-        
+
         if (failedOrderId) {
           console.log(`Processing failed payment for order ${failedOrderId}`);
-          
+
           // Update order status to failed
           await updateOrderStatus(
             failedOrderId,
             'failed'
           );
-          
+
+          // TODO: Re-enable after implementing Vercel KV for failed order cache
+          // Haal order details op en registreer voor recovery email
+          /*
+          try {
+            const endpoint = `${WC_URL}/orders/${failedOrderId}`;
+            const response = await fetch(endpoint, {
+              method: 'GET',
+              headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Basic ' + Buffer.from(`${WC_CONSUMER_KEY}:${WC_CONSUMER_SECRET}`).toString('base64'),
+              },
+            });
+
+            if (response.ok) {
+              const orderData = await response.json();
+              const customerEmail = failedPaymentIntent.metadata.customerEmail || orderData.billing?.email;
+
+              if (customerEmail) {
+                // Registreer voor recovery email over 5 minuten
+                registerFailedOrder(failedOrderId, customerEmail, orderData);
+                console.log(`[Recovery] Registered failed order ${failedOrderId} for recovery email`);
+              }
+            }
+          } catch (error) {
+            console.error(`[Recovery] Failed to register order ${failedOrderId}:`, error);
+          }
+          */
+
           // Log failure reason for debugging
           const lastError = failedPaymentIntent.last_payment_error;
           console.log(`Payment failure reason: ${lastError?.message || 'Unknown error'}`);

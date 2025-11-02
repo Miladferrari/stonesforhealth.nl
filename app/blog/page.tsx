@@ -337,7 +337,7 @@ export default function BlogPage() {
         {/* Background Image */}
         <div className="absolute inset-0">
           <Image
-            src="/images/banner.png"
+            src="/images/banner.webp"
             alt="Stonesforhealth blog header - Kristallen en spiritualiteit gids met edelstenen"
             fill
             className="object-cover"

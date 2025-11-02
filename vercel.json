@@ -1,0 +1,4 @@
+{
+  "comment": "Cron job disabled until Vercel KV is implemented for failed order cache",
+  "crons": []
+}

@@ -592,32 +592,7 @@ export default function UnifiedCheckoutPage() {
 
               {/* Discount code section */}
               <section className="mb-6">
-                <div className="flex gap-2">
-                  <input
-                    type="text"
-                    placeholder="Kortingscode of cadeaubon"
-                    className="flex-1 px-3 py-2.5 border border-gray-300 rounded-md text-base text-black placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-[#492c4a] focus:border-[#492c4a] font-[family-name:var(--font-eb-garamond)]"
-                  />
-                  <button
-                    type="button"
-                    className="px-4 py-2.5 bg-gray-200 text-gray-400 rounded-md text-base font-medium cursor-not-allowed font-[family-name:var(--font-eb-garamond)]"
-                    disabled
-                  >
-                    Toepassen
-                  </button>
-                </div>
-                {appliedCoupon && (
-                  <div className="mt-2 flex items-center justify-between bg-green-50 px-3 py-2 rounded-md">
-                    <span className="text-base text-green-700 font-[family-name:var(--font-eb-garamond)]">
-                      {appliedCoupon.code} toegepast
-                    </span>
-                    <button className="text-green-700 hover:text-green-800">
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                      </svg>
-                    </button>
-                  </div>
-                )}
+                <CouponInput variant="compact" />
               </section>
 
               {/* Cost breakdown section */}
@@ -1347,32 +1322,7 @@ export default function UnifiedCheckoutPage() {
               {/* Discount code section */}
               <div className="pb-4">
                 <div className="border-t border-[#e5e7eb] pt-4">
-                  <div className="flex gap-2">
-                    <input
-                      type="text"
-                      placeholder="Kortingscode of cadeaubon"
-                      className="flex-1 px-3 py-2 border border-[#d1d5db] rounded-md text-base text-black placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-[#492c4a] focus:border-[#492c4a] font-[family-name:var(--font-eb-garamond)]"
-                    />
-                    <button
-                      type="button"
-                      className="px-4 py-2 bg-gray-100 border border-gray-300 text-black rounded-md text-base font-medium cursor-not-allowed font-[family-name:var(--font-eb-garamond)] transition-colors"
-                      disabled
-                    >
-                      Toepassen
-                    </button>
-                  </div>
-                  {appliedCoupon && (
-                    <div className="mt-2 flex items-center justify-between bg-green-50 px-3 py-2 rounded-md">
-                      <span className="text-base text-green-700 font-[family-name:var(--font-eb-garamond)]">
-                        {appliedCoupon.code} toegepast
-                      </span>
-                      <button className="text-green-700 hover:text-green-800">
-                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                        </svg>
-                      </button>
-                    </div>
-                  )}
+                  <CouponInput variant="compact" />
                 </div>
               </div>
 

@@ -651,6 +651,38 @@ class WooCommerceAPI {
     return paymentUrl;
   }
 
+  async createCoupon(couponData: {
+    code: string;
+    amount: string;
+    discount_type: "percent" | "fixed_cart" | "fixed_product";
+    description?: string;
+    date_expires?: string;
+    minimum_amount?: string;
+    maximum_amount?: string;
+    usage_limit?: number;
+    usage_limit_per_user?: number;
+    email_restrictions?: string[];
+    individual_use?: boolean;
+    free_shipping?: boolean;
+  }): Promise<Coupon> {
+    wooLogger.info("Creating coupon:", couponData.code);
+
+    try {
+      const response = await this.fetchAPI<Coupon>("coupons", {
+        method: "POST",
+        body: JSON.stringify(couponData),
+        useCache: false,
+        cache: "no-store",
+      });
+
+      wooLogger.info("Coupon created successfully:", response.code);
+      return response;
+    } catch (error: any) {
+      wooLogger.error("Coupon creation failed:", error.message);
+      throw error;
+    }
+  }
+
   async getOrder(orderId: number | string): Promise<any> {
     return this.fetchAPI(`orders/${orderId}`);
   }
@@ -673,8 +705,9 @@ class WooCommerceAPI {
 
   async getCouponByCode(code: string): Promise<Coupon | null> {
     try {
-      // WooCommerce API requires searching coupons by code
-      const endpoint = `coupons?code=${encodeURIComponent(code)}`;
+      // WooCommerce stores coupon codes in lowercase, so we need to search with lowercase
+      const searchCode = code.toLowerCase();
+      const endpoint = `coupons?code=${encodeURIComponent(searchCode)}`;
       const coupons = await this.fetchAPI<Coupon[]>(endpoint, {
         useCache: false,
         cache: "no-store",
@@ -685,6 +718,32 @@ class WooCommerceAPI {
     } catch (error) {
       console.error("Error fetching coupon:", error);
       return null;
+    }
+  }
+
+  async getCouponsByEmail(email: string): Promise<Coupon[]> {
+    try {
+      // Get all coupons and filter by email restriction
+      // WooCommerce API doesn't support filtering by email_restrictions directly,
+      // so we need to fetch and filter
+      const endpoint = `coupons?per_page=100`;
+      const allCoupons = await this.fetchAPI<Coupon[]>(endpoint, {
+        useCache: false,
+        cache: "no-store",
+      });
+
+      // Filter coupons that have this email in email_restrictions
+      const emailCoupons = allCoupons.filter(coupon =>
+        coupon.email_restrictions &&
+        coupon.email_restrictions.some(restrictedEmail =>
+          restrictedEmail.toLowerCase() === email.toLowerCase()
+        )
+      );
+
+      return emailCoupons;
+    } catch (error) {
+      console.error("Error fetching coupons by email:", error);
+      return [];
     }
   }
 
@@ -711,9 +770,9 @@ class WooCommerceAPI {
         }
       }
 
-      // Check usage limits
+      // Check usage limits - kortingscode is al gebruikt
       if (coupon.usage_limit && coupon.usage_count >= coupon.usage_limit) {
-        return { valid: false, error: "Deze kortingscode is niet meer geldig" };
+        return { valid: false, error: "Deze kortingscode is al gebruikt en kan niet meer worden toegepast" };
       }
 
       // Check minimum amount
@@ -727,9 +786,10 @@ class WooCommerceAPI {
         };
       }
 
-      // Check maximum amount
+      // Check maximum amount (only if it's set and greater than 0)
       if (
         coupon.maximum_amount &&
+        parseFloat(coupon.maximum_amount) > 0 &&
         cartTotal > parseFloat(coupon.maximum_amount)
       ) {
         return {

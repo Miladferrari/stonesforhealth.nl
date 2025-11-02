@@ -85,51 +85,30 @@ export default function CouponInput({ variant = 'default', onSuccess }: CouponIn
             </button>
           </div>
         ) : (
-          <>
-            {!showInput ? (
+          <div className="space-y-2">
+            <div className="flex gap-2">
+              <input
+                type="text"
+                value={couponCode}
+                onChange={(e) => setCouponCode(e.target.value)}
+                placeholder="Voer kortingscode in"
+                className="flex-1 px-3 py-2.5 border border-[#d1d5db] rounded-md focus:outline-none focus:ring-2 focus:ring-[#492c4a] focus:border-[#492c4a] text-sm text-black placeholder-gray-400 font-[family-name:var(--font-eb-garamond)]"
+                onKeyPress={(e) => e.key === 'Enter' && handleApplyCoupon()}
+                disabled={isValidating}
+              />
               <button
-                onClick={() => setShowInput(true)}
-                className="text-[#6b7280] hover:text-[#492c4a] underline text-sm font-[family-name:var(--font-eb-garamond)] w-full text-left"
+                onClick={handleApplyCoupon}
+                disabled={isValidating || !couponCode.trim()}
+                className="px-4 py-2.5 bg-[#fbe022] hover:bg-[#e6cc1f] text-black rounded-md transition-colors disabled:bg-gray-300 disabled:cursor-not-allowed text-sm font-bold font-[family-name:var(--font-eb-garamond)]"
                 type="button"
               >
-                Kortingscode toepassen?
+                {isValidating ? 'Valideren...' : 'Toepassen'}
               </button>
-            ) : (
-              <div className="space-y-2">
-                <div className="flex gap-2">
-                  <input
-                    type="text"
-                    value={couponCode}
-                    onChange={(e) => setCouponCode(e.target.value)}
-                    placeholder="Voer kortingscode in"
-                    className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-medical-green text-sm text-black placeholder-gray-500"
-                    onKeyPress={(e) => e.key === 'Enter' && handleApplyCoupon()}
-                    disabled={isValidating}
-                  />
-                  <button
-                    onClick={handleApplyCoupon}
-                    disabled={isValidating || !couponCode.trim()}
-                    className="px-4 py-2 bg-medical-green text-white rounded-md hover:bg-medical-green/90 transition-colors disabled:bg-gray-300 disabled:cursor-not-allowed text-sm font-medium"
-                    type="button"
-                  >
-                    {isValidating ? 'Valideren...' : 'Toepassen'}
-                  </button>
-                </div>
-                {error && <p className="text-red-500 text-xs">{error}</p>}
-                <button
-                  onClick={() => {
-                    setShowInput(false);
-                    setCouponCode('');
-                    setError('');
-                  }}
-                  className="text-steel-gray text-xs underline"
-                  type="button"
-                >
-                  Annuleren
-                </button>
-              </div>
+            </div>
+            {error && (
+              <p className="text-red-500 text-xs font-medium">{error}</p>
             )}
-          </>
+          </div>
         )}
       </div>
     );

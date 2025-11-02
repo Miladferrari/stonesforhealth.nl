@@ -8,6 +8,7 @@ import { ToastProvider } from "./contexts/ToastContext";
 import LayoutContent from "./components/LayoutContent";
 import GoogleAnalytics from "./components/GoogleAnalytics";
 import MetaPixel from "./components/MetaPixel";
+import NewsletterPopupContainer from "./components/NewsletterPopupContainer";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -88,6 +89,7 @@ export default function RootLayout({
             <LayoutContent>
               {children}
             </LayoutContent>
+            <NewsletterPopupContainer />
           </CartProvider>
         </ToastProvider>
       </body>
