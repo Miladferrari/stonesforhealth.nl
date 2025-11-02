@@ -23,7 +23,7 @@ export async function POST(request: NextRequest) {
     cleanupOldFailedOrders();
 
     // Haal orders op die klaar zijn voor recovery email
-    const ordersToRecover = getOrdersReadyForRecovery();
+    const ordersToRecover = await getOrdersReadyForRecovery();
 
     console.log(`[Recovery] Found ${ordersToRecover.length} orders ready for recovery`);
 

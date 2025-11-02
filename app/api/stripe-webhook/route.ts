@@ -1,8 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import Stripe from 'stripe';
 import { addNotification } from '@/app/utils/purchaseNotificationCache';
-// TODO: Re-enable after implementing Vercel KV for failed order cache
-// import { registerFailedOrder, markOrderAsSuccessful } from '@/app/utils/failedOrderCache';
+import { registerFailedOrder, markOrderAsSuccessful } from '@/app/utils/failedOrderCache';
 import { Resend } from 'resend';
 import { OrderConfirmationEmail } from '@/app/emails/OrderConfirmation';
 import { NewOrderNotificationEmail } from '@/app/emails/NewOrderNotification';
@@ -389,9 +388,8 @@ export async function POST(request: NextRequest) {
         if (orderId) {
           console.log(`Processing successful payment for order ${orderId}`);
 
-          // TODO: Re-enable after implementing Vercel KV
           // Verwijder uit failed orders lijst (als de klant alsnog heeft betaald)
-          // markOrderAsSuccessful(orderId);
+          await markOrderAsSuccessful(orderId);
 
           // Update order status to processing (payment successful, awaiting fulfillment)
           await updateOrderStatus(
@@ -428,9 +426,7 @@ export async function POST(request: NextRequest) {
             'failed'
           );
 
-          // TODO: Re-enable after implementing Vercel KV for failed order cache
           // Haal order details op en registreer voor recovery email
-          /*
           try {
             const endpoint = `${WC_URL}/orders/${failedOrderId}`;
             const response = await fetch(endpoint, {
@@ -446,15 +442,14 @@ export async function POST(request: NextRequest) {
               const customerEmail = failedPaymentIntent.metadata.customerEmail || orderData.billing?.email;
 
               if (customerEmail) {
-                // Registreer voor recovery email over 5 minuten
-                registerFailedOrder(failedOrderId, customerEmail, orderData);
+                // Registreer voor recovery email via WooCommerce metadata
+                await registerFailedOrder(failedOrderId, customerEmail, orderData);
                 console.log(`[Recovery] Registered failed order ${failedOrderId} for recovery email`);
               }
             }
           } catch (error) {
             console.error(`[Recovery] Failed to register order ${failedOrderId}:`, error);
           }
-          */
 
           // Log failure reason for debugging
           const lastError = failedPaymentIntent.last_payment_error;
