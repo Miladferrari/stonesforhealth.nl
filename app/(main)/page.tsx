@@ -49,25 +49,21 @@ export default async function Home() {
 
   // Fetch categories from WooCommerce
   try {
-    categories = await woocommerce.getCategories({ per_page: 20, hide_empty: false });
-    // Filter out parent categories or specific ones you want to show
-    categories = categories.filter(cat => cat.parent === 0 && cat.slug !== 'uncategorized');
+    categories = await woocommerce.getCategories({ per_page: 50, hide_empty: true });
+    // Filter out uncategorized and empty categories
+    categories = categories.filter(cat =>
+      cat.slug !== 'uncategorized' &&
+      cat.count > 0 // Only show categories with products
+    );
 
-    // Sort categories by best-selling logic
-    // In the future when sales data is available, we can fetch sales count per category
-    // and sort by: categories.sort((a, b) => b.salesCount - a.salesCount)
-    // For now, we'll sort by product count as a proxy for popularity
+    // Sort categories by product count (most products first)
     categories = categories
       .sort((a, b) => {
-        // Future enhancement: Add a 'sales_count' meta field to categories
-        // const aSales = a.meta_data?.find(m => m.key === 'sales_count')?.value || 0;
-        // const bSales = b.meta_data?.find(m => m.key === 'sales_count')?.value || 0;
-        // return bSales - aSales;
-
-        // Current: Sort by product count (most products first)
         return (b.count || 0) - (a.count || 0);
       })
       .slice(0, 4); // Limit to maximum 4 collections
+
+    console.log('[Homepage] Loaded categories:', categories.map(c => ({ name: c.name, slug: c.slug, count: c.count })));
   } catch (error) {
     console.error('Failed to fetch categories:', error);
     // Fallback categories if API fails
