@@ -3,7 +3,13 @@ import { woocommerce } from '@/lib/woocommerce';
 import { Resend } from 'resend';
 import { WelcomeDiscountEmail } from '@/app/emails/WelcomeDiscount';
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+// Lazy initialize Resend to avoid build-time errors
+function getResend() {
+  if (!process.env.RESEND_API_KEY) {
+    throw new Error('RESEND_API_KEY is not configured');
+  }
+  return new Resend(process.env.RESEND_API_KEY);
+}
 
 // Functie om unieke kortingscode te genereren
 function generateCouponCode(): string {
@@ -76,6 +82,7 @@ export async function POST(request: NextRequest) {
         expiryDate: expiryDate,
       });
 
+      const resend = getResend();
       await resend.emails.send({
         from: 'Stones for Health <noreply@stonesforhealth.nl>',
         to: email,

@@ -7,7 +7,14 @@ import { Resend } from 'resend';
 import { OrderConfirmationEmail } from '@/app/emails/OrderConfirmation';
 import { NewOrderNotificationEmail } from '@/app/emails/NewOrderNotification';
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+// Lazy initialize Resend to avoid build-time errors
+function getResend() {
+  if (!process.env.RESEND_API_KEY) {
+    console.warn('[Email] RESEND_API_KEY not configured - emails will not be sent');
+    return null;
+  }
+  return new Resend(process.env.RESEND_API_KEY);
+}
 
 /**
  * Initialize Stripe with the secret key from environment variables
@@ -195,62 +202,67 @@ async function sendOrderEmails(orderId: string): Promise<void> {
     const paymentMethod = paymentMethodLabels[order.payment_method] || order.payment_method_title || 'Online betaling';
 
     // Verstuur klant email
-    try {
-      const customerEmailHtml = OrderConfirmationEmail({
-        orderNumber: order.number.toString(),
-        orderDate,
-        customerName: `${order.billing.first_name} ${order.billing.last_name}`,
-        customerEmail: order.billing.email,
-        items,
-        shippingAddress,
-        billingAddress,
-        subtotal,
-        shippingCost,
-        discount,
-        total,
-        paymentMethod,
-      });
+    const resend = getResend();
+    if (resend) {
+      try {
+        const customerEmailHtml = OrderConfirmationEmail({
+          orderNumber: order.number.toString(),
+          orderDate,
+          customerName: `${order.billing.first_name} ${order.billing.last_name}`,
+          customerEmail: order.billing.email,
+          items,
+          shippingAddress,
+          billingAddress,
+          subtotal,
+          shippingCost,
+          discount,
+          total,
+          paymentMethod,
+        });
 
-      await resend.emails.send({
-        from: 'Stones for Health <noreply@stonesforhealth.nl>',
-        to: order.billing.email,
-        subject: `Bestelbevestiging #${order.number} - Stones for Health`,
-        html: customerEmailHtml,
-      });
+        await resend.emails.send({
+          from: 'Stones for Health <noreply@stonesforhealth.nl>',
+          to: order.billing.email,
+          subject: `Bestelbevestiging #${order.number} - Stones for Health`,
+          html: customerEmailHtml,
+        });
 
-      console.log(`[Email] Order confirmation sent to customer: ${order.billing.email}`);
-    } catch (error) {
-      console.error('[Email] Failed to send customer email:', error);
-    }
+        console.log(`[Email] Order confirmation sent to customer: ${order.billing.email}`);
+      } catch (error) {
+        console.error('[Email] Failed to send customer email:', error);
+      }
 
-    // Verstuur shop eigenaar email
-    try {
-      const ownerEmailHtml = NewOrderNotificationEmail({
-        orderNumber: order.number.toString(),
-        orderDate,
-        customerName: `${order.billing.first_name} ${order.billing.last_name}`,
-        customerEmail: order.billing.email,
-        customerPhone: order.billing.phone,
-        items,
-        shippingAddress,
-        billingAddress,
-        subtotal,
-        shippingCost,
-        discount,
-        total,
-        paymentMethod,
-      });
+      // Verstuur shop eigenaar email
+      try {
+        const ownerEmailHtml = NewOrderNotificationEmail({
+          orderNumber: order.number.toString(),
+          orderDate,
+          customerName: `${order.billing.first_name} ${order.billing.last_name}`,
+          customerEmail: order.billing.email,
+          customerPhone: order.billing.phone,
+          items,
+          shippingAddress,
+          billingAddress,
+          subtotal,
+          shippingCost,
+          discount,
+          total,
+          paymentMethod,
+        });
 
-      await resend.emails.send({
-        from: 'Stones for Health <noreply@stonesforhealth.nl>',
-        to: 'info@stonesforhealth.nl',
-        subject: `🎉 Nieuwe Bestelling #${order.number} - stonesforhealth.nl`,
-        html: ownerEmailHtml,
-      });
+        await resend.emails.send({
+          from: 'Stones for Health <noreply@stonesforhealth.nl>',
+          to: 'info@stonesforhealth.nl',
+          subject: `🎉 Nieuwe Bestelling #${order.number} - stonesforhealth.nl`,
+          html: ownerEmailHtml,
+        });
 
-      console.log(`[Email] New order notification sent to shop owner`);
-    } catch (error) {
-      console.error('[Email] Failed to send owner email:', error);
+        console.log(`[Email] New order notification sent to shop owner`);
+      } catch (error) {
+        console.error('[Email] Failed to send owner email:', error);
+      }
+    } else {
+      console.warn('[Email] Skipping emails - Resend not configured');
     }
 
   } catch (error) {

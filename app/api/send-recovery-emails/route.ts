@@ -3,7 +3,13 @@ import { getOrdersReadyForRecovery, markRecoveryEmailSent, cleanupOldFailedOrder
 import { Resend } from 'resend';
 import { OrderRecoveryEmail } from '@/app/emails/OrderRecovery';
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+// Lazy initialize Resend to avoid build-time errors
+function getResend() {
+  if (!process.env.RESEND_API_KEY) {
+    throw new Error('RESEND_API_KEY is not configured');
+  }
+  return new Resend(process.env.RESEND_API_KEY);
+}
 
 /**
  * Deze endpoint wordt aangeroepen door een cron job (bijv. Vercel Cron of externe service)
@@ -60,6 +66,7 @@ export async function POST(request: NextRequest) {
         });
 
         // Verstuur email
+        const resend = getResend();
         await resend.emails.send({
           from: 'Stones for Health <noreply@stonesforhealth.nl>',
           to: failedOrder.customerEmail,
