@@ -419,11 +419,12 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
                   className="appearance-none px-3 sm:px-4 lg:px-5 py-2.5 sm:py-2.5 lg:py-3 pr-8 sm:pr-10 border border-gray-300 sm:border-gray-400 rounded-md sm:rounded-lg text-xs sm:text-base font-semibold focus:outline-none focus:ring-2 focus:ring-black focus:border-black bg-white text-black cursor-pointer hover:border-black transition-all min-w-[85px] sm:min-w-[140px] lg:min-w-[180px] font-[family-name:var(--font-eb-garamond)]"
                   value={selectedBundle}
                   onChange={(e) => {
-                    setSelectedBundle(e.target.value);
+                    const value = e.target.value as 'single' | 'duo' | 'family';
+                    setSelectedBundle(value);
                     // Update quantity based on bundle selection
-                    if (e.target.value === 'single') setQuantity(1);
-                    else if (e.target.value === 'duo') setQuantity(2);
-                    else if (e.target.value === 'family') setQuantity(3);
+                    if (value === 'single') setQuantity(1);
+                    else if (value === 'duo') setQuantity(2);
+                    else if (value === 'family') setQuantity(3);
                   }}
                 >
                   <option value="single">Solo Set</option>
