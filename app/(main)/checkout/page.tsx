@@ -78,6 +78,9 @@ export default function UnifiedCheckoutPage() {
   // Debounce timers for shipping calculations
   const debounceTimerRef = useRef<NodeJS.Timeout | null>(null);
 
+  // Abandoned cart tracking
+  const abandonedCartTimerRef = useRef<NodeJS.Timeout | null>(null);
+
   // Prevent double-click on checkout button
   const [isProcessingCheckout, setIsProcessingCheckout] = useState(false);
 
@@ -229,8 +232,47 @@ export default function UnifiedCheckoutPage() {
       if (debounceTimerRef.current) {
         clearTimeout(debounceTimerRef.current);
       }
+      if (abandonedCartTimerRef.current) {
+        clearTimeout(abandonedCartTimerRef.current);
+      }
     };
   }, []);
+
+  // Save abandoned cart when email is filled
+  const saveAbandonedCart = useCallback(async (email: string) => {
+    // Only save if email is valid and cart has items
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) || items.length === 0) {
+      return;
+    }
+
+    try {
+      const cartData = items.map(item => ({
+        product_id: item.product.id,
+        name: item.product.name,
+        quantity: item.quantity,
+        price: parseFloat(item.product.price),
+        image: item.product.images[0]?.src || '',
+        bundleType: item.bundleType,
+        bundlePrice: item.bundlePrice
+      }));
+
+      await fetch('/api/abandoned-cart/save', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email,
+          name: `${formData.firstName} ${formData.lastName}`.trim(),
+          cartItems: cartData,
+          cartTotal: getTotalPriceAfterDiscount(),
+          sessionId: `checkout_${Date.now()}`
+        })
+      });
+
+      console.log('[Abandoned Cart] Cart saved for', email);
+    } catch (error) {
+      console.error('[Abandoned Cart] Failed to save:', error);
+    }
+  }, [items, formData.firstName, formData.lastName, getTotalPriceAfterDiscount]);
 
   // Input handlers
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -258,6 +300,16 @@ export default function UnifiedCheckoutPage() {
     } else if (name === 'postcode') {
       // Debounce postcode changes to reduce API calls while typing
       debouncedShippingUpdate(formData.country, value);
+    }
+
+    // Save abandoned cart when email is filled (debounced)
+    if (name === 'email' && value) {
+      if (abandonedCartTimerRef.current) {
+        clearTimeout(abandonedCartTimerRef.current);
+      }
+      abandonedCartTimerRef.current = setTimeout(() => {
+        saveAbandonedCart(value);
+      }, 2000); // Wait 2 seconds after user stops typing
     }
   };
 
