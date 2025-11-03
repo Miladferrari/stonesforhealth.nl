@@ -1,10 +1,10 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, Suspense } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { useCart } from '../contexts/CartContextStoreAPI';
 
-export default function CartRecoveryPage() {
+function CartRecoveryContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const { items, addToCart } = useCart();
@@ -133,5 +133,22 @@ export default function CartRecoveryPage() {
         </p>
       </div>
     </div>
+  );
+}
+
+export default function CartRecoveryPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-[#faf8f4] flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-[#492c4a] mx-auto mb-6"></div>
+          <h1 className="text-2xl font-bold text-[#492c4a] mb-2 font-[family-name:var(--font-eb-garamond)]">
+            Een moment...
+          </h1>
+        </div>
+      </div>
+    }>
+      <CartRecoveryContent />
+    </Suspense>
   );
 }
