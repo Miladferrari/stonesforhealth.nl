@@ -329,7 +329,7 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
       const bundleInfo = {
         type: selectedBundle,
         discount: bundleDiscount,
-        totalPrice: bundlePrices[selectedBundle]
+        totalPrice: bundlePrices[selectedBundle as keyof typeof bundlePrices]
       };
 
       addToCart(product as any, quantityToAdd, bundleInfo);
