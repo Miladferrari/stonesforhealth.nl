@@ -426,7 +426,7 @@ export async function POST(request: NextRequest) {
             'failed'
           );
 
-          // Haal order details op en registreer voor recovery email
+          // Stuur direct een failed order email
           try {
             const endpoint = `${WC_URL}/orders/${failedOrderId}`;
             const response = await fetch(endpoint, {
@@ -442,13 +442,40 @@ export async function POST(request: NextRequest) {
               const customerEmail = failedPaymentIntent.metadata.customerEmail || orderData.billing?.email;
 
               if (customerEmail) {
-                // Registreer voor recovery email via WooCommerce metadata
-                await registerFailedOrder(failedOrderId, customerEmail, orderData);
-                console.log(`[Recovery] Registered failed order ${failedOrderId} for recovery email`);
+                // Stuur failed order email DIRECT
+                const resend = getResend();
+                if (resend) {
+                  const items = orderData.line_items.map((item: any) => ({
+                    name: item.name,
+                    quantity: item.quantity,
+                    price: parseFloat(item.price).toFixed(2),
+                  }));
+
+                  const total = parseFloat(orderData.total).toFixed(2);
+                  const customerName = orderData.billing.first_name || 'Klant';
+                  const checkoutUrl = `${process.env.NEXT_PUBLIC_SITE_URL}/checkout`;
+
+                  const emailHtml = OrderRecoveryEmail({
+                    customerName,
+                    orderNumber: orderData.number.toString(),
+                    items,
+                    total,
+                    checkoutUrl,
+                  });
+
+                  await resend.emails.send({
+                    from: 'Stones for Health <noreply@stonesforhealth.nl>',
+                    to: customerEmail,
+                    subject: '❌ Betaling mislukt - Probeer opnieuw | Stones for Health',
+                    html: emailHtml,
+                  });
+
+                  console.log(`[Failed Order] Email sent to ${customerEmail} for order ${failedOrderId}`);
+                }
               }
             }
           } catch (error) {
-            console.error(`[Recovery] Failed to register order ${failedOrderId}:`, error);
+            console.error(`[Failed Order] Failed to send email for order ${failedOrderId}:`, error);
           }
 
           // Log failure reason for debugging
