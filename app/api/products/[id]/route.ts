@@ -16,15 +16,15 @@ export async function GET(
     }
 
     // Fetch product from WooCommerce
-    const product = await woocommerce.get(`products/${productId}`);
+    const product = await woocommerce.getProduct(parseInt(productId));
 
-    return NextResponse.json(product.data);
+    return NextResponse.json(product);
 
   } catch (error: any) {
     const { id } = await params;
     console.error(`[Products API] Error fetching product ${id}:`, error);
 
-    if (error.response?.status === 404) {
+    if (error.message?.includes('not found')) {
       return NextResponse.json(
         { error: 'Product not found' },
         { status: 404 }
