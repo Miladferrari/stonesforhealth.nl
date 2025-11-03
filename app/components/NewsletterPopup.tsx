@@ -11,9 +11,6 @@ export default function NewsletterPopup({ onClose }: NewsletterPopupProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [error, setError] = useState('');
-  const [couponCode, setCouponCode] = useState('');
-  const [expiryDate, setExpiryDate] = useState('');
-  const [copied, setCopied] = useState(false);
 
   // Disable scrolling when popup is open
   useEffect(() => {
@@ -63,8 +60,6 @@ export default function NewsletterPopup({ onClose }: NewsletterPopupProps) {
       }
 
       // Success!
-      setCouponCode(data.coupon.code);
-      setExpiryDate(data.coupon.expires);
       setIsSuccess(true);
     } catch (err: any) {
       setError(err.message || 'Er is een fout opgetreden. Probeer het later opnieuw.');
@@ -73,12 +68,6 @@ export default function NewsletterPopup({ onClose }: NewsletterPopupProps) {
     }
   };
 
-  const handleCopyCode = () => {
-    navigator.clipboard.writeText(couponCode);
-    setCopied(true);
-    // Reset na 2 seconden
-    setTimeout(() => setCopied(false), 2000);
-  };
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/20 backdrop-blur-sm animate-in fade-in duration-300">
@@ -201,70 +190,45 @@ export default function NewsletterPopup({ onClose }: NewsletterPopupProps) {
                   fill="none"
                   strokeLinecap="round"
                   strokeLinejoin="round"
-                  strokeWidth="2.5"
+                  strokeWidth="2"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
                 >
-                  <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                  <path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
                 </svg>
               </div>
               <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-[#492c4a] mb-2 sm:mb-3 font-[family-name:var(--font-eb-garamond)]">
-                Gefeliciteerd! 🎉
+                Check je inbox! 📧
               </h2>
               <p className="text-sm sm:text-base text-[#3b223b]/80 font-medium mb-6 sm:mb-8 px-2">
-                Je kortingscode is klaar. Gebruik deze bij het afrekenen:
+                We hebben je kortingscode van €10 naar <span className="font-bold text-[#492c4a]">{email}</span> verzonden.
               </p>
 
-              {/* Coupon code display */}
+              {/* Email info card */}
               <div className="bg-gradient-to-br from-white to-[#fbe022]/5 border-2 border-[#fbe022] rounded-2xl p-5 sm:p-6 md:p-8 mb-5 sm:mb-6 shadow-xl relative overflow-hidden">
                 <div className="absolute top-0 right-0 w-24 h-24 bg-[#fbe022]/10 rounded-full blur-2xl"></div>
-                <div className="relative">
-                  <div className="text-xs sm:text-sm font-bold text-[#492c4a] mb-2 sm:mb-3 font-[family-name:var(--font-eb-garamond)] uppercase tracking-wide">
-                    Jouw kortingscode:
+                <div className="relative space-y-3 sm:space-y-4">
+                  <div className="flex items-start gap-3 text-left">
+                    <div className="w-6 h-6 rounded-full bg-[#492c4a] text-white flex items-center justify-center text-xs flex-shrink-0 mt-0.5">1</div>
+                    <div>
+                      <p className="font-bold text-[#492c4a] text-sm sm:text-base">Open je email</p>
+                      <p className="text-xs sm:text-sm text-[#3b223b]/70">Controleer ook je spam/promotie folder</p>
+                    </div>
                   </div>
-                  <div className="text-2xl sm:text-3xl md:text-4xl font-bold text-[#492c4a] mb-3 sm:mb-4 tracking-wider font-mono bg-[#fbe022]/10 py-2 sm:py-3 px-3 sm:px-4 rounded-xl border-2 border-dashed border-[#492c4a]/20 break-all">
-                    {couponCode}
+                  <div className="flex items-start gap-3 text-left">
+                    <div className="w-6 h-6 rounded-full bg-[#492c4a] text-white flex items-center justify-center text-xs flex-shrink-0 mt-0.5">2</div>
+                    <div>
+                      <p className="font-bold text-[#492c4a] text-sm sm:text-base">Kopieer je unieke code</p>
+                      <p className="text-xs sm:text-sm text-[#3b223b]/70">De code is persoonlijk voor jou</p>
+                    </div>
                   </div>
-                  <button
-                    onClick={handleCopyCode}
-                    className={`inline-flex items-center gap-2 font-bold text-sm px-4 py-2 rounded-full transition-all border ${
-                      copied
-                        ? 'bg-[#492c4a] text-white border-[#492c4a]'
-                        : 'text-[#492c4a] hover:text-[#6b4069] bg-white hover:bg-[#fbe022]/20 border-[#492c4a]/20 hover:border-[#492c4a]/40'
-                    }`}
-                  >
-                    {copied ? (
-                      <>
-                        <svg
-                          className="w-4 h-4"
-                          fill="none"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth="2.5"
-                          viewBox="0 0 24 24"
-                          stroke="currentColor"
-                        >
-                          <path d="M5 13l4 4L19 7"></path>
-                        </svg>
-                        Gekopieerd!
-                      </>
-                    ) : (
-                      <>
-                        <svg
-                          className="w-4 h-4"
-                          fill="none"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth="2.5"
-                          viewBox="0 0 24 24"
-                          stroke="currentColor"
-                        >
-                          <path d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
-                        </svg>
-                        Kopieer code
-                      </>
-                    )}
-                  </button>
+                  <div className="flex items-start gap-3 text-left">
+                    <div className="w-6 h-6 rounded-full bg-[#492c4a] text-white flex items-center justify-center text-xs flex-shrink-0 mt-0.5">3</div>
+                    <div>
+                      <p className="font-bold text-[#492c4a] text-sm sm:text-base">Gebruik bij het afrekenen</p>
+                      <p className="text-xs sm:text-sm text-[#3b223b]/70">Bij minimale besteding van €25</p>
+                    </div>
+                  </div>
                 </div>
               </div>
 
@@ -280,7 +244,7 @@ export default function NewsletterPopup({ onClose }: NewsletterPopupProps) {
                   </p>
                   <p className="flex items-center justify-center gap-2 sm:gap-3 font-medium">
                     <span className="w-5 h-5 rounded-full bg-[#492c4a] text-white flex items-center justify-center text-xs flex-shrink-0">✓</span>
-                    <span>Geldig tot: {new Date(expiryDate).toLocaleDateString('nl-NL')}</span>
+                    <span>Geldig voor 30 dagen</span>
                   </p>
                 </div>
               </div>

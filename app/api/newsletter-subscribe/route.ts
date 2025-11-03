@@ -97,15 +97,10 @@ export async function POST(request: NextRequest) {
       // We kunnen later een fallback implementeren
     }
 
-    // Return kortingscode naar de gebruiker
+    // Return alleen success bericht - kortingscode wordt via email verzonden
     return NextResponse.json({
       success: true,
-      coupon: {
-        code: coupon.code,
-        amount: '10',
-        minimum_amount: '25',
-        expires: expiryDate,
-      },
+      message: 'Kortingscode is verzonden naar je e-mailadres',
     });
   } catch (error: any) {
     console.error('[Newsletter] Fout bij aanmaken kortingscode:', error);
