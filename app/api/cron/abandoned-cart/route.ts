@@ -31,7 +31,7 @@ async function createRecoveryCoupon(email: string): Promise<string> {
     const expiryDate = new Date();
     expiryDate.setDate(expiryDate.getDate() + 7); // Valid for 7 days
 
-    await woocommerce.post('coupons', {
+    await woocommerce.createCoupon({
       code: couponCode,
       discount_type: 'percent',
       amount: '5',
