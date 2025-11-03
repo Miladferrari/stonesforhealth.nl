@@ -894,7 +894,7 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
                     value="single"
                     checked={selectedBundle === 'single'}
                     disabled={!canSelectSingle}
-                    onChange={(e) => canSelectSingle && setSelectedBundle(e.target.value)}
+                    onChange={(e) => canSelectSingle && setSelectedBundle(e.target.value as 'single' | 'duo' | 'family')}
                   />
                   <div className="kaching-bundles__bar-content flex items-center justify-between">
                     <div className="flex items-center gap-3">
@@ -945,7 +945,7 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
                     value="duo"
                     checked={selectedBundle === 'duo'}
                     disabled={!canSelectDuo}
-                    onChange={(e) => canSelectDuo && setSelectedBundle(e.target.value)}
+                    onChange={(e) => canSelectDuo && setSelectedBundle(e.target.value as 'single' | 'duo' | 'family')}
                   />
                   <div className="kaching-bundles__bar-content flex items-center justify-between">
                     <div className="flex items-center gap-3">
@@ -1002,7 +1002,7 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
                     value="family"
                     checked={selectedBundle === 'family'}
                     disabled={!canSelectFamily}
-                    onChange={(e) => canSelectFamily && setSelectedBundle(e.target.value)}
+                    onChange={(e) => canSelectFamily && setSelectedBundle(e.target.value as 'single' | 'duo' | 'family')}
                   />
                   <div className="kaching-bundles__bar-content flex items-center justify-between">
                     <div className="flex items-center gap-3">
