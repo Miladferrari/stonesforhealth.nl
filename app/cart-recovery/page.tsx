@@ -12,7 +12,7 @@ export default function CartRecoveryPage() {
   const [error, setError] = useState('');
 
   useEffect(() => {
-    const token = searchParams.get('token');
+    const token = searchParams?.get('token');
 
     if (!token) {
       setError('Ongeldige recovery link');
