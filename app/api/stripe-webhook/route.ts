@@ -5,6 +5,7 @@ import { registerFailedOrder, markOrderAsSuccessful } from '@/app/utils/failedOr
 import { Resend } from 'resend';
 import { OrderConfirmationEmail } from '@/app/emails/OrderConfirmation';
 import { NewOrderNotificationEmail } from '@/app/emails/NewOrderNotification';
+import { OrderRecoveryEmail } from '@/app/emails/OrderRecovery';
 
 // Lazy initialize Resend to avoid build-time errors
 function getResend() {
