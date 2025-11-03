@@ -3,10 +3,10 @@ import { woocommerce } from '@/lib/woocommerce';
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const productId = params.id;
+    const { id: productId } = await params;
 
     if (!productId) {
       return NextResponse.json(
@@ -21,7 +21,8 @@ export async function GET(
     return NextResponse.json(product.data);
 
   } catch (error: any) {
-    console.error(`[Products API] Error fetching product ${params.id}:`, error);
+    const { id } = await params;
+    console.error(`[Products API] Error fetching product ${id}:`, error);
 
     if (error.response?.status === 404) {
       return NextResponse.json(
