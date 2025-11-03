@@ -62,7 +62,7 @@ const faqData: FAQItem[] = [
   {
     category: 'Verzending',
     question: 'Hoeveel zijn de verzendkosten?',
-    answer: 'Voor Nederland: €4,95 voor bestellingen onder €50, gratis verzending vanaf €50. Voor België: €7,95 voor bestellingen onder €75, gratis verzending vanaf €75. Alle bestellingen worden verzonden met track & trace.'
+    answer: 'Voor Nederland en België: €4,95 voor bestellingen onder €30, gratis verzending vanaf €30. Alle bestellingen worden verzonden met track & trace.'
   },
   {
     category: 'Verzending',

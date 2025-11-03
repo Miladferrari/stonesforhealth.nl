@@ -313,7 +313,7 @@ export default function ProductDetailHormozi({ product, relatedProducts }: Produ
                   </span>
                 )}
               </div>
-              <p className="text-sm text-gray-600">Inclusief BTW • Gratis verzending vanaf €75</p>
+              <p className="text-sm text-gray-600">Inclusief BTW • Gratis verzending vanaf €30</p>
             </div>
 
             {/* Quantity and CTA */}

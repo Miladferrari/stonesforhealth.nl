@@ -15,6 +15,7 @@ export default function SlideInCart() {
     getTotalPrice,
     getTotalPriceAfterDiscount,
     getDiscountAmount,
+    getTotalSavings,
     isCartOpen,
     setIsCartOpen,
     appliedCoupon,
@@ -95,32 +96,42 @@ export default function SlideInCart() {
             </div>
 
             {/* Free shipping progress bar */}
-            {items.length > 0 && shipping.rates.length > 0 && (() => {
-              const freeShippingRate = shipping.rates.find(r => r.method_id.includes('free_shipping'));
-              const flatRate = shipping.rates.find(r => r.method_id.includes('flat_rate'));
-              const currentRate = freeShippingRate || flatRate || shipping.rates[0];
+            {items.length > 0 && (() => {
+              const FREE_SHIPPING_THRESHOLD = 30;
+              const currentTotal = getTotalPriceAfterDiscount();
+              const remaining = FREE_SHIPPING_THRESHOLD - currentTotal;
+              const progressPercentage = Math.min((currentTotal / FREE_SHIPPING_THRESHOLD) * 100, 100);
 
-              if (currentRate?.free_shipping_remaining && currentRate.free_shipping_remaining > 0) {
-                const progressPercentage = Math.min(
-                  (getTotalPriceAfterDiscount() / (getTotalPriceAfterDiscount() + currentRate.free_shipping_remaining)) * 100,
-                  100
-                );
-
+              if (currentTotal >= FREE_SHIPPING_THRESHOLD) {
+                // Already qualified for free shipping
                 return (
-                  <div className="mt-3 bg-[#492c4a]/5 rounded-lg p-3">
-                    <p className="text-xs text-gray-600 mb-2">
-                      Nog <span className="font-semibold text-[#492c4a]">€{currentRate.free_shipping_remaining.toFixed(2)}</span> voor gratis verzending
-                    </p>
-                    <div className="w-full bg-gray-200 rounded-full h-1.5">
-                      <div
-                        className="bg-[#492c4a] h-1.5 rounded-full transition-all duration-500"
-                        style={{ width: `${progressPercentage}%` }}
-                      />
+                  <div className="mt-3 bg-green-50 border border-green-200 rounded-lg p-3">
+                    <div className="flex items-center gap-2">
+                      <svg className="w-4 h-4 text-green-600 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                      </svg>
+                      <p className="text-sm font-medium text-green-700">
+                        Je komt in aanmerking voor gratis verzending!
+                      </p>
                     </div>
                   </div>
                 );
               }
-              return null;
+
+              // Still need more for free shipping
+              return (
+                <div className="mt-3 bg-[#492c4a]/5 rounded-lg p-3">
+                  <p className="text-sm text-gray-700 mb-2">
+                    Nog <span className="font-semibold text-[#492c4a]">€{remaining.toFixed(2)}</span> voor gratis verzending
+                  </p>
+                  <div className="w-full bg-gray-200 rounded-full h-2">
+                    <div
+                      className="bg-gradient-to-r from-[#492c4a] to-[#6b4069] h-2 rounded-full transition-all duration-500"
+                      style={{ width: `${progressPercentage}%` }}
+                    />
+                  </div>
+                </div>
+              );
             })()}
           </div>
 
@@ -219,40 +230,11 @@ export default function SlideInCart() {
                           </div>
 
                           <div className="flex items-end justify-between">
-                            {/* Quantity display (not editable for bundles) */}
+                            {/* Quantity display */}
                             <div className="flex items-center">
-                              {item.bundleType ? (
-                                // For bundles, show quantity as text
-                                <div className="px-3 py-1 bg-[#492c4a]/5 rounded text-xs font-medium text-[#492c4a]">
-                                  {item.quantity} stuks
-                                </div>
-                              ) : (
-                                // For single items, show controls
-                                <>
-                                  <button
-                                    onClick={() => updateQuantity(item.product.id, item.quantity - 1)}
-                                    className="w-7 h-7 border border-[#E8DCC6] rounded-l flex items-center justify-center hover:bg-[#492c4a]/5 transition-colors"
-                                    disabled={item.quantity <= 1}
-                                    aria-label="Verminder"
-                                  >
-                                    <svg className="w-3.5 h-3.5 text-[#492c4a]/50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 12H4" />
-                                    </svg>
-                                  </button>
-                                  <div className="w-10 h-7 border-t border-b border-[#E8DCC6] flex items-center justify-center bg-white">
-                                    <span className="text-sm font-medium text-[#492c4a]">{item.quantity}</span>
-                                  </div>
-                                  <button
-                                    onClick={() => updateQuantity(item.product.id, item.quantity + 1)}
-                                    className="w-7 h-7 border border-[#E8DCC6] rounded-r flex items-center justify-center hover:bg-[#492c4a]/5 transition-colors"
-                                    aria-label="Verhoog"
-                                  >
-                                    <svg className="w-3.5 h-3.5 text-[#492c4a]/50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-                                    </svg>
-                                  </button>
-                                </>
-                              )}
+                              <div className="px-3 py-1 bg-[#492c4a]/5 rounded text-xs font-medium text-[#492c4a]">
+                                {item.quantity} {item.quantity === 1 ? 'stuk' : 'stuks'}
+                              </div>
                             </div>
 
                             {/* Price */}
@@ -290,7 +272,7 @@ export default function SlideInCart() {
                 <div className="flex justify-between items-center">
                   <span className="text-xl text-gray-600 font-[family-name:var(--font-eb-garamond)]">Totale korting</span>
                   <span className="text-2xl font-medium text-green-600 font-[family-name:var(--font-eb-garamond)]">
-                    {getDiscountAmount() > 0 ? `-€${getDiscountAmount().toFixed(2)}` : '€0.00'}
+                    {getTotalSavings() > 0 ? `-€${getTotalSavings().toFixed(2)}` : '€0.00'}
                   </span>
                 </div>
                 {shipping.rates.length > 0 && (
@@ -338,7 +320,7 @@ export default function SlideInCart() {
                       <svg className="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" />
                       </svg>
-                      <span className="font-[family-name:var(--font-eb-garamond)]">Gratis verzending vanaf €75</span>
+                      <span className="font-[family-name:var(--font-eb-garamond)]">Gratis verzending vanaf €30</span>
                     </div>
                   </div>
 

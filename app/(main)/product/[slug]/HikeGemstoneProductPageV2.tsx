@@ -779,7 +779,7 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
                     <path d="M0 9C0 4.02944 4.02944 0 9 0C13.9706 0 18 4.02944 18 9C18 13.9706 13.9706 18 9 18C4.02944 18 0 13.9706 0 9Z" fill="currentColor"></path>
                     <path d="M5 8.8L7.62937 11.6L13 6" stroke="#ffffff" fill="none"></path>
                   </svg>
-                  <span className="text-base md:text-lg text-gray-700 font-[family-name:var(--font-eb-garamond)]">Gratis verzending vanaf €50 – Binnen Nederland & België</span>
+                  <span className="text-base md:text-lg text-gray-700 font-[family-name:var(--font-eb-garamond)]">Gratis verzending vanaf €30 – Binnen Nederland & België</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <svg role="presentation" focusable="false" strokeWidth="2" width="24" height="24" className="text-green-600 flex-shrink-0" style={{ "--icon-height": "24px" } as React.CSSProperties} viewBox="0 0 18 18">
@@ -1022,7 +1022,9 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
                             25% EXTRA KORTING
                           </span>
                         </div>
-                        <div className="kaching-bundles__bar-subtitle text-base md:text-lg text-black font-medium font-[family-name:var(--font-eb-garamond)]">PLUS Gratis mysterie-item & gratis verzending</div>
+                        <div className="kaching-bundles__bar-subtitle text-base md:text-lg text-black font-medium font-[family-name:var(--font-eb-garamond)]">
+                          PLUS Gratis mysterie-item{bundlePrices.family >= 30 ? ' & gratis verzending' : ''}
+                        </div>
                       </div>
                     </div>
                     <div className="kaching-bundles__bar-pricing text-right">

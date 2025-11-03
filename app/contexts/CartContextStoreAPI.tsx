@@ -41,6 +41,7 @@ interface CartContextType {
   updateQuantity: (productId: number, quantity: number) => void;
   clearCart: () => void;
   getTotalPrice: () => number;
+  getTotalSavings: () => number;
   getTotalItems: () => number;
   appliedCoupon: any | null;
   applyDiscount: (coupon: any) => void;
@@ -286,11 +287,28 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     }
 
     setItems(prevItems => {
-      const newItems = prevItems.map(item =>
-        item.product.id === productId
-          ? { ...item, quantity }
-          : item
-      );
+      const newItems = prevItems.map(item => {
+        if (item.product.id !== productId) {
+          return item;
+        }
+
+        // If item has bundle pricing, recalculate the bundle price
+        if (item.bundleType && item.bundleDiscount && item.bundlePrice) {
+          const basePrice = parseFloat(item.product.price);
+          // Calculate new bundle price based on quantity
+          const discountMultiplier = (100 - item.bundleDiscount) / 100;
+          const newBundlePrice = basePrice * quantity * discountMultiplier;
+
+          return {
+            ...item,
+            quantity,
+            bundlePrice: newBundlePrice
+          };
+        }
+
+        // For non-bundle items, just update quantity
+        return { ...item, quantity };
+      });
 
       // Save to localStorage immediately
       localStorage.setItem('cart', JSON.stringify({
@@ -468,6 +486,24 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     return getTotalPrice() - getDiscountAmount();
   };
 
+  // Calculate total savings (bundle discounts + coupon discounts)
+  const getTotalSavings = () => {
+    // Calculate bundle discount savings
+    const bundleSavings = items.reduce((total, item) => {
+      if (item.bundlePrice !== undefined) {
+        const regularPrice = parseFloat(item.product.price) * item.quantity;
+        const bundlePrice = item.bundlePrice;
+        return total + (regularPrice - bundlePrice);
+      }
+      return total;
+    }, 0);
+
+    // Add coupon discount
+    const couponDiscount = getDiscountAmount();
+
+    return bundleSavings + couponDiscount;
+  };
+
   const getShippingCost = () => {
     if (storeCart?.totals && storeCart.totals.total_shipping) {
       const divisor = Math.pow(10, storeCart.totals.currency_minor_unit);
@@ -503,6 +539,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     updateQuantity,
     clearCart,
     getTotalPrice,
+    getTotalSavings,
     getTotalItems,
     appliedCoupon,
     applyDiscount,

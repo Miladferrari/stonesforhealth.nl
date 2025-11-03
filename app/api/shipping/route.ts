@@ -99,6 +99,39 @@ async function getAllowedCountries() {
 
 // Calculate shipping rates based on country and cart total
 async function calculateShippingRates(country: string, total: number, postcode?: string) {
+  // OVERRIDE: For BE and NL, always use our new shipping rates (€4.95 / free from €30)
+  if (country === 'BE' || country === 'NL') {
+    console.log(`[Shipping API] Using override rates for ${country}: €4.95 / free from €30`);
+
+    const rates: any[] = [];
+
+    // Check if free shipping threshold is met (€30)
+    if (total >= 30) {
+      console.log('[Shipping API] Free shipping threshold met (€30)');
+      rates.push({
+        method_id: 'free_shipping:1',
+        method_title: 'Gratis verzekerde verzending + Track and trace | Boven €30',
+        cost: 0,
+        free: true,
+        delivery_time: country === 'NL' ? '1-2 werkdagen' : '2-3 werkdagen'
+      });
+    } else {
+      // Add paid shipping rate with remaining amount for free shipping
+      rates.push({
+        method_id: 'flat_rate:1',
+        method_title: 'Verzekerde verzending + Track and trace | 1-2 dagen thuis',
+        cost: 4.95,
+        free: false,
+        delivery_time: country === 'NL' ? '1-2 werkdagen' : '2-3 werkdagen',
+        free_shipping_remaining: 30 - total
+      });
+    }
+
+    console.log(`[Shipping API] Override rates for ${country}:`, rates);
+    return rates;
+  }
+
+  // For other countries, use WooCommerce zones
   const zones = await fetchShippingZones();
   const rates: any[] = [];
 
@@ -178,11 +211,6 @@ async function calculateShippingRates(country: string, total: number, postcode?:
         cost = cost / 100;
       }
 
-      // Default to 2.95 if cost parsing fails (your WooCommerce setting)
-      if (cost === 0 && (country === 'BE' || country === 'NL')) {
-        cost = 2.95;
-      }
-
       const flatRate = {
         method_id: `${method.method_id}:${method.instance_id}`,
         method_title: method.title || method.method_title || 'Verzending',
@@ -224,18 +252,6 @@ async function calculateShippingRates(country: string, total: number, postcode?:
       console.log(`[Shipping API] Unknown method type: ${method.method_id}`);
     }
     }
-  }
-
-  // If no rates found but country is BE or NL, provide default rate
-  if (rates.length === 0 && (country === 'BE' || country === 'NL')) {
-    console.log('[Shipping API] No rates found, using default €2.95 for BE/NL');
-    rates.push({
-      method_id: 'flat_rate:1',
-      method_title: 'Verzending',
-      cost: 2.95,
-      free: false,
-      delivery_time: country === 'NL' ? '1-2 werkdagen' : '2-3 werkdagen'
-    });
   }
 
   console.log(`[Shipping API] Calculated rates for ${country}:`, rates);
@@ -304,14 +320,30 @@ export async function GET(request: NextRequest) {
       const total = parseFloat(searchParams.get('total') || '0');
 
       if (country === 'BE' || country === 'NL') {
-        return NextResponse.json({
-          rates: [{
+        const rates = [];
+
+        // Check if free shipping threshold is met (€30)
+        if (total >= 30) {
+          rates.push({
+            method_id: 'free_shipping:1',
+            method_title: 'Gratis verzending',
+            cost: 0,
+            free: true,
+            delivery_time: country === 'NL' ? '1-2 werkdagen' : '2-3 werkdagen'
+          });
+        } else {
+          rates.push({
             method_id: 'flat_rate:1',
             method_title: 'Verzending',
-            cost: 2.95,
+            cost: 4.95,
             free: false,
-            delivery_time: country === 'NL' ? '1-2 werkdagen' : '2-3 werkdagen'
-          }],
+            delivery_time: country === 'NL' ? '1-2 werkdagen' : '2-3 werkdagen',
+            free_shipping_remaining: 30 - total
+          });
+        }
+
+        return NextResponse.json({
+          rates,
           country,
           postcode: searchParams.get('postcode') || '',
           total

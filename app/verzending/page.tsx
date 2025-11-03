@@ -2,7 +2,7 @@ import { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: 'Verzending & Retour | Stones for Health',
-  description: 'Informatie over verzending, levertijden, verzendkosten en retourbeleid bij Stones for Health. Gratis verzending vanaf €50 in Nederland.',
+  description: 'Informatie over verzending, levertijden, verzendkosten en retourbeleid bij Stones for Health. Gratis verzending vanaf €30 in Nederland en België.',
 };
 
 export default function VerzendingPage() {
@@ -27,8 +27,8 @@ export default function VerzendingPage() {
             </svg>
             <h3 className="font-bold font-[family-name:var(--font-eb-garamond)] text-gray-900 mb-2">Gratis Verzending</h3>
             <p className="text-sm text-gray-700 font-[family-name:var(--font-eb-garamond)]">
-              Nederland: vanaf €50<br />
-              België: vanaf €75
+              Nederland & België<br />
+              vanaf €30
             </p>
           </div>
 
@@ -75,15 +75,15 @@ export default function VerzendingPage() {
                     <span className="font-semibold font-[family-name:var(--font-eb-garamond)] text-gray-900">€4,95</span>
                   </div>
                   <div className="flex justify-between items-center py-2 border-b">
-                    <span className="font-[family-name:var(--font-eb-garamond)] text-gray-700">Nederland - Vanaf €50</span>
+                    <span className="font-[family-name:var(--font-eb-garamond)] text-gray-700">Nederland - Vanaf €30</span>
                     <span className="font-semibold font-[family-name:var(--font-eb-garamond)] text-green-600">Gratis</span>
                   </div>
                   <div className="flex justify-between items-center py-2 border-b">
                     <span className="font-[family-name:var(--font-eb-garamond)] text-gray-700">België - Standaard</span>
-                    <span className="font-semibold font-[family-name:var(--font-eb-garamond)] text-gray-900">€7,95</span>
+                    <span className="font-semibold font-[family-name:var(--font-eb-garamond)] text-gray-900">€4,95</span>
                   </div>
                   <div className="flex justify-between items-center py-2 border-b">
-                    <span className="font-[family-name:var(--font-eb-garamond)] text-gray-700">België - Vanaf €75</span>
+                    <span className="font-[family-name:var(--font-eb-garamond)] text-gray-700">België - Vanaf €30</span>
                     <span className="font-semibold font-[family-name:var(--font-eb-garamond)] text-green-600">Gratis</span>
                   </div>
                 </div>

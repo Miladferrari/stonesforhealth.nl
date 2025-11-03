@@ -27,7 +27,7 @@ export default function CollectionTrustBadges() {
         </svg>
       ),
       title: "Gratis Verzending",
-      subtitle: "Vanaf €50"
+      subtitle: "Vanaf €30"
     },
     {
       icon: (

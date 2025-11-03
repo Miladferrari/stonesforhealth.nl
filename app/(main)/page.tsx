@@ -11,7 +11,7 @@ export const revalidate = 60;
 
 export const metadata: Metadata = {
   title: 'Edelstenen & Kristallen Kopen | Authentiek & Ethisch | StonesForHealth',
-  description: 'Koop authentieke edelstenen en kristallen bij StonesForHealth ✓ 100% Ethisch Gewonnen ✓ Gratis Verzending €50+ ✓ 30 Dagen Retour ✓ 3000+ Tevreden Klanten',
+  description: 'Koop authentieke edelstenen en kristallen bij StonesForHealth ✓ 100% Ethisch Gewonnen ✓ Gratis Verzending €30+ ✓ 30 Dagen Retour ✓ 3000+ Tevreden Klanten',
   keywords: [
     'edelstenen kopen',
     'kristallen kopen',
@@ -25,7 +25,7 @@ export const metadata: Metadata = {
   ],
   openGraph: {
     title: 'Edelstenen & Kristallen Kopen | StonesForHealth',
-    description: 'Koop authentieke en ethisch gewonnen edelstenen en kristallen. Gratis verzending vanaf €50.',
+    description: 'Koop authentieke en ethisch gewonnen edelstenen en kristallen. Gratis verzending vanaf €30.',
     url: 'https://stonesforhealth.nl',
     siteName: 'Stones for Health',
     locale: 'nl_NL',
@@ -117,7 +117,7 @@ export default async function Home() {
     "name": "Stones for Health",
     "url": "https://stonesforhealth.nl",
     "logo": "https://stonesforhealth.nl/logo.png",
-    "description": "Nederlandse webshop voor authentieke edelstenen en kristallen. 100% ethisch gewonnen, gratis verzending vanaf €50, 30 dagen retour.",
+    "description": "Nederlandse webshop voor authentieke edelstenen en kristallen. 100% ethisch gewonnen, gratis verzending vanaf €30, 30 dagen retour.",
     "address": {
       "@type": "PostalAddress",
       "addressCountry": "NL"

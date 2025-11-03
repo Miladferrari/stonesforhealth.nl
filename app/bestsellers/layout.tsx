@@ -2,7 +2,7 @@ import { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: 'Bestsellers | Meest Verkochte Edelstenen & Kristallen | StonesForHealth',
-  description: 'Shop onze bestseller edelstenen en kristallen ✓ Meest populaire stenen ✓ Gratis verzending vanaf €50 ✓ 30 dagen retour ✓ Amethist, Bergkristal, Rozenkwarts & meer',
+  description: 'Shop onze bestseller edelstenen en kristallen ✓ Meest populaire stenen ✓ Gratis verzending vanaf €30 ✓ 30 dagen retour ✓ Amethist, Bergkristal, Rozenkwarts & meer',
   keywords: 'bestseller edelstenen, populaire kristallen, meest verkocht, amethist, rozenkwarts',
   openGraph: {
     title: 'Bestsellers | StonesForHealth',
