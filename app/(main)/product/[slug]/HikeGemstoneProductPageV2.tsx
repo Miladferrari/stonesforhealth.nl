@@ -322,7 +322,17 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
     setIsAddingToCart(true);
 
     try {
-      addToCart(product as any, quantityToAdd);
+      // Calculate bundle discount percentage
+      const bundleDiscount = selectedBundle === 'duo' ? 20 : selectedBundle === 'family' ? 25 : 0;
+
+      // Create bundle info to pass to cart
+      const bundleInfo = {
+        type: selectedBundle,
+        discount: bundleDiscount,
+        totalPrice: bundlePrices[selectedBundle]
+      };
+
+      addToCart(product as any, quantityToAdd, bundleInfo);
       // Show success animation
       setTimeout(() => {
         setIsAddingToCart(false);

@@ -6,6 +6,9 @@ import { Product, Coupon, ShippingRate } from '@/lib/woocommerce';
 interface CartItem {
   product: Product;
   quantity: number;
+  bundleType?: 'single' | 'duo' | 'family';
+  bundleDiscount?: number;
+  bundlePrice?: number;
 }
 
 interface ShippingInfo {
@@ -17,11 +20,17 @@ interface ShippingInfo {
   error: string | null;
 }
 
+interface BundleInfo {
+  type: 'single' | 'duo' | 'family';
+  discount: number;
+  totalPrice: number;
+}
+
 interface CartContextType {
   items: CartItem[];
   isCartOpen: boolean;
   setIsCartOpen: (isOpen: boolean) => void;
-  addToCart: (product: Product, quantity?: number) => void;
+  addToCart: (product: Product, quantity?: number, bundleInfo?: BundleInfo) => void;
   removeFromCart: (productId: number) => void;
   updateQuantity: (productId: number, quantity: number) => void;
   clearCart: () => void;
@@ -67,25 +76,58 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
 
   // Cart persistence removed - will be handled by WooCommerce Store API
 
-  const addToCart = (product: Product, quantity: number = 1) => {
+  const addToCart = (product: Product, quantity: number = 1, bundleInfo?: BundleInfo) => {
     // Don't add out of stock products
     if (product.stock_status !== 'instock' || product.stock_quantity === 0) {
       console.warn('Cannot add out of stock product to cart:', product.name);
       return;
     }
-    
+
+    console.log('[Cart] Adding to cart:', {
+      productName: product.name,
+      quantity,
+      bundleInfo
+    });
+
     setItems(prevItems => {
       const existingItem = prevItems.find(item => item.product.id === product.id);
-      
+
       if (existingItem) {
-        return prevItems.map(item =>
-          item.product.id === product.id
-            ? { ...item, quantity: item.quantity + quantity }
-            : item
-        );
+        // If adding more of the same bundle type, merge quantities
+        if (bundleInfo && existingItem.bundleType === bundleInfo.type) {
+          return prevItems.map(item =>
+            item.product.id === product.id
+              ? {
+                  ...item,
+                  quantity: item.quantity + quantity,
+                  bundlePrice: bundleInfo.totalPrice // Update total price
+                }
+              : item
+          );
+        }
+        // Otherwise add as separate cart item
+        return [
+          ...prevItems,
+          {
+            product,
+            quantity,
+            bundleType: bundleInfo?.type,
+            bundleDiscount: bundleInfo?.discount,
+            bundlePrice: bundleInfo?.totalPrice
+          }
+        ];
       }
-      
-      return [...prevItems, { product, quantity }];
+
+      return [
+        ...prevItems,
+        {
+          product,
+          quantity,
+          bundleType: bundleInfo?.type,
+          bundleDiscount: bundleInfo?.discount,
+          bundlePrice: bundleInfo?.totalPrice
+        }
+      ];
     });
     // Open the slide-in cart when an item is added
     setIsCartOpen(true);
@@ -117,6 +159,11 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
 
   const getTotalPrice = () => {
     return items.reduce((total, item) => {
+      // If bundle price is set, use that instead of calculating from product price
+      if (item.bundlePrice !== undefined) {
+        return total + item.bundlePrice;
+      }
+      // Otherwise use normal price × quantity
       const price = parseFloat(item.product.price);
       return total + (price * item.quantity);
     }, 0);

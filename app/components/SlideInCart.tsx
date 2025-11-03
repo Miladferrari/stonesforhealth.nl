@@ -150,17 +150,25 @@ export default function SlideInCart() {
               </div>
             ) : (
               <div className="px-5 py-4 space-y-3 bg-white">
-                {items.map((item) => {
+                {items.map((item, index) => {
                   const price = parseFloat(item.product.price);
                   const regularPrice = item.product.regular_price ? parseFloat(item.product.regular_price) : price;
                   const mainImage = item.product.images[0];
                   const hasDiscount = regularPrice > price;
 
+                  // Calculate display price - use bundle price if available
+                  const displayPrice = item.bundlePrice !== undefined ? item.bundlePrice : (price * item.quantity);
+                  const originalPrice = regularPrice * item.quantity;
+
+                  // Bundle badge info
+                  const bundleBadge = item.bundleType === 'duo' ? '2 PAAR -20%' :
+                                     item.bundleType === 'family' ? '3 PAAR -25%' : null;
+
                   return (
-                    <div key={item.product.id} className="bg-white border border-[#E8DCC6]/40 rounded-lg overflow-hidden hover:border-[#492c4a]/20 transition-colors">
+                    <div key={`${item.product.id}-${index}`} className="bg-white border border-[#E8DCC6]/40 rounded-lg overflow-hidden hover:border-[#492c4a]/20 transition-colors">
                       <div className="flex gap-4 p-4">
                         {/* Product image */}
-                        <div className="w-20 h-20 flex-shrink-0">
+                        <div className="w-20 h-20 flex-shrink-0 relative">
                           <a href={`/product/${item.product.slug}`} className="block w-full h-full">
                             {mainImage ? (
                               <img
@@ -176,6 +184,12 @@ export default function SlideInCart() {
                               </div>
                             )}
                           </a>
+                          {/* Bundle badge overlay */}
+                          {bundleBadge && (
+                            <div className="absolute -top-1 -right-1 bg-green-500 text-white text-[9px] font-bold px-1.5 py-0.5 rounded shadow-sm">
+                              {bundleBadge}
+                            </div>
+                          )}
                         </div>
 
                         {/* Product details */}
@@ -185,6 +199,12 @@ export default function SlideInCart() {
                               <a href={`/product/${item.product.slug}`} className="text-sm font-medium text-gray-900 hover:text-[#492c4a] transition-colors line-clamp-2">
                                 {item.product.name}
                               </a>
+                              {/* Bundle info below product name */}
+                              {bundleBadge && (
+                                <div className="mt-1 text-[10px] text-green-600 font-semibold">
+                                  BUNDEL KORTING: {item.bundleDiscount}% EXTRA
+                                </div>
+                              )}
                             </div>
                             <button
                               onClick={() => removeFromCart(item.product.id)}
@@ -199,41 +219,51 @@ export default function SlideInCart() {
                           </div>
 
                           <div className="flex items-end justify-between">
-                            {/* Quantity controls */}
+                            {/* Quantity display (not editable for bundles) */}
                             <div className="flex items-center">
-                              <button
-                                onClick={() => updateQuantity(item.product.id, item.quantity - 1)}
-                                className="w-7 h-7 border border-[#E8DCC6] rounded-l flex items-center justify-center hover:bg-[#492c4a]/5 transition-colors"
-                                disabled={item.quantity <= 1}
-                                aria-label="Verminder"
-                              >
-                                <svg className="w-3.5 h-3.5 text-[#492c4a]/50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 12H4" />
-                                </svg>
-                              </button>
-                              <div className="w-10 h-7 border-t border-b border-[#E8DCC6] flex items-center justify-center bg-white">
-                                <span className="text-sm font-medium text-[#492c4a]">{item.quantity}</span>
-                              </div>
-                              <button
-                                onClick={() => updateQuantity(item.product.id, item.quantity + 1)}
-                                className="w-7 h-7 border border-[#E8DCC6] rounded-r flex items-center justify-center hover:bg-[#492c4a]/5 transition-colors"
-                                aria-label="Verhoog"
-                              >
-                                <svg className="w-3.5 h-3.5 text-[#492c4a]/50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-                                </svg>
-                              </button>
+                              {item.bundleType ? (
+                                // For bundles, show quantity as text
+                                <div className="px-3 py-1 bg-[#492c4a]/5 rounded text-xs font-medium text-[#492c4a]">
+                                  {item.quantity} stuks
+                                </div>
+                              ) : (
+                                // For single items, show controls
+                                <>
+                                  <button
+                                    onClick={() => updateQuantity(item.product.id, item.quantity - 1)}
+                                    className="w-7 h-7 border border-[#E8DCC6] rounded-l flex items-center justify-center hover:bg-[#492c4a]/5 transition-colors"
+                                    disabled={item.quantity <= 1}
+                                    aria-label="Verminder"
+                                  >
+                                    <svg className="w-3.5 h-3.5 text-[#492c4a]/50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 12H4" />
+                                    </svg>
+                                  </button>
+                                  <div className="w-10 h-7 border-t border-b border-[#E8DCC6] flex items-center justify-center bg-white">
+                                    <span className="text-sm font-medium text-[#492c4a]">{item.quantity}</span>
+                                  </div>
+                                  <button
+                                    onClick={() => updateQuantity(item.product.id, item.quantity + 1)}
+                                    className="w-7 h-7 border border-[#E8DCC6] rounded-r flex items-center justify-center hover:bg-[#492c4a]/5 transition-colors"
+                                    aria-label="Verhoog"
+                                  >
+                                    <svg className="w-3.5 h-3.5 text-[#492c4a]/50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                                    </svg>
+                                  </button>
+                                </>
+                              )}
                             </div>
 
                             {/* Price */}
                             <div className="text-right">
                               <div className="flex flex-col items-end">
                                 <span className="text-sm font-semibold text-[#492c4a]">
-                                  €{(price * item.quantity).toFixed(2)}
+                                  €{displayPrice.toFixed(2)}
                                 </span>
-                                {hasDiscount && (
+                                {(hasDiscount || item.bundlePrice) && (
                                   <span className="text-xs text-gray-500 line-through">
-                                    €{(regularPrice * item.quantity).toFixed(2)}
+                                    €{originalPrice.toFixed(2)}
                                   </span>
                                 )}
                               </div>
