@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { useCart } from '@/app/contexts/CartContextStoreAPI';
 import { Product } from '@/lib/woocommerce';
 import { generateProductReviewData } from '@/lib/reviewGenerator';
+import { trackProductView, trackAddToCart } from '../../../lib/analytics';
 
 interface HikeGemstoneProductPageV2Props {
   product: Product;
@@ -303,6 +304,15 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
     }
   }, [showReviewDropdown]);
 
+  // Track product view on mount
+  useEffect(() => {
+    trackProductView({
+      id: product.id.toString(),
+      name: product.name,
+      price: parseFloat(product.price),
+      category: product.categories?.[0]?.name,
+    });
+  }, [product]);
 
   const handleAddToCart = async () => {
     // Don't add to cart if out of stock or max quantity reached
@@ -333,6 +343,15 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
       };
 
       addToCart(product as any, quantityToAdd, bundleInfo);
+
+      // Track add to cart event
+      trackAddToCart({
+        id: product.id.toString(),
+        name: product.name,
+        price: bundlePrices[selectedBundle as keyof typeof bundlePrices] / quantityToAdd,
+        category: product.categories?.[0]?.name,
+      }, quantityToAdd);
+
       // Show success animation
       setTimeout(() => {
         setIsAddingToCart(false);

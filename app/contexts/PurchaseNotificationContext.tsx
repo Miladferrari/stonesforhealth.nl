@@ -83,8 +83,10 @@ export function PurchaseNotificationProvider({ children }: { children: React.Rea
       }
     } catch (error) {
       // Stille failure - alleen loggen, niet crashen
+      // Dit kan gebeuren door browser extensies, netwerk issues, of server startup
       if (isMountedRef.current) {
-        console.warn('Purchase notifications: Unable to fetch (this is normal if server is starting)');
+        // Loggen zonder error te gooien
+        // console.debug('Purchase notifications: Fetch skipped');
       }
     }
   }, [shownNotificationIds]);

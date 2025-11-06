@@ -1,8 +1,22 @@
 'use client';
 
 import Script from 'next/script';
+import { useEffect } from 'react';
 
 export default function MetaPixel() {
+  useEffect(() => {
+    // Check if consent was previously given
+    const consent = localStorage.getItem('cookie_consent');
+
+    if (typeof window !== 'undefined' && window.fbq) {
+      if (consent === 'granted') {
+        window.fbq('consent', 'grant');
+      } else if (consent === 'denied') {
+        window.fbq('consent', 'revoke');
+      }
+    }
+  }, []);
+
   return (
     <>
       <Script id="meta-pixel" strategy="afterInteractive">
@@ -15,6 +29,9 @@ export default function MetaPixel() {
           t.src=v;s=b.getElementsByTagName(e)[0];
           s.parentNode.insertBefore(t,s)}(window, document,'script',
           'https://connect.facebook.net/en_US/fbevents.js');
+
+          // Initialize with consent mode
+          fbq('consent', 'revoke');
           fbq('init', '706502092486460');
           fbq('track', 'PageView');
         `}

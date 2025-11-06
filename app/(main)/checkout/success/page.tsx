@@ -4,6 +4,7 @@ import { useEffect, useState, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { useCart } from '../../../contexts/CartContextStoreAPI';
+import { trackPurchase } from '../../../lib/analytics';
 
 function SuccessContent() {
   const searchParams = useSearchParams();
@@ -38,20 +39,42 @@ function SuccessContent() {
         if (data.success && data.order) {
           setOrderNumber(orderId.padStart(6, '0'));
           setOrderStatus(data.order.status);
-          
+
           // Clear pending order from session
           sessionStorage.removeItem('pendingOrderId');
           sessionStorage.removeItem('orderData');
           sessionStorage.removeItem('completedOrderId');
           sessionStorage.removeItem('checkoutFormData');
           sessionStorage.removeItem('selectedShippingRate');
-          
+
           // Clear cart ONLY if payment is confirmed as successful
           const paymentSuccessStatuses = ['processing', 'completed', 'on-hold'];
           if (paymentSuccessStatuses.includes(data.order.status) && !cartCleared) {
             clearCart();
             setCartCleared(true);
             console.log('Cart cleared after successful payment confirmation');
+
+            // Track purchase in Google Analytics (only once)
+            if (!sessionStorage.getItem(`tracked_order_${orderId}`)) {
+              const items = data.order.line_items?.map((item: any) => ({
+                id: item.product_id.toString(),
+                name: item.name,
+                price: parseFloat(item.price),
+                quantity: item.quantity,
+                category: item.categories?.[0] || 'Edelstenen',
+              })) || [];
+
+              trackPurchase(
+                orderId,
+                items,
+                parseFloat(data.order.total),
+                parseFloat(data.order.total_tax || '0'),
+                parseFloat(data.order.shipping_total || '0')
+              );
+
+              // Mark this order as tracked to prevent duplicate tracking
+              sessionStorage.setItem(`tracked_order_${orderId}`, 'true');
+            }
           }
         } else {
           setError('Kon bestellingsinformatie niet ophalen');

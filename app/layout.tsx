@@ -9,6 +9,8 @@ import LayoutContent from "./components/LayoutContent";
 import GoogleAnalytics from "./components/GoogleAnalytics";
 import MetaPixel from "./components/MetaPixel";
 import NewsletterPopupContainer from "./components/NewsletterPopupContainer";
+import CookieConsent from "./components/CookieConsent";
+import UTMTracker from "./components/UTMTracker";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -84,6 +86,8 @@ export default function RootLayout({
       >
         <GoogleAnalytics />
         <MetaPixel />
+        <CookieConsent />
+        <UTMTracker />
         <ToastProvider>
           <CartProvider>
             <LayoutContent>

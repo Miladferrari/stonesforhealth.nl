@@ -122,6 +122,83 @@ async function updateOrderStatus(
 }
 
 /**
+ * Generate invoice PDF for an order
+ * @param order - The WooCommerce order object
+ * @returns PDF buffer or null if generation fails
+ */
+async function generateInvoicePDF(order: any): Promise<Buffer | null> {
+  try {
+    console.log('[Invoice] Generating invoice PDF for order:', order.number);
+
+    // Dynamically import @react-pdf/renderer to avoid build-time issues
+    const { renderToBuffer } = await import('@react-pdf/renderer');
+    const { default: InvoiceTemplate } = await import('@/app/pdfs/InvoiceTemplate');
+    const React = await import('react');
+
+    const invoiceData = {
+      invoiceNumber: `INV-${order.number}`,
+      orderNumber: order.number.toString(),
+      invoiceDate: new Date().toLocaleDateString('nl-NL'),
+      orderDate: new Date(order.date_created).toLocaleDateString('nl-NL'),
+
+      companyName: 'Stones for Health',
+      companyAddress: 'Adres van je bedrijf', // TODO: Update
+      companyPostcode: '1234 AB', // TODO: Update
+      companyCity: 'Amsterdam', // TODO: Update
+      companyCountry: 'Nederland',
+      companyEmail: 'info@stonesforhealth.nl',
+      companyPhone: '+31 (0)6 12345678', // TODO: Update
+      companyKVK: '12345678', // TODO: Update
+      companyVAT: 'NL123456789B01', // TODO: Update
+      companyIBAN: 'NL12 ABCD 0123 4567 89', // TODO: Update
+
+      customerName: `${order.billing.first_name} ${order.billing.last_name}`,
+      customerEmail: order.billing.email,
+      customerPhone: order.billing.phone,
+      billingAddress: `${order.billing.address_1}${order.billing.address_2 ? ' ' + order.billing.address_2 : ''}`,
+      billingPostcode: order.billing.postcode,
+      billingCity: order.billing.city,
+      billingCountry: order.billing.country,
+
+      shippingName: `${order.shipping.first_name} ${order.shipping.last_name}`,
+      shippingAddress: `${order.shipping.address_1}${order.shipping.address_2 ? ' ' + order.shipping.address_2 : ''}`,
+      shippingPostcode: order.shipping.postcode,
+      shippingCity: order.shipping.city,
+      shippingCountry: order.shipping.country,
+
+      items: order.line_items.map((item: any) => ({
+        name: item.name,
+        quantity: item.quantity,
+        price: parseFloat(item.price),
+        total: parseFloat(item.total),
+      })),
+
+      subtotal: parseFloat(order.total) - parseFloat(order.shipping_total || '0') + parseFloat(order.discount_total || '0'),
+      discount: parseFloat(order.discount_total || '0'),
+      discountCode: order.coupon_lines && order.coupon_lines.length > 0 ? order.coupon_lines[0].code : '',
+      shippingCost: parseFloat(order.shipping_total || '0'),
+      shippingMethod: order.shipping_lines && order.shipping_lines.length > 0 ? order.shipping_lines[0].method_title : 'Standaard Verzending',
+      tax: 0,
+      total: parseFloat(order.total),
+
+      paymentMethod: order.payment_method_title || 'Online Betaling',
+      paymentStatus: 'Betaald',
+
+      customerNotes: order.customer_note || '',
+    };
+
+    const InvoiceDoc = React.createElement(InvoiceTemplate, { data: invoiceData });
+    const pdfBuffer = await renderToBuffer(InvoiceDoc as any);
+
+    console.log('[Invoice] Invoice PDF generated successfully, size:', pdfBuffer.length, 'bytes');
+    return pdfBuffer;
+  } catch (error) {
+    console.error('[Invoice] Failed to generate invoice PDF:', error);
+    return null;
+  }
+}
+
+/**
  * Verstuur order emails naar klant en shop eigenaar
  * @param orderId - The WooCommerce order ID
  */
@@ -201,6 +278,9 @@ async function sendOrderEmails(orderId: string): Promise<void> {
     };
     const paymentMethod = paymentMethodLabels[order.payment_method] || order.payment_method_title || 'Online betaling';
 
+    // Generate invoice PDF
+    const invoicePDF = await generateInvoicePDF(order);
+
     // Verstuur klant email
     const resend = getResend();
     if (resend) {
@@ -220,12 +300,26 @@ async function sendOrderEmails(orderId: string): Promise<void> {
           paymentMethod,
         });
 
-        await resend.emails.send({
+        // Prepare email payload
+        const emailPayload: any = {
           from: 'Stones for Health <noreply@stonesforhealth.nl>',
           to: order.billing.email,
           subject: `Bestelbevestiging #${order.number} - Stones for Health`,
           html: customerEmailHtml,
-        });
+        };
+
+        // Add invoice PDF as attachment if generated successfully
+        if (invoicePDF) {
+          emailPayload.attachments = [
+            {
+              filename: `Factuur-${order.number}.pdf`,
+              content: invoicePDF,
+            },
+          ];
+          console.log('[Email] Invoice PDF attached to customer email');
+        }
+
+        await resend.emails.send(emailPayload);
 
         console.log(`[Email] Order confirmation sent to customer: ${order.billing.email}`);
       } catch (error) {
@@ -250,12 +344,25 @@ async function sendOrderEmails(orderId: string): Promise<void> {
           paymentMethod,
         });
 
-        await resend.emails.send({
+        // Prepare owner email payload
+        const ownerEmailPayload: any = {
           from: 'Stones for Health <noreply@stonesforhealth.nl>',
           to: 'info@stonesforhealth.nl',
           subject: `🎉 Nieuwe Bestelling #${order.number} - stonesforhealth.nl`,
           html: ownerEmailHtml,
-        });
+        };
+
+        // Add invoice PDF as attachment if generated successfully
+        if (invoicePDF) {
+          ownerEmailPayload.attachments = [
+            {
+              filename: `Factuur-${order.number}.pdf`,
+              content: invoicePDF,
+            },
+          ];
+        }
+
+        await resend.emails.send(ownerEmailPayload);
 
         console.log(`[Email] New order notification sent to shop owner`);
       } catch (error) {

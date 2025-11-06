@@ -1,6 +1,26 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  // Webpack configuration to handle react-pdf
+  webpack: (config, { isServer }) => {
+    // Exclude react-pdf from server-side builds to prevent module issues
+    if (isServer) {
+      config.externals = config.externals || [];
+      config.externals.push({
+        '@react-pdf/renderer': 'commonjs @react-pdf/renderer',
+      });
+    }
+
+    // Add fallbacks for node modules
+    config.resolve.fallback = {
+      ...config.resolve.fallback,
+      canvas: false,
+      encoding: false,
+    };
+
+    return config;
+  },
+
   // Enable image optimization
   images: {
     remotePatterns: [

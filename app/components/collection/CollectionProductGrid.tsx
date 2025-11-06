@@ -151,39 +151,38 @@ export default function CollectionProductGrid({
                     );
                   })()}
 
-                  {/* Price and Cart Button */}
-                  <div className="flex items-center justify-between">
+                  {/* Price */}
+                  <div className="flex items-center justify-between mb-3">
                     <div>
                       {product.on_sale && product.regular_price ? (
                         <>
-                          <span className="text-xs sm:text-sm text-gray-500 line-through">
-                            €{parseFloat(product.regular_price).toFixed(2).replace('.', ',')}
+                          <span className="text-xs text-gray-500 line-through block">
+                            €{parseFloat(product.regular_price).toFixed(2)}
                           </span>
-                          <span className="text-base sm:text-lg md:text-xl font-bold text-[#492c4a] ml-1 sm:ml-2">
-                            €{parseFloat(product.price).toFixed(2).replace('.', ',')}
+                          <span className="text-base sm:text-lg md:text-xl font-bold text-[#492c4a]">
+                            €{parseFloat(product.price).toFixed(2)}
                           </span>
                         </>
                       ) : (
                         <span className="text-base sm:text-lg md:text-xl font-bold text-[#492c4a]">
-                          €{parseFloat(product.price).toFixed(2).replace('.', ',')}
+                          €{parseFloat(product.price).toFixed(2)}
                         </span>
                       )}
                     </div>
-                    <button
-                      className="w-8 h-8 rounded-full bg-[#492c4a]/10 hover:bg-[#492c4a] flex items-center justify-center transition-all group/btn"
-                      aria-label="Toevoegen aan winkelwagen"
-                      onClick={(e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        addToCart(product);
-                        showToast('Product toegevoegd aan winkelwagen!', 'success');
-                      }}
-                    >
-                      <svg className="w-4 h-4 text-[#492c4a] group-hover/btn:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-                      </svg>
-                    </button>
                   </div>
+
+                  {/* Add to Cart Button */}
+                  <button
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      addToCart(product);
+                      showToast('Product toegevoegd aan winkelwagen!', 'success');
+                    }}
+                    className="w-full uppercase text-sm sm:text-base font-bold py-2 sm:py-3 transition-all duration-200 bg-[#492c4a] text-white hover:bg-[#492c4a]/90"
+                  >
+                    Add To Cart
+                  </button>
                 </div>
               </div>
             );

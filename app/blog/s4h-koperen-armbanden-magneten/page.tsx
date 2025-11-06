@@ -25,7 +25,7 @@ const blogPostingSchema = {
   "@type": "BlogPosting",
   "headline": "S4H Koperen Armbanden met Magneten - Stijl, Balans en Natuurlijke Energie",
   "description": "Ontdek de kracht van koperen armbanden met magneten. Eeuwenoude kennis gecombineerd met modern design voor balans, herstel en stijlvolle energie.",
-  "image": "https://stonesforhealth.nl/blog-images/S4H Koperen Armbanden met Magneten - Stijl, Balans en Natuurlijke Energie.jpeg",
+  "image": "https://stonesforhealth.nl/blog-images/S4H Koperen Armbanden met Magneten – Stijl, Balans en Natuurlijke Energie.jpeg",
   "datePublished": "2025-10-01T09:00:00Z",
   "dateModified": "2025-10-01T09:00:00Z",
   "author": {
@@ -72,7 +72,7 @@ export default function S4HKoperenArmbanden() {
         {/* Blog Image */}
         <div className="relative w-full h-64 sm:h-96 mb-8 rounded-lg overflow-hidden">
           <Image
-            src="/blog-images/S4H Koperen Armbanden met Magneten - Stijl, Balans en Natuurlijke Energie.jpeg"
+            src="/blog-images/S4H Koperen Armbanden met Magneten – Stijl, Balans en Natuurlijke Energie.jpeg"
             alt="S4H Koperen armbanden met magneten voor balans en natuurlijke energie"
             fill
             className="object-cover"
