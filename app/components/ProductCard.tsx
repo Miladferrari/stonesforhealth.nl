@@ -152,7 +152,7 @@ const ProductCard = memo(function ProductCard({ product }: ProductCardProps) {
   }, [isWishlisted, product]);
 
   return (
-    <div className={`group relative bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 ${isOutOfStock ? 'opacity-75' : ''}`}>
+    <div className={`group relative bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 flex flex-col ${isOutOfStock ? 'opacity-75' : ''}`}>
       <Link href={`/product/${product.slug}`}>
         <div className="relative aspect-square overflow-hidden">
           <div className="relative w-full h-full">
@@ -182,7 +182,7 @@ const ProductCard = memo(function ProductCard({ product }: ProductCardProps) {
       </Link>
         
 
-      <div className="p-2 sm:p-3 md:p-4">
+      <div className="p-2 sm:p-3 md:p-4 flex flex-col h-full">
         <Link href={`/product/${product.slug}`}>
           <h3 className="font-bold text-gray-900 mb-1 text-sm sm:text-base md:text-lg font-[family-name:var(--font-eb-garamond)] line-clamp-1 hover:text-[#492c4a] transition-colors cursor-pointer">
             {product.name}
@@ -197,7 +197,7 @@ const ProductCard = memo(function ProductCard({ product }: ProductCardProps) {
         </div>
 
         <div className="flex items-center justify-between mb-3">
-          <div>
+          <div className="min-h-[2.5rem] flex flex-col justify-end">
             {isOnSale && regularPrice > price && (
               <span className="text-xs text-gray-500 line-through block">
                 €{regularPrice.toFixed(2)}
@@ -209,38 +209,51 @@ const ProductCard = memo(function ProductCard({ product }: ProductCardProps) {
           </div>
         </div>
 
+        {/* Spacer to push button to bottom */}
+        <div className="flex-grow"></div>
+
         <button
           onClick={handleAddToCart}
           disabled={isAdding || showAdded || isOutOfStock}
-          className={`w-full uppercase text-sm sm:text-base font-bold py-2 sm:py-3 transition-all duration-200 ${
+          className={`w-full rounded-lg text-sm sm:text-base font-semibold py-2.5 sm:py-3 transition-all duration-200 flex items-center justify-center gap-2 shadow-sm ${
             isOutOfStock
               ? 'bg-gray-400 text-white cursor-not-allowed'
               : isAdding
-              ? 'bg-[#492c4a]/80 text-white'
+              ? 'bg-[#492c4a]/80 text-white scale-95'
               : showAdded
-              ? 'bg-green-600 text-white'
-              : 'bg-[#492c4a] text-white hover:bg-[#492c4a]/90'
+              ? 'bg-green-600 text-white scale-95'
+              : 'bg-[#492c4a] text-white hover:bg-[#492c4a]/90 hover:shadow-md active:scale-95'
           }`}
         >
           {isOutOfStock ? (
-            'Uitverkocht'
+            <>
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+              Uitverkocht
+            </>
           ) : isAdding ? (
-            <span className="flex items-center justify-center gap-2">
+            <>
               <svg className="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24">
                 <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                 <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
               </svg>
               Toevoegen...
-            </span>
+            </>
           ) : showAdded ? (
-            <span className="flex items-center justify-center gap-2">
+            <>
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7"></path>
               </svg>
               Toegevoegd!
-            </span>
+            </>
           ) : (
-            'Add To Cart'
+            <>
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+              </svg>
+              In Winkelwagen
+            </>
           )}
         </button>
       </div>

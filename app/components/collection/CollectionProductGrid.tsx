@@ -89,7 +89,7 @@ export default function CollectionProductGrid({
             return (
               <div
                 key={product.id}
-                className="group relative bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300"
+                className="group relative bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 flex flex-col"
                 onMouseEnter={() => setHoveredProduct(product.id)}
                 onMouseLeave={() => setHoveredProduct(null)}
               >
@@ -130,7 +130,7 @@ export default function CollectionProductGrid({
                 </Link>
 
                 {/* Product Info */}
-                <div className="p-2 sm:p-3 md:p-4">
+                <div className="p-2 sm:p-3 md:p-4 flex flex-col h-full">
                   <Link href={`/product/${product.slug}`}>
                     {/* Product Title */}
                     <h3 className="font-bold text-gray-900 mb-1 text-sm sm:text-base md:text-lg font-[family-name:var(--font-eb-garamond)] line-clamp-1 hover:text-[#492c4a] transition-colors cursor-pointer">
@@ -153,7 +153,7 @@ export default function CollectionProductGrid({
 
                   {/* Price */}
                   <div className="flex items-center justify-between mb-3">
-                    <div>
+                    <div className="min-h-[2.5rem] flex flex-col justify-end">
                       {product.on_sale && product.regular_price ? (
                         <>
                           <span className="text-xs text-gray-500 line-through block">
@@ -171,6 +171,9 @@ export default function CollectionProductGrid({
                     </div>
                   </div>
 
+                  {/* Spacer to push button to bottom */}
+                  <div className="flex-grow"></div>
+
                   {/* Add to Cart Button */}
                   <button
                     onClick={(e) => {
@@ -179,9 +182,12 @@ export default function CollectionProductGrid({
                       addToCart(product);
                       showToast('Product toegevoegd aan winkelwagen!', 'success');
                     }}
-                    className="w-full uppercase text-sm sm:text-base font-bold py-2 sm:py-3 transition-all duration-200 bg-[#492c4a] text-white hover:bg-[#492c4a]/90"
+                    className="w-full rounded-lg text-sm sm:text-base font-semibold py-2.5 sm:py-3 transition-all duration-200 flex items-center justify-center gap-2 shadow-sm bg-[#492c4a] text-white hover:bg-[#492c4a]/90 hover:shadow-md active:scale-95"
                   >
-                    Add To Cart
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                    </svg>
+                    In Winkelwagen
                   </button>
                 </div>
               </div>

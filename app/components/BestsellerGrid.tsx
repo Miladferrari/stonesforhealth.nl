@@ -128,7 +128,7 @@ export default function BestsellerGrid() {
       {products.map((product) => (
         <div
           key={product.id}
-          className="group relative bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300"
+          className="group relative bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 flex flex-col"
         >
           {/* Product Image - Clickable Link */}
           <Link href={`/product/${product.slug}`}>
@@ -167,10 +167,10 @@ export default function BestsellerGrid() {
           </Link>
 
           {/* Product Info - Separate from Link */}
-          <div className="p-4">
+          <div className="p-2 sm:p-3 md:p-4 flex flex-col h-full">
             {/* Product Title - Also Clickable */}
             <Link href={`/product/${product.slug}`}>
-              <h3 className="font-bold text-gray-900 mb-1 text-lg font-[family-name:var(--font-eb-garamond)] line-clamp-1 hover:text-[#492c4a] transition-colors cursor-pointer">
+              <h3 className="font-bold text-gray-900 mb-1 text-sm sm:text-base md:text-lg font-[family-name:var(--font-eb-garamond)] line-clamp-1 hover:text-[#492c4a] transition-colors cursor-pointer">
                 {product.name}
               </h3>
             </Link>
@@ -188,43 +188,42 @@ export default function BestsellerGrid() {
               );
             })()}
 
-            {/* Price and Add to Cart */}
-            <div className="flex items-center justify-between">
-              <div>
+            {/* Price */}
+            <div className="flex items-center justify-between mb-3">
+              <div className="min-h-[2.5rem] flex flex-col justify-end">
                 {product.on_sale && product.regular_price ? (
                   <>
-                    <span className="text-sm text-gray-500 line-through">
+                    <span className="text-xs text-gray-500 line-through block">
                       €{parseFloat(product.regular_price).toFixed(2).replace('.', ',')}
                     </span>
-                    <span className="text-xl font-bold text-[#492c4a] ml-2">
+                    <span className="text-base sm:text-lg md:text-xl font-bold text-[#492c4a]">
                       €{parseFloat(product.price).toFixed(2).replace('.', ',')}
                     </span>
                   </>
                 ) : (
-                  <span className="text-xl font-bold text-[#492c4a]">
+                  <span className="text-base sm:text-lg md:text-xl font-bold text-[#492c4a]">
                     €{parseFloat(product.price).toFixed(2).replace('.', ',')}
                   </span>
                 )}
               </div>
-
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  handleQuickAdd(product);
-                }}
-                className="w-8 h-8 rounded-full bg-[#492c4a]/10 hover:bg-[#492c4a] flex items-center justify-center transition-all group/btn"
-                aria-label="Toevoegen aan winkelwagen"
-              >
-                <svg
-                  className="w-4 h-4 text-[#492c4a] group-hover/btn:text-white"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-                </svg>
-              </button>
             </div>
+
+            {/* Spacer to push button to bottom */}
+            <div className="flex-grow"></div>
+
+            {/* Add to Cart Button */}
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                handleQuickAdd(product);
+              }}
+              className="w-full rounded-lg text-sm sm:text-base font-semibold py-2.5 sm:py-3 transition-all duration-200 flex items-center justify-center gap-2 shadow-sm bg-[#492c4a] text-white hover:bg-[#492c4a]/90 hover:shadow-md active:scale-95"
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+              </svg>
+              In Winkelwagen
+            </button>
           </div>
         </div>
       ))}
