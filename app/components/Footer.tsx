@@ -146,7 +146,7 @@ const Footer = memo(function Footer() {
                   <span className="text-sm bg-[#492c4a]/10 text-[#492c4a] px-1.5 py-0.5 rounded-md font-semibold">4.4/5</span>
                 </div>
                 <span className="text-sm text-gray-700 font-semibold mt-0.5 font-[family-name:var(--font-eb-garamond)]">
-                  Vertrouwd door <span className="font-bold text-[#492c4a]">3000+</span> klanten
+                  Vertrouwd door <span className="font-bold text-[#492c4a]">4000+</span> klanten
                 </span>
               </div>
             </div>

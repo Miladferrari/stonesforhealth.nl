@@ -11,7 +11,7 @@ export const revalidate = 60;
 
 export const metadata: Metadata = {
   title: 'Edelstenen & Kristallen Kopen | Authentiek & Ethisch | StonesForHealth',
-  description: 'Koop authentieke edelstenen en kristallen bij StonesForHealth ✓ 100% Ethisch Gewonnen ✓ Gratis Verzending €30+ ✓ 30 Dagen Retour ✓ 3000+ Tevreden Klanten',
+  description: 'Koop authentieke edelstenen en kristallen bij StonesForHealth ✓ 100% Ethisch Gewonnen ✓ Gratis Verzending €30+ ✓ 30 Dagen Retour ✓ 4000+ Tevreden Klanten',
   keywords: [
     'edelstenen kopen',
     'kristallen kopen',
@@ -49,19 +49,21 @@ export default async function Home() {
 
   // Fetch categories from WooCommerce
   try {
-    categories = await woocommerce.getCategories({ per_page: 50, hide_empty: true });
-    // Filter out uncategorized and empty categories
+    categories = await woocommerce.getCategories({ per_page: 100, hide_empty: true });
+
+    // Filter for the 3 main parent categories we want to display
+    const desiredCategories = ['intenties', 'sterrenbeeld', 'elementen'];
     categories = categories.filter(cat =>
-      cat.slug !== 'uncategorized' &&
-      cat.count > 0 // Only show categories with products
+      desiredCategories.includes(cat.slug.toLowerCase()) &&
+      cat.parent === 0 // Only parent categories
     );
 
-    // Sort categories by product count (most products first)
-    categories = categories
-      .sort((a, b) => {
-        return (b.count || 0) - (a.count || 0);
-      })
-      .slice(0, 4); // Limit to maximum 4 collections
+    // Sort in specific order: Intenties, Sterrenbeeld, Elementen
+    categories = categories.sort((a, b) => {
+      const orderA = desiredCategories.indexOf(a.slug.toLowerCase());
+      const orderB = desiredCategories.indexOf(b.slug.toLowerCase());
+      return orderA - orderB;
+    });
 
     console.log('[Homepage] Loaded categories:', categories.map(c => ({ name: c.name, slug: c.slug, count: c.count })));
   } catch (error) {
@@ -70,43 +72,33 @@ export default async function Home() {
     categories = [
       {
         id: 1,
-        name: 'Chakra & Energie',
-        slug: 'chakra-energie',
+        name: 'Intenties',
+        slug: 'intenties',
         parent: 0,
-        description: 'Kristallen voor chakra balans en energie werk',
+        description: 'Shop op basis van jouw intentie - liefde, bescherming, geluk, rust en meer',
         display: 'default',
-        image: { id: 1, src: '/images/chakra-collection.jpg', alt: 'Chakra kristallen' },
-        count: 24
+        image: { id: 1, src: '/intenties.png', alt: 'Intenties' },
+        count: 238
       },
       {
         id: 2,
-        name: 'Bescherming',
-        slug: 'bescherming',
+        name: 'Sterrenbeeld',
+        slug: 'sterrenbeeld',
         parent: 0,
-        description: 'Beschermende kristallen tegen negatieve energie',
+        description: 'Ontdek de perfecte kristallen voor jouw sterrenbeeld',
         display: 'default',
-        image: { id: 2, src: '/images/protection-collection.jpg', alt: 'Beschermende kristallen' },
-        count: 18
+        image: { id: 2, src: '/sterrenbeeld.png', alt: 'Sterrenbeeld' },
+        count: 189
       },
       {
         id: 3,
-        name: 'Liefde & Relaties',
-        slug: 'liefde-relaties',
+        name: 'Elementen',
+        slug: 'elementen',
         parent: 0,
-        description: 'Kristallen voor liefde en harmonieuze relaties',
+        description: 'Breng balans met de 5 elementen - aarde, water, vuur, lucht en ether',
         display: 'default',
-        image: { id: 3, src: '/images/love-collection.jpg', alt: 'Liefde kristallen' },
-        count: 21
-      },
-      {
-        id: 4,
-        name: 'Meditatie & Spiritualiteit',
-        slug: 'meditatie',
-        parent: 0,
-        description: 'Verhoog je spirituele bewustzijn',
-        display: 'default',
-        image: { id: 4, src: '/images/meditation-collection.jpg', alt: 'Meditatie kristallen' },
-        count: 15
+        image: { id: 3, src: '/elementen.png', alt: 'Elementen' },
+        count: 213
       }
     ];
   }
@@ -198,7 +190,7 @@ export default async function Home() {
                       </div>
                       <span className="text-xs bg-[#492c4a]/10 text-[#492c4a] px-1.5 py-0.5 rounded-md font-semibold">4.4/5</span>
                     </div>
-                    <span className="text-[11px] text-gray-600 font-medium mt-1 font-[family-name:var(--font-eb-garamond)]">Vertrouwd door <span className="font-bold text-[#492c4a]">3000+</span> klanten</span>
+                    <span className="text-[11px] text-gray-600 font-medium mt-1 font-[family-name:var(--font-eb-garamond)]">Vertrouwd door <span className="font-bold text-[#492c4a]">4000+</span> klanten</span>
                   </div>
                 </div>
               </div>
@@ -284,7 +276,7 @@ export default async function Home() {
                       </div>
                       <span className="text-xs bg-[#492c4a]/10 text-[#492c4a] px-1.5 py-0.5 rounded-md font-semibold">4.4/5</span>
                     </div>
-                    <span className="text-[11px] text-gray-600 font-medium mt-1 font-[family-name:var(--font-eb-garamond)]">Vertrouwd door <span className="font-bold text-[#492c4a]">3000+</span> klanten</span>
+                    <span className="text-[11px] text-gray-600 font-medium mt-1 font-[family-name:var(--font-eb-garamond)]">Vertrouwd door <span className="font-bold text-[#492c4a]">4000+</span> klanten</span>
                   </div>
                 </div>
 
@@ -310,6 +302,151 @@ export default async function Home() {
                 <div className="absolute inset-0 bg-black/10 rounded-2xl"></div>
               </div>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Collections Section - Beautiful Cards */}
+      <section className="py-24 bg-gradient-to-b from-[#f7f3ec] to-white relative overflow-hidden">
+        {/* Subtle background decoration */}
+        <div className="absolute inset-0 pointer-events-none">
+          <div className="absolute top-20 left-10 w-96 h-96 bg-[#492c4a]/3 rounded-full blur-3xl"></div>
+          <div className="absolute bottom-20 right-10 w-96 h-96 bg-[#492c4a]/2 rounded-full blur-3xl"></div>
+        </div>
+
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          {/* Header */}
+          <div className="text-center mb-16">
+            <span className="inline-block text-sm font-bold text-[#492c4a] uppercase tracking-wider mb-4 font-[family-name:var(--font-eb-garamond)]">
+              Shop Op Jouw Manier
+            </span>
+            <h2 className="text-4xl lg:text-5xl font-bold text-[#2D2D2D] mb-6 font-[family-name:var(--font-eb-garamond)]">
+              Vind De Perfecte <span className="text-[#492c4a]">Kristallen</span>
+            </h2>
+            <p className="text-lg text-gray-600 max-w-3xl mx-auto font-[family-name:var(--font-eb-garamond)]">
+              Shop op basis van jouw intentie, sterrenbeeld of element en ontdek de kristallen die perfect bij jou passen
+            </p>
+          </div>
+
+          {/* Collection Cards Grid - Shows 3 main collections */}
+          <div className="max-w-5xl mx-auto grid grid-cols-2 md:grid-cols-3 gap-6 lg:gap-8 mb-12">
+            {categories.length > 0 ? categories.slice(0, 3).map((category, index) => (
+              <Link
+                key={category.id}
+                href={`/collectie/${category.slug}`}
+                className="group relative bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300"
+              >
+                {/* Image Container */}
+                <div className="relative aspect-square overflow-hidden bg-gradient-to-br from-[#492c4a]/10 to-[#492c4a]/5">
+                  {category.image?.src ? (
+                    <img
+                      src={category.image.src}
+                      alt={category.image.alt || category.name}
+                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                    />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-gray-100 to-gray-200">
+                      <svg className="w-16 h-16 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                      </svg>
+                    </div>
+                  )}
+
+                  {/* Overlay gradient */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                </div>
+
+                {/* Content */}
+                <div className="p-6 text-center">
+                  <h3 className="text-2xl font-bold text-[#2D2D2D] mb-2 font-[family-name:var(--font-eb-garamond)]">
+                    {category.name}
+                  </h3>
+                  <p className="text-sm text-gray-600 mb-4 font-[family-name:var(--font-eb-garamond)]">
+                    {category.slug === 'intenties' && 'Shop gebaseerd op wat je nu voelt dat je nodig hebt'}
+                    {category.slug === 'sterrenbeeld' && 'Shop op wat jouw sterrenbeeld nodig heeft'}
+                    {category.slug === 'elementen' && 'Shop op wat de natuur je kan geven'}
+                  </p>
+                  <button className="bg-[#492c4a] hover:bg-[#6b4069] text-white px-6 py-2 rounded-full transition-colors font-[family-name:var(--font-eb-garamond)]">
+                    SHOP
+                  </button>
+                </div>
+
+                {/* Hover effect line */}
+                <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-[#492c4a] to-[#6b4069] transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500"></div>
+              </Link>
+            )) : (
+              /* Fallback hardcoded collections - Intenties, Sterrenbeeld, Elementen */
+              <>
+                <Link href="/collectie/intenties" className="group relative bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300">
+                  <div className="relative aspect-square overflow-hidden bg-gradient-to-br from-[#492c4a]/10 to-[#492c4a]/5">
+                    <img
+                      src="/intenties.png"
+                      alt="Intenties"
+                      className="w-full h-full object-cover object-[center_60%] group-hover:scale-110 transition-transform duration-700"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                  </div>
+                  <div className="p-6 text-center">
+                    <h3 className="text-2xl font-bold text-[#2D2D2D] mb-2 font-[family-name:var(--font-eb-garamond)]">
+                      Intenties
+                    </h3>
+                    <p className="text-sm text-gray-600 mb-4 font-[family-name:var(--font-eb-garamond)]">
+                      Shop gebaseerd op wat je nu voelt dat je nodig hebt
+                    </p>
+                    <button className="bg-[#492c4a] hover:bg-[#6b4069] text-white px-6 py-2 rounded-full transition-colors font-[family-name:var(--font-eb-garamond)]">
+                      SHOP
+                    </button>
+                  </div>
+                  <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-[#492c4a] to-[#6b4069] transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500"></div>
+                </Link>
+
+                <Link href="/collectie/sterrenbeeld" className="group relative bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300">
+                  <div className="relative aspect-square overflow-hidden bg-gradient-to-br from-[#492c4a]/10 to-[#492c4a]/5">
+                    <img
+                      src="/sterrenbeeld.png"
+                      alt="Sterrenbeeld"
+                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                  </div>
+                  <div className="p-6 text-center">
+                    <h3 className="text-2xl font-bold text-[#2D2D2D] mb-2 font-[family-name:var(--font-eb-garamond)]">
+                      Sterrenbeeld
+                    </h3>
+                    <p className="text-sm text-gray-600 mb-4 font-[family-name:var(--font-eb-garamond)]">
+                      Shop op wat jouw sterrenbeeld nodig heeft
+                    </p>
+                    <button className="bg-[#492c4a] hover:bg-[#6b4069] text-white px-6 py-2 rounded-full transition-colors font-[family-name:var(--font-eb-garamond)]">
+                      SHOP
+                    </button>
+                  </div>
+                  <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-[#492c4a] to-[#6b4069] transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500"></div>
+                </Link>
+
+                <Link href="/collectie/elementen" className="group relative bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300">
+                  <div className="relative aspect-square overflow-hidden bg-gradient-to-br from-[#492c4a]/10 to-[#492c4a]/5">
+                    <img
+                      src="/elementen.png"
+                      alt="Elementen"
+                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                  </div>
+                  <div className="p-6 text-center">
+                    <h3 className="text-2xl font-bold text-[#2D2D2D] mb-2 font-[family-name:var(--font-eb-garamond)]">
+                      Elementen
+                    </h3>
+                    <p className="text-sm text-gray-600 mb-4 font-[family-name:var(--font-eb-garamond)]">
+                      Shop op wat de natuur je kan geven
+                    </p>
+                    <button className="bg-[#492c4a] hover:bg-[#6b4069] text-white px-6 py-2 rounded-full transition-colors font-[family-name:var(--font-eb-garamond)]">
+                      SHOP
+                    </button>
+                  </div>
+                  <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-[#492c4a] to-[#6b4069] transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500"></div>
+                </Link>
+              </>
+            )}
           </div>
         </div>
       </section>
@@ -448,7 +585,7 @@ export default async function Home() {
               <svg className="w-5 h-5 text-yellow-300" fill="currentColor" viewBox="0 0 20 20">
                 <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
               </svg>
-              <span className="text-sm font-bold text-yellow-300 uppercase tracking-wider font-[family-name:var(--font-eb-garamond)]">Meest Populaire Winkel van 2024</span>
+              <span className="text-sm font-bold text-yellow-300 uppercase tracking-wider font-[family-name:var(--font-eb-garamond)]">Meest Populaire Winkel van 2025</span>
             </div>
             
             <h2 className="text-4xl lg:text-5xl font-bold text-white mb-6 font-[family-name:var(--font-eb-garamond)]">
@@ -574,7 +711,7 @@ export default async function Home() {
                         </svg>
                       ))}
                     </div>
-                    <span className="text-sm text-white font-bold">4.9 uit 3000+ klanten</span>
+                    <span className="text-sm text-white font-bold">4.9 uit 4000+ klanten</span>
                   </div>
                 </div>
               </div>
@@ -629,233 +766,6 @@ export default async function Home() {
             </div>
           </div>
 
-        </div>
-      </section>
-
-      {/* Collections Section - Beautiful Cards */}
-      <section className="py-24 bg-gradient-to-b from-[#f7f3ec] to-white relative overflow-hidden">
-        {/* Subtle background decoration */}
-        <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute top-20 left-10 w-96 h-96 bg-[#492c4a]/3 rounded-full blur-3xl"></div>
-          <div className="absolute bottom-20 right-10 w-96 h-96 bg-[#492c4a]/2 rounded-full blur-3xl"></div>
-        </div>
-
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          {/* Header */}
-          <div className="text-center mb-16">
-            <span className="inline-block text-sm font-bold text-[#492c4a] uppercase tracking-wider mb-4 font-[family-name:var(--font-eb-garamond)]">
-              Onze Collecties
-            </span>
-            <h2 className="text-4xl lg:text-5xl font-bold text-[#2D2D2D] mb-6 font-[family-name:var(--font-eb-garamond)]">
-              Ontdek Jouw <span className="text-[#492c4a]">Kristal Collectie</span>
-            </h2>
-            <p className="text-lg text-gray-600 max-w-3xl mx-auto font-[family-name:var(--font-eb-garamond)]">
-              Elke collectie is zorgvuldig samengesteld om je te ondersteunen in verschillende aspecten van je leven
-            </p>
-          </div>
-          
-          {/* Collection Cards Grid - Shows up to 4 collections */}
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6 mb-12">
-            {categories.length > 0 ? categories.slice(0, 4).map((category, index) => (
-              <Link 
-                key={category.id} 
-                href={`/alle-producten?category=${category.slug}`}
-                className="group relative bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300"
-              >
-                {/* Image Container */}
-                <div className="relative aspect-square overflow-hidden bg-gradient-to-br from-[#492c4a]/10 to-[#492c4a]/5">
-                  {category.image?.src ? (
-                    <img 
-                      src={category.image.src}
-                      alt={category.image.alt || category.name}
-                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-                    />
-                  ) : (
-                    <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-gray-100 to-gray-200">
-                      <svg className="w-16 h-16 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                      </svg>
-                    </div>
-                  )}
-                  
-                  {/* Overlay gradient */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                  
-                  {/* Category count badge */}
-                  {category.count && (
-                    <div className="absolute top-2 right-2 bg-white/90 backdrop-blur px-2 py-1 rounded-full">
-                      <span className="text-xs font-bold text-[#492c4a]">{category.count} items</span>
-                    </div>
-                  )}
-                </div>
-                
-                {/* Content */}
-                <div className="p-4">
-                  <h3 className="text-lg font-bold text-[#2D2D2D] mb-1 group-hover:text-[#492c4a] transition-colors font-[family-name:var(--font-eb-garamond)]">
-                    {category.name}
-                  </h3>
-                  <p className="text-xs text-gray-600 mb-3 line-clamp-2 font-[family-name:var(--font-eb-garamond)]">
-                    {category.description || 'Ontdek onze selectie'}
-                  </p>
-                  
-                  {/* Call to action */}
-                  <div className="flex items-center justify-between">
-                    <span className="text-xs font-semibold text-[#492c4a] group-hover:text-[#6b4069] transition-colors">
-                      Bekijk collectie
-                    </span>
-                    <div className="w-6 h-6 rounded-full bg-[#492c4a]/10 group-hover:bg-[#492c4a] flex items-center justify-center transition-all duration-300">
-                      <svg className="w-3 h-3 text-[#492c4a] group-hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                      </svg>
-                    </div>
-                  </div>
-                </div>
-                
-                {/* Hover effect line */}
-                <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-[#492c4a] to-[#6b4069] transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500"></div>
-              </Link>
-            )) : (
-              /* Fallback hardcoded collections */
-              <>
-                <Link href="/alle-producten?category=chakra" className="group relative bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300">
-                  <div className="relative aspect-square overflow-hidden bg-gradient-to-br from-purple-100 to-pink-100">
-                    <div className="w-full h-full flex items-center justify-center">
-                      <div className="text-5xl opacity-30">⚡</div>
-                    </div>
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                    <div className="absolute top-2 right-2 bg-white/90 backdrop-blur px-2 py-1 rounded-full">
-                      <span className="text-xs font-bold text-[#492c4a]">24 items</span>
-                    </div>
-                  </div>
-                  <div className="p-4">
-                    <h3 className="text-lg font-bold text-[#2D2D2D] mb-1 group-hover:text-[#492c4a] transition-colors font-[family-name:var(--font-eb-garamond)]">
-                      Chakra & Energie
-                    </h3>
-                    <p className="text-xs text-gray-600 mb-3 font-[family-name:var(--font-eb-garamond)]">
-                      Kristallen voor chakra balans en energie werk
-                    </p>
-                    <div className="flex items-center justify-between">
-                      <span className="text-xs font-semibold text-[#492c4a] group-hover:text-[#6b4069] transition-colors">
-                        Bekijk collectie
-                      </span>
-                      <div className="w-6 h-6 rounded-full bg-[#492c4a]/10 group-hover:bg-[#492c4a] flex items-center justify-center transition-all duration-300">
-                        <svg className="w-3 h-3 text-[#492c4a] group-hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                        </svg>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-[#492c4a] to-[#6b4069] transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500"></div>
-                </Link>
-
-                <Link href="/alle-producten?category=bescherming" className="group relative bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300">
-                  <div className="relative aspect-square overflow-hidden bg-gradient-to-br from-gray-100 to-slate-100">
-                    <div className="w-full h-full flex items-center justify-center">
-                      <div className="text-5xl opacity-30">🛡️</div>
-                    </div>
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                    <div className="absolute top-2 right-2 bg-white/90 backdrop-blur px-2 py-1 rounded-full">
-                      <span className="text-xs font-bold text-[#492c4a]">18 items</span>
-                    </div>
-                  </div>
-                  <div className="p-4">
-                    <h3 className="text-lg font-bold text-[#2D2D2D] mb-1 group-hover:text-[#492c4a] transition-colors font-[family-name:var(--font-eb-garamond)]">
-                      Bescherming
-                    </h3>
-                    <p className="text-xs text-gray-600 mb-3 font-[family-name:var(--font-eb-garamond)]">
-                      Beschermende kristallen tegen negatieve energie
-                    </p>
-                    <div className="flex items-center justify-between">
-                      <span className="text-xs font-semibold text-[#492c4a] group-hover:text-[#6b4069] transition-colors">
-                        Bekijk collectie
-                      </span>
-                      <div className="w-6 h-6 rounded-full bg-[#492c4a]/10 group-hover:bg-[#492c4a] flex items-center justify-center transition-all duration-300">
-                        <svg className="w-3 h-3 text-[#492c4a] group-hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                        </svg>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-[#492c4a] to-[#6b4069] transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500"></div>
-                </Link>
-
-                <Link href="/alle-producten?category=liefde" className="group relative bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300">
-                  <div className="relative aspect-square overflow-hidden bg-gradient-to-br from-pink-100 to-red-100">
-                    <div className="w-full h-full flex items-center justify-center">
-                      <div className="text-5xl opacity-30">💜</div>
-                    </div>
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                    <div className="absolute top-2 right-2 bg-white/90 backdrop-blur px-2 py-1 rounded-full">
-                      <span className="text-xs font-bold text-[#492c4a]">21 items</span>
-                    </div>
-                  </div>
-                  <div className="p-4">
-                    <h3 className="text-lg font-bold text-[#2D2D2D] mb-1 group-hover:text-[#492c4a] transition-colors font-[family-name:var(--font-eb-garamond)]">
-                      Liefde & Relaties
-                    </h3>
-                    <p className="text-xs text-gray-600 mb-3 font-[family-name:var(--font-eb-garamond)]">
-                      Kristallen voor liefde en harmonieuze relaties
-                    </p>
-                    <div className="flex items-center justify-between">
-                      <span className="text-xs font-semibold text-[#492c4a] group-hover:text-[#6b4069] transition-colors">
-                        Bekijk collectie
-                      </span>
-                      <div className="w-6 h-6 rounded-full bg-[#492c4a]/10 group-hover:bg-[#492c4a] flex items-center justify-center transition-all duration-300">
-                        <svg className="w-3 h-3 text-[#492c4a] group-hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                        </svg>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-[#492c4a] to-[#6b4069] transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500"></div>
-                </Link>
-
-                <Link href="/alle-producten?category=meditatie" className="group relative bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300">
-                  <div className="relative aspect-square overflow-hidden bg-gradient-to-br from-blue-100 to-indigo-100">
-                    <div className="w-full h-full flex items-center justify-center">
-                      <div className="text-5xl opacity-30">🧘</div>
-                    </div>
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                    <div className="absolute top-2 right-2 bg-white/90 backdrop-blur px-2 py-1 rounded-full">
-                      <span className="text-xs font-bold text-[#492c4a]">15 items</span>
-                    </div>
-                  </div>
-                  <div className="p-4">
-                    <h3 className="text-lg font-bold text-[#2D2D2D] mb-1 group-hover:text-[#492c4a] transition-colors font-[family-name:var(--font-eb-garamond)]">
-                      Meditatie & Spiritualiteit
-                    </h3>
-                    <p className="text-xs text-gray-600 mb-3 font-[family-name:var(--font-eb-garamond)]">
-                      Verhoog je spirituele bewustzijn
-                    </p>
-                    <div className="flex items-center justify-between">
-                      <span className="text-xs font-semibold text-[#492c4a] group-hover:text-[#6b4069] transition-colors">
-                        Bekijk collectie
-                      </span>
-                      <div className="w-6 h-6 rounded-full bg-[#492c4a]/10 group-hover:bg-[#492c4a] flex items-center justify-center transition-all duration-300">
-                        <svg className="w-3 h-3 text-[#492c4a] group-hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                        </svg>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-[#492c4a] to-[#6b4069] transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500"></div>
-                </Link>
-              </>
-            )}
-          </div>
-          
-          {/* CTA Button */}
-          <div className="text-center">
-            <Link
-              href="/alle-producten"
-              className="inline-flex items-center gap-3 bg-[#fbe022] hover:bg-[#e6cc1f] text-black px-8 py-4 rounded-full font-bold text-lg transition-all duration-300 shadow-xl hover:shadow-2xl transform hover:-translate-y-1 font-[family-name:var(--font-eb-garamond)]"
-            >
-              <span>Ontdek Alle Kristallen</span>
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-              </svg>
-            </Link>
-          </div>
         </div>
       </section>
 
