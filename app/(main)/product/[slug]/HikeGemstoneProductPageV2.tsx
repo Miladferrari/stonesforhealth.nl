@@ -148,7 +148,14 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
   const isBestseller = product.categories?.some((cat: any) => cat.id === 20);
 
   // Generate comprehensive review data with individual reviews - only for bestsellers
-  const reviewData = isBestseller ? generateProductReviewData(product.id) : { reviews: [], totalReviews: 0, averageRating: '0' };
+  const reviewData = isBestseller
+    ? generateProductReviewData(product.id)
+    : {
+        reviews: [],
+        totalReviews: 0,
+        averageRating: '0',
+        distribution: []
+      };
   const customerReviews = reviewData.reviews;
   console.log('[Reviews] Is bestseller:', isBestseller, 'Generated data:', reviewData);
 
@@ -676,7 +683,7 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
                 </button>
 
                 {/* Review Dropdown - Hike Style */}
-                {showReviewDropdown && (
+                {showReviewDropdown && customerReviews.length > 0 && (
                   <div
                     ref={reviewDropdownRef}
                     className="absolute top-full mt-2 left-0 z-50 w-[320px] bg-white rounded-md shadow-xl border border-gray-200"
@@ -707,7 +714,7 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
 
                       {/* Rating Bars */}
                       <div className="space-y-1.5 mb-4">
-                        {reviewData.distribution.map(rating => (
+                        {reviewData.distribution?.map(rating => (
                           <div key={rating.stars} className="flex items-center gap-2 text-xs">
                             <span className="w-3 text-gray-600">{rating.stars}</span>
                             <svg className="w-3 h-3 text-[#FAD14C] fill-current" viewBox="0 0 15 15">
