@@ -185,29 +185,53 @@ export default async function CollectionPage({ params }: CollectionPageProps) {
               </div>
 
               <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                {subcategories.map((category) => (
-                  <Link
-                    key={category.id}
-                    href={`/alle-producten?category=${category.slug}`}
-                    className="group relative bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 flex flex-col"
-                  >
-                    {/* Image Container */}
-                    <div className="relative aspect-square overflow-hidden bg-gradient-to-br from-[#492c4a]/10 to-[#492c4a]/5">
-                      {category.image?.src ? (
-                        <img
-                          src={category.image.src}
-                          alt={decodeHtmlEntities(category.image.alt || category.name)}
-                          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-                        />
-                      ) : (
-                        <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-gray-100 to-gray-200">
-                          <div className="w-32 h-32 rounded-full bg-white/60 flex items-center justify-center">
-                            <svg className="w-16 h-16 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                            </svg>
+                {subcategories.map((category) => {
+                  // Map local images for element and intenties subcategories
+                  const localImageMap: Record<string, string> = {
+                    // Element categories
+                    'aarde-stenen-gronding-stabiliteit-elementen': '/aarde-stenen.png',
+                    'liefde-stenen-zelfliefde-compassie': '/liefde-stenen.png',
+                    'lucht-stenen-communicatie-helderheid': '/lucht-stenen.png',
+                    'vuur-stenen-passie-energie': '/vuur-stenen.png',
+                    'water-stenen-emotie-intuitie': '/water-stenen.png',
+                    // Intenties categories
+                    'balans-energie': '/balans-energie.png',
+                    'bescherming-aarding': '/bescherming-aarding.png',
+                    'creativiteit': '/creativiteit.png',
+                    'focus-helderheid': '/focus-helderheid.png',
+                    'geluk-rijkdom': '/geluk-rijkdom.png',
+                    'intuitie-spirituele-groei': '/intuitie-spirituele-groei.png',
+                    'kracht-doorzettingsvermogen': '/kracht-doorzettingsvermogen.png',
+                    'liefde-verbinding': '/liefde-verbinding.png',
+                    'rust-ontspanning': '/rust-ontspanning.png',
+                    'zelfliefde-zelfvertrouwen': '/zelfliefde-zelfvertrouwen.png'
+                  };
+
+                  const imageSrc = localImageMap[category.slug] || category.image?.src;
+
+                  return (
+                    <Link
+                      key={category.id}
+                      href={`/alle-producten?category=${category.slug}`}
+                      className="group relative bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 flex flex-col"
+                    >
+                      {/* Image Container */}
+                      <div className="relative aspect-square overflow-hidden bg-gradient-to-br from-[#492c4a]/10 to-[#492c4a]/5">
+                        {imageSrc ? (
+                          <img
+                            src={imageSrc}
+                            alt={decodeHtmlEntities(category.image?.alt || category.name)}
+                            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                          />
+                        ) : (
+                          <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-gray-100 to-gray-200">
+                            <div className="w-32 h-32 rounded-full bg-white/60 flex items-center justify-center">
+                              <svg className="w-16 h-16 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                              </svg>
+                            </div>
                           </div>
-                        </div>
-                      )}
+                        )}
 
                       {/* Overlay gradient */}
                       <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
@@ -226,7 +250,8 @@ export default async function CollectionPage({ params }: CollectionPageProps) {
                     {/* Hover effect line */}
                     <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-[#492c4a] to-[#6b4069] transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500"></div>
                   </Link>
-                ))}
+                  );
+                })}
               </div>
             </>
           ) : (
