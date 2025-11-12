@@ -144,10 +144,13 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
   const canSelectDuo = availableQuantity >= 2;
   const canSelectFamily = availableQuantity >= 3;
 
-  // Generate comprehensive review data with individual reviews
-  const reviewData = generateProductReviewData(product.id);
+  // Check if product is in bestsellers category (ID: 20)
+  const isBestseller = product.categories?.some((cat: any) => cat.id === 20);
+
+  // Generate comprehensive review data with individual reviews - only for bestsellers
+  const reviewData = isBestseller ? generateProductReviewData(product.id) : { reviews: [], totalReviews: 0, averageRating: '0' };
   const customerReviews = reviewData.reviews;
-  console.log('[Reviews] Generated data:', reviewData);
+  console.log('[Reviews] Is bestseller:', isBestseller, 'Generated data:', reviewData);
 
   // Helper function to render stars based on rating
   const renderStars = (rating: number, size: string = 'w-4 h-4') => {
@@ -635,7 +638,7 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
                 />
               </div>
               <div className="text-base md:text-lg ml-4 text-gray-700 font-[family-name:var(--font-eb-garamond)]">
-                Sluit je aan bij 22+ tevreden klanten - beoordeeld met 4.4/5
+                Sluit je aan bij 4000+ tevreden klanten - beoordeeld met 4.6/5
               </div>
             </div>
 
@@ -649,14 +652,26 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
               <div className="relative mb-4">
                 <button
                   ref={reviewButtonRef}
-                  onClick={() => setShowReviewDropdown(!showReviewDropdown)}
+                  onClick={() => customerReviews.length > 0 && setShowReviewDropdown(!showReviewDropdown)}
                   className="inline-flex items-center gap-1.5 px-2 py-1 border border-gray-200 rounded-md hover:border-gray-300 transition-colors group"
-                  title={`${reviewData.averageRating} rating (${reviewData.totalReviews} votes)`}
-                  aria-label={`${reviewData.averageRating} rating (${reviewData.totalReviews} votes)`}
+                  title={customerReviews.length > 0 ? `${reviewData.averageRating} rating (${reviewData.totalReviews} votes)` : '0 reviews'}
+                  aria-label={customerReviews.length > 0 ? `${reviewData.averageRating} rating (${reviewData.totalReviews} votes)` : '0 reviews'}
+                  disabled={customerReviews.length === 0}
                 >
-                  {renderStars(parseFloat(reviewData.averageRating))}
+                  <div className="flex gap-0">
+                    {customerReviews.length > 0 ? (
+                      renderStars(parseFloat(reviewData.averageRating))
+                    ) : (
+                      // 5 empty gray stars for 0 reviews
+                      [...Array(5)].map((_, i) => (
+                        <svg key={i} className="w-4 h-4 text-gray-300 fill-current" viewBox="0 0 24 24">
+                          <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"></path>
+                        </svg>
+                      ))
+                    )}
+                  </div>
                   <span className="text-base md:text-lg text-gray-600 font-medium ml-0.5 font-[family-name:var(--font-eb-garamond)]">
-                    {reviewData.totalReviews} Reviews
+                    {customerReviews.length > 0 ? `${reviewData.totalReviews} Reviews` : '0 Reviews'}
                   </span>
                 </button>
 
@@ -1118,29 +1133,10 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
       {/* PRODUCT DESCRIPTION & DETAILS SECTION */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
         <div className="bg-white rounded-lg shadow-sm border border-gray-100">
-          {/* Tab Navigation */}
-          <div className="border-b border-gray-200">
-            <nav className="flex space-x-8 px-6" aria-label="Product information">
-              <button
-                onClick={() => setActiveTab('description')}
-                className={`py-4 px-1 border-b-2 font-medium text-base transition-colors font-[family-name:var(--font-eb-garamond)] ${
-                  activeTab === 'description'
-                    ? 'border-[#492c4a] text-[#492c4a]'
-                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-                }`}
-              >
-                Productbeschrijving
-              </button>
-            </nav>
-          </div>
-
           {/* Tab Content */}
           <div className="px-6 py-8">
             {activeTab === 'description' && (
               <div className="max-w-none font-[family-name:var(--font-eb-garamond)]">
-                <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4 md:mb-6 font-[family-name:var(--font-eb-garamond)]">
-                  Over dit product
-                </h2>
                 {product.description && product.description.trim() !== '' ? (
                   <div
                     className="space-y-4 text-base md:text-lg text-gray-600 font-[family-name:var(--font-eb-garamond)]"
@@ -1412,54 +1408,6 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
       </section>
 
       {/* 6. BENEFITS SECTION - Clean Hike Style */}
-      <section className="py-5 md:py-10 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid md:grid-cols-2 gap-8 md:gap-12 items-center">
-
-            {/* Left: Feature Image */}
-            <div className="order-2 md:order-1">
-              <div className="aspect-square overflow-hidden rounded-lg bg-gray-200">
-                {images[2] || images[1] || images[0] ? (
-                  <Image
-                    src={(images[2] || images[1] || images[0]).src}
-                    alt={`${product.name} voordelen`}
-                    width={600}
-                    height={600}
-                    className="w-full h-full object-cover"
-                  />
-                ) : null}
-              </div>
-            </div>
-
-            {/* Right: Benefits List */}
-            <div className="order-1 md:order-2">
-              <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4 md:mb-6 font-[family-name:var(--font-eb-garamond)]">
-                Ontdek De Voordelen Van Stonesforhealth.nl
-              </h2>
-
-              <div className="space-y-3 text-base md:text-lg text-gray-700 font-[family-name:var(--font-eb-garamond)]">
-                <p className="mb-4">
-                </p>
-
-                <p>✔ <strong>Authentieke & Echte Producten</strong> – Alle edelstenen, armbanden, kaarten en ritueelproducten zijn zorgvuldig geselecteerd en 100% authentiek.</p>
-
-                <p>✔ <strong>Snelle Verzending</strong> – Voor 19:00 besteld = dezelfde dag verzonden. Zo hoef je nooit lang te wachten.</p>
-
-                <p>✔ <strong>Veilig & Betrouwbaar Shoppen</strong> – Meer dan 3000 tevreden klanten gingen je al voor.</p>
-
-                <p>✔ <strong>30 Dagen Tevredenheidsgarantie</strong> – Niet tevreden? Dan krijg je zonder gedoe je geld terug.</p>
-
-                <p>✔ <strong>Persoonlijke Service</strong> – Vragen over welk product bij jou past? Ons team helpt je graag met advies.</p>
-
-                <p>✔ <strong>Duurzaam & Zorgvuldig</strong> – Met respect voor mens en natuur, zodat je met een gerust hart kunt genieten.</p>
-
-                <p>✔ <strong>Met Liefde Ingepakt</strong> – Elk product wordt zorgvuldig en mooi verpakt, zodat het voelt als een cadeautje voor jezelf of een ander.</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* Duplicate section removed */}
       <section className="py-5 md:py-10 bg-white" style={{ display: 'none' }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -1488,14 +1436,21 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
             <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4 font-[family-name:var(--font-eb-garamond)]">
               Wat Onze Klanten Zeggen
             </h2>
-            <div className="flex justify-center items-center gap-2 mb-2">
-              {renderStars(parseFloat(reviewData.averageRating), 'w-5 h-5')}
-              <span className="text-base font-semibold text-gray-700 font-[family-name:var(--font-eb-garamond)]">{reviewData.averageRating} • {reviewData.totalReviews} Reviews</span>
-            </div>
+            {customerReviews.length > 0 ? (
+              <div className="flex justify-center items-center gap-2 mb-2">
+                {renderStars(parseFloat(reviewData.averageRating), 'w-5 h-5')}
+                <span className="text-base font-semibold text-gray-700 font-[family-name:var(--font-eb-garamond)]">{reviewData.averageRating} • {reviewData.totalReviews} Reviews</span>
+              </div>
+            ) : (
+              <p className="text-center text-lg text-gray-500 font-[family-name:var(--font-eb-garamond)]">
+                Nog geen reviews beschikbaar voor dit product
+              </p>
+            )}
           </div>
 
           {/* Masonry Grid of Review Cards - Show limited reviews */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+          {customerReviews.length > 0 && (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
             {customerReviews.slice(0, visibleReviewsCount).map(review => (
               <div key={review.id} className="bg-white rounded-lg shadow-sm border border-gray-200 p-5 hover:shadow-md transition-shadow flex flex-col">
                 {/* Header */}
@@ -1560,9 +1515,10 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
             ))}
 
           </div>
+          )}
 
           {/* Load More Button - Show only if there are more reviews to load */}
-          {visibleReviewsCount < customerReviews.length && (
+          {customerReviews.length > 0 && visibleReviewsCount < customerReviews.length && (
             <div className="text-center mt-8">
               <button
                 onClick={() => {
@@ -1571,7 +1527,7 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
                 }}
                 className="px-6 py-2.5 bg-black text-white font-semibold rounded-lg hover:bg-gray-800 transition-colors font-[family-name:var(--font-eb-garamond)]"
               >
-                Meer reviews laden ({Math.min(16, customerReviews.length - visibleReviewsCount)} van {customerReviews.length - visibleReviewsCount})
+                Meer reviews laden ({visibleReviewsCount} van {customerReviews.length})
               </button>
             </div>
           )}

@@ -33,6 +33,26 @@ export default function CollectionProductGrid({
   };
 
   const renderStars = (rating: number, productId: number) => {
+    // If rating is 0, show 5 empty gray stars
+    if (rating === 0) {
+      return (
+        <div className="flex">
+          {[...Array(5)].map((_, i) => (
+            <svg
+              key={`star-${productId}-${i}`}
+              className="w-3.5 h-3.5 inline-block"
+              viewBox="0 0 20 20"
+            >
+              <path
+                d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"
+                fill="#D1D5DB"
+              />
+            </svg>
+          ))}
+        </div>
+      );
+    }
+
     const fullStars = Math.floor(rating);
     const partialFill = (rating - fullStars) * 100;
 
@@ -140,7 +160,14 @@ export default function CollectionProductGrid({
 
                   {/* Rating */}
                   {(() => {
-                    const reviewData = getProductReviewSummary(product.id);
+                    // Check if product is in bestsellers category (ID: 20)
+                    const isBestseller = product.categories?.some((cat: any) => cat.id === 20);
+
+                    // Get review data from the review generator - only for bestsellers
+                    const reviewData = isBestseller
+                      ? getProductReviewSummary(product.id)
+                      : { rating: 0, count: 0 };
+
                     return (
                       <div className="flex items-center gap-1 mb-2">
                         {renderStars(reviewData.rating, product.id)}
