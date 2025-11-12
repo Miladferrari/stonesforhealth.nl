@@ -80,7 +80,7 @@ export async function POST(request: NextRequest) {
     console.log('[Generate Invoice] Invoice generated successfully, size:', pdfBuffer.length, 'bytes');
 
     // Return the PDF as a buffer with proper headers
-    return new NextResponse(pdfBuffer, {
+    return new NextResponse(pdfBuffer as unknown as BodyInit, {
       headers: {
         'Content-Type': 'application/pdf',
         'Content-Disposition': `attachment; filename="Invoice-${orderData.orderNumber}.pdf"`,

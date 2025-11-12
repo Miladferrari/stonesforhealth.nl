@@ -20,13 +20,14 @@ function decodeHtmlEntities(text: string): string {
 }
 
 interface CollectionPageProps {
-  params: {
+  params: Promise<{
     slug: string;
-  };
+  }>;
 }
 
 export async function generateMetadata({ params }: CollectionPageProps): Promise<Metadata> {
-  const categoryName = params.slug.charAt(0).toUpperCase() + params.slug.slice(1);
+  const { slug } = await params;
+  const categoryName = slug.charAt(0).toUpperCase() + slug.slice(1);
 
   return {
     title: `${categoryName} Collectie | Stones for Health`,
@@ -35,7 +36,7 @@ export async function generateMetadata({ params }: CollectionPageProps): Promise
 }
 
 export default async function CollectionPage({ params }: CollectionPageProps) {
-  const { slug } = params;
+  const { slug } = await params;
 
   // Mapping van Nederlandse namen naar hun display namen
   const categoryTitles: Record<string, { title: string; description: string }> = {
