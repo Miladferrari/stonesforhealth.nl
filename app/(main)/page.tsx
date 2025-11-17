@@ -51,14 +51,14 @@ export default async function Home() {
   try {
     categories = await woocommerce.getCategories({ per_page: 100, hide_empty: true });
 
-    // Filter for the 3 main parent categories we want to display
-    const desiredCategories = ['intenties', 'sterrenbeeld', 'elementen'];
+    // Filter for the 3 specific categories we want to display
+    // Note: These are sub-categories, not parent categories
+    const desiredCategories = ['intenties', 'stenen-per-sterrenbeeld', 'elementen'];
     categories = categories.filter(cat =>
-      desiredCategories.includes(cat.slug.toLowerCase()) &&
-      cat.parent === 0 // Only parent categories
+      desiredCategories.includes(cat.slug.toLowerCase())
     );
 
-    // Sort in specific order: Intenties, Sterrenbeeld, Elementen
+    // Sort in specific order: Intenties, Stenen per Sterrenbeeld, Elementen
     categories = categories.sort((a, b) => {
       const orderA = desiredCategories.indexOf(a.slug.toLowerCase());
       const orderB = desiredCategories.indexOf(b.slug.toLowerCase());
@@ -74,7 +74,7 @@ export default async function Home() {
         id: 1,
         name: 'Intenties',
         slug: 'intenties',
-        parent: 0,
+        parent: 597,
         description: 'Shop op basis van jouw intentie - liefde, bescherming, geluk, rust en meer',
         display: 'default',
         image: { id: 1, src: '/intenties.png', alt: 'Intenties' },
@@ -83,8 +83,8 @@ export default async function Home() {
       {
         id: 2,
         name: 'Sterrenbeeld',
-        slug: 'sterrenbeeld',
-        parent: 0,
+        slug: 'stenen-per-sterrenbeeld',
+        parent: 595,
         description: 'Ontdek de perfecte kristallen voor jouw sterrenbeeld',
         display: 'default',
         image: { id: 2, src: '/sterrenbeeld.png', alt: 'Sterrenbeeld' },
@@ -94,7 +94,7 @@ export default async function Home() {
         id: 3,
         name: 'Elementen',
         slug: 'elementen',
-        parent: 0,
+        parent: 597,
         description: 'Breng balans met de 5 elementen - aarde, water, vuur, lucht en ether',
         display: 'default',
         image: { id: 3, src: '/elementen.png', alt: 'Elementen' },
@@ -345,11 +345,14 @@ export default async function Home() {
                       className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                     />
                   ) : (
-                    <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-gray-100 to-gray-200">
-                      <svg className="w-16 h-16 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                      </svg>
-                    </div>
+                    <img
+                      src={category.slug === 'stenen-per-sterrenbeeld' ? '/sterrenbeeld.png' :
+                           category.slug === 'intenties' ? '/intenties.png' :
+                           category.slug === 'elementen' ? '/elementen.png' :
+                           '/placeholder.png'}
+                      alt={category.name}
+                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                    />
                   )}
 
                   {/* Overlay gradient */}
@@ -363,7 +366,7 @@ export default async function Home() {
                   </h3>
                   <p className="text-sm text-gray-600 mb-4 font-[family-name:var(--font-eb-garamond)]">
                     {category.slug === 'intenties' && 'Shop gebaseerd op wat je nu voelt dat je nodig hebt'}
-                    {category.slug === 'sterrenbeeld' && 'Shop op wat jouw sterrenbeeld nodig heeft'}
+                    {category.slug === 'stenen-per-sterrenbeeld' && 'Shop op wat jouw sterrenbeeld nodig heeft'}
                     {category.slug === 'elementen' && 'Shop op wat de natuur je kan geven'}
                   </p>
                   <button className="bg-[#492c4a] hover:bg-[#6b4069] text-white px-6 py-2 rounded-full transition-colors font-[family-name:var(--font-eb-garamond)]">
@@ -377,7 +380,7 @@ export default async function Home() {
             )) : (
               /* Fallback hardcoded collections - Intenties, Sterrenbeeld, Elementen */
               <>
-                <Link href="/collectie/intenties" className="group relative bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300">
+                <Link href="/collections/intenties" className="group relative bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300">
                   <div className="relative aspect-square overflow-hidden bg-gradient-to-br from-[#492c4a]/10 to-[#492c4a]/5">
                     <img
                       src="/intenties.png"
@@ -400,7 +403,7 @@ export default async function Home() {
                   <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-[#492c4a] to-[#6b4069] transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500"></div>
                 </Link>
 
-                <Link href="/collectie/sterrenbeeld" className="group relative bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300">
+                <Link href="/collections/sterrenbeeld" className="group relative bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300">
                   <div className="relative aspect-square overflow-hidden bg-gradient-to-br from-[#492c4a]/10 to-[#492c4a]/5">
                     <img
                       src="/sterrenbeeld.png"
@@ -423,7 +426,7 @@ export default async function Home() {
                   <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-[#492c4a] to-[#6b4069] transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500"></div>
                 </Link>
 
-                <Link href="/collectie/elementen" className="group relative bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300">
+                <Link href="/collections/elementen" className="group relative bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300">
                   <div className="relative aspect-square overflow-hidden bg-gradient-to-br from-[#492c4a]/10 to-[#492c4a]/5">
                     <img
                       src="/elementen.png"

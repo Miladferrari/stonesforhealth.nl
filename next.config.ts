@@ -18,6 +18,12 @@ const nextConfig: NextConfig = {
       encoding: false,
     };
 
+    // Optimize file watching for faster dev server startup
+    config.watchOptions = {
+      ignored: ['**/node_modules', '**/.git', '**/.next'],
+      poll: false,
+    };
+
     return config;
   },
 
@@ -84,7 +90,8 @@ const nextConfig: NextConfig = {
   reactStrictMode: true,
 
   // Generate static pages at build time when possible
-  output: 'standalone', // Required for Docker/CapRover deployment
+  // Only use standalone in production for deployment
+  output: process.env.NODE_ENV === 'production' ? 'standalone' : undefined,
 };
 
 export default nextConfig;

@@ -1,7 +1,8 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
+import Link from 'next/link';
 import CollectionHero from '@/app/components/collection/CollectionHero';
 import CollectionTrustBadges from '@/app/components/collection/CollectionTrustBadges';
 import CollectionProductGrid from '@/app/components/collection/CollectionProductGrid';
@@ -10,39 +11,115 @@ import { Product } from '@/lib/woocommerce';
 
 const PRODUCTS_PER_PAGE = 12;
 
+interface Category {
+  id: number;
+  name: string;
+  slug: string;
+  parent: number;
+  description: string;
+  count: number;
+  image?: {
+    src: string;
+    alt: string;
+  };
+}
+
 export default function CollectionPage() {
   const params = useParams();
   const slug = params?.slug as string;
+  const router = useRouter();
 
   const [products, setProducts] = useState<Product[]>([]);
+  const [subcategories, setSubcategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [collectionTitle, setCollectionTitle] = useState('EDELSTENEN COLLECTIE');
+  const [showSubcategories, setShowSubcategories] = useState(false);
+  const [parentCategoryId, setParentCategoryId] = useState<number | null>(null);
 
   useEffect(() => {
-    fetchProducts();
-  }, [slug, currentPage]);
+    checkIfParentCategory();
+  }, [slug]);
+
+  useEffect(() => {
+    if (!showSubcategories) {
+      fetchProducts();
+    }
+  }, [slug, currentPage, showSubcategories]);
+
+  const checkIfParentCategory = async () => {
+    setLoading(true);
+    try {
+      // Check if this slug is a parent category (intenties, stenen-per-sterrenbeeld, elementen)
+      const parentCategories = ['intenties', 'stenen-per-sterrenbeeld', 'elementen'];
+
+      if (parentCategories.includes(slug.toLowerCase())) {
+        // Fetch all categories and find this parent's ID
+        const categoriesResponse = await fetch('/api/categories');
+        const allCategories: Category[] = await categoriesResponse.json();
+
+        const parentCat = allCategories.find(cat => cat.slug.toLowerCase() === slug.toLowerCase());
+
+        if (parentCat) {
+          setParentCategoryId(parentCat.id);
+          setCollectionTitle(parentCat.name.toUpperCase());
+
+          // Fetch subcategories
+          const subcatsResponse = await fetch(`/api/woocommerce/categories?parent=${parentCat.id}&hide_empty=true`);
+          let subcats: Category[] = await subcatsResponse.json();
+
+          // Sort sterrenbeelden in zodiac order
+          if (slug.toLowerCase() === 'stenen-per-sterrenbeeld') {
+            const zodiacOrder = [
+              'ram', 'stier', 'tweelingen', 'kreeft',
+              'leeuw', 'maagd', 'weegschaal', 'schorpioen',
+              'boogschutter', 'steenbok', 'waterman', 'vissen'
+            ];
+
+            subcats = subcats.sort((a, b) => {
+              const indexA = zodiacOrder.indexOf(a.slug.toLowerCase());
+              const indexB = zodiacOrder.indexOf(b.slug.toLowerCase());
+
+              // If not found in order, put at end
+              if (indexA === -1) return 1;
+              if (indexB === -1) return -1;
+
+              return indexA - indexB;
+            });
+          }
+
+          setSubcategories(subcats);
+          setShowSubcategories(true);
+        }
+      } else {
+        setShowSubcategories(false);
+      }
+    } catch (error) {
+      console.error('Error checking category:', error);
+      setShowSubcategories(false);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const fetchProducts = async () => {
     setLoading(true);
     try {
+      // Fetch category info for proper title
+      const categoriesResponse = await fetch('/api/categories');
+      const allCategories: Category[] = await categoriesResponse.json();
+      const currentCat = allCategories.find(cat => cat.slug.toLowerCase() === slug.toLowerCase());
+
+      if (currentCat) {
+        setCollectionTitle(currentCat.name.toUpperCase());
+      }
+
       // Determine the API endpoint based on slug
       let apiUrl = '/api/products?per_page=' + PRODUCTS_PER_PAGE + '&page=' + currentPage;
 
       if (slug && slug !== 'all') {
         apiUrl += '&category=' + slug;
-
-        // Set collection title based on slug
-        const titles: { [key: string]: string } = {
-          'chakra': 'CHAKRA KRISTALLEN',
-          'bescherming': 'BESCHERMING STENEN',
-          'liefde': 'LIEFDE & RELATIES',
-          'energie': 'ENERGIE KRISTALLEN',
-          'meditatie': 'MEDITATIE STENEN',
-          'healing': 'HEALING KRISTALLEN'
-        };
-        setCollectionTitle(titles[slug] || slug.toUpperCase() + ' COLLECTIE');
       }
 
       const response = await fetch(apiUrl);
@@ -143,12 +220,40 @@ export default function CollectionPage() {
       {/* Trust Badges */}
       <CollectionTrustBadges />
 
-      {/* Product Grid with Pagination */}
       {loading ? (
         <div className="flex items-center justify-center py-20">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#492c4a]"></div>
         </div>
+      ) : showSubcategories ? (
+        /* Show Subcategories Grid */
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+          <h2 className="text-3xl font-bold text-center text-[#2D2D2D] mb-8 font-[family-name:var(--font-eb-garamond)]">
+            {slug.toLowerCase() === 'stenen-per-sterrenbeeld' ? 'Selecteer je sterrenbeeld' : 'Kies een categorie'}
+          </h2>
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            {subcategories.map((subcat) => (
+              <Link
+                key={subcat.id}
+                href={`/collections/${subcat.slug}`}
+                className="group relative bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 border border-gray-100"
+              >
+                <div className="aspect-square bg-gradient-to-br from-[#492c4a]/10 to-[#492c4a]/5 flex items-center justify-center p-6">
+                  <h3 className="text-xl font-bold text-[#2D2D2D] text-center font-[family-name:var(--font-eb-garamond)] group-hover:text-[#492c4a] transition-colors">
+                    {subcat.name}
+                  </h3>
+                </div>
+                <div className="p-4 text-center bg-white">
+                  <p className="text-sm text-gray-600 font-[family-name:var(--font-eb-garamond)]">
+                    {subcat.count} {subcat.count === 1 ? 'product' : 'producten'}
+                  </p>
+                </div>
+                <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-[#492c4a] to-[#6b4069] transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500"></div>
+              </Link>
+            ))}
+          </div>
+        </div>
       ) : (
+        /* Show Products Grid */
         <>
           <CollectionProductGrid
             products={products}
