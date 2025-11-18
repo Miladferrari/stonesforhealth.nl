@@ -46,7 +46,7 @@ export default async function CollectionPage({ params }: CollectionPageProps) {
     },
     'sterrenbeeld': {
       title: 'Shop op sterrenbeeld',
-      description: 'Elke sterrenbeeld heeft unieke kristallen die perfect aansluiten bij jouw energie - ontdek die van jou'
+      description: 'Ontdek welke edelstenen bij jouw sterrenbeeld horen en versterk de unieke eigenschappen van jouw zonneteken met natuurlijke energie'
     },
     'elementen': {
       title: 'Shop op element',
@@ -83,7 +83,7 @@ export default async function CollectionPage({ params }: CollectionPageProps) {
           name: 'Sterrenbeeld',
           slug: 'sterrenbeeld',
           parent: 0,
-          description: 'Ontdek de perfecte kristallen voor jouw sterrenbeeld',
+          description: 'Ontdek welke edelstenen bij jouw sterrenbeeld horen en versterk de unieke eigenschappen van jouw zonneteken met natuurlijke energie',
           subcategories: [
             { name: 'Ram', slug: 'ram', description: 'Kristallen voor het sterrenbeeld Ram (21 maart - 19 april)' },
             { name: 'Stier', slug: 'stier', description: 'Kristallen voor het sterrenbeeld Stier (20 april - 20 mei)' },
@@ -163,10 +163,19 @@ export default async function CollectionPage({ params }: CollectionPageProps) {
     notFound();
   }
 
-  const categoryInfo = categoryTitles[slug] || {
-    title: parentCategory?.name || 'Collectie',
-    description: parentCategory?.description || ''
-  };
+  // Override description based on slug, regardless of what WooCommerce returns
+  let categoryInfo;
+  if (slug === 'stenen-per-sterrenbeeld' || slug === 'sterrenbeeld') {
+    categoryInfo = {
+      title: 'Shop op sterrenbeeld',
+      description: 'Ontdek welke edelstenen bij jouw sterrenbeeld horen en versterk de unieke eigenschappen van jouw zonneteken met natuurlijke energie'
+    };
+  } else {
+    categoryInfo = categoryTitles[slug] || {
+      title: parentCategory?.name || 'Collectie',
+      description: parentCategory?.description || ''
+    };
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-white to-gray-50">
@@ -204,7 +213,9 @@ export default async function CollectionPage({ params }: CollectionPageProps) {
                     'kracht-doorzettingsvermogen': '/kracht-doorzettingsvermogen.png',
                     'liefde-verbinding': '/liefde-verbinding.png',
                     'rust-ontspanning': '/rust-ontspanning.png',
-                    'zelfliefde-zelfvertrouwen': '/zelfliefde-zelfvertrouwen.png'
+                    'zelfliefde-zelfvertrouwen': '/zelfliefde-zelfvertrouwen.png',
+                    // Sterrenbeeld category
+                    'vissen': '/vissen.png'
                   };
 
                   const imageSrc = localImageMap[category.slug] || category.image?.src;
