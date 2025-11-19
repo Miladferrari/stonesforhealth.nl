@@ -6,6 +6,25 @@ import { useState, memo, useEffect, useRef } from 'react';
 import { useCart } from '../contexts/CartContextStoreAPI';
 import SearchDropdown from './SearchDropdown';
 
+// Helper function to decode HTML entities
+function decodeHtmlEntities(text: string): string {
+  if (typeof window !== 'undefined') {
+    const textArea = document.createElement('textarea');
+    textArea.innerHTML = text;
+    return textArea.value;
+  }
+  // Server-side fallback
+  const entities: { [key: string]: string } = {
+    '&amp;': '&',
+    '&lt;': '<',
+    '&gt;': '>',
+    '&quot;': '"',
+    '&#039;': "'",
+    '&apos;': "'"
+  };
+  return text.replace(/&[#a-z0-9]+;/gi, (entity) => entities[entity] || entity);
+}
+
 const Header = memo(function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [helpDropdownOpen, setHelpDropdownOpen] = useState(false);
@@ -405,7 +424,7 @@ const Header = memo(function Header() {
                         onClick={() => setShopDropdownOpen(false)}
                         onMouseEnter={() => handleCategoryHover(category)}
                       >
-                        <div className="font-medium text-base">{category.name}</div>
+                        <div className="font-medium text-base">{decodeHtmlEntities(category.name)}</div>
                       </Link>
                     </li>
                   ))}
@@ -416,7 +435,7 @@ const Header = memo(function Header() {
               {hoveredCategory && getSubcategories(hoveredCategory.id).length > 0 && (
                 <div className="w-64">
                   <h3 className="text-sm font-bold text-gray-900 mb-4 pl-2 font-[family-name:var(--font-eb-garamond)]">
-                    {hoveredCategory.name}
+                    {decodeHtmlEntities(hoveredCategory.name)}
                   </h3>
                   <ul className="space-y-1">
                     {getSubcategories(hoveredCategory.id).map((subcat) => (
@@ -427,7 +446,7 @@ const Header = memo(function Header() {
                           onClick={() => setShopDropdownOpen(false)}
                           onMouseEnter={() => handleSubcategoryHover(subcat)}
                         >
-                          <div className="font-medium text-base">{subcat.name}</div>
+                          <div className="font-medium text-base">{decodeHtmlEntities(subcat.name)}</div>
                         </Link>
                       </li>
                     ))}
@@ -458,8 +477,8 @@ const Header = memo(function Header() {
                   // Show products
                   <div className="py-6 px-4">
                     <h3 className="text-sm font-bold text-gray-900 mb-4 font-[family-name:var(--font-eb-garamond)]">
-                      {hoveredSubcategory ? `Producten in ${hoveredSubcategory.name}` :
-                       hoveredCategory ? `Producten in ${hoveredCategory.name}` :
+                      {hoveredSubcategory ? `Producten in ${decodeHtmlEntities(hoveredSubcategory.name)}` :
+                       hoveredCategory ? `Producten in ${decodeHtmlEntities(hoveredCategory.name)}` :
                        'Alle Producten'}
                     </h3>
                     <div className="space-y-2">
@@ -560,7 +579,7 @@ const Header = memo(function Header() {
                       className="block px-3 py-2 text-base font-light text-[#2D2D2D] hover:text-[#8B7355] transition-colors font-[family-name:var(--font-eb-garamond)]"
                       onClick={() => setMobileMenuOpen(false)}
                     >
-                      {category.name}
+                      {decodeHtmlEntities(category.name)}
                     </Link>
                   ))}
                 </div>
