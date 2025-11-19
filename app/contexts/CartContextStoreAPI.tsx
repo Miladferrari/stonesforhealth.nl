@@ -15,6 +15,7 @@ interface CartItem {
   bundleType?: 'single' | 'duo' | 'family';
   bundleDiscount?: number;
   bundlePrice?: number;
+  variation_id?: number;
 }
 
 interface ShippingInfo {
@@ -204,22 +205,28 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       return;
     }
 
+    // Extract variation_id if present
+    const variationId = (product as any).variation_id;
+
     console.log('[Cart] Adding to cart:', {
       productName: product.name,
       quantity,
-      bundleInfo
+      bundleInfo,
+      variationId
     });
 
     // Use local cart management only (Store API requires authentication)
     setItems(prevItems => {
-      const existingItem = prevItems.find(item => item.product.id === product.id);
+      const existingItem = prevItems.find(item =>
+        item.product.id === product.id && item.variation_id === variationId
+      );
       let newItems;
 
       if (existingItem) {
         // If adding more of the same bundle type, merge quantities
         if (bundleInfo && existingItem.bundleType === bundleInfo.type) {
           newItems = prevItems.map(item =>
-            item.product.id === product.id
+            item.product.id === product.id && item.variation_id === variationId
               ? {
                   ...item,
                   quantity: item.quantity + quantity,
@@ -236,7 +243,8 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
               quantity,
               bundleType: bundleInfo?.type,
               bundleDiscount: bundleInfo?.discount,
-              bundlePrice: bundleInfo?.totalPrice
+              bundlePrice: bundleInfo?.totalPrice,
+              variation_id: variationId
             }
           ];
         }
@@ -248,7 +256,8 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
             quantity,
             bundleType: bundleInfo?.type,
             bundleDiscount: bundleInfo?.discount,
-            bundlePrice: bundleInfo?.totalPrice
+            bundlePrice: bundleInfo?.totalPrice,
+            variation_id: variationId
           }
         ];
       }
@@ -265,9 +274,16 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   };
 
   // Remove from cart (local management only)
-  const removeFromCart = async (productId: number) => {
+  const removeFromCart = async (productId: number, variationId?: number) => {
     setItems(prevItems => {
-      const newItems = prevItems.filter(item => item.product.id !== productId);
+      const newItems = prevItems.filter(item => {
+        if (variationId !== undefined) {
+          // Match both product ID and variation ID
+          return !(item.product.id === productId && item.variation_id === variationId);
+        }
+        // Match only product ID if no variation specified
+        return item.product.id !== productId;
+      });
 
       // Save to localStorage immediately
       localStorage.setItem('cart', JSON.stringify({
@@ -280,15 +296,20 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   };
 
   // Update quantity (local management only)
-  const updateQuantity = async (productId: number, quantity: number) => {
+  const updateQuantity = async (productId: number, quantity: number, variationId?: number) => {
     if (quantity <= 0) {
-      await removeFromCart(productId);
+      await removeFromCart(productId, variationId);
       return;
     }
 
     setItems(prevItems => {
       const newItems = prevItems.map(item => {
-        if (item.product.id !== productId) {
+        // Match by product ID and variation ID if provided
+        const isMatch = variationId !== undefined
+          ? (item.product.id === productId && item.variation_id === variationId)
+          : (item.product.id === productId);
+
+        if (!isMatch) {
           return item;
         }
 

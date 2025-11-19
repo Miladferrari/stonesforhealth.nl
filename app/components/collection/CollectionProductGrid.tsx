@@ -7,6 +7,7 @@ import { Product } from '@/lib/woocommerce';
 import { useCart } from '@/app/contexts/CartContextStoreAPI';
 import { useToast } from '@/app/contexts/ToastContext';
 import { getProductReviewSummary } from '@/lib/reviewGenerator';
+import { getProductUrl } from '@/lib/slugify';
 
 interface CollectionProductGridProps {
   products: Product[];
@@ -106,6 +107,8 @@ export default function CollectionProductGrid({
             const discount = calculateDiscount(product);
             const isHovered = hoveredProduct === product.id;
 
+            const productUrl = getProductUrl(product);
+
             return (
               <div
                 key={product.id}
@@ -113,7 +116,7 @@ export default function CollectionProductGrid({
                 onMouseEnter={() => setHoveredProduct(product.id)}
                 onMouseLeave={() => setHoveredProduct(null)}
               >
-                <Link href={`/product/${product.slug}`}>
+                <Link href={productUrl}>
                   {/* Product Image */}
                   <div className="relative aspect-square overflow-hidden">
                     {/* Discount Badge */}

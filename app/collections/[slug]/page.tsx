@@ -178,6 +178,7 @@ export default function CollectionPage() {
         name: productNames[i % productNames.length] + ' - Premium Kwaliteit',
         slug: `product-${id}`,
         permalink: `/product/${id}`,
+        type: 'simple' as const,
         price: isOnSale ? (basePrice * 0.7).toFixed(2) : basePrice.toFixed(2),
         regular_price: basePrice.toFixed(2),
         sale_price: isOnSale ? (basePrice * 0.7).toFixed(2) : '',

@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { getProductUrl } from '@/lib/slugify';
 
 interface SearchDropdownProps {
   isOpen: boolean;
@@ -178,7 +179,7 @@ export default function SearchDropdown({ isOpen, onClose }: SearchDropdownProps)
                 {results.map((product) => (
                   <Link
                     key={product.id}
-                    href={`/product/${product.slug}`}
+                    href={getProductUrl(product)}
                     onClick={onClose}
                     className="flex items-center gap-3 p-3 hover:bg-gray-50 rounded-lg transition-colors"
                   >

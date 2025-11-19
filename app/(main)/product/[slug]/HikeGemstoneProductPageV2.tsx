@@ -4,7 +4,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useCart } from '@/app/contexts/CartContextStoreAPI';
-import { Product } from '@/lib/woocommerce';
+import { Product, ProductVariation } from '@/lib/woocommerce';
 import { generateProductReviewData } from '@/lib/reviewGenerator';
 import { trackProductView, trackAddToCart } from '../../../lib/analytics';
 
@@ -84,6 +84,13 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
   const reviewButtonRef = useRef<HTMLButtonElement>(null);
   const thumbnailRefs = useRef<(HTMLButtonElement | null)[]>([]);
 
+  // Variation state
+  const [variations, setVariations] = useState<ProductVariation[]>([]);
+  const [selectedVariations, setSelectedVariations] = useState<(ProductVariation | null)[]>([null, null, null]); // For single, duo, family
+  const [loadingVariations, setLoadingVariations] = useState(false);
+  const [showVariationError, setShowVariationError] = useState(false);
+  const [variationErrorMessage, setVariationErrorMessage] = useState('');
+
   // Touch swipe state for image gallery
   const [touchStartX, setTouchStartX] = useState<number | null>(null);
   const [touchEndX, setTouchEndX] = useState<number | null>(null);
@@ -127,17 +134,19 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
     }
   };
 
-  // Check if product is out of stock
-  const isOutOfStock = product.stock_status !== 'instock' || product.stock_quantity === 0;
+  // Check if product is out of stock - use variation stock if selected (for single bundle)
+  const currentStockStatus = selectedVariations[0] ? selectedVariations[0].stock_status : product.stock_status;
+  const currentStockQuantity = selectedVariations[0] ? selectedVariations[0].stock_quantity : product.stock_quantity;
+  const isOutOfStock = currentStockStatus !== 'instock' || currentStockQuantity === 0;
 
   // Check how many of this product are already in cart
   const cartQuantity = items.find(item => item.product.id === product.id)?.quantity || 0;
 
-  // Check if we've reached the maximum quantity (stock limit)
-  const hasReachedMaxQuantity = product.stock_quantity !== null && cartQuantity >= product.stock_quantity;
+  // Check if we've reached the maximum quantity (stock limit) - use variation stock if selected
+  const hasReachedMaxQuantity = currentStockQuantity !== null && cartQuantity >= currentStockQuantity;
 
-  // Calculate available quantity (stock minus what's in cart)
-  const availableQuantity = product.stock_quantity !== null ? Math.max(0, product.stock_quantity - cartQuantity) : Infinity;
+  // Calculate available quantity (stock minus what's in cart) - use variation stock if selected
+  const availableQuantity = currentStockQuantity !== null ? Math.max(0, currentStockQuantity - cartQuantity) : Infinity;
 
   // Check if each bundle option is available
   const canSelectSingle = availableQuantity >= 1;
@@ -206,10 +215,15 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
     energy: 'Kalmerend & Beschermend',
   };
 
-  // Calculate pricing
-  const price = parseFloat(product.price);
-  const regularPrice = product.regular_price ? parseFloat(product.regular_price) : price;
-  const isOnSale = product.on_sale && regularPrice > price;
+  // Calculate pricing - use variation price if selected (for single bundle)
+  const basePrice = selectedVariations[0] ? parseFloat(selectedVariations[0].price) : parseFloat(product.price);
+  const baseRegularPrice = selectedVariations[0]
+    ? (selectedVariations[0].regular_price ? parseFloat(selectedVariations[0].regular_price) : basePrice)
+    : (product.regular_price ? parseFloat(product.regular_price) : basePrice);
+
+  const price = basePrice;
+  const regularPrice = baseRegularPrice;
+  const isOnSale = (selectedVariations[0] ? selectedVariations[0].on_sale : product.on_sale) && regularPrice > price;
   const discount = isOnSale ? Math.round(((regularPrice - price) / regularPrice) * 100) : 0;
 
   // Bundle pricing
@@ -314,6 +328,40 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
     }
   }, [showReviewDropdown]);
 
+  // Load variations for variable products
+  useEffect(() => {
+    console.log('[Variations Debug] Product type:', product.type, 'Has variations:', product.variations, 'Length:', product.variations?.length);
+
+    const loadVariations = async () => {
+      if (product.type === 'variable' && product.variations && product.variations.length > 0) {
+        console.log('[Variations Debug] Loading variations for product:', product.id);
+        setLoadingVariations(true);
+        try {
+          const response = await fetch(`/api/woocommerce/products/${product.id}/variations`);
+          console.log('[Variations Debug] API Response status:', response.status);
+          if (response.ok) {
+            const data = await response.json();
+            console.log('[Variations Debug] Loaded variations:', data);
+            setVariations(data);
+          }
+        } catch (error) {
+          console.error('Failed to load variations:', error);
+        } finally {
+          setLoadingVariations(false);
+        }
+      }
+    };
+
+    loadVariations();
+  }, [product.id, product.type, product.variations]);
+
+  // Reset selected image when variation changes
+  useEffect(() => {
+    if (selectedVariations[0]) {
+      setSelectedImage(0);
+    }
+  }, [selectedVariations]);
+
   // Track product view on mount
   useEffect(() => {
     trackProductView({
@@ -325,6 +373,23 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
   }, [product]);
 
   const handleAddToCart = async () => {
+    // Check if variations are required but not selected
+    if (product.type === 'variable') {
+      const bundleIndex = selectedBundle === 'single' ? 0 : selectedBundle === 'duo' ? 1 : 2;
+      const quantityToAdd = selectedBundle === 'duo' ? 2 : selectedBundle === 'family' ? 3 : 1;
+
+      // Check if all required variations are selected for this bundle
+      for (let i = 0; i < quantityToAdd; i++) {
+        if (!selectedVariations[i]) {
+          const itemLabel = quantityToAdd === 1 ? 'een variatie' : `een variatie voor item ${i + 1}`;
+          setVariationErrorMessage(`Selecteer eerst ${itemLabel}`);
+          setShowVariationError(true);
+          setTimeout(() => setShowVariationError(false), 4000);
+          return;
+        }
+      }
+    }
+
     // Don't add to cart if out of stock or max quantity reached
     if (isOutOfStock || hasReachedMaxQuantity) {
       console.warn('Cannot add to cart:', isOutOfStock ? 'Out of stock' : 'Max quantity reached');
@@ -352,7 +417,30 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
         totalPrice: bundlePrices[selectedBundle as keyof typeof bundlePrices]
       };
 
-      addToCart(product as any, quantityToAdd, bundleInfo);
+      // For variable products with bundles, add each item separately with its variation
+      if (product.type === 'variable' && selectedVariations[0]) {
+        // Add each item in the bundle separately with its own variation_id
+        for (let i = 0; i < quantityToAdd; i++) {
+          // Use the variation at index i, or fallback to the first variation if not enough selected
+          const variation = selectedVariations[i] || selectedVariations[0];
+
+          const productWithVariation = {
+            ...product,
+            variation_id: variation.id,
+            // Update the price to the variation's price
+            price: variation.price,
+            regular_price: variation.regular_price,
+            sale_price: variation.sale_price,
+            on_sale: variation.on_sale
+          };
+
+          // Add individual item with quantity 1
+          addToCart(productWithVariation as any, 1, bundleInfo);
+        }
+      } else {
+        // For simple products or single items, add as before
+        addToCart(product as any, quantityToAdd, bundleInfo);
+      }
 
       // Track add to cart event
       trackAddToCart({
@@ -372,12 +460,67 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
     }
   };
 
-  // Check if product has images
-  const hasImages = product.images && product.images.length > 0;
-  const images = hasImages ? product.images : [];
+  // Check if product has images - use variation image if selected and available (for single bundle)
+  const variationImage = selectedVariations[0]?.image;
+  const baseImages = product.images && product.images.length > 0 ? product.images : [];
+  const hasImages = baseImages.length > 0 || variationImage !== null;
+
+  // If variation has an image, show it first, then product images
+  const images = variationImage
+    ? [variationImage, ...baseImages]
+    : baseImages;
 
   // Only show actual images, no empty placeholders
   const thumbnailSlots = images;
+
+  // Helper function to render variation dropdown for a specific item index
+  const renderVariationDropdown = (itemIndex: number) => {
+    if (product.type !== 'variable' || variations.length === 0) return null;
+
+    const variationAttributes = product.attributes?.filter(attr => attr.variation) || [];
+    if (variationAttributes.length === 0) return null;
+
+    return (
+      <div className="space-y-1">
+        {variationAttributes.map((attribute) => {
+          const options = attribute.options;
+          const selectedOption = selectedVariations[itemIndex]?.attributes.find(
+            attr => attr.name === attribute.name
+          )?.option;
+
+          return (
+            <select
+              key={attribute.id}
+              value={selectedOption || ''}
+              onChange={(e) => {
+                const optionValue = e.target.value;
+                if (!optionValue) return;
+
+                // Find matching variation
+                const matchingVariation = variations.find(v =>
+                  v.attributes.some(a => a.name === attribute.name && a.option === optionValue)
+                );
+
+                if (matchingVariation) {
+                  const newSelectedVariations = [...selectedVariations];
+                  newSelectedVariations[itemIndex] = matchingVariation;
+                  setSelectedVariations(newSelectedVariations);
+                }
+              }}
+              className="w-full pl-3 pr-8 py-2 text-base text-gray-900 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black font-[family-name:var(--font-eb-garamond)] bg-white appearance-none bg-[url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2020%2020%22%20fill%3D%22none%22%3E%3Cpath%20d%3D%22M7%207l3-3%203%203m0%206l-3%203-3-3%22%20stroke%3D%22%239ca3af%22%20stroke-width%3D%221.5%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%2F%3E%3C%2Fsvg%3E')] bg-[length:1.25rem] bg-[right_0.5rem_center] bg-no-repeat"
+            >
+              <option value="">Selecteer {attribute.name}</option>
+              {options.map((option) => (
+                <option key={option} value={option}>
+                  {option}
+                </option>
+              ))}
+            </select>
+          );
+        })}
+      </div>
+    );
+  };
 
   return (
     <div className="min-h-screen bg-white">
@@ -962,6 +1105,12 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
                       )}
                     </div>
                   </div>
+                  {/* Variation dropdown for single */}
+                  {product.type === 'variable' && variations.length > 0 && (
+                    <div className="mt-3 border-t border-gray-200 pt-2">
+                      {renderVariationDropdown(0)}
+                    </div>
+                  )}
                 </div>
               </div>
 
@@ -1014,6 +1163,19 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
                       <div className="kaching-bundles__bar-full-price text-sm text-gray-400 line-through font-[family-name:var(--font-eb-garamond)]">€{(bundlePrices.single * 2).toFixed(2).replace('.', ',')}</div>
                     </div>
                   </div>
+                  {/* Variation dropdowns for duo (2 items) */}
+                  {product.type === 'variable' && variations.length > 0 && (
+                    <div className="mt-3 space-y-2 border-t border-gray-200 pt-2">
+                      <div className="flex items-center gap-2">
+                        <span className="text-xs font-semibold text-gray-600 font-[family-name:var(--font-eb-garamond)] min-w-[45px]">Item 1:</span>
+                        <div className="flex-1">{renderVariationDropdown(0)}</div>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <span className="text-xs font-semibold text-gray-600 font-[family-name:var(--font-eb-garamond)] min-w-[45px]">Item 2:</span>
+                        <div className="flex-1">{renderVariationDropdown(1)}</div>
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
 
@@ -1073,9 +1235,36 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
                       <div className="kaching-bundles__bar-full-price text-sm text-gray-400 line-through font-[family-name:var(--font-eb-garamond)]">€{(bundlePrices.single * 3).toFixed(2).replace('.', ',')}</div>
                     </div>
                   </div>
+                  {/* Variation dropdowns for family (3 items) */}
+                  {product.type === 'variable' && variations.length > 0 && (
+                    <div className="mt-3 space-y-2 border-t border-gray-200 pt-2">
+                      <div className="flex items-center gap-2">
+                        <span className="text-xs font-semibold text-gray-600 font-[family-name:var(--font-eb-garamond)] min-w-[45px]">Item 1:</span>
+                        <div className="flex-1">{renderVariationDropdown(0)}</div>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <span className="text-xs font-semibold text-gray-600 font-[family-name:var(--font-eb-garamond)] min-w-[45px]">Item 2:</span>
+                        <div className="flex-1">{renderVariationDropdown(1)}</div>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <span className="text-xs font-semibold text-gray-600 font-[family-name:var(--font-eb-garamond)] min-w-[45px]">Item 3:</span>
+                        <div className="flex-1">{renderVariationDropdown(2)}</div>
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
+
+            {/* Variation Error Message */}
+            {showVariationError && (
+              <div className="mb-4 p-4 bg-red-50 border border-red-200 rounded-lg flex items-center gap-3 animate-in fade-in slide-in-from-top-2 duration-300">
+                <svg className="w-5 h-5 text-red-600 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+                </svg>
+                <p className="text-red-800 font-medium font-[family-name:var(--font-eb-garamond)]">{variationErrorMessage}</p>
+              </div>
+            )}
 
             {/* Large green Add to Cart button */}
             <button

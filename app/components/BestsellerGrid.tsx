@@ -5,6 +5,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useCart } from '@/app/contexts/CartContextStoreAPI';
 import { getProductReviewSummary } from '@/lib/reviewGenerator';
+import { getProductUrl } from '@/lib/slugify';
 
 interface Product {
   id: number;
@@ -125,13 +126,16 @@ export default function BestsellerGrid() {
 
   return (
     <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4 lg:gap-6">
-      {products.map((product) => (
-        <div
-          key={product.id}
-          className="group relative bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 flex flex-col"
-        >
+      {products.map((product) => {
+        const productUrl = getProductUrl(product);
+
+        return (
+          <div
+            key={product.id}
+            className="group relative bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 flex flex-col"
+          >
           {/* Product Image - Clickable Link */}
-          <Link href={`/product/${product.slug}`}>
+          <Link href={productUrl}>
             <div className="relative aspect-square overflow-hidden">
               {/* Bestseller Badge */}
               <div className="absolute top-2 left-2 z-10 bg-[#492c4a] text-white text-xs px-2 py-1 rounded-full font-bold">
@@ -169,7 +173,7 @@ export default function BestsellerGrid() {
           {/* Product Info - Separate from Link */}
           <div className="p-2 sm:p-3 md:p-4 flex flex-col h-full">
             {/* Product Title - Also Clickable */}
-            <Link href={`/product/${product.slug}`}>
+            <Link href={productUrl}>
               <h3 className="font-bold text-gray-900 mb-1 text-sm sm:text-base md:text-lg font-[family-name:var(--font-eb-garamond)] line-clamp-1 hover:text-[#492c4a] transition-colors cursor-pointer">
                 {product.name}
               </h3>
@@ -226,7 +230,8 @@ export default function BestsellerGrid() {
             </button>
           </div>
         </div>
-      ))}
+        );
+      })}
 
       {/* Empty placeholders if less than 5 products - Optional, can be removed */}
       {products.length < 5 && products.length > 0 && (

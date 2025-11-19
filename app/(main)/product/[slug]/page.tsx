@@ -11,18 +11,27 @@ interface ProductPageProps {
   params: Promise<{ slug: string }>;
 }
 
+
 export async function generateMetadata({ params }: ProductPageProps): Promise<Metadata> {
   const { slug } = await params;
 
   try {
     let product;
 
-    // Always try by slug first (supports both text slugs and EAN barcode slugs)
-    product = await woocommerce.getProductBySlug(slug);
+    // Try by slug first
+    try {
+      product = await woocommerce.getProductBySlug(slug);
+    } catch (error) {
+      // Silently handle API errors
+    }
 
     // If not found and slug is numeric, try as product ID (backward compatibility)
     if (!product && !isNaN(parseInt(slug))) {
-      product = await woocommerce.getProduct(parseInt(slug));
+      try {
+        product = await woocommerce.getProduct(parseInt(slug));
+      } catch (error) {
+        // Silently handle API errors
+      }
     }
 
     if (!product) {
@@ -65,17 +74,27 @@ export default async function ProductPage({ params }: ProductPageProps) {
   try {
     let product;
 
-    // Always try by slug first (supports both text slugs and EAN barcode slugs)
-    product = await woocommerce.getProductBySlug(slug);
+    // Try by slug first
+    try {
+      product = await woocommerce.getProductBySlug(slug);
+    } catch (error) {
+      // Silently handle API errors for slug lookup
+      console.log(`[Product Page] Product with slug "${slug}" not found`);
+    }
 
     // If not found and slug is numeric, try as product ID (backward compatibility)
     if (!product && !isNaN(parseInt(slug))) {
       const productId = parseInt(slug);
-      product = await woocommerce.getProduct(productId);
+      try {
+        product = await woocommerce.getProduct(productId);
 
-      if (product && product.slug) {
-        // Redirect old ID-based URL to new slug-based URL
-        redirect(`/product/${product.slug}`);
+        // Redirect numeric product IDs to slug-based URLs
+        if (product && product.slug) {
+          redirect(`/product/${product.slug}`);
+        }
+      } catch (error) {
+        // Silently handle API errors for product ID lookup
+        console.log(`[Product Page] Product with ID ${productId} not found`);
       }
     }
 
@@ -138,8 +157,11 @@ export default async function ProductPage({ params }: ProductPageProps) {
         <HikeGemstoneProductPageV2 product={product} relatedProducts={bestSellingProducts} />
       </>
     );
-  } catch (error) {
-    console.error('Product page error:', error);
+  } catch (error: any) {
+    // Only log unexpected errors, not 404s (notFound throws NEXT_HTTP_ERROR_FALLBACK)
+    if (error?.message && !error.message.includes('NEXT_HTTP_ERROR_FALLBACK') && !error.message.includes('NEXT_REDIRECT')) {
+      console.error('[Product Page] Unexpected error:', error.message);
+    }
     notFound();
   }
 }

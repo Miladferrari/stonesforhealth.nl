@@ -88,6 +88,7 @@ export default function BestsellersPage() {
         name: bestsellers[i % bestsellers.length],
         slug: `bestseller-${id}`,
         permalink: `/product/${id}`,
+        type: 'simple' as const,
         price: isOnSale ? (basePrice * 0.75).toFixed(2) : basePrice.toFixed(2),
         regular_price: basePrice.toFixed(2),
         sale_price: isOnSale ? (basePrice * 0.75).toFixed(2) : '',

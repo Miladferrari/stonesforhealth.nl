@@ -18,6 +18,7 @@ export interface Product {
   name: string;
   slug: string;
   permalink: string;
+  type: 'simple' | 'variable' | 'grouped' | 'external';
   price: string;
   regular_price: string;
   sale_price: string;
@@ -36,6 +37,35 @@ export interface Product {
   }>;
   stock_status: string;
   stock_quantity: number | null;
+  attributes?: Array<{
+    id: number;
+    name: string;
+    position: number;
+    visible: boolean;
+    variation: boolean;
+    options: string[];
+  }>;
+  variations?: number[];
+}
+
+export interface ProductVariation {
+  id: number;
+  attributes: Array<{
+    id: number;
+    name: string;
+    option: string;
+  }>;
+  price: string;
+  regular_price: string;
+  sale_price: string;
+  on_sale: boolean;
+  stock_status: string;
+  stock_quantity: number | null;
+  image: {
+    id: number;
+    src: string;
+    alt: string;
+  } | null;
 }
 
 export interface Category {
@@ -540,6 +570,10 @@ class WooCommerceAPI {
   async getProductBySlug(slug: string): Promise<Product | null> {
     const products = await this.fetchAPI<Product[]>(`products?slug=${slug}`);
     return products.length > 0 ? products[0] : null;
+  }
+
+  async getProductVariations(productId: number): Promise<ProductVariation[]> {
+    return this.fetchAPI<ProductVariation[]>(`products/${productId}/variations`);
   }
 
   async getCategories(params?: {

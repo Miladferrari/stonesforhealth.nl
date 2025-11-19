@@ -16,16 +16,33 @@ export async function POST(request: NextRequest) {
       itemCount: items.length,
       shipping: shippingRate,
       coupon: couponCode,
-      total: totals.total
+      total: totals.total,
+      items: items.map((item: any) => ({
+        id: item.product.id,
+        name: item.product.name,
+        quantity: item.quantity,
+        variation_id: item.variation_id
+      }))
     });
 
     // Prepare line items for WooCommerce
-    const lineItems = items.map((item: any) => ({
-      product_id: item.product.id,
-      quantity: item.quantity,
-      subtotal: (parseFloat(item.product.price) * item.quantity).toString(),
-      total: (parseFloat(item.product.price) * item.quantity).toString()
-    }));
+    const lineItems = items.map((item: any) => {
+      const lineItem: any = {
+        product_id: item.product.id,
+        quantity: item.quantity,
+        subtotal: (parseFloat(item.product.price) * item.quantity).toString(),
+        total: (parseFloat(item.product.price) * item.quantity).toString()
+      };
+
+      // Add variation_id if the item has one (for variable products)
+      if (item.variation_id) {
+        lineItem.variation_id = item.variation_id;
+      }
+
+      return lineItem;
+    });
+
+    console.log('[Create Order] Line items with variations:', lineItems);
 
     // Prepare order data for WooCommerce
     const orderData = {

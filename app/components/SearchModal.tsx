@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { getProductUrl } from '@/lib/slugify';
 
 interface SearchModalProps {
   isOpen: boolean;
@@ -163,7 +164,7 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
                 {results.map((product) => (
                   <Link
                     key={product.id}
-                    href={`/product/${product.slug}`}
+                    href={getProductUrl(product)}
                     onClick={onClose}
                     className="flex items-center gap-4 px-4 py-3 hover:bg-gray-50 transition-colors"
                   >

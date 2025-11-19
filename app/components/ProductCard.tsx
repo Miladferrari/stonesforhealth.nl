@@ -7,6 +7,7 @@ import { useCartWithToast } from '../hooks/useCartWithToast';
 import type { Product } from '@/lib/woocommerce';
 import { getProductReviewSummary } from '@/lib/reviewGenerator';
 import { trackAddToCart } from '../lib/analytics';
+import { getProductUrl } from '@/lib/slugify';
 
 interface ProductCardProps {
   product: Product;
@@ -176,9 +177,11 @@ const ProductCard = memo(function ProductCard({ product }: ProductCardProps) {
     }
   }, [isWishlisted, product]);
 
+  const productUrl = getProductUrl(product);
+
   return (
     <div className={`group relative bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 flex flex-col ${isOutOfStock ? 'opacity-75' : ''}`}>
-      <Link href={`/product/${product.slug}`}>
+      <Link href={productUrl}>
         <div className="relative aspect-square overflow-hidden">
           <div className="relative w-full h-full">
             {mainImage ? (
@@ -208,7 +211,7 @@ const ProductCard = memo(function ProductCard({ product }: ProductCardProps) {
         
 
       <div className="p-2 sm:p-3 md:p-4 flex flex-col h-full">
-        <Link href={`/product/${product.slug}`}>
+        <Link href={productUrl}>
           <h3 className="font-bold text-gray-900 mb-1 text-sm sm:text-base md:text-lg font-[family-name:var(--font-eb-garamond)] line-clamp-1 hover:text-[#492c4a] transition-colors cursor-pointer">
             {product.name}
           </h3>
