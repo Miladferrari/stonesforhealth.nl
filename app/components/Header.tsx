@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { useState, memo, useEffect, useRef } from 'react';
+import { usePathname } from 'next/navigation';
 import { useCart } from '../contexts/CartContextStoreAPI';
 import SearchDropdown from './SearchDropdown';
 
@@ -37,11 +38,19 @@ const Header = memo(function Header() {
   const [categoryProducts, setCategoryProducts] = useState<any[]>([]);
   const [loadingProducts, setLoadingProducts] = useState(false);
   const { setIsCartOpen, getTotalItems } = useCart();
+  const pathname = usePathname();
 
   // Timeout refs for dropdown delays
   const shopDropdownTimeout = useRef<NodeJS.Timeout | null>(null);
   const helpDropdownTimeout = useRef<NodeJS.Timeout | null>(null);
   const productFetchTimeout = useRef<NodeJS.Timeout | null>(null);
+
+  // Close mobile menu when route changes
+  useEffect(() => {
+    setMobileMenuOpen(false);
+    setShopDropdownOpen(false);
+    setHelpDropdownOpen(false);
+  }, [pathname]);
 
   const toggleCart = () => {
     setIsCartOpen(true);
@@ -162,11 +171,14 @@ const Header = memo(function Header() {
     const handleClickOutside = (event: MouseEvent) => {
       const target = event.target as HTMLElement;
 
-      // Check if click is outside mega menu and categorieën button (desktop)
+      // Check if click is outside mega menu and categorieën button (desktop ONLY)
       const megaMenu = document.querySelector('[data-mega-menu]');
       const shopButton = document.querySelector('[data-shop-button]');
+      const isDesktop = window.innerWidth >= 1024; // lg breakpoint in Tailwind
 
+      // Only close desktop mega menu on desktop screens
       if (shopDropdownOpen &&
+          isDesktop &&
           megaMenu &&
           shopButton &&
           !megaMenu.contains(target) &&
@@ -178,6 +190,8 @@ const Header = memo(function Header() {
       const mobileMenu = document.querySelector('[data-mobile-menu]');
       const hamburgerButton = document.querySelector('[data-hamburger-button]');
 
+      // ONLY close if clicking completely outside the mobile menu
+      // Don't interfere with links inside the menu - they have their own onClick handlers
       if (mobileMenuOpen &&
           mobileMenu &&
           hamburgerButton &&
@@ -401,9 +415,13 @@ const Header = memo(function Header() {
           }}
         >
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-            <div className="flex gap-8">
-              {/* Left Side - Categories List */}
-              <div className="w-80 border-r border-gray-200 pr-8">
+            <div className={`grid gap-8 transition-all duration-300 ${
+              hoveredCategory && getSubcategories(hoveredCategory.id).length > 0
+                ? 'grid-cols-3'
+                : 'grid-cols-2'
+            }`}>
+              {/* Left Column - Main Categories (Fixed Width) */}
+              <div className="border-r border-gray-200 pr-8">
                 <h3 className="text-sm font-bold text-gray-900 mb-4 pl-2 font-[family-name:var(--font-eb-garamond)]">
                   Categorieën
                 </h3>
@@ -436,24 +454,31 @@ const Header = memo(function Header() {
                       <div className="font-medium text-base">Alle Producten</div>
                     </Link>
                   </li>
-                  {categories.map((category) => (
-                    <li key={category.id}>
-                      <Link
-                        href={category.slug === 'bestsellers' ? '/bestsellers' : `/alle-producten?category=${category.slug}`}
-                        className="block px-4 py-2 text-[#2D2D2D] hover:bg-[#f5f1e8] hover:text-[#3b223b] rounded-md transition-colors font-[family-name:var(--font-eb-garamond)]"
-                        onClick={() => setShopDropdownOpen(false)}
-                        onMouseEnter={() => handleCategoryHover(category)}
-                      >
-                        <div className="font-medium text-base">{decodeHtmlEntities(category.name)}</div>
-                      </Link>
-                    </li>
-                  ))}
+                  {categories.map((category) => {
+                    const isActive = hoveredCategory?.id === category.id;
+                    return (
+                      <li key={category.id}>
+                        <Link
+                          href={category.slug === 'bestsellers' ? '/bestsellers' : `/alle-producten?category=${category.slug}`}
+                          className={`block px-4 py-2 rounded-md transition-all duration-200 font-[family-name:var(--font-eb-garamond)] ${
+                            isActive
+                              ? 'bg-[#492c4a] text-white shadow-md'
+                              : 'text-[#2D2D2D] hover:bg-[#f5f1e8] hover:text-[#3b223b]'
+                          }`}
+                          onClick={() => setShopDropdownOpen(false)}
+                          onMouseEnter={() => handleCategoryHover(category)}
+                        >
+                          <div className="font-medium text-base">{decodeHtmlEntities(category.name)}</div>
+                        </Link>
+                      </li>
+                    );
+                  })}
                 </ul>
               </div>
 
-              {/* Middle - Subcategories (only show if category has subcategories) */}
+              {/* Middle Column - Subcategories (Only visible when category has subcategories) */}
               {hoveredCategory && getSubcategories(hoveredCategory.id).length > 0 && (
-                <div className="w-64">
+                <div className="border-r border-gray-200 pr-8 animate-fadeIn">
                   <h3 className="text-sm font-bold text-gray-900 mb-4 pl-2 font-[family-name:var(--font-eb-garamond)]">
                     {decodeHtmlEntities(hoveredCategory.name)}
                   </h3>
@@ -474,18 +499,21 @@ const Header = memo(function Header() {
                 </div>
               )}
 
-              {/* Right Side - Products */}
-              <div className="flex-1">
+              {/* Right Column - Featured Products (Always visible, Fixed Width) */}
+              <div className="min-h-[300px] transition-opacity duration-300">
                 {!hoveredCategory ? (
-                  // No category hovered - show placeholder
+                  // No category hovered - show welcome message
                   <div className="text-center py-12 text-gray-500">
                     <div className="mb-4">
                       <svg className="w-16 h-16 mx-auto text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
                       </svg>
                     </div>
-                    <p className="text-sm font-[family-name:var(--font-eb-garamond)]">
-                      Hover over een categorie om verder te navigeren
+                    <p className="text-sm text-gray-600 font-[family-name:var(--font-eb-garamond)] font-medium">
+                      Ontdek onze collectie
+                    </p>
+                    <p className="text-xs text-gray-400 mt-2 font-[family-name:var(--font-eb-garamond)]">
+                      Hover over een categorie voor meer
                     </p>
                   </div>
                 ) : loadingProducts ? (
@@ -584,11 +612,12 @@ const Header = memo(function Header() {
                 </svg>
               </button>
               {shopDropdownOpen && (
-                <div className="pl-8 space-y-1 mt-1">
+                <div className="pl-8 space-y-1 mt-1" data-mobile-category-links>
                   <Link
                     href="/alle-producten"
                     className="block px-3 py-2 text-base font-light text-[#2D2D2D] hover:text-[#8B7355] transition-colors font-[family-name:var(--font-eb-garamond)]"
                     onClick={() => {
+                      // Close menu immediately for better UX
                       setMobileMenuOpen(false);
                       setShopDropdownOpen(false);
                     }}
@@ -601,6 +630,7 @@ const Header = memo(function Header() {
                       href={category.slug === 'bestsellers' ? '/bestsellers' : `/alle-producten?category=${category.slug}`}
                       className="block px-3 py-2 text-base font-light text-[#2D2D2D] hover:text-[#8B7355] transition-colors font-[family-name:var(--font-eb-garamond)]"
                       onClick={() => {
+                        // Close menu immediately for better UX
                         setMobileMenuOpen(false);
                         setShopDropdownOpen(false);
                       }}
@@ -629,11 +659,12 @@ const Header = memo(function Header() {
                 </svg>
               </button>
               {helpDropdownOpen && (
-                <div className="pl-8 space-y-1 mt-1">
+                <div className="pl-8 space-y-1 mt-1" data-mobile-help-links>
                   <Link
                     href="/contact"
                     className="block px-3 py-2 text-base font-light text-[#2D2D2D] hover:text-[#8B7355] transition-colors font-[family-name:var(--font-eb-garamond)]"
                     onClick={() => {
+                      // Close menu immediately for better UX
                       setMobileMenuOpen(false);
                       setHelpDropdownOpen(false);
                     }}
@@ -644,6 +675,7 @@ const Header = memo(function Header() {
                     href="/volg-je-bestelling"
                     className="block px-3 py-2 text-base font-light text-[#2D2D2D] hover:text-[#8B7355] transition-colors font-[family-name:var(--font-eb-garamond)]"
                     onClick={() => {
+                      // Close menu immediately for better UX
                       setMobileMenuOpen(false);
                       setHelpDropdownOpen(false);
                     }}
