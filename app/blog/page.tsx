@@ -1,7 +1,36 @@
-'use client';
-
 import Image from 'next/image';
 import Link from 'next/link';
+import type { Metadata } from 'next';
+
+// Server-side metadata for SEO
+export const metadata: Metadata = {
+  title: 'Blog - Edelstenen, Kristallen & Spiritualiteit | StonesForHealth',
+  description: 'Ontdek alles over edelstenen, kristallen en spiritualiteit op onze blog. Tips, inzichten en gidsen over chakras, healing, meditatie en meer.',
+  keywords: [
+    'edelstenen blog',
+    'kristallen gids',
+    'spiritualiteit tips',
+    'chakra blog',
+    'healing kristallen',
+    'kristallen informatie'
+  ],
+  openGraph: {
+    title: 'Blog - Edelstenen, Kristallen & Spiritualiteit | StonesForHealth',
+    description: 'Ontdek alles over edelstenen, kristallen en spiritualiteit op onze blog.',
+    url: 'https://stonesforhealth.nl/blog',
+    siteName: 'Stones for Health',
+    locale: 'nl_NL',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Blog - Edelstenen, Kristallen & Spiritualiteit | StonesForHealth',
+    description: 'Ontdek alles over edelstenen, kristallen en spiritualiteit op onze blog.',
+  },
+  alternates: {
+    canonical: 'https://stonesforhealth.nl/blog',
+  },
+};
 
 // Sample blog data
 const sampleBlogs = [

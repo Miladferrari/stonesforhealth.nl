@@ -63,25 +63,45 @@ export default function BestsellerGrid() {
     );
   };
 
-  useEffect(() => {
-    fetchProducts();
-  }, []);
-
   const fetchProducts = async () => {
     try {
       // Fetch from bestsellers category (ID: 20), limited to 5 products
-      const response = await fetch('/api/woocommerce/products?per_page=5&category=20');
+      // Add cache control to ensure fresh data
+      const response = await fetch('/api/woocommerce/products?per_page=5&category=20', {
+        cache: 'no-store',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
       if (response.ok) {
         const data = await response.json();
-        // Take maximum 5 products
-        setProducts(data.slice(0, 5));
+
+        // Validate data is an array
+        if (Array.isArray(data) && data.length > 0) {
+          // Take maximum 5 products
+          setProducts(data.slice(0, 5));
+          console.log('[BestsellerGrid] Successfully loaded', data.length, 'bestseller products');
+        } else {
+          console.warn('[BestsellerGrid] No products returned from API');
+          setProducts([]);
+        }
+      } else {
+        console.error('[BestsellerGrid] API response not OK:', response.status, response.statusText);
+        setProducts([]);
       }
     } catch (error) {
-      console.error('Error fetching products:', error);
+      console.error('[BestsellerGrid] Error fetching bestseller products:', error);
+      // Keep products empty on error so the "no products" message shows
+      setProducts([]);
     } finally {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    fetchProducts();
+  }, []);
 
   const handleQuickAdd = async (product: Product) => {
     addToCart(product as any, 1);

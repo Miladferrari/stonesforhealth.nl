@@ -1,7 +1,29 @@
-'use client';
-
 import Image from 'next/image';
 import Link from 'next/link';
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Over Ons - Authentieke Edelstenen & Kristallen | StonesForHealth',
+  description: 'Leer meer over StonesForHealth, uw specialist in authentieke edelstenen en kristallen. Ethisch gewonnen, wereldwijd geselecteerd, met liefde verpakt.',
+  keywords: [
+    'over stonesforhealth',
+    'edelstenen specialist',
+    'kristallen webshop',
+    'ethisch gewonnen',
+    'authentieke stenen'
+  ],
+  openGraph: {
+    title: 'Over Ons - StonesForHealth',
+    description: 'Leer meer over StonesForHealth, uw specialist in authentieke edelstenen en kristallen.',
+    url: 'https://stonesforhealth.nl/over-ons',
+    siteName: 'Stones for Health',
+    locale: 'nl_NL',
+    type: 'website',
+  },
+  alternates: {
+    canonical: 'https://stonesforhealth.nl/over-ons',
+  },
+};
 
 export default function OverOnsPage() {
   const teamMembers = [

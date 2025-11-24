@@ -4,10 +4,10 @@ import { woocommerce } from '@/lib/woocommerce';
 export async function GET(request: NextRequest) {
   try {
     const searchParams = request.nextUrl.searchParams;
-    
+
     // Parse query parameters
     const params: any = {};
-    
+
     if (searchParams.get('per_page')) {
       params.per_page = parseInt(searchParams.get('per_page')!);
     }
@@ -35,20 +35,39 @@ export async function GET(request: NextRequest) {
     if (searchParams.get('status')) {
       params.status = searchParams.get('status');
     }
-    
+
+    console.log('[API /woocommerce/products] Fetching products with params:', params);
+
     // Fetch products from WooCommerce with pagination info
     const result = await woocommerce.getProducts(params);
 
-    // Return response with pagination headers
+    // Validate response
+    if (!result || !Array.isArray(result.products)) {
+      console.error('[API /woocommerce/products] Invalid response from WooCommerce:', typeof result);
+      return NextResponse.json(
+        { error: 'Invalid data format from WooCommerce' },
+        { status: 500 }
+      );
+    }
+
+    console.log('[API /woocommerce/products] Successfully fetched', result.products.length, 'products (total:', result.total, ')');
+
+    // Return response with pagination headers and cache control
     const response = NextResponse.json(result.products);
     response.headers.set('X-WP-Total', result.total.toString());
     response.headers.set('X-WP-TotalPages', result.totalPages.toString());
+    response.headers.set('Cache-Control', 'no-store, must-revalidate');
+    response.headers.set('Pragma', 'no-cache');
 
     return response;
   } catch (error: any) {
-    console.error('Error fetching products:', error);
+    console.error('[API /woocommerce/products] Error fetching products:', error.message || error);
     return NextResponse.json(
-      { error: 'Failed to fetch products', details: error.message },
+      {
+        error: 'Failed to fetch products',
+        message: error.message || 'Unknown error',
+        timestamp: new Date().toISOString()
+      },
       { status: 500 }
     );
   }

@@ -49,12 +49,17 @@ export default async function Home() {
 
   // Fetch categories from WooCommerce
   try {
-    categories = await woocommerce.getCategories({ per_page: 100, hide_empty: true });
+    const fetchedCategories = await woocommerce.getCategories({ per_page: 100, hide_empty: true });
+
+    // Validate fetched categories
+    if (!Array.isArray(fetchedCategories) || fetchedCategories.length === 0) {
+      console.warn('[Homepage] No categories fetched from WooCommerce, using fallback');
+      throw new Error('No categories returned from WooCommerce');
+    }
 
     // Filter for the 3 specific categories we want to display
-    // Note: These are sub-categories, not parent categories
     const desiredCategories = ['intenties', 'stenen-per-sterrenbeeld', 'elementen'];
-    categories = categories.filter(cat =>
+    categories = fetchedCategories.filter(cat =>
       desiredCategories.includes(cat.slug.toLowerCase())
     );
 
@@ -65,9 +70,15 @@ export default async function Home() {
       return orderA - orderB;
     });
 
-    console.log('[Homepage] Loaded categories:', categories.map(c => ({ name: c.name, slug: c.slug, count: c.count })));
+    console.log('[Homepage] Successfully loaded categories:', categories.map(c => ({ name: c.name, slug: c.slug, count: c.count })));
+
+    // If we didn't find all 3 desired categories, log a warning but continue
+    if (categories.length < 3) {
+      console.warn('[Homepage] Only found', categories.length, 'out of 3 desired categories');
+    }
+
   } catch (error) {
-    console.error('Failed to fetch categories:', error);
+    console.error('[Homepage] Failed to fetch categories from WooCommerce, using fallback:', error);
     // Fallback categories if API fails
     categories = [
       {
@@ -330,30 +341,39 @@ export default async function Home() {
 
           {/* Collection Cards Grid - Shows 3 main collections */}
           <div className="max-w-5xl mx-auto grid grid-cols-2 md:grid-cols-3 gap-6 lg:gap-8 mb-12">
-            {categories.length > 0 ? categories.slice(0, 3).map((category, index) => (
+            {categories.length > 0 ? categories.slice(0, 3).map((category, index) => {
+              // Map slugs correctly - if it's stenen-per-sterrenbeeld, we still use the same slug
+              const collectionSlug = category.slug === 'stenen-per-sterrenbeeld' ? 'stenen-per-sterrenbeeld' : category.slug;
+
+              return (
               <Link
                 key={category.id}
-                href={`/collectie/${category.slug}`}
+                href={`/collectie/${collectionSlug}`}
                 className="group relative bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300"
               >
                 {/* Image Container */}
                 <div className="relative aspect-square overflow-hidden bg-gradient-to-br from-[#492c4a]/10 to-[#492c4a]/5">
-                  {category.image?.src ? (
-                    <img
-                      src={category.image.src}
-                      alt={category.image.alt || category.name}
-                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-                    />
-                  ) : (
-                    <img
-                      src={category.slug === 'stenen-per-sterrenbeeld' ? '/sterrenbeeld.png' :
-                           category.slug === 'intenties' ? '/intenties.png' :
-                           category.slug === 'elementen' ? '/elementen.png' :
-                           '/placeholder.png'}
-                      alt={category.name}
-                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-                    />
-                  )}
+                  {(() => {
+                    // Always use local images for these main collections for consistency
+                    let imageSrc = category.image?.src;
+
+                    // Override with local images if available
+                    if (category.slug === 'stenen-per-sterrenbeeld') {
+                      imageSrc = '/sterrenbeeld.png';
+                    } else if (category.slug === 'intenties') {
+                      imageSrc = '/intenties.png';
+                    } else if (category.slug === 'elementen') {
+                      imageSrc = '/elementen.png';
+                    }
+
+                    return (
+                      <img
+                        src={imageSrc || '/placeholder.png'}
+                        alt={category.name}
+                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                      />
+                    );
+                  })()}
 
                   {/* Overlay gradient */}
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
@@ -365,9 +385,10 @@ export default async function Home() {
                     {category.name}
                   </h3>
                   <p className="text-sm text-gray-600 mb-4 font-[family-name:var(--font-eb-garamond)]">
-                    {category.slug === 'intenties' && 'Shop gebaseerd op wat je nu voelt dat je nodig hebt'}
-                    {category.slug === 'stenen-per-sterrenbeeld' && 'Shop op wat jouw sterrenbeeld nodig heeft'}
-                    {category.slug === 'elementen' && 'Shop op wat de natuur je kan geven'}
+                    {category.slug === 'intenties' ? 'Shop gebaseerd op wat je nu voelt dat je nodig hebt' :
+                     category.slug === 'stenen-per-sterrenbeeld' ? 'Shop op wat jouw sterrenbeeld nodig heeft' :
+                     category.slug === 'elementen' ? 'Shop op wat de natuur je kan geven' :
+                     category.description || 'Ontdek deze collectie'}
                   </p>
                   <button className="bg-[#492c4a] hover:bg-[#6b4069] text-white px-6 py-2 rounded-full transition-colors font-[family-name:var(--font-eb-garamond)]">
                     SHOP
@@ -377,7 +398,8 @@ export default async function Home() {
                 {/* Hover effect line */}
                 <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-[#492c4a] to-[#6b4069] transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500"></div>
               </Link>
-            )) : (
+              );
+            }) : (
               /* Fallback hardcoded collections - Intenties, Sterrenbeeld, Elementen */
               <>
                 <Link href="/collections/intenties" className="group relative bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300">

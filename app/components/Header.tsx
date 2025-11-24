@@ -53,11 +53,22 @@ const Header = memo(function Header() {
       try {
         // Add cache-busting parameter to force fresh data
         const response = await fetch('/api/categories?t=' + Date.now(), {
-          cache: 'no-store'
+          cache: 'no-store',
+          headers: {
+            'Content-Type': 'application/json',
+          },
         });
+
         if (response.ok) {
           const data = await response.json();
-          console.log('Fetched categories:', data.length, 'total');
+
+          // Validate data is an array
+          if (!Array.isArray(data)) {
+            console.error('[Header] Categories API returned non-array data:', typeof data);
+            throw new Error('Invalid categories data format');
+          }
+
+          console.log('[Header] Fetched categories:', data.length, 'total');
 
           // Store all categories (including subcategories)
           setAllCategories(data);
@@ -67,17 +78,26 @@ const Header = memo(function Header() {
             .filter((cat: any) => cat.parent === 0 && cat.slug !== 'uncategorized')
             .sort((a: any, b: any) => (b.count || 0) - (a.count || 0));
 
-          console.log('Main categories:', mainCategories.length, mainCategories.map((c: any) => c.name));
-          setCategories(mainCategories);
+          console.log('[Header] Main categories:', mainCategories.length, mainCategories.map((c: any) => c.name));
+
+          if (mainCategories.length > 0) {
+            setCategories(mainCategories);
+          } else {
+            console.warn('[Header] No main categories found, using fallback');
+            throw new Error('No main categories found');
+          }
+        } else {
+          console.error('[Header] Categories API response not OK:', response.status, response.statusText);
+          throw new Error('Categories API failed');
         }
       } catch (error) {
-        console.error('Failed to fetch categories for header:', error);
-        // Fallback categories
+        console.error('[Header] Failed to fetch categories, using fallback:', error);
+        // Fallback categories - keep these updated with your actual main categories
         setCategories([
-          { id: 1, name: 'Chakra Kristallen', slug: 'chakra' },
-          { id: 2, name: 'Bescherming', slug: 'bescherming' },
-          { id: 3, name: 'Liefde & Relaties', slug: 'liefde' },
-          { id: 4, name: 'Bestsellers', slug: 'bestsellers' }
+          { id: 20, name: 'Bestsellers', slug: 'bestsellers' },
+          { id: 595, name: 'Edelstenen en Mineralen', slug: 'edelstenen-mineralen' },
+          { id: 596, name: 'Edelsteen Sieraden', slug: 'edelsteen-sieraden' },
+          { id: 18, name: 'Chakra en meditatie', slug: 'chakru-edelstenen' }
         ]);
       }
     };
@@ -568,7 +588,10 @@ const Header = memo(function Header() {
                   <Link
                     href="/alle-producten"
                     className="block px-3 py-2 text-base font-light text-[#2D2D2D] hover:text-[#8B7355] transition-colors font-[family-name:var(--font-eb-garamond)]"
-                    onClick={() => setMobileMenuOpen(false)}
+                    onClick={() => {
+                      setMobileMenuOpen(false);
+                      setShopDropdownOpen(false);
+                    }}
                   >
                     Alle Producten
                   </Link>
@@ -577,7 +600,10 @@ const Header = memo(function Header() {
                       key={category.id}
                       href={category.slug === 'bestsellers' ? '/bestsellers' : `/alle-producten?category=${category.slug}`}
                       className="block px-3 py-2 text-base font-light text-[#2D2D2D] hover:text-[#8B7355] transition-colors font-[family-name:var(--font-eb-garamond)]"
-                      onClick={() => setMobileMenuOpen(false)}
+                      onClick={() => {
+                        setMobileMenuOpen(false);
+                        setShopDropdownOpen(false);
+                      }}
                     >
                       {decodeHtmlEntities(category.name)}
                     </Link>
@@ -607,14 +633,20 @@ const Header = memo(function Header() {
                   <Link
                     href="/contact"
                     className="block px-3 py-2 text-base font-light text-[#2D2D2D] hover:text-[#8B7355] transition-colors font-[family-name:var(--font-eb-garamond)]"
-                    onClick={() => setMobileMenuOpen(false)}
+                    onClick={() => {
+                      setMobileMenuOpen(false);
+                      setHelpDropdownOpen(false);
+                    }}
                   >
                     Contact
                   </Link>
                   <Link
                     href="/volg-je-bestelling"
                     className="block px-3 py-2 text-base font-light text-[#2D2D2D] hover:text-[#8B7355] transition-colors font-[family-name:var(--font-eb-garamond)]"
-                    onClick={() => setMobileMenuOpen(false)}
+                    onClick={() => {
+                      setMobileMenuOpen(false);
+                      setHelpDropdownOpen(false);
+                    }}
                   >
                     Volg je bestelling
                   </Link>
