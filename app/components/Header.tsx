@@ -37,6 +37,7 @@ const Header = memo(function Header() {
   const [hoveredSubcategory, setHoveredSubcategory] = useState<any>(null);
   const [categoryProducts, setCategoryProducts] = useState<any[]>([]);
   const [loadingProducts, setLoadingProducts] = useState(false);
+  const [expandedMobileCategories, setExpandedMobileCategories] = useState<number[]>([]); // Track which mobile categories are expanded
   const { setIsCartOpen, getTotalItems } = useCart();
   const pathname = usePathname();
 
@@ -50,6 +51,7 @@ const Header = memo(function Header() {
     setMobileMenuOpen(false);
     setShopDropdownOpen(false);
     setHelpDropdownOpen(false);
+    setExpandedMobileCategories([]);
   }, [pathname]);
 
   const toggleCart = () => {
@@ -164,6 +166,15 @@ const Header = memo(function Header() {
   const handleSubcategoryHover = (subcategory: any) => {
     setHoveredSubcategory(subcategory);
     fetchCategoryProducts(subcategory);
+  };
+
+  // Toggle mobile category expansion
+  const toggleMobileCategory = (categoryId: number) => {
+    setExpandedMobileCategories(prev =>
+      prev.includes(categoryId)
+        ? prev.filter(id => id !== categoryId)
+        : [...prev, categoryId]
+    );
   };
 
   // Close dropdowns when clicking outside
@@ -595,7 +606,7 @@ const Header = memo(function Header() {
       {mobileMenuOpen && (
         <div data-mobile-menu className="lg:hidden bg-white border-t border-gray-100">
           <div className="space-y-1 px-4 pb-3 pt-2">
-            {/* Shop with dropdown */}
+            {/* Shop with dropdown and accordion */}
             <div>
               <button
                 onClick={() => setShopDropdownOpen(!shopDropdownOpen)}
@@ -612,32 +623,81 @@ const Header = memo(function Header() {
                 </svg>
               </button>
               {shopDropdownOpen && (
-                <div className="pl-8 space-y-1 mt-1" data-mobile-category-links>
+                <div className="pl-4 space-y-1 mt-1" data-mobile-category-links>
+                  {/* Alle Producten Link */}
                   <Link
                     href="/alle-producten"
                     className="block px-3 py-2 text-base font-light text-[#2D2D2D] hover:text-[#8B7355] transition-colors font-[family-name:var(--font-eb-garamond)]"
                     onClick={() => {
-                      // Close menu immediately for better UX
                       setMobileMenuOpen(false);
                       setShopDropdownOpen(false);
                     }}
                   >
                     Alle Producten
                   </Link>
-                  {categories.map((category) => (
-                    <Link
-                      key={category.id}
-                      href={category.slug === 'bestsellers' ? '/bestsellers' : `/alle-producten?category=${category.slug}`}
-                      className="block px-3 py-2 text-base font-light text-[#2D2D2D] hover:text-[#8B7355] transition-colors font-[family-name:var(--font-eb-garamond)]"
-                      onClick={() => {
-                        // Close menu immediately for better UX
-                        setMobileMenuOpen(false);
-                        setShopDropdownOpen(false);
-                      }}
-                    >
-                      {decodeHtmlEntities(category.name)}
-                    </Link>
-                  ))}
+
+                  {/* Categories with Accordion */}
+                  {categories.map((category) => {
+                    const subcategories = getSubcategories(category.id);
+                    const isExpanded = expandedMobileCategories.includes(category.id);
+                    const hasSubcategories = subcategories.length > 0;
+
+                    return (
+                      <div key={category.id} className="border-l-2 border-gray-200">
+                        {hasSubcategories ? (
+                          // Category with subcategories - Accordion
+                          <div>
+                            <button
+                              onClick={() => toggleMobileCategory(category.id)}
+                              className="w-full flex items-center justify-between px-3 py-2 text-base font-light text-[#2D2D2D] hover:text-[#8B7355] transition-colors font-[family-name:var(--font-eb-garamond)]"
+                            >
+                              <span className="font-medium">{decodeHtmlEntities(category.name)}</span>
+                              <svg
+                                className={`w-4 h-4 transition-transform flex-shrink-0 ${isExpanded ? 'rotate-180' : ''}`}
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                              >
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                              </svg>
+                            </button>
+
+                            {/* Subcategories - Show when expanded */}
+                            {isExpanded && (
+                              <div className="pl-4 space-y-1 bg-gray-50/50 py-1">
+                                {subcategories.map((subcat) => (
+                                  <Link
+                                    key={subcat.id}
+                                    href={`/alle-producten?category=${subcat.slug}`}
+                                    className="block px-3 py-2 text-sm font-light text-[#2D2D2D] hover:text-[#8B7355] transition-colors font-[family-name:var(--font-eb-garamond)]"
+                                    onClick={() => {
+                                      setMobileMenuOpen(false);
+                                      setShopDropdownOpen(false);
+                                      setExpandedMobileCategories([]);
+                                    }}
+                                  >
+                                    • {decodeHtmlEntities(subcat.name)}
+                                  </Link>
+                                ))}
+                              </div>
+                            )}
+                          </div>
+                        ) : (
+                          // Category without subcategories - Direct link
+                          <Link
+                            href={category.slug === 'bestsellers' ? '/bestsellers' : `/alle-producten?category=${category.slug}`}
+                            className="block px-3 py-2 text-base font-light text-[#2D2D2D] hover:text-[#8B7355] transition-colors font-[family-name:var(--font-eb-garamond)]"
+                            onClick={() => {
+                              setMobileMenuOpen(false);
+                              setShopDropdownOpen(false);
+                            }}
+                          >
+                            {decodeHtmlEntities(category.name)}
+                          </Link>
+                        )}
+                      </div>
+                    );
+                  })}
                 </div>
               )}
             </div>
