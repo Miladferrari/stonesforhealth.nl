@@ -168,12 +168,12 @@ const Header = memo(function Header() {
     fetchCategoryProducts(subcategory);
   };
 
-  // Toggle mobile category expansion
+  // Toggle mobile category expansion (only one can be open at a time)
   const toggleMobileCategory = (categoryId: number) => {
     setExpandedMobileCategories(prev =>
       prev.includes(categoryId)
-        ? prev.filter(id => id !== categoryId)
-        : [...prev, categoryId]
+        ? [] // Close if clicking on already open category
+        : [categoryId] // Open clicked category and close others
     );
   };
 
@@ -211,11 +211,13 @@ const Header = memo(function Header() {
         setMobileMenuOpen(false);
       }
 
-      // Check if click is outside helpcentrum dropdown
+      // Check if click is outside helpcentrum dropdown (desktop ONLY)
       const helpDropdown = document.querySelector('[data-help-dropdown]');
       const helpButton = document.querySelector('[data-help-button]');
 
+      // Only close desktop help dropdown on desktop screens
       if (helpDropdownOpen &&
+          isDesktop &&
           helpDropdown &&
           helpButton &&
           !helpDropdown.contains(target) &&
@@ -701,6 +703,15 @@ const Header = memo(function Header() {
                 </div>
               )}
             </div>
+
+            {/* Bestsellers Link */}
+            <Link
+              href="/bestsellers"
+              className="block px-3 py-2 text-base font-light text-[#2D2D2D] hover:text-[#8B7355] transition-colors font-[family-name:var(--font-eb-garamond)]"
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              Bestsellers
+            </Link>
 
             {/* Helpcentrum with dropdown */}
             <div>
