@@ -1,9 +1,6 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  // Turbopack configuration (Next.js 16+ default)
-  turbopack: {},
-
   // Webpack configuration to handle react-pdf
   webpack: (config, { isServer }) => {
     // Exclude react-pdf from server-side builds to prevent module issues
