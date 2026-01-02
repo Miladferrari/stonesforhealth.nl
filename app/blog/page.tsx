@@ -36,6 +36,26 @@ export const metadata: Metadata = {
 const sampleBlogs = [
   {
     id: 0,
+    title: 'Zaphir Shanti Chimes – Kwaliteit, Authenticiteit & Harmonie',
+    excerpt: 'Ontdek originele Zaphir Shanti Chimes bij Stonesforhealth.nl. Handgemaakt in Frankrijk, zuivere klank voor meditatie, yoga en sound healing. 100% authentiek.',
+    image: '/blog-images/Zaphir Shanti Chimes – Kwaliteit, Authenticiteit & Harmonie | Stonesforhealth.nl.jpeg',
+    category: 'Spiritualiteit',
+    date: '2 januari 2025',
+    readTime: '7 min leestijd',
+    slug: 'zaphir-shanti-chimes-kwaliteit-authenticiteit-harmonie'
+  },
+  {
+    id: 1,
+    title: 'Koshi Windgongs – Magische Klanken voor Rust, Yoga & Sound Healing',
+    excerpt: 'Ontdek de magische klanken van Koshi Windgongs. Handgemaakte chimes in 4 elementen: Terra, Aqua, Aria en Ignis. Perfect voor meditatie, yoga en sound healing.',
+    image: '/blog-images/Koshi Windgongs – Magische Klanken voor Rust, Yoga & Sound Healing.jpeg',
+    category: 'Spiritualiteit',
+    date: '2 januari 2025',
+    readTime: '6 min leestijd',
+    slug: 'koshi-windgongs-magische-klanken-rust-yoga-sound'
+  },
+  {
+    id: 2,
     title: 'Top 7 Edelstenen voor de Donkere Maanden van het Jaar',
     excerpt: 'Ontdek de 7 krachtigste edelstenen tegen winterdipjes. Van Zonnesteen voor levenslust tot Amethist voor rust. Natuurlijke ondersteuning tijdens herfst en winter.',
     image: '/blog-images/Top 7 Edelstenen voor de Donkere Maanden van het Jaar.jpeg',
