@@ -1,17 +1,17 @@
-import { NextResponse } from 'next/server'
-import type { NextRequest } from 'next/server'
+import { NextResponse } from "next/server";
+import type { NextRequest } from "next/server";
 
 export function middleware(request: NextRequest) {
-  // Allow all static assets to pass through
+  // Allow all static assets to pass throughik
   if (
-    request.nextUrl.pathname.startsWith('/images/') ||
-    request.nextUrl.pathname.startsWith('/_next/') ||
-    request.nextUrl.pathname.includes('.') // This catches all files with extensions
+    request.nextUrl.pathname.startsWith("/images/") ||
+    request.nextUrl.pathname.startsWith("/_next/") ||
+    request.nextUrl.pathname.includes(".") // This catches all files with extensions
   ) {
-    return NextResponse.next()
+    return NextResponse.next();
   }
 
-  return NextResponse.next()
+  return NextResponse.next();
 }
 
 export const config = {
@@ -23,6 +23,6 @@ export const config = {
      * - _next/image (image optimization files)
      * - favicon.ico (favicon file)
      */
-    '/((?!api|_next/static|_next/image|favicon.ico).*)',
+    "/((?!api|_next/static|_next/image|favicon.ico).*)",
   ],
-}
+};

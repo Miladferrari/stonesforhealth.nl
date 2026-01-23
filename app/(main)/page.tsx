@@ -1,4 +1,4 @@
-import { Category, woocommerce } from '@/lib/woocommerce';
+import { Category } from '@/lib/woocommerce';
 import dynamicImport from 'next/dynamic';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -30,11 +30,20 @@ export const metadata: Metadata = {
     siteName: 'Stones for Health',
     locale: 'nl_NL',
     type: 'website',
+    images: [
+      {
+        url: '/logo.png',
+        width: 1024,
+        height: 1024,
+        alt: 'Stones for Health - Edelstenen & Kristallen Webshop',
+      },
+    ],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Edelstenen & Kristallen Kopen | StonesForHealth',
     description: 'Koop authentieke en ethisch gewonnen edelstenen en kristallen.',
+    images: ['/logo.png'],
   },
   alternates: {
     canonical: 'https://stonesforhealth.nl',
@@ -42,77 +51,39 @@ export const metadata: Metadata = {
 };
 
 export default async function Home() {
-  let featuredProducts: any[] = [];
-  let categories: Category[] = [];
-  let categoryPrices: Record<number, number> = {};
-  let apiError = false;
-
-  // Fetch categories from WooCommerce
-  try {
-    const fetchedCategories = await woocommerce.getCategories({ per_page: 100, hide_empty: true });
-
-    // Validate fetched categories
-    if (!Array.isArray(fetchedCategories) || fetchedCategories.length === 0) {
-      console.warn('[Homepage] No categories fetched from WooCommerce, using fallback');
-      throw new Error('No categories returned from WooCommerce');
+  // Use static fallback data - no API calls to prevent hanging
+  const categories: Category[] = [
+    {
+      id: 1,
+      name: 'Intenties',
+      slug: 'intenties',
+      parent: 597,
+      description: 'Shop op basis van jouw intentie - liefde, bescherming, geluk, rust en meer',
+      display: 'default',
+      image: { id: 1, src: '/intenties.png', alt: 'Intenties' },
+      count: 238
+    },
+    {
+      id: 2,
+      name: 'Sterrenbeeld',
+      slug: 'stenen-per-sterrenbeeld',
+      parent: 595,
+      description: 'Ontdek de perfecte kristallen voor jouw sterrenbeeld',
+      display: 'default',
+      image: { id: 2, src: '/sterrenbeeld.png', alt: 'Sterrenbeeld' },
+      count: 189
+    },
+    {
+      id: 3,
+      name: 'Elementen',
+      slug: 'elementen',
+      parent: 597,
+      description: 'Breng balans met de 5 elementen - aarde, water, vuur, lucht en ether',
+      display: 'default',
+      image: { id: 3, src: '/elementen.png', alt: 'Elementen' },
+      count: 213
     }
-
-    // Filter for the 3 specific categories we want to display
-    const desiredCategories = ['intenties', 'stenen-per-sterrenbeeld', 'elementen'];
-    categories = fetchedCategories.filter(cat =>
-      desiredCategories.includes(cat.slug.toLowerCase())
-    );
-
-    // Sort in specific order: Intenties, Stenen per Sterrenbeeld, Elementen
-    categories = categories.sort((a, b) => {
-      const orderA = desiredCategories.indexOf(a.slug.toLowerCase());
-      const orderB = desiredCategories.indexOf(b.slug.toLowerCase());
-      return orderA - orderB;
-    });
-
-    console.log('[Homepage] Successfully loaded categories:', categories.map(c => ({ name: c.name, slug: c.slug, count: c.count })));
-
-    // If we didn't find all 3 desired categories, log a warning but continue
-    if (categories.length < 3) {
-      console.warn('[Homepage] Only found', categories.length, 'out of 3 desired categories');
-    }
-
-  } catch (error) {
-    console.error('[Homepage] Failed to fetch categories from WooCommerce, using fallback:', error);
-    // Fallback categories if API fails
-    categories = [
-      {
-        id: 1,
-        name: 'Intenties',
-        slug: 'intenties',
-        parent: 597,
-        description: 'Shop op basis van jouw intentie - liefde, bescherming, geluk, rust en meer',
-        display: 'default',
-        image: { id: 1, src: '/intenties.png', alt: 'Intenties' },
-        count: 238
-      },
-      {
-        id: 2,
-        name: 'Sterrenbeeld',
-        slug: 'stenen-per-sterrenbeeld',
-        parent: 595,
-        description: 'Ontdek de perfecte kristallen voor jouw sterrenbeeld',
-        display: 'default',
-        image: { id: 2, src: '/sterrenbeeld.png', alt: 'Sterrenbeeld' },
-        count: 189
-      },
-      {
-        id: 3,
-        name: 'Elementen',
-        slug: 'elementen',
-        parent: 597,
-        description: 'Breng balans met de 5 elementen - aarde, water, vuur, lucht en ether',
-        display: 'default',
-        image: { id: 3, src: '/elementen.png', alt: 'Elementen' },
-        count: 213
-      }
-    ];
-  }
+  ];
 
   const organizationSchema = {
     "@context": "https://schema.org",
@@ -224,6 +195,7 @@ export default async function Home() {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
                   </svg>
                 </Link>
+{/* Kristal quiz button - hidden
                 <Link
                   href="/quiz"
                   className="inline-flex items-center justify-center gap-2 bg-white hover:bg-gray-50 text-[#3b223b] px-8 py-4 rounded-full text-lg font-medium transition-all duration-200 border border-[#3b223b]/20 font-[family-name:var(--font-eb-garamond)]"
@@ -233,6 +205,7 @@ export default async function Home() {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
                   </svg>
                 </Link>
+                */}
               </div>
 
               {/* Reviews - Desktop only */}

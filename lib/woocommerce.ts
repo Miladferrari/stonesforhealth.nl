@@ -46,6 +46,17 @@ export interface Product {
     options: string[];
   }>;
   variations?: number[];
+  date_modified?: string;
+  sku?: string;
+  average_rating?: string;
+  rating_count?: number;
+  // Yoast SEO data (added via WordPress filter)
+  yoast_seo?: {
+    title: string;
+    meta_description: string;
+    focus_keyword?: string;
+    canonical_url: string;
+  };
 }
 
 export interface ProductVariation {

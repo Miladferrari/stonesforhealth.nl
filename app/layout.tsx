@@ -41,6 +41,22 @@ export const metadata: Metadata = {
     title: 'Stonesforhealth - Natuurlijke Kristallen & Edelstenen',
     description: 'Ontdek de helende kracht van natuurlijke kristallen',
     type: 'website',
+    locale: 'nl_NL',
+    siteName: 'Stones for Health',
+    images: [
+      {
+        url: '/logo.png',
+        width: 1024,
+        height: 1024,
+        alt: 'Stones for Health - Edelstenen & Kristallen',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Stonesforhealth - Natuurlijke Kristallen & Edelstenen',
+    description: 'Ontdek de helende kracht van natuurlijke kristallen en edelstenen',
+    images: ['/logo.png'],
   },
   robots: {
     index: true,
@@ -61,7 +77,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="nl">
       <head>
         <meta name="google-site-verification" content="1gGu2xZkDqKZC-kIMouHLY3JaRSVznzVzzBk2vodwro" />
         <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />

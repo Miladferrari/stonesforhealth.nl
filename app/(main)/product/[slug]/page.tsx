@@ -41,23 +41,50 @@ export async function generateMetadata({ params }: ProductPageProps): Promise<Me
       };
     }
 
-    // Strip HTML from description
-    const cleanDescription = product.short_description
+    // Use Yoast SEO data if available, otherwise use product data as fallback
+    const fallbackDescription = product.short_description
       ?.replace(/<[^>]*>/g, '')
       .substring(0, 160) || product.name;
 
+    const seoTitle = product.yoast_seo?.title || `${product.name} | Authentieke Edelstenen | StonesForHealth`;
+    const seoDescription = product.yoast_seo?.meta_description || fallbackDescription;
+    const canonicalUrl = product.yoast_seo?.canonical_url || `https://www.stonesforhealth.nl/product/${product.slug}`;
+    const productImage = product.images?.[0]?.src || '/logo.png';
+
+    // Build keywords from Yoast focus keyword + categories
+    const categoryKeywords = product.categories?.map(c => c.name).join(', ') || '';
+    const keywords = product.yoast_seo?.focus_keyword
+      ? `${product.yoast_seo.focus_keyword}, ${product.name}, edelstenen kopen, ${categoryKeywords}`
+      : `${product.name}, edelstenen kopen, kristallen, ${categoryKeywords}`;
+
     return {
-      title: `${product.name} | Authentieke Edelstenen | StonesForHealth`,
-      description: cleanDescription,
-      keywords: `${product.name}, edelstenen kopen, kristallen, ${product.categories?.map(c => c.name).join(', ')}`,
+      title: seoTitle,
+      description: seoDescription,
+      keywords: keywords,
       openGraph: {
-        title: product.name,
-        description: cleanDescription,
-        images: product.images?.[0]?.src ? [product.images[0].src] : [],
+        title: seoTitle,
+        description: seoDescription,
+        url: canonicalUrl,
+        siteName: 'Stones for Health',
+        locale: 'nl_NL',
         type: 'website',
+        images: [
+          {
+            url: productImage,
+            width: 800,
+            height: 800,
+            alt: product.name,
+          },
+        ],
+      },
+      twitter: {
+        card: 'summary_large_image',
+        title: seoTitle,
+        description: seoDescription,
+        images: [productImage],
       },
       alternates: {
-        canonical: `https://stonesforhealth.nl/product/${product.slug}`
+        canonical: canonicalUrl
       }
     };
   } catch (error) {
