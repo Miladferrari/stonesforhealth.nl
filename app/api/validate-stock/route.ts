@@ -18,7 +18,7 @@ export async function POST(request: NextRequest) {
     const stockIssues = [];
     
     for (const item of items) {
-      const product = await woocommerce.getProduct(item.product.id);
+      const product = await woocommerce.getProduct(item.product.id, { fresh: true });
       
       // Check if product is out of stock
       if (product.stock_status !== 'instock' || product.stock_quantity === 0) {
