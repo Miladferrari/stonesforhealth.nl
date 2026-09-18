@@ -360,7 +360,7 @@ async function sendOrderEmails(orderId: string): Promise<void> {
         console.error('[Email] Failed to send owner email:', error);
       }
     } else {
-      console.warn('[Email] Skipping emails - Mailgun not configured');
+      console.warn('[Email] Skipping emails - Resend not configured');
     }
 
   } catch (error) {
