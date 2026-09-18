@@ -32,6 +32,11 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       {
         protocol: 'https',
+        hostname: 'admin.stonesforhealth.nl',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
         hostname: 'wordpress.stonesforhealth.nl',
         pathname: '/**',
       },
