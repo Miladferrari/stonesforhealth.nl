@@ -19,6 +19,11 @@ function generateRecoveryToken(): string {
 }
 
 export async function POST(request: NextRequest) {
+  // Abandoned cart needs its own MySQL database; without it this feature is simply off
+  if (!process.env.DB_HOST) {
+    return NextResponse.json({ success: false, disabled: true });
+  }
+
   try {
     const body = await request.json();
     const { email, name, cartItems, cartTotal, sessionId } = body;
@@ -121,6 +126,11 @@ export async function POST(request: NextRequest) {
 
 // Mark cart as recovered (when order is completed)
 export async function PATCH(request: NextRequest) {
+  // Abandoned cart needs its own MySQL database; without it this feature is simply off
+  if (!process.env.DB_HOST) {
+    return NextResponse.json({ success: false, disabled: true });
+  }
+
   try {
     const body = await request.json();
     const { email, orderId } = body;

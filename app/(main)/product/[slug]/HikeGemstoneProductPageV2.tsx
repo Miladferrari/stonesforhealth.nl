@@ -1028,7 +1028,7 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
               {/* Tax and shipping info */}
               <p className="text-sm text-gray-600 font-[family-name:var(--font-eb-garamond)] mb-2">
                 Inclusief BTW.
-                <Link href="/policies/shipping-policy" className="underline hover:text-gray-800 ml-1">
+                <Link href="/verzending" className="underline hover:text-gray-800 ml-1">
                   Verzendkosten berekend
                 </Link> bij checkout.
               </p>

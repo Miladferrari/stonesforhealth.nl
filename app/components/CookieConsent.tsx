@@ -95,7 +95,7 @@ export default function CookieConsent() {
           verkeer te analyseren en advertenties te personaliseren. Door op "Accepteren" te klikken,
           stem je in met het gebruik van deze cookies. Je kunt je keuze op elk moment aanpassen.{' '}
           <a
-            href="/privacy-policy"
+            href="/privacy"
             style={{ color: '#10b981', textDecoration: 'underline' }}
           >
             Meer informatie

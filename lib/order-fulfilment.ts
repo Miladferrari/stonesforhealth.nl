@@ -1,6 +1,4 @@
 import type Stripe from 'stripe';
-import { addNotification } from '@/app/utils/purchaseNotificationCache';
-import { markOrderAsSuccessful } from '@/app/utils/failedOrderCache';
 import { sendMail, isMailConfigured, ADMIN_EMAIL } from '@/lib/mail';
 import { woocommerce } from '@/lib/woocommerce';
 import { verifyPaymentForOrder } from '@/lib/order-security';
@@ -352,66 +350,6 @@ export async function sendOrderEmails(orderId: string): Promise<void> {
   }
 }
 
-/**
- * Haalt order details op van WooCommerce en maakt een purchase notification
- * @param orderId - The WooCommerce order ID
- */
-export async function createPurchaseNotification(orderId: string): Promise<void> {
-  try {
-    // Check if WooCommerce is configured
-    if (!WC_URL || !WC_CONSUMER_KEY || !WC_CONSUMER_SECRET) {
-      console.error('[Notification] WooCommerce API not configured properly');
-      return;
-    }
-
-    // Haal order details op van WooCommerce
-    const endpoint = `${WC_URL}/orders/${orderId}`;
-    const response = await fetch(endpoint, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Basic ' + Buffer.from(`${WC_CONSUMER_KEY}:${WC_CONSUMER_SECRET}`).toString('base64'),
-      },
-    });
-
-    if (!response.ok) {
-      console.error(`[Notification] Failed to fetch order ${orderId}: ${response.status}`);
-      return;
-    }
-
-    const order = await response.json();
-
-    // Haal klantnaam op (alleen voornaam)
-    const customerName = order.billing?.first_name || 'Een klant';
-
-    // Haal eerste product op (of meerdere producten samenvatten)
-    let productName = 'een product';
-    if (order.line_items && order.line_items.length > 0) {
-      if (order.line_items.length === 1) {
-        // Eén product
-        productName = order.line_items[0].name;
-      } else {
-        // Meerdere producten - toon eerste product + aantal extra
-        const firstProduct = order.line_items[0].name;
-        const extraCount = order.line_items.length - 1;
-        productName = `${firstProduct} + ${extraCount} andere`;
-      }
-    }
-
-    // Maak de notificatie
-    await addNotification({
-      orderId: parseInt(orderId, 10),
-      customerName,
-      productName,
-    });
-
-    console.log(`[Notification] Created purchase notification for order ${orderId}`);
-  } catch (error) {
-    console.error(`[Notification] Failed to create notification for order ${orderId}:`, error);
-    // Don't throw - we don't want to fail the webhook if notification creation fails
-  }
-}
-
 export type FulfilResult = 'fulfilled' | 'already-fulfilled' | 'rejected' | 'update-failed';
 
 /**
@@ -440,17 +378,11 @@ export async function fulfilPaidOrder(paymentIntent: Stripe.PaymentIntent, order
     return 'already-fulfilled';
   }
 
-  // Verwijder uit failed orders lijst (als de klant alsnog heeft betaald)
-  await markOrderAsSuccessful(orderId);
-
   // Update order status to processing (payment successful, awaiting fulfillment)
   const updated = await updateOrderStatus(orderId, 'processing', paymentIntent.id);
   if (!updated) {
     return 'update-failed';
   }
-
-  // Maak purchase notification voor real-time display
-  await createPurchaseNotification(orderId);
 
   // Verstuur order emails naar klant en shop eigenaar
   await sendOrderEmails(orderId);
