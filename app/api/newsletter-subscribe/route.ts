@@ -1,15 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { woocommerce } from '@/lib/woocommerce';
-import { Resend } from 'resend';
+import { sendMail } from '@/lib/mail';
 import { WelcomeDiscountEmail } from '@/app/emails/WelcomeDiscount';
-
-// Lazy initialize Resend to avoid build-time errors
-function getResend() {
-  if (!process.env.RESEND_API_KEY) {
-    throw new Error('RESEND_API_KEY is not configured');
-  }
-  return new Resend(process.env.RESEND_API_KEY);
-}
 
 // Functie om unieke kortingscode te genereren
 function generateCouponCode(): string {
@@ -82,9 +74,7 @@ export async function POST(request: NextRequest) {
         expiryDate: expiryDate,
       });
 
-      const resend = getResend();
-      await resend.emails.send({
-        from: 'Stones for Health <noreply@stonesforhealth.nl>',
+      await sendMail({
         to: email,
         subject: '🎉 Jouw €10 Kortingscode is Klaar!',
         html: emailHtml,

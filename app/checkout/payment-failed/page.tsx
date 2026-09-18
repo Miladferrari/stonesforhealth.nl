@@ -25,7 +25,7 @@ function PaymentFailedContent() {
       }
     } else if (orderId) {
       // Try to fetch order details
-      fetchOrderDetails(orderId);
+      fetchOrderDetails(orderId, searchParams?.get('key') || '');
     }
 
     setLoading(false);
@@ -41,9 +41,9 @@ function PaymentFailedContent() {
     }
   }, [retryCountdown]);
 
-  const fetchOrderDetails = async (orderId: string) => {
+  const fetchOrderDetails = async (orderId: string, orderKey: string) => {
     try {
-      const response = await fetch(`/api/check-order?orderId=${orderId}`);
+      const response = await fetch(`/api/check-order?orderId=${orderId}&key=${orderKey}`);
       if (response.ok) {
         const data = await response.json();
         setOrderDetails(data);

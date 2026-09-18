@@ -1,17 +1,45 @@
 import { NextRequest, NextResponse } from 'next/server';
 import Stripe from 'stripe';
+import { getOrderWithKey, orderTotalInCents } from '@/lib/order-security';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || '', {
   apiVersion: '2023-10-16' as Stripe.LatestApiVersion,
 });
 
+// Orders in these statuses are still awaiting payment
+const PAYABLE_STATUSES = ['pending', 'failed'];
+
 export async function POST(request: NextRequest) {
   try {
-    const { amount, currency = 'eur', paymentMethod, orderId, customerEmail } = await request.json();
+    const { paymentMethod, orderId, orderKey } = await request.json();
 
-    if (!amount || !paymentMethod || !orderId) {
+    if (!paymentMethod || !orderId || !orderKey) {
       return NextResponse.json(
         { error: 'Missing required fields' },
+        { status: 400 }
+      );
+    }
+
+    // The amount is never taken from the client: the WooCommerce order is the source of truth
+    const order = await getOrderWithKey(orderId, orderKey);
+    if (!order) {
+      return NextResponse.json(
+        { error: 'Order not found' },
+        { status: 404 }
+      );
+    }
+
+    if (!PAYABLE_STATUSES.includes(order.status)) {
+      return NextResponse.json(
+        { error: 'Deze bestelling kan niet (meer) betaald worden' },
+        { status: 409 }
+      );
+    }
+
+    const amount = orderTotalInCents(order);
+    if (!amount || amount <= 0) {
+      return NextResponse.json(
+        { error: 'Invalid order total' },
         { status: 400 }
       );
     }
@@ -26,14 +54,14 @@ export async function POST(request: NextRequest) {
       : ['card'];
 
     const paymentIntent = await stripe.paymentIntents.create({
-      amount: Math.round(amount * 100), // Convert to cents
-      currency,
+      amount,
+      currency: String(order.currency).toLowerCase(),
       payment_method_types: paymentMethodTypes,
       metadata: {
-        orderId: orderId.toString(),
+        orderId: order.id.toString(),
       },
-      receipt_email: customerEmail,
-      description: `Order #${orderId} - Stones for Health`,
+      receipt_email: order.billing?.email || undefined,
+      description: `Order #${order.id} - Stones for Health`,
     });
 
     return NextResponse.json({
@@ -44,7 +72,7 @@ export async function POST(request: NextRequest) {
   } catch (error: any) {
     console.error('Payment intent creation error:', error);
     return NextResponse.json(
-      { error: error.message || 'Failed to create payment intent' },
+      { error: 'Failed to create payment intent' },
       { status: 500 }
     );
   }

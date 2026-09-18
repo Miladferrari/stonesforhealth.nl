@@ -2,19 +2,12 @@ import { NextRequest, NextResponse } from 'next/server';
 import Stripe from 'stripe';
 import { addNotification } from '@/app/utils/purchaseNotificationCache';
 import { registerFailedOrder, markOrderAsSuccessful } from '@/app/utils/failedOrderCache';
-import { Resend } from 'resend';
+import { sendMail, isMailConfigured, ADMIN_EMAIL } from '@/lib/mail';
+import { woocommerce } from '@/lib/woocommerce';
+import { verifyPaymentForOrder } from '@/lib/order-security';
 import { OrderConfirmationEmail } from '@/app/emails/OrderConfirmation';
 import { NewOrderNotificationEmail } from '@/app/emails/NewOrderNotification';
 import { OrderRecoveryEmail } from '@/app/emails/OrderRecovery';
-
-// Lazy initialize Resend to avoid build-time errors
-function getResend() {
-  if (!process.env.RESEND_API_KEY) {
-    console.warn('[Email] RESEND_API_KEY not configured - emails will not be sent');
-    return null;
-  }
-  return new Resend(process.env.RESEND_API_KEY);
-}
 
 /**
  * Initialize Stripe with the secret key from environment variables
@@ -51,7 +44,7 @@ async function updateOrderStatus(
   orderId: string, 
   status: OrderStatus, 
   transactionId?: string
-): Promise<void> {
+): Promise<boolean> {
   try {
     // Prepare the update payload
     const updateData: any = {
@@ -107,6 +100,7 @@ async function updateOrderStatus(
     const updatedOrder = await response.json();
     console.log(`[Webhook] Successfully updated order ${orderId} to status: ${status}`);
     console.log(`[Webhook] Order update response:`, { id: updatedOrder.id, status: updatedOrder.status });
+    return true;
     
   } catch (error) {
     console.error(`[Webhook] Failed to update order ${orderId} status:`, error);
@@ -116,8 +110,8 @@ async function updateOrderStatus(
       wcUrl: WC_URL ? 'configured' : 'missing',
       credentials: WC_CONSUMER_KEY && WC_CONSUMER_SECRET ? 'configured' : 'missing'
     });
-    // Don't throw - we want to return 200 to Stripe even if WooCommerce update fails
-    // This prevents Stripe from retrying the webhook unnecessarily
+    // Don't throw - the caller decides whether Stripe should retry
+    return false;
   }
 }
 
@@ -282,8 +276,7 @@ async function sendOrderEmails(orderId: string): Promise<void> {
     const invoicePDF = await generateInvoicePDF(order);
 
     // Verstuur klant email
-    const resend = getResend();
-    if (resend) {
+    if (isMailConfigured()) {
       try {
         const customerEmailHtml = OrderConfirmationEmail({
           orderNumber: order.number.toString(),
@@ -302,7 +295,6 @@ async function sendOrderEmails(orderId: string): Promise<void> {
 
         // Prepare email payload
         const emailPayload: any = {
-          from: 'Stones for Health <noreply@stonesforhealth.nl>',
           to: order.billing.email,
           subject: `Bestelbevestiging #${order.number} - Stones for Health`,
           html: customerEmailHtml,
@@ -319,7 +311,7 @@ async function sendOrderEmails(orderId: string): Promise<void> {
           console.log('[Email] Invoice PDF attached to customer email');
         }
 
-        await resend.emails.send(emailPayload);
+        await sendMail(emailPayload);
 
         console.log(`[Email] Order confirmation sent to customer: ${order.billing.email}`);
       } catch (error) {
@@ -346,8 +338,7 @@ async function sendOrderEmails(orderId: string): Promise<void> {
 
         // Prepare owner email payload
         const ownerEmailPayload: any = {
-          from: 'Stones for Health <noreply@stonesforhealth.nl>',
-          to: 'info@stonesforhealth.nl',
+          to: ADMIN_EMAIL,
           subject: `🎉 Nieuwe Bestelling #${order.number} - stonesforhealth.nl`,
           html: ownerEmailHtml,
         };
@@ -362,14 +353,14 @@ async function sendOrderEmails(orderId: string): Promise<void> {
           ];
         }
 
-        await resend.emails.send(ownerEmailPayload);
+        await sendMail(ownerEmailPayload);
 
         console.log(`[Email] New order notification sent to shop owner`);
       } catch (error) {
         console.error('[Email] Failed to send owner email:', error);
       }
     } else {
-      console.warn('[Email] Skipping emails - Resend not configured');
+      console.warn('[Email] Skipping emails - Mailgun not configured');
     }
 
   } catch (error) {
@@ -496,15 +487,43 @@ export async function POST(request: NextRequest) {
         if (orderId) {
           console.log(`Processing successful payment for order ${orderId}`);
 
+          // Never trust the PaymentIntent alone: it must cover the full WooCommerce order total
+          const check = await verifyPaymentForOrder(paymentIntent, orderId);
+          if (!check.ok) {
+            console.error(`[Webhook] Payment rejected for order ${orderId}: ${check.reason}`);
+            if (check.order) {
+              await woocommerce.updateOrder(orderId, { status: 'on-hold' });
+              await woocommerce.createOrderNote(orderId, {
+                note: `Betaling NIET automatisch geaccepteerd. ${check.reason}. Controleer in Stripe voordat je verzendt.`,
+                customer_note: false,
+              });
+            }
+            break;
+          }
+
+          // Stripe can deliver the same event more than once: don't mail the customer twice
+          if (['processing', 'completed'].includes(check.order.status)) {
+            console.log(`[Webhook] Order ${orderId} is already ${check.order.status}, skipping`);
+            break;
+          }
+
           // Verwijder uit failed orders lijst (als de klant alsnog heeft betaald)
           await markOrderAsSuccessful(orderId);
 
           // Update order status to processing (payment successful, awaiting fulfillment)
-          await updateOrderStatus(
+          const updated = await updateOrderStatus(
             orderId,
             'processing',
             paymentIntent.id
           );
+
+          // A paid order must never silently stay pending: let Stripe retry the event
+          if (!updated) {
+            return NextResponse.json(
+              { error: 'Order update failed, please retry' },
+              { status: 500 }
+            );
+          }
 
           // Maak purchase notification voor real-time display
           await createPurchaseNotification(orderId);
@@ -527,6 +546,13 @@ export async function POST(request: NextRequest) {
 
         if (failedOrderId) {
           console.log(`Processing failed payment for order ${failedOrderId}`);
+
+          // A failed retry attempt must not downgrade an order that was paid through another attempt
+          const currentOrder = await woocommerce.getOrder(failedOrderId).catch(() => null);
+          if (!currentOrder?.id || !['pending', 'failed'].includes(currentOrder.status)) {
+            console.log(`[Webhook] Order ${failedOrderId} is not awaiting payment, ignoring failed attempt`);
+            break;
+          }
 
           // Update order status to failed
           await updateOrderStatus(
@@ -551,8 +577,7 @@ export async function POST(request: NextRequest) {
 
               if (customerEmail) {
                 // Stuur failed order email DIRECT
-                const resend = getResend();
-                if (resend) {
+                if (isMailConfigured()) {
                   const items = orderData.line_items.map((item: any) => ({
                     name: item.name,
                     quantity: item.quantity,
@@ -571,8 +596,7 @@ export async function POST(request: NextRequest) {
                     checkoutUrl,
                   });
 
-                  await resend.emails.send({
-                    from: 'Stones for Health <noreply@stonesforhealth.nl>',
+                  await sendMail({
                     to: customerEmail,
                     subject: '❌ Betaling mislukt - Probeer opnieuw | Stones for Health',
                     html: emailHtml,
@@ -601,14 +625,8 @@ export async function POST(request: NextRequest) {
         const chargeOrderId = charge.metadata.orderId || charge.metadata.order_id;
         
         if (chargeOrderId) {
+          // Order status is only set by payment_intent.succeeded, where the amount is verified
           console.log(`Charge succeeded for order ${chargeOrderId}`);
-          
-          // Update with charge ID (this provides additional payment reference)
-          await updateOrderStatus(
-            chargeOrderId,
-            'processing',
-            charge.id
-          );
         }
         break;
       }

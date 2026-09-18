@@ -421,8 +421,15 @@ export default function UnifiedCheckoutPage() {
             price: item.product.price
           })).sort((a: any, b: any) => a.id - b.id));
 
-          // Reuse order if cart items haven't changed
-          if (existingItemsHash === currentItemsHash) {
+          // Reuse order only if nothing about the checkout has changed
+          // The order in WooCommerce holds address, shipping and coupon too,
+          // so those must be unchanged as well or the customer would pay a stale total
+          const detailsUnchanged =
+            JSON.stringify(parsedOrderData.formData) === JSON.stringify(formData) &&
+            parsedOrderData.shippingMethodId === (shipping.selectedRate?.method_id || null) &&
+            parsedOrderData.couponCode === (appliedCoupon?.code || null);
+
+          if (existingItemsHash === currentItemsHash && detailsUnchanged && parsedOrderData.order_key) {
             shouldReuseOrder = true;
             order = parsedOrderData;
             console.log('Reusing existing order:', order.id);
@@ -474,6 +481,9 @@ export default function UnifiedCheckoutPage() {
         sessionStorage.setItem('pendingOrderId', order.id.toString());
         sessionStorage.setItem('orderData', JSON.stringify({
           id: order.id,
+          order_key: order.order_key,
+          shippingMethodId: shipping.selectedRate?.method_id || null,
+          couponCode: appliedCoupon?.code || null,
           total: order.total,
           currency: order.currency,
           items: items,
@@ -483,13 +493,12 @@ export default function UnifiedCheckoutPage() {
         // Update order data with new form data and totals
         sessionStorage.setItem('orderData', JSON.stringify({
           ...order,
-          formData: formData,
-          total: total.toFixed(2)
+          formData: formData
         }));
       }
 
       // Navigate to payment page
-      router.push(`/checkout/payment?orderId=${order.id}&total=${order.total || total.toFixed(2)}`);
+      router.push(`/checkout/payment?orderId=${order.id}&key=${order.order_key}&total=${order.total || total.toFixed(2)}`);
 
     } catch (error: any) {
       console.error('Checkout error:', error);

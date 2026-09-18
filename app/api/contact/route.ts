@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import nodemailer from 'nodemailer';
+import { sendMail, isMailConfigured, ADMIN_EMAIL } from '@/lib/mail';
 
 // Email validation regex
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -67,19 +67,8 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Create transporter with environment variables
-    const transporter = nodemailer.createTransport({
-      host: process.env.SMTP_HOST || 'smtp.gmail.com',
-      port: parseInt(process.env.SMTP_PORT || '587'),
-      secure: false, // true for 465, false for other ports
-      auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASSWORD,
-      },
-    });
-
     // Check if email credentials are configured
-    if (!process.env.EMAIL_USER || !process.env.EMAIL_PASSWORD) {
+    if (!isMailConfigured()) {
       console.error('Email credentials not configured');
       return NextResponse.json(
         { error: 'E-mail service is tijdelijk niet beschikbaar. Probeer het later opnieuw.' },
@@ -252,8 +241,7 @@ IP Adres: ${clientIp}
 
     // Email options
     const mailOptions = {
-      from: `"Stones for Health Contact" <${process.env.EMAIL_USER}>`,
-      to: process.env.CONTACT_EMAIL_TO || process.env.EMAIL_USER,
+      to: process.env.CONTACT_EMAIL_TO || ADMIN_EMAIL,
       replyTo: email,
       subject: subject || `Nieuw contact van ${name} - Stones for Health`,
       text: textContent,
@@ -261,7 +249,7 @@ IP Adres: ${clientIp}
     };
 
     // Send email
-    await transporter.sendMail(mailOptions);
+    await sendMail(mailOptions);
 
     // Send auto-reply to customer
     const autoReplyHtml = `
@@ -343,7 +331,6 @@ IP Adres: ${clientIp}
     `;
 
     const autoReplyOptions = {
-      from: `"Stones for Health" <${process.env.EMAIL_USER}>`,
       to: email,
       subject: 'Bevestiging: We hebben uw bericht ontvangen - Stones for Health',
       html: autoReplyHtml,
@@ -351,7 +338,7 @@ IP Adres: ${clientIp}
 
     // Send auto-reply
     try {
-      await transporter.sendMail(autoReplyOptions);
+      await sendMail(autoReplyOptions);
     } catch (autoReplyError) {
       console.error('Auto-reply failed:', autoReplyError);
       // Don't fail the main request if auto-reply fails

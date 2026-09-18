@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import mysql from 'mysql2/promise';
-import { Resend } from 'resend';
+import { sendMail } from '@/lib/mail';
 import { AbandonedCartEmail1 } from '@/app/emails/AbandonedCartEmail1';
 import { AbandonedCartEmail2 } from '@/app/emails/AbandonedCartEmail2';
 import { woocommerce } from '@/lib/woocommerce';
@@ -15,14 +15,6 @@ const dbConfig = {
   connectionLimit: 10,
   queueLimit: 0
 };
-
-// Initialize Resend
-function getResend() {
-  if (!process.env.RESEND_API_KEY) {
-    throw new Error('RESEND_API_KEY is not configured');
-  }
-  return new Resend(process.env.RESEND_API_KEY);
-}
 
 // Generate 5% discount coupon for abandoned cart
 async function createRecoveryCoupon(email: string): Promise<string> {
@@ -58,14 +50,13 @@ export async function GET(request: NextRequest) {
   try {
     // Verify cron secret to ensure only Vercel can call this
     const authHeader = request.headers.get('authorization');
-    if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
+    if (!process.env.CRON_SECRET || authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     console.log('[Abandoned Cart Cron] Starting abandoned cart check...');
 
     const connection = await mysql.createConnection(dbConfig);
-    const resend = getResend();
     const now = new Date();
 
     try {
@@ -134,12 +125,14 @@ export async function GET(request: NextRequest) {
           }
 
           // Send email
-          await resend.emails.send({
-            from: 'Stones for Health <noreply@stonesforhealth.nl>',
+          const sent = await sendMail({
             to: cart.customer_email,
             subject,
             html: emailHtml,
           });
+          if (!sent) {
+            throw new Error('Mail is not configured');
+          }
 
           // Update database
           await connection.execute(

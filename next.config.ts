@@ -36,11 +36,6 @@ const nextConfig: NextConfig = {
         pathname: '/**',
       },
       {
-        protocol: 'http',
-        hostname: 'wordpress.123noodboxen.nl',
-        pathname: '/**',
-      },
-      {
         protocol: 'https',
         hostname: 'upload.wikimedia.org',
         pathname: '/**',
@@ -89,9 +84,6 @@ const nextConfig: NextConfig = {
   // Strict mode for better error detection
   reactStrictMode: true,
 
-  // Generate static pages at build time when possible
-  // Only use standalone in production for deployment
-  output: process.env.NODE_ENV === 'production' ? 'standalone' : undefined,
 };
 
 export default nextConfig;
