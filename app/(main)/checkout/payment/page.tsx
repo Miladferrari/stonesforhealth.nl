@@ -130,7 +130,9 @@ function PaymentPageContent() {
     sessionStorage.removeItem('orderData');
 
     // Redirect to thank you page
-    router.push(`/thank-you?order=${orderId}&key=${orderKey}`);
+    // Pass the PaymentIntent along so the thank-you page can verify the payment server-side
+    const paymentIntentId = clientSecret?.split('_secret_')[0];
+    router.push(`/thank-you?order=${orderId}&key=${orderKey}${paymentIntentId ? `&payment_intent=${paymentIntentId}` : ''}`);
   };
 
   const handlePaymentError = (error: string) => {
