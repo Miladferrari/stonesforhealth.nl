@@ -13,6 +13,11 @@ const dbConfig = {
 };
 
 export async function GET(request: NextRequest) {
+  // Abandoned cart needs its own MySQL database; without it this feature is simply off
+  if (!process.env.DB_HOST) {
+    return NextResponse.json({ success: false, disabled: true });
+  }
+
   try {
     const searchParams = request.nextUrl.searchParams;
     const token = searchParams.get('token');

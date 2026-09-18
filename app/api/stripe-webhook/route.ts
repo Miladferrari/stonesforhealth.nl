@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
 import Stripe from 'stripe';
-import { registerFailedOrder } from '@/app/utils/failedOrderCache';
 import { sendMail, isMailConfigured } from '@/lib/mail';
 import { woocommerce } from '@/lib/woocommerce';
 import { fulfilPaidOrder, updateOrderStatus } from '@/lib/order-fulfilment';

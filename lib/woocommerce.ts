@@ -744,6 +744,14 @@ class WooCommerceAPI {
     return this.fetchAPI(`orders/${orderId}`, { useCache: false });
   }
 
+  async getRecentPaidOrders(limit: number = 5): Promise<any[]> {
+    const after = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
+    return this.fetchAPI<any[]>(
+      `orders?status=processing,completed&per_page=${limit}&orderby=date&order=desc&after=${encodeURIComponent(after)}`,
+      { useCache: false }
+    );
+  }
+
   async updateOrder(orderId: number | string, data: any): Promise<any> {
     return this.fetchAPI(`orders/${orderId}`, {
       method: "PUT",

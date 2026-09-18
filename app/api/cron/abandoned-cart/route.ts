@@ -54,6 +54,11 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
+    // Abandoned cart needs its own MySQL database; without it this feature is simply off
+    if (!process.env.DB_HOST) {
+      return NextResponse.json({ success: true, disabled: true, emailsSent: 0 });
+    }
+
     console.log('[Abandoned Cart Cron] Starting abandoned cart check...');
 
     const connection = await mysql.createConnection(dbConfig);
