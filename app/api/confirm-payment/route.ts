@@ -1,14 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server';
 import Stripe from 'stripe';
 import { getOrderWithKey } from '@/lib/order-security';
+import { fulfilPaidOrder } from '@/lib/order-fulfilment';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || '', {
   apiVersion: '2023-10-16' as Stripe.LatestApiVersion,
 });
 
 /**
- * Tells the thank-you page how the payment went.
- * This route is read-only: the order status itself is only changed by the Stripe webhook.
+ * Tells the thank-you page how the payment went and acts as a fallback for the webhook.
+ * The client cannot influence anything here: the payment is read from Stripe and must match the order.
  */
 export async function POST(request: NextRequest) {
   try {
@@ -41,6 +42,16 @@ export async function POST(request: NextRequest) {
     }
 
     if (paymentIntent.status === 'succeeded') {
+      // Normally the webhook has already done this. If it did not arrive (yet), finish the
+      // order here: the payment is verified against Stripe and the order total either way.
+      const result = await fulfilPaidOrder(paymentIntent, String(order.id));
+      if (result === 'rejected') {
+        return NextResponse.json(
+          { success: false, status: 'rejected', error: 'Payment does not match this order' },
+          { status: 400 }
+        );
+      }
+
       return NextResponse.json({
         success: true,
         status: 'succeeded',
