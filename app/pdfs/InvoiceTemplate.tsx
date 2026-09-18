@@ -259,7 +259,7 @@ const InvoiceTemplate: React.FC<InvoiceTemplateProps> = ({ data }) => {
             <Text style={styles.text}>{data.companyPostcode} {data.companyCity}</Text>
             <Text style={styles.text}>{data.companyCountry}</Text>
             <Text style={styles.text}>{data.companyEmail}</Text>
-            <Text style={styles.text}>{data.companyPhone}</Text>
+            {data.companyPhone ? <Text style={styles.text}>{data.companyPhone}</Text> : null}
             {data.companyKVK && <Text style={styles.text}>KVK: {data.companyKVK}</Text>}
             {data.companyVAT && <Text style={styles.text}>BTW: {data.companyVAT}</Text>}
           </View>
@@ -330,7 +330,7 @@ const InvoiceTemplate: React.FC<InvoiceTemplateProps> = ({ data }) => {
         {/* Totals Section */}
         <View style={styles.totalsSection}>
           <View style={styles.totalRow}>
-            <Text style={styles.totalLabel}>Subtotaal:</Text>
+            <Text style={styles.totalLabel}>Subtotaal (excl. btw):</Text>
             <Text style={styles.totalValue}>{formatCurrency(data.subtotal)}</Text>
           </View>
 
@@ -352,9 +352,9 @@ const InvoiceTemplate: React.FC<InvoiceTemplateProps> = ({ data }) => {
             </Text>
           </View>
 
-          {data.tax && data.tax > 0 && (
+          {data.tax !== undefined && data.tax > 0 && (
             <View style={styles.totalRow}>
-              <Text style={styles.totalLabel}>BTW (21%):</Text>
+              <Text style={styles.totalLabel}>BTW 21%:</Text>
               <Text style={styles.totalValue}>{formatCurrency(data.tax)}</Text>
             </View>
           )}
@@ -387,7 +387,7 @@ const InvoiceTemplate: React.FC<InvoiceTemplateProps> = ({ data }) => {
         <View style={styles.footer}>
           <Text>Bedankt voor uw bestelling bij {data.companyName}!</Text>
           <Text>
-            Voor vragen kunt u contact met ons opnemen via {data.companyEmail} of {data.companyPhone}
+            Voor vragen kunt u contact met ons opnemen via {data.companyEmail}{data.companyPhone ? ` of ${data.companyPhone}` : ''}
           </Text>
           <Text style={{ marginTop: 5 }}>
             Deze factuur is automatisch gegenereerd en geldig zonder handtekening.

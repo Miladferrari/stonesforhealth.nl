@@ -44,6 +44,11 @@ export async function POST(request: NextRequest) {
     if (paymentIntent.status === 'succeeded') {
       // Normally the webhook has already done this. If it did not arrive (yet), finish the
       // order here: the payment is verified against Stripe and the order total either way.
+      // Give the webhook a head start so the order is not handled (and mailed) twice.
+      if (['pending', 'failed'].includes(order.status)) {
+        await new Promise((resolve) => setTimeout(resolve, 5000));
+      }
+
       const result = await fulfilPaidOrder(paymentIntent, String(order.id));
       if (result === 'rejected') {
         return NextResponse.json(

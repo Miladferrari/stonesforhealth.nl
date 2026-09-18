@@ -116,16 +116,16 @@ export async function generateInvoicePDF(order: any): Promise<Buffer | null> {
       invoiceDate: new Date().toLocaleDateString('nl-NL'),
       orderDate: new Date(order.date_created).toLocaleDateString('nl-NL'),
 
-      companyName: 'Stones for Health',
-      companyAddress: 'Adres van je bedrijf', // TODO: Update
-      companyPostcode: '1234 AB', // TODO: Update
-      companyCity: 'Amsterdam', // TODO: Update
+      companyName: 'Art-of-Stones B.V. (Stones for Health)',
+      companyAddress: 'Koperhoek 54',
+      companyPostcode: '3162LA',
+      companyCity: 'Rhoon',
       companyCountry: 'Nederland',
-      companyEmail: 'info@stonesforhealth.nl',
-      companyPhone: '+31 (0)6 12345678', // TODO: Update
-      companyKVK: '12345678', // TODO: Update
-      companyVAT: 'NL123456789B01', // TODO: Update
-      companyIBAN: 'NL12 ABCD 0123 4567 89', // TODO: Update
+      companyEmail: ADMIN_EMAIL,
+      companyPhone: process.env.COMPANY_PHONE || '',
+      companyKVK: '95898476',
+      // Required on a Dutch invoice: set COMPANY_VAT_NUMBER (NL…B01) in the environment
+      companyVAT: process.env.COMPANY_VAT_NUMBER || '',
 
       customerName: `${order.billing.first_name} ${order.billing.last_name}`,
       customerEmail: order.billing.email,
@@ -148,12 +148,13 @@ export async function generateInvoicePDF(order: any): Promise<Buffer | null> {
         total: parseFloat(item.total),
       })),
 
-      subtotal: parseFloat(order.total) - parseFloat(order.shipping_total || '0') + parseFloat(order.discount_total || '0'),
+      // WooCommerce line, shipping and discount amounts are excluding VAT; VAT is listed separately
+      subtotal: order.line_items.reduce((sum: number, item: any) => sum + parseFloat(item.subtotal ?? item.total), 0),
       discount: parseFloat(order.discount_total || '0'),
       discountCode: order.coupon_lines && order.coupon_lines.length > 0 ? order.coupon_lines[0].code : '',
       shippingCost: parseFloat(order.shipping_total || '0'),
       shippingMethod: order.shipping_lines && order.shipping_lines.length > 0 ? order.shipping_lines[0].method_title : 'Standaard Verzending',
-      tax: 0,
+      tax: parseFloat(order.total_tax || '0'),
       total: parseFloat(order.total),
 
       paymentMethod: order.payment_method_title || 'Online Betaling',
