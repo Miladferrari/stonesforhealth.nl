@@ -68,20 +68,20 @@ export async function POST(request: NextRequest) {
     }
 
     let itemsTotal = 0;
+    const lineDiscounts: number[] = [];
     const lineItems = pricedItems.map((item) => {
       const rule = item.bundleType ? BUNDLE_RULES[item.bundleType] : undefined;
       const bundleQuantity = bundleQuantities.get(`${item.productId}:${item.bundleType}`) || 0;
       const discount = rule && bundleQuantity >= rule.minQuantity ? rule.discount : 0;
 
-      const subtotal = item.unitPrice * item.quantity;
-      const total = subtotal * (100 - discount) / 100;
-      itemsTotal += total;
+      lineDiscounts.push(discount);
+      itemsTotal += item.unitPrice * item.quantity * (100 - discount) / 100;
 
+      // No subtotal/total here: WooCommerce prices the line itself, so VAT
+      // (prices including or excluding tax) is always handled correctly
       const lineItem: any = {
         product_id: item.productId,
-        quantity: item.quantity,
-        subtotal: subtotal.toFixed(2),
-        total: total.toFixed(2)
+        quantity: item.quantity
       };
 
       // Add variation_id if the item has one (for variable products)
@@ -152,7 +152,38 @@ export async function POST(request: NextRequest) {
     };
 
     // Create the order in WooCommerce
-    const order = await woocommerce.createOrder(orderData);
+    let order = await woocommerce.createOrder(orderData);
+
+    // Line and shipping totals in the REST API are excluding tax. Rather than guessing the
+    // tax setup, correct them based on what WooCommerce calculated for this order.
+    const adjustments: any = {};
+
+    const discountedLines = (order.line_items || [])
+      .map((line: any, index: number) => ({ line, discount: lineDiscounts[index] || 0 }))
+      .filter(({ discount }: { discount: number }) => discount > 0)
+      .map(({ line, discount }: { line: any; discount: number }) => ({
+        id: line.id,
+        subtotal: (parseFloat(line.subtotal) * (100 - discount) / 100).toFixed(2),
+        total: (parseFloat(line.total) * (100 - discount) / 100).toFixed(2)
+      }));
+    if (discountedLines.length > 0) {
+      adjustments.line_items = discountedLines;
+    }
+
+    // The shipping cost shown to the customer includes VAT
+    const shippingLine = order.shipping_lines?.[0];
+    const shippingCost = Number(selectedRate.cost);
+    const shippingTax = parseFloat(shippingLine?.total_tax || '0');
+    if (shippingLine && shippingCost > 0 && shippingTax > 0) {
+      adjustments.shipping_lines = [{
+        id: shippingLine.id,
+        total: (shippingCost * shippingCost / (shippingCost + shippingTax)).toFixed(2)
+      }];
+    }
+
+    if (Object.keys(adjustments).length > 0) {
+      order = await woocommerce.updateOrder(order.id, adjustments);
+    }
 
     console.log('[Create Order] Order created:', {
       id: order.id,
