@@ -435,15 +435,25 @@ class WooCommerceAPI {
     }
 
     try {
+      // Orders, stock and every write must never be served from the Next.js data cache
+      const noStore =
+        options?.useCache === false ||
+        options?.cache === "no-store" ||
+        (options?.method !== undefined && options.method !== "GET");
+
       const response = await fetch(fullUrl, {
         ...options,
         headers,
         mode: "cors",
         credentials: "omit", // Don't send cookies with API requests
-        // Next.js specific caching - 60 second revalidation
-        next: {
-          revalidate: 60, // Revalidate every 60 seconds
-        },
+        ...(noStore
+          ? { cache: "no-store" as RequestCache }
+          : {
+              // Next.js specific caching - 60 second revalidation
+              next: {
+                revalidate: 60, // Revalidate every 60 seconds
+              },
+            }),
       });
 
       if (!response.ok) {
@@ -574,8 +584,9 @@ class WooCommerceAPI {
     return this.fetchAPIWithHeaders<Product[]>(endpoint);
   }
 
-  async getProduct(id: number): Promise<Product> {
-    return this.fetchAPI<Product>(`products/${id}`);
+  async getProduct(id: number, options?: { fresh?: boolean }): Promise<Product> {
+    // Checkout needs the current price and stock, not a cached copy
+    return this.fetchAPI<Product>(`products/${id}`, options?.fresh ? { useCache: false } : undefined);
   }
 
   async getProductBySlug(slug: string): Promise<Product | null> {
@@ -729,7 +740,8 @@ class WooCommerceAPI {
   }
 
   async getOrder(orderId: number | string): Promise<any> {
-    return this.fetchAPI(`orders/${orderId}`);
+    // Order status changes within seconds during checkout: always read it fresh
+    return this.fetchAPI(`orders/${orderId}`, { useCache: false });
   }
 
   async updateOrder(orderId: number | string, data: any): Promise<any> {

@@ -33,7 +33,7 @@ async function priceItem(item: any): Promise<PricedItem> {
     const variations = await woocommerce.getProductVariations(productId);
     price = variations.find((v: any) => v.id === variationId)?.price;
   } else {
-    price = (await woocommerce.getProduct(productId))?.price;
+    price = (await woocommerce.getProduct(productId, { fresh: true }))?.price;
   }
 
   const unitPrice = parseFloat(price || '');

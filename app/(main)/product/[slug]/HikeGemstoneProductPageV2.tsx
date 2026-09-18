@@ -463,7 +463,7 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
   // Check if product has images - use variation image if selected and available (for single bundle)
   const variationImage = selectedVariations[0]?.image;
   const baseImages = product.images && product.images.length > 0 ? product.images : [];
-  const hasImages = baseImages.length > 0 || variationImage !== null;
+  const hasImages = baseImages.length > 0 || Boolean(variationImage);
 
   // If variation has an image, show it first, then product images
   const images = variationImage
