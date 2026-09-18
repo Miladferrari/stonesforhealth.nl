@@ -32,12 +32,12 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: 'wordpress.stonesforhealth.nl',
+        hostname: 'admin.stonesforhealth.nl',
         pathname: '/**',
       },
       {
-        protocol: 'http',
-        hostname: 'wordpress.123noodboxen.nl',
+        protocol: 'https',
+        hostname: 'wordpress.stonesforhealth.nl',
         pathname: '/**',
       },
       {
@@ -89,9 +89,6 @@ const nextConfig: NextConfig = {
   // Strict mode for better error detection
   reactStrictMode: true,
 
-  // Generate static pages at build time when possible
-  // Only use standalone in production for deployment
-  output: process.env.NODE_ENV === 'production' ? 'standalone' : undefined,
 };
 
 export default nextConfig;

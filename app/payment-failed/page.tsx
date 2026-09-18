@@ -9,6 +9,17 @@ function PaymentFailedContent() {
   const router = useRouter();
   const orderId = searchParams?.get('order') || null;
   const reason = searchParams?.get('reason') || 'cancelled';
+
+  // The order key proves this visitor owns the order; it comes from the URL or the checkout session
+  const getOrderKey = () => {
+    const keyFromUrl = searchParams?.get('key');
+    if (keyFromUrl) return keyFromUrl;
+    try {
+      return JSON.parse(sessionStorage.getItem('orderData') || '{}').order_key || null;
+    } catch {
+      return null;
+    }
+  };
   const [hasOrderData, setHasOrderData] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -57,6 +68,7 @@ function PaymentFailedContent() {
           },
           body: JSON.stringify({
             orderId: orderId,
+            orderKey: getOrderKey(),
             status: 'cancelled',
             note: 'Customer abandoned payment'
           }),

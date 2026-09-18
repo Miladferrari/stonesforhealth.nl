@@ -1,68 +1,54 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { woocommerce } from '@/lib/woocommerce';
+import { getOrderWithKey } from '@/lib/order-security';
 
-// Valid WooCommerce order statuses
-const VALID_STATUSES = [
-  'pending',
-  'processing',
-  'on-hold',
-  'completed',
-  'cancelled',
-  'refunded',
-  'failed'
-];
+// A customer may only give up on their own unpaid order.
+// Every other status change (processing, completed, refunded, ...) comes from the
+// Stripe webhook or the WooCommerce admin, never from the browser.
+const CUSTOMER_ALLOWED_STATUSES = ['cancelled', 'failed'];
+const UNPAID_STATUSES = ['pending', 'failed'];
 
 export async function POST(request: NextRequest) {
   try {
-    const { orderId, status, note, transactionId } = await request.json();
+    const { orderId, orderKey, status, note } = await request.json();
 
     // Validate required fields
-    if (!orderId || !status) {
+    if (!orderId || !orderKey || !status) {
       return NextResponse.json(
-        { error: 'Order ID and status are required' },
+        { error: 'Order ID, order key and status are required' },
         { status: 400 }
       );
     }
 
-    // Validate status
-    if (!VALID_STATUSES.includes(status)) {
+    if (!CUSTOMER_ALLOWED_STATUSES.includes(status)) {
       return NextResponse.json(
-        { error: `Invalid status. Must be one of: ${VALID_STATUSES.join(', ')}` },
-        { status: 400 }
+        { error: 'Status not allowed' },
+        { status: 403 }
       );
     }
 
-    // Prepare update data
-    const updateData: any = {
-      status
-    };
-
-    // Add transaction ID if provided (for payment confirmations)
-    if (transactionId) {
-      updateData.transaction_id = transactionId;
-      updateData.meta_data = [
-        {
-          key: '_stripe_payment_intent',
-          value: transactionId
-        }
-      ];
-    }
-
-    // Update order in WooCommerce
-    const updatedOrder = await woocommerce.updateOrder(orderId, updateData);
-
-    if (!updatedOrder || updatedOrder.code === 'woocommerce_rest_shop_order_invalid_id') {
+    const order = await getOrderWithKey(orderId, orderKey);
+    if (!order) {
       return NextResponse.json(
         { error: 'Order not found' },
         { status: 404 }
       );
     }
 
+    if (!UNPAID_STATUSES.includes(order.status)) {
+      return NextResponse.json(
+        { error: 'Order can no longer be changed' },
+        { status: 409 }
+      );
+    }
+
+    const updatedOrder = await woocommerce.updateOrder(order.id, { status });
+
     // Add order note if provided
     if (note) {
       try {
-        await woocommerce.createOrderNote(orderId, {
-          note: note,
+        await woocommerce.createOrderNote(order.id, {
+          note: String(note).slice(0, 500),
           customer_note: false
         });
       } catch (noteError) {
@@ -71,8 +57,7 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    // Log status update
-    console.log(`[Order Status Update] Order ${orderId} updated to ${status}`);
+    console.log(`[Order Status Update] Order ${order.id} updated to ${status}`);
 
     return NextResponse.json({
       success: true,
@@ -86,47 +71,6 @@ export async function POST(request: NextRequest) {
     console.error('Error updating order status:', error);
     return NextResponse.json(
       { error: 'Failed to update order status' },
-      { status: 500 }
-    );
-  }
-}
-
-// GET endpoint to check current order status
-export async function GET(request: NextRequest) {
-  try {
-    const searchParams = request.nextUrl.searchParams;
-    const orderId = searchParams.get('orderId');
-
-    if (!orderId) {
-      return NextResponse.json(
-        { error: 'Order ID is required' },
-        { status: 400 }
-      );
-    }
-
-    // Fetch order from WooCommerce
-    const order = await woocommerce.getOrder(orderId);
-
-    if (!order || order.code === 'woocommerce_rest_shop_order_invalid_id') {
-      return NextResponse.json(
-        { error: 'Order not found' },
-        { status: 404 }
-      );
-    }
-
-    return NextResponse.json({
-      orderId: order.id,
-      status: order.status,
-      transactionId: order.transaction_id,
-      total: order.total,
-      currency: order.currency,
-      dateModified: order.date_modified
-    });
-
-  } catch (error) {
-    console.error('Error fetching order status:', error);
-    return NextResponse.json(
-      { error: 'Failed to fetch order status' },
       { status: 500 }
     );
   }

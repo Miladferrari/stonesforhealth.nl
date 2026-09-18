@@ -57,8 +57,8 @@ interface OrderData {
 function ThankYouContent() {
   const searchParams = useSearchParams();
   const orderId = searchParams?.get('order') || null;
+  const orderKey = searchParams?.get('key') || null;
   const redirectStatus = searchParams?.get('redirect_status') || null;
-  const sessionId = searchParams?.get('session_id') || null;
   const paymentIntentId = searchParams?.get('payment_intent') || null;
   const { clearCart } = useCart();
   const [orderData, setOrderData] = useState<OrderData | null>(null);
@@ -66,38 +66,8 @@ function ThankYouContent() {
   const [error, setError] = useState<string | null>(null);
   const [hasFetched, setHasFetched] = useState(false);
 
-  // Verify payment if session_id OR payment_intent is present
+  // Confirm payment if payment_intent is present
   useEffect(() => {
-    const verifyPayment = async () => {
-      if (sessionId && orderId && !hasFetched) {
-        try {
-          const response = await fetch('/api/verify-payment', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              sessionId,
-              orderId,
-            }),
-          });
-
-          const result = await response.json();
-
-          if (result.success) {
-            // Payment verified successfully
-            clearCart();
-          } else {
-            // Payment failed
-            window.location.href = `/payment-failed?order=${orderId}&reason=payment_verification_failed`;
-          }
-        } catch (error) {
-          console.error('Payment verification error:', error);
-        }
-        setHasFetched(true);
-      }
-    };
-
     const confirmPaymentIntent = async () => {
       if (paymentIntentId && orderId && !hasFetched) {
         try {
@@ -109,6 +79,7 @@ function ThankYouContent() {
             body: JSON.stringify({
               paymentIntentId,
               orderId,
+              orderKey,
             }),
           });
 
@@ -123,7 +94,7 @@ function ThankYouContent() {
             console.log('Payment is still processing');
           } else {
             // Payment failed
-            window.location.href = `/payment-failed?order=${orderId}&reason=payment_confirmation_failed`;
+            window.location.href = `/payment-failed?order=${orderId}&key=${orderKey || ''}&reason=payment_confirmation_failed`;
           }
         } catch (error) {
           console.error('Payment confirmation error:', error);
@@ -134,21 +105,18 @@ function ThankYouContent() {
 
     // Check redirect_status for payment flow
     if (redirectStatus === 'failed' && orderId) {
-      window.location.href = `/payment-failed?order=${orderId}&reason=payment_failed`;
+      window.location.href = `/payment-failed?order=${orderId}&key=${orderKey || ''}&reason=payment_failed`;
     } else if (redirectStatus === 'succeeded' && orderId) {
       clearCart();
       // Also confirm payment intent if present
       if (paymentIntentId) {
         confirmPaymentIntent();
       }
-    } else if (sessionId) {
-      // Stripe Checkout Session flow
-      verifyPayment();
     } else if (paymentIntentId) {
       // Stripe Payment Intent flow
       confirmPaymentIntent();
     }
-  }, [redirectStatus, orderId, sessionId, paymentIntentId, hasFetched]); // Remove clearCart from dependencies
+  }, [redirectStatus, orderId, paymentIntentId, hasFetched]); // Remove clearCart from dependencies
 
   useEffect(() => {
     // Prevent multiple fetches
@@ -190,7 +158,7 @@ function ThankYouContent() {
             headers: {
               'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ orderId }),
+            body: JSON.stringify({ orderId, orderKey }),
           });
 
           if (!response.ok) {
@@ -235,7 +203,7 @@ function ThankYouContent() {
     if (hasSessionData) {
       // Redirect to payment failed page if we still have order data
       // This means the user likely navigated here without completing payment
-      window.location.href = `/payment-failed?order=${orderId || ''}&reason=incomplete`;
+      window.location.href = `/payment-failed?order=${orderId || ''}&key=${orderKey || ''}&reason=incomplete`;
       return null;
     }
     

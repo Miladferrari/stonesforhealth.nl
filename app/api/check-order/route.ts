@@ -1,22 +1,23 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { woocommerce } from '@/lib/woocommerce';
+import { getOrderWithKey } from '@/lib/order-security';
 
 export async function GET(request: NextRequest) {
   try {
     const searchParams = request.nextUrl.searchParams;
     const orderId = searchParams.get('orderId');
+    const orderKey = searchParams.get('key');
 
-    if (!orderId) {
+    if (!orderId || !orderKey) {
       return NextResponse.json(
-        { success: false, error: 'Order ID is required' },
+        { success: false, error: 'Order ID and key are required' },
         { status: 400 }
       );
     }
 
-    // Fetch order from WooCommerce
-    const order = await woocommerce.getOrder(orderId);
+    // Order details contain personal data: only return them to someone who knows the order key
+    const order = await getOrderWithKey(orderId, orderKey);
 
-    if (!order || order.code === 'woocommerce_rest_shop_order_invalid_id') {
+    if (!order) {
       return NextResponse.json(
         { success: false, error: 'Order not found' },
         { status: 404 }
@@ -78,19 +79,18 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
-    const { orderId } = await request.json();
+    const { orderId, orderKey } = await request.json();
 
-    if (!orderId) {
+    if (!orderId || !orderKey) {
       return NextResponse.json(
-        { success: false, error: 'Order ID is required' },
+        { success: false, error: 'Order ID and key are required' },
         { status: 400 }
       );
     }
 
-    // Fetch order from WooCommerce
-    const order = await woocommerce.getOrder(orderId);
+    const order = await getOrderWithKey(orderId, orderKey);
 
-    if (!order || order.code === 'woocommerce_rest_shop_order_invalid_id') {
+    if (!order) {
       return NextResponse.json(
         { success: false, error: 'Order not found' },
         { status: 404 }

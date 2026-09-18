@@ -21,6 +21,7 @@ function PaymentPageContent() {
   // Get order details from URL params
   const orderId = searchParams?.get('orderId') || null;
   const orderTotal = searchParams?.get('total') || null;
+  const orderKey = searchParams?.get('key') || null;
 
   // Payment states
   const [loading, setLoading] = useState(false);
@@ -40,7 +41,7 @@ function PaymentPageContent() {
 
   // Validate order data on mount
   useEffect(() => {
-    if (!orderId || !orderTotal) {
+    if (!orderId || !orderTotal || !orderKey) {
       router.push('/checkout');
       return;
     }
@@ -96,10 +97,8 @@ function PaymentPageContent() {
         },
         body: JSON.stringify({
           orderId: parseInt(orderId!),
-          amount: parseFloat(orderTotal!),
-          currency: 'eur',
+          orderKey,
           paymentMethod: selectedPaymentMethod,
-          customerEmail: customerEmail,
         }),
       });
 
@@ -131,7 +130,7 @@ function PaymentPageContent() {
     sessionStorage.removeItem('orderData');
 
     // Redirect to thank you page
-    router.push(`/thank-you?order=${orderId}`);
+    router.push(`/thank-you?order=${orderId}&key=${orderKey}`);
   };
 
   const handlePaymentError = (error: string) => {
@@ -375,6 +374,7 @@ function PaymentPageContent() {
                         <EmbeddedPaymentForm
                           clientSecret={clientSecret}
                           orderId={orderId!}
+                          orderKey={orderKey!}
                           paymentMethod="ideal"
                           onSuccess={handlePaymentSuccess}
                           onError={handlePaymentError}
@@ -421,6 +421,7 @@ function PaymentPageContent() {
                         <EmbeddedPaymentForm
                           clientSecret={clientSecret}
                           orderId={orderId!}
+                          orderKey={orderKey!}
                           paymentMethod="bancontact"
                           onSuccess={handlePaymentSuccess}
                           onError={handlePaymentError}
@@ -492,6 +493,7 @@ function PaymentPageContent() {
                         <EmbeddedPaymentForm
                           clientSecret={clientSecret}
                           orderId={orderId!}
+                          orderKey={orderKey!}
                           paymentMethod="card"
                           onSuccess={handlePaymentSuccess}
                           onError={handlePaymentError}

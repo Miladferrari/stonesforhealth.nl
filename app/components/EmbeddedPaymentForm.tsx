@@ -16,6 +16,7 @@ const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY 
 interface PaymentFormProps {
   clientSecret: string;
   orderId: string;
+  orderKey: string;
   paymentMethod: 'card' | 'ideal' | 'bancontact';
   onSuccess: () => void;
   onError: (error: string) => void;
@@ -23,7 +24,7 @@ interface PaymentFormProps {
   customerEmail?: string;
 }
 
-function CheckoutForm({ orderId, paymentMethod, onSuccess, onError, customerName, customerEmail }: Omit<PaymentFormProps, 'clientSecret'>) {
+function CheckoutForm({ orderId, orderKey, paymentMethod, onSuccess, onError, customerName, customerEmail }: Omit<PaymentFormProps, 'clientSecret'>) {
   const stripe = useStripe();
   const elements = useElements();
   const [isProcessing, setIsProcessing] = useState(false);
@@ -100,7 +101,7 @@ function CheckoutForm({ orderId, paymentMethod, onSuccess, onError, customerName
         const { error } = await stripe.confirmPayment({
           elements,
           confirmParams: {
-            return_url: `${window.location.origin}/thank-you?order=${orderId}`,
+            return_url: `${window.location.origin}/thank-you?order=${orderId}&key=${orderKey}`,
             payment_method_data: {
               billing_details: billingDetails,
             },
@@ -129,7 +130,7 @@ function CheckoutForm({ orderId, paymentMethod, onSuccess, onError, customerName
     return () => {
       delete (window as any).submitPayment;
     };
-  }, [stripe, elements, isProcessing, orderId, onSuccess, onError, customerName, customerEmail, paymentMethod]);
+  }, [stripe, elements, isProcessing, orderId, orderKey, onSuccess, onError, customerName, customerEmail, paymentMethod]);
 
   return (
     <div className="space-y-4">
@@ -168,7 +169,7 @@ function CheckoutForm({ orderId, paymentMethod, onSuccess, onError, customerName
   );
 }
 
-export default function EmbeddedPaymentForm({ clientSecret, orderId, paymentMethod, onSuccess, onError, customerName, customerEmail }: PaymentFormProps) {
+export default function EmbeddedPaymentForm({ clientSecret, orderId, orderKey, paymentMethod, onSuccess, onError, customerName, customerEmail }: PaymentFormProps) {
   const options: StripeElementsOptions = {
     clientSecret,
     appearance: {
@@ -207,6 +208,7 @@ export default function EmbeddedPaymentForm({ clientSecret, orderId, paymentMeth
     <Elements stripe={stripePromise} options={options}>
       <CheckoutForm
         orderId={orderId}
+        orderKey={orderKey}
         paymentMethod={paymentMethod}
         onSuccess={onSuccess}
         onError={onError}
