@@ -74,17 +74,24 @@ export async function POST(request: NextRequest) {
         expiryDate: expiryDate,
       });
 
-      await sendMail({
+      const sent = await sendMail({
         to: email,
         subject: '🎉 Jouw €10 Kortingscode is Klaar!',
         html: emailHtml,
       });
+      if (!sent) {
+        throw new Error('Mail is not configured');
+      }
 
       console.log('[Newsletter] Email verzonden naar:', email);
     } catch (emailError: any) {
       console.error('[Newsletter] Email verzenden mislukt:', emailError);
-      // Continue anyway - kortingscode is al aangemaakt
-      // We kunnen later een fallback implementeren
+
+      // Don't claim the code was sent when it wasn't: the customer would wait for nothing
+      return NextResponse.json(
+        { error: 'Je kortingscode kon niet worden verstuurd. Probeer het later opnieuw.' },
+        { status: 502 }
+      );
     }
 
     // Return alleen success bericht - kortingscode wordt via email verzonden

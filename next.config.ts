@@ -80,7 +80,9 @@ const nextConfig: NextConfig = {
 
   // Optimize CSS
   compiler: {
-    removeConsole: process.env.NODE_ENV === 'production',
+    // Keep errors and warnings: without them production problems (failed mails, webhook
+    // errors) are invisible in the Vercel logs
+    removeConsole: process.env.NODE_ENV === 'production' ? { exclude: ['error', 'warn'] } : false,
   },
 
   // Power optimizations
