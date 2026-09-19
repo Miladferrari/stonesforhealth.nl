@@ -334,7 +334,7 @@ const InvoiceTemplate: React.FC<InvoiceTemplateProps> = ({ data }) => {
             <Text style={styles.totalValue}>{formatCurrency(data.subtotal)}</Text>
           </View>
 
-          {data.discount && data.discount > 0 && (
+          {data.discount !== undefined && data.discount > 0 && (
             <View style={styles.totalRow}>
               <Text style={styles.totalLabel}>
                 Korting {data.discountCode ? `(${data.discountCode})` : ''}:
