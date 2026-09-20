@@ -6,6 +6,7 @@ import { useState, memo, useEffect, useRef } from 'react';
 import { usePathname } from 'next/navigation';
 import { useCart } from '../contexts/CartContextStoreAPI';
 import SearchDropdown from './SearchDropdown';
+import { sortMainCategories, subcategoriesFor, MAIN_ORDER, DISPLAY_NAMES } from '../lib/categoryMenu';
 
 // Helper function to decode HTML entities
 function decodeHtmlEntities(text: string): string {
@@ -85,9 +86,10 @@ const Header = memo(function Header() {
           setAllCategories(data);
 
           // Filter main categories only (parent === 0, exclude uncategorized)
-          const mainCategories = data
-            .filter((cat: any) => cat.parent === 0 && cat.slug !== 'uncategorized')
-            .sort((a: any, b: any) => (b.count || 0) - (a.count || 0));
+          // and put them in the order defined by the category tree.
+          const mainCategories = sortMainCategories(
+            data.filter((cat: any) => cat.parent === 0 && cat.slug !== 'uncategorized')
+          );
 
           console.log('[Header] Main categories:', mainCategories.length, mainCategories.map((c: any) => c.name));
 
@@ -103,13 +105,16 @@ const Header = memo(function Header() {
         }
       } catch (error) {
         console.error('[Header] Failed to fetch categories, using fallback:', error);
-        // Fallback categories - keep these updated with your actual main categories
-        setCategories([
-          { id: 20, name: 'Bestsellers', slug: 'bestsellers' },
-          { id: 595, name: 'Edelstenen en Mineralen', slug: 'edelstenen-mineralen' },
-          { id: 596, name: 'Edelsteen Sieraden', slug: 'edelsteen-sieraden' },
-          { id: 18, name: 'Chakra en meditatie', slug: 'chakru-edelstenen' }
-        ]);
+        // Fallback: alleen de hoofdcategorieën uit de categorieboom, zodat het
+        // menu bij een API-storing geen categorieën toont die niet bestaan.
+        // Zonder id's, dus zonder submenu - de links blijven wel werken.
+        setCategories(
+          MAIN_ORDER.map((slug, index) => ({
+            id: -(index + 1),
+            name: DISPLAY_NAMES[slug] || slug,
+            slug,
+          }))
+        );
       }
     };
 
@@ -144,9 +149,12 @@ const Header = memo(function Header() {
     }, 200);
   };
 
-  // Get subcategories for a parent category
-  const getSubcategories = (parentId: number) => {
-    return allCategories.filter((cat: any) => cat.parent === parentId);
+  // Get subcategories for a parent category, in the order of the category tree.
+  // Categories that belong under two parents (e.g. "Armband Sets" under both
+  // Armbanden and Cadeaus) are shown under both, linking to the same page.
+  const getSubcategories = (category: any) => {
+    if (!category?.slug) return [];
+    return subcategoriesFor(category.slug, allCategories);
   };
 
   const handleCategoryHover = (category: any) => {
@@ -155,7 +163,7 @@ const Header = memo(function Header() {
     setCategoryProducts([]);
 
     // Check if this category has subcategories
-    const subcategories = getSubcategories(category.id);
+    const subcategories = getSubcategories(category);
 
     // If no subcategories, fetch products directly (like before)
     if (subcategories.length === 0) {
@@ -429,7 +437,7 @@ const Header = memo(function Header() {
         >
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
             <div className={`grid gap-8 transition-all duration-300 ${
-              hoveredCategory && getSubcategories(hoveredCategory.id).length > 0
+              hoveredCategory && getSubcategories(hoveredCategory).length > 0
                 ? 'grid-cols-3'
                 : 'grid-cols-2'
             }`}>
@@ -490,13 +498,13 @@ const Header = memo(function Header() {
               </div>
 
               {/* Middle Column - Subcategories (Only visible when category has subcategories) */}
-              {hoveredCategory && getSubcategories(hoveredCategory.id).length > 0 && (
+              {hoveredCategory && getSubcategories(hoveredCategory).length > 0 && (
                 <div className="border-r border-gray-200 pr-8 animate-fadeIn">
                   <h3 className="text-sm font-bold text-gray-900 mb-4 pl-2 font-[family-name:var(--font-eb-garamond)]">
                     {decodeHtmlEntities(hoveredCategory.name)}
                   </h3>
                   <ul className="space-y-1">
-                    {getSubcategories(hoveredCategory.id).map((subcat) => (
+                    {getSubcategories(hoveredCategory).map((subcat) => (
                       <li key={subcat.id}>
                         <Link
                           href={`/alle-producten?category=${subcat.slug}`}
@@ -578,7 +586,7 @@ const Header = memo(function Header() {
                       Bekijk alle {(hoveredSubcategory || hoveredCategory).count} producten →
                     </Link>
                   </div>
-                ) : getSubcategories(hoveredCategory.id).length > 0 ? (
+                ) : getSubcategories(hoveredCategory).length > 0 ? (
                   // Has subcategories but no subcategory hovered yet
                   <div className="text-center py-12 text-gray-500">
                     <div className="mb-4">
@@ -640,7 +648,7 @@ const Header = memo(function Header() {
 
                   {/* Categories with Accordion */}
                   {categories.map((category) => {
-                    const subcategories = getSubcategories(category.id);
+                    const subcategories = getSubcategories(category);
                     const isExpanded = expandedMobileCategories.includes(category.id);
                     const hasSubcategories = subcategories.length > 0;
 

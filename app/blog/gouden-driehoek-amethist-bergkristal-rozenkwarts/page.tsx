@@ -16,7 +16,7 @@ export const metadata: Metadata = {
     authors: ['StonesForHealth'],
   },
   alternates: {
-    canonical: 'https://stonesforhealth.nl/blog/gouden-driehoek-amethist-bergkristal-rozenkwarts',
+    canonical: 'https://www.stonesforhealth.nl/blog/gouden-driehoek-amethist-bergkristal-rozenkwarts',
   }
 };
 
@@ -25,7 +25,7 @@ const blogPostingSchema = {
   "@type": "BlogPosting",
   "headline": "De Gouden Driehoek: Amethist, Bergkristal & Rozenkwarts",
   "description": "Ontdek de kracht van de Gouden Driehoek - de meest populaire kristalcombinatie. Amethist, Bergkristal en Rozenkwarts voor balans en harmonie.",
-  "image": "https://stonesforhealth.nl/blog-images/De Gouden Driehoek- Amethist, Bergkristal & Rozenkwarts .webp",
+  "image": "https://www.stonesforhealth.nl/blog-images/De Gouden Driehoek- Amethist, Bergkristal & Rozenkwarts .webp",
   "datePublished": "2025-03-05T09:00:00Z",
   "dateModified": "2025-03-05T09:00:00Z",
   "author": {
@@ -37,12 +37,12 @@ const blogPostingSchema = {
     "name": "Stones for Health",
     "logo": {
       "@type": "ImageObject",
-      "url": "https://stonesforhealth.nl/logo.webp"
+      "url": "https://www.stonesforhealth.nl/logo.webp"
     }
   },
   "mainEntityOfPage": {
     "@type": "WebPage",
-    "@id": "https://stonesforhealth.nl/blog/gouden-driehoek-amethist-bergkristal-rozenkwarts"
+    "@id": "https://www.stonesforhealth.nl/blog/gouden-driehoek-amethist-bergkristal-rozenkwarts"
   }
 };
 

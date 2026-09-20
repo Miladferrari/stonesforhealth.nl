@@ -9,7 +9,7 @@ export const metadata: Metadata = {
     description: 'Vind antwoorden op al je vragen over edelstenen en kristallen.',
   },
   alternates: {
-    canonical: 'https://stonesforhealth.nl/faq'
+    canonical: 'https://www.stonesforhealth.nl/faq'
   }
 };
 

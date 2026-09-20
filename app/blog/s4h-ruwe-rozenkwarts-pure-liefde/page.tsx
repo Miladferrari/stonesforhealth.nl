@@ -29,7 +29,7 @@ export const metadata: Metadata = {
     publishedTime: '2025-11-06',
   },
   alternates: {
-    canonical: 'https://stonesforhealth.nl/blog/s4h-ruwe-rozenkwarts-pure-liefde',
+    canonical: 'https://www.stonesforhealth.nl/blog/s4h-ruwe-rozenkwarts-pure-liefde',
   },
 };
 
@@ -39,7 +39,7 @@ export default function S4HRuweRozenkwarts() {
     "@type": "BlogPosting",
     "headline": "S4H Ruwe Rozenkwarts – Pure Liefde in Grote Brokken Natuurkracht",
     "description": "Ontdek de kracht van S4H ruwe Rozenkwarts brokken. Authentieke, handgeselecteerde edelstenen voor liefde, zelfacceptatie en emotionele healing.",
-    "image": "https://stonesforhealth.nl/blog-images/S4H Ruwe Rozenkwarts – Pure Liefde in Grote Brokken Natuurkracht .jpeg",
+    "image": "https://www.stonesforhealth.nl/blog-images/S4H Ruwe Rozenkwarts – Pure Liefde in Grote Brokken Natuurkracht .jpeg",
     "datePublished": "2025-11-06T10:00:00Z",
     "dateModified": "2025-11-06T10:00:00Z",
     "author": {
@@ -51,7 +51,7 @@ export default function S4HRuweRozenkwarts() {
       "name": "StonesForHealth",
       "logo": {
         "@type": "ImageObject",
-        "url": "https://stonesforhealth.nl/logo.webp"
+        "url": "https://www.stonesforhealth.nl/logo.webp"
       }
     }
   };
@@ -66,9 +66,9 @@ export default function S4HRuweRozenkwarts() {
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <Breadcrumbs
           customItems={[
-            { name: 'Home', url: 'https://stonesforhealth.nl' },
-            { name: 'Blog', url: 'https://stonesforhealth.nl/blog' },
-            { name: 'S4H Ruwe Rozenkwarts', url: 'https://stonesforhealth.nl/blog/s4h-ruwe-rozenkwarts-pure-liefde' }
+            { name: 'Home', url: 'https://www.stonesforhealth.nl' },
+            { name: 'Blog', url: 'https://www.stonesforhealth.nl/blog' },
+            { name: 'S4H Ruwe Rozenkwarts', url: 'https://www.stonesforhealth.nl/blog/s4h-ruwe-rozenkwarts-pure-liefde' }
           ]}
         />
 

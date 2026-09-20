@@ -15,13 +15,13 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Over Ons - StonesForHealth',
     description: 'Leer meer over StonesForHealth, uw specialist in authentieke edelstenen en kristallen.',
-    url: 'https://stonesforhealth.nl/over-ons',
+    url: 'https://www.stonesforhealth.nl/over-ons',
     siteName: 'Stones for Health',
     locale: 'nl_NL',
     type: 'website',
   },
   alternates: {
-    canonical: 'https://stonesforhealth.nl/over-ons',
+    canonical: 'https://www.stonesforhealth.nl/over-ons',
   },
 };
 

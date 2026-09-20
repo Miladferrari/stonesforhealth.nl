@@ -16,7 +16,7 @@ export const metadata: Metadata = {
     authors: ['StonesForHealth'],
   },
   alternates: {
-    canonical: 'https://stonesforhealth.nl/blog/edelstenen-opladen-maanlicht',
+    canonical: 'https://www.stonesforhealth.nl/blog/edelstenen-opladen-maanlicht',
   }
 };
 
@@ -25,7 +25,7 @@ const blogPostingSchema = {
   "@type": "BlogPosting",
   "headline": "Edelstenen Schoonmaken en Opladen in Maanlicht: Zo Doe Je Dat!",
   "description": "Leer hoe je edelstenen reinigt en oplaadt met maanlicht. Complete gids met timing, methodes en welke stenen perfect reageren op maanenergie.",
-  "image": "https://stonesforhealth.nl/blog-images/Edelstenen Schoonmaken en Opladen in Maanlicht- Zo Doe Je Dat!.jpeg",
+  "image": "https://www.stonesforhealth.nl/blog-images/Edelstenen Schoonmaken en Opladen in Maanlicht- Zo Doe Je Dat!.jpeg",
   "datePublished": "2025-10-05T09:00:00Z",
   "dateModified": "2025-10-05T09:00:00Z",
   "author": {
@@ -37,12 +37,12 @@ const blogPostingSchema = {
     "name": "Stones for Health",
     "logo": {
       "@type": "ImageObject",
-      "url": "https://stonesforhealth.nl/logo.webp"
+      "url": "https://www.stonesforhealth.nl/logo.webp"
     }
   },
   "mainEntityOfPage": {
     "@type": "WebPage",
-    "@id": "https://stonesforhealth.nl/blog/edelstenen-opladen-maanlicht"
+    "@id": "https://www.stonesforhealth.nl/blog/edelstenen-opladen-maanlicht"
   }
 };
 

@@ -30,7 +30,7 @@ export const metadata: Metadata = {
     publishedTime: '2025-04-12',
   },
   alternates: {
-    canonical: 'https://stonesforhealth.nl/blog/zilveren-koord-slapen-zoutlampen-spirituele-tips',
+    canonical: 'https://www.stonesforhealth.nl/blog/zilveren-koord-slapen-zoutlampen-spirituele-tips',
   }
 };
 
@@ -39,7 +39,7 @@ const blogPostingSchema = {
   "@type": "BlogPosting",
   "headline": "Het Zilveren Koord: Slapen, Zoutlampen & Spirituele Tips",
   "description": "Ontdek het zilveren koord - de energieverbinding tussen lichaam en ziel. Leer over dromen, astrale projectie, zoutlampen voor rust en edelstenen voor diepe spirituele slaap.",
-  "image": "https://stonesforhealth.nl/blog-images/Het Zilveren Koord, Slapen, Zoutlampen & Spirituele Tips.webp",
+  "image": "https://www.stonesforhealth.nl/blog-images/Het Zilveren Koord, Slapen, Zoutlampen & Spirituele Tips.webp",
   "datePublished": "2025-04-12T09:00:00Z",
   "dateModified": "2025-04-12T09:00:00Z",
   "author": {
@@ -51,12 +51,12 @@ const blogPostingSchema = {
     "name": "Stones for Health",
     "logo": {
       "@type": "ImageObject",
-      "url": "https://stonesforhealth.nl/logo.webp"
+      "url": "https://www.stonesforhealth.nl/logo.webp"
     }
   },
   "mainEntityOfPage": {
     "@type": "WebPage",
-    "@id": "https://stonesforhealth.nl/blog/zilveren-koord-slapen-zoutlampen-spirituele-tips"
+    "@id": "https://www.stonesforhealth.nl/blog/zilveren-koord-slapen-zoutlampen-spirituele-tips"
   }
 };
 

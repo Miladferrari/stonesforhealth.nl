@@ -7,6 +7,7 @@ import CollectionTrustBadges from '@/app/components/collection/CollectionTrustBa
 import CollectionProductGrid from '@/app/components/collection/CollectionProductGrid';
 import CollectionPagination from '@/app/components/collection/CollectionPagination';
 import { Product } from '@/lib/woocommerce';
+import { DISPLAY_NAMES } from '../lib/categoryMenu';
 
 const PRODUCTS_PER_PAGE = 12;
 
@@ -33,16 +34,10 @@ function AlleProductenContent() {
       if (category) {
         apiUrl += '&category=' + category;
 
-        // Set collection title based on category
-        const titles: { [key: string]: string } = {
-          'chakra': 'CHAKRA KRISTALLEN',
-          'bescherming': 'BESCHERMING STENEN',
-          'liefde': 'LIEFDE & RELATIES',
-          'energie': 'ENERGIE KRISTALLEN',
-          'meditatie': 'MEDITATIE STENEN',
-          'healing': 'HEALING KRISTALLEN'
-        };
-        setCollectionTitle(titles[category] || category.toUpperCase().replace('-', ' '));
+        // Titel uit de categorieboom, met de slug als terugval.
+        setCollectionTitle(
+          (DISPLAY_NAMES[category] || category.replace(/-/g, ' ')).toUpperCase()
+        );
       } else {
         setCollectionTitle('ALLE PRODUCTEN');
       }

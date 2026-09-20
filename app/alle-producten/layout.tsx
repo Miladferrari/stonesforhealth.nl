@@ -9,7 +9,7 @@ export const metadata: Metadata = {
     description: 'Ontdek onze volledige collectie van 100+ authentieke edelstenen en kristallen.',
   },
   alternates: {
-    canonical: 'https://stonesforhealth.nl/alle-producten'
+    canonical: 'https://www.stonesforhealth.nl/alle-producten'
   }
 };
 

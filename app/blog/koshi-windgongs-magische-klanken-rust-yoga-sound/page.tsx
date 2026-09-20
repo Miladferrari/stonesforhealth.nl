@@ -29,7 +29,7 @@ export const metadata: Metadata = {
     publishedTime: '2025-01-02',
   },
   alternates: {
-    canonical: 'https://stonesforhealth.nl/blog/koshi-windgongs-magische-klanken-rust-yoga-sound',
+    canonical: 'https://www.stonesforhealth.nl/blog/koshi-windgongs-magische-klanken-rust-yoga-sound',
   },
 };
 
@@ -39,7 +39,7 @@ export default function KoshiWindgongs() {
     "@type": "BlogPosting",
     "headline": "Koshi Windgongs – Magische Klanken voor Rust, Yoga & Sound Healing",
     "description": "Ontdek de magische klanken van Koshi Windgongs. Handgemaakte chimes in 4 elementen: Terra, Aqua, Aria en Ignis. Perfect voor meditatie, yoga en sound healing.",
-    "image": "https://stonesforhealth.nl/blog-images/Koshi Windgongs – Magische Klanken voor Rust, Yoga & Sound Healing.jpeg",
+    "image": "https://www.stonesforhealth.nl/blog-images/Koshi Windgongs – Magische Klanken voor Rust, Yoga & Sound Healing.jpeg",
     "datePublished": "2025-01-02T10:00:00Z",
     "dateModified": "2025-01-02T10:00:00Z",
     "author": {
@@ -51,7 +51,7 @@ export default function KoshiWindgongs() {
       "name": "StonesForHealth",
       "logo": {
         "@type": "ImageObject",
-        "url": "https://stonesforhealth.nl/logo.webp"
+        "url": "https://www.stonesforhealth.nl/logo.webp"
       }
     }
   };
@@ -66,9 +66,9 @@ export default function KoshiWindgongs() {
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <Breadcrumbs
           customItems={[
-            { name: 'Home', url: 'https://stonesforhealth.nl' },
-            { name: 'Blog', url: 'https://stonesforhealth.nl/blog' },
-            { name: 'Koshi Windgongs', url: 'https://stonesforhealth.nl/blog/koshi-windgongs-magische-klanken-rust-yoga-sound' }
+            { name: 'Home', url: 'https://www.stonesforhealth.nl' },
+            { name: 'Blog', url: 'https://www.stonesforhealth.nl/blog' },
+            { name: 'Koshi Windgongs', url: 'https://www.stonesforhealth.nl/blog/koshi-windgongs-magische-klanken-rust-yoga-sound' }
           ]}
         />
 

@@ -16,7 +16,7 @@ export const metadata: Metadata = {
     authors: ['StonesForHealth'],
   },
   alternates: {
-    canonical: 'https://stonesforhealth.nl/blog/edelstenen-per-sterrenbeeld-numerologie',
+    canonical: 'https://www.stonesforhealth.nl/blog/edelstenen-per-sterrenbeeld-numerologie',
   }
 };
 
@@ -25,7 +25,7 @@ const blogPostingSchema = {
   "@type": "BlogPosting",
   "headline": "Edelstenen per Sterrenbeeld en Numerologie",
   "description": "Ontdek welke edelsteen perfect bij jou past op basis van je sterrenbeeld, Chinese dierenriem en numerologie getal.",
-  "image": "https://stonesforhealth.nl/blog-images/Edelstenen per Sterrenbeeld en Numerologie.webp",
+  "image": "https://www.stonesforhealth.nl/blog-images/Edelstenen per Sterrenbeeld en Numerologie.webp",
   "datePublished": "2025-03-08T09:00:00Z",
   "dateModified": "2025-03-08T09:00:00Z",
   "author": {
@@ -37,12 +37,12 @@ const blogPostingSchema = {
     "name": "Stones for Health",
     "logo": {
       "@type": "ImageObject",
-      "url": "https://stonesforhealth.nl/logo.webp"
+      "url": "https://www.stonesforhealth.nl/logo.webp"
     }
   },
   "mainEntityOfPage": {
     "@type": "WebPage",
-    "@id": "https://stonesforhealth.nl/blog/edelstenen-per-sterrenbeeld-numerologie"
+    "@id": "https://www.stonesforhealth.nl/blog/edelstenen-per-sterrenbeeld-numerologie"
   }
 };
 

@@ -8,6 +8,7 @@ import CollectionTrustBadges from '@/app/components/collection/CollectionTrustBa
 import CollectionProductGrid from '@/app/components/collection/CollectionProductGrid';
 import CollectionPagination from '@/app/components/collection/CollectionPagination';
 import { Product } from '@/lib/woocommerce';
+import { subcategoriesFor, MENU, DISPLAY_NAMES } from '@/app/lib/categoryMenu';
 
 const PRODUCTS_PER_PAGE = 12;
 
@@ -51,11 +52,14 @@ export default function CollectionPage() {
   const checkIfParentCategory = async () => {
     setLoading(true);
     try {
-      // Check if this slug is a parent category (intenties, stenen-per-sterrenbeeld, elementen)
-      const parentCategories = ['intenties', 'stenen-per-sterrenbeeld', 'elementen'];
+      // Een hoofdcategorie uit de categorieboom toont zijn subcategorieën in
+      // plaats van een productlijst. Welke dat zijn, staat in de menuconfig,
+      // dus dit werkt voor elke categorie die we aanmaken.
+      const isParent = MENU.some(
+        (section) => section.slug === slug.toLowerCase() && section.children.length > 0
+      );
 
-      if (parentCategories.includes(slug.toLowerCase())) {
-        // Fetch all categories and find this parent's ID
+      if (isParent) {
         const categoriesResponse = await fetch('/api/categories');
         const allCategories: Category[] = await categoriesResponse.json();
 
@@ -63,33 +67,10 @@ export default function CollectionPage() {
 
         if (parentCat) {
           setParentCategoryId(parentCat.id);
-          setCollectionTitle(parentCat.name.toUpperCase());
-
-          // Fetch subcategories
-          const subcatsResponse = await fetch(`/api/woocommerce/categories?parent=${parentCat.id}&hide_empty=true`);
-          let subcats: Category[] = await subcatsResponse.json();
-
-          // Sort sterrenbeelden in zodiac order
-          if (slug.toLowerCase() === 'stenen-per-sterrenbeeld') {
-            const zodiacOrder = [
-              'ram', 'stier', 'tweelingen', 'kreeft',
-              'leeuw', 'maagd', 'weegschaal', 'schorpioen',
-              'boogschutter', 'steenbok', 'waterman', 'vissen'
-            ];
-
-            subcats = subcats.sort((a, b) => {
-              const indexA = zodiacOrder.indexOf(a.slug.toLowerCase());
-              const indexB = zodiacOrder.indexOf(b.slug.toLowerCase());
-
-              // If not found in order, put at end
-              if (indexA === -1) return 1;
-              if (indexB === -1) return -1;
-
-              return indexA - indexB;
-            });
-          }
-
-          setSubcategories(subcats);
+          setCollectionTitle((parentCat.name || DISPLAY_NAMES[slug] || slug).toUpperCase());
+          // subcategoriesFor houdt de volgorde van de boom aan en neemt ook
+          // categorieën mee die onder een tweede ouder horen.
+          setSubcategories(subcategoriesFor(slug.toLowerCase(), allCategories));
           setShowSubcategories(true);
         }
       } else {

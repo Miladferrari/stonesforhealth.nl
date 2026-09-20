@@ -323,7 +323,7 @@ IP Adres: ${clientIp}
               Stones for Health<br>
               Koperhoek 54, 3162 LA Rhoon<br>
               KVK: 95898476<br>
-              <a href="https://stonesforhealth.nl" style="color: #492c4a;">stonesforhealth.nl</a>
+              <a href="https://www.stonesforhealth.nl" style="color: #492c4a;">stonesforhealth.nl</a>
             </p>
           </div>
         </body>

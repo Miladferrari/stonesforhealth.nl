@@ -1367,7 +1367,13 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
             {/* Feature 1 - Authentic Stone */}
             <div className="flex flex-col">
               <div className="flex items-center justify-center mb-2">
-                <img src="/usp4.svg" alt="Bescherming" className="w-28 h-28 md:w-36 md:h-36" />
+                <Image
+                  src="/usp4.webp"
+                  alt="Bescherming"
+                  width={144}
+                  height={144}
+                  className="w-28 h-28 md:w-36 md:h-36"
+                />
               </div>
               <div className="text-center px-1 md:px-2">
                 <h3 className="text-base md:text-lg font-bold text-gray-900 mb-1 md:mb-1.5 font-[family-name:var(--font-eb-garamond)]">Authentieke Natuursteen</h3>
@@ -1378,7 +1384,13 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
             {/* Feature 2 - Energetic Power */}
             <div className="flex flex-col">
               <div className="flex items-center justify-center mb-2">
-                <img src="/usp3.svg" alt="Energie" className="w-28 h-28 md:w-36 md:h-36" />
+                <Image
+                  src="/usp3.webp"
+                  alt="Energie"
+                  width={144}
+                  height={144}
+                  className="w-28 h-28 md:w-36 md:h-36"
+                />
               </div>
               <div className="text-center px-1 md:px-2">
                 <h3 className="text-base md:text-lg font-bold text-gray-900 mb-1 md:mb-1.5 font-[family-name:var(--font-eb-garamond)]">Energetische Kracht</h3>
@@ -1389,7 +1401,13 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
             {/* Feature 3 - Spiritual Healing */}
             <div className="flex flex-col">
               <div className="flex items-center justify-center mb-2">
-                <img src="/usp2.svg" alt="Liefde" className="w-28 h-28 md:w-36 md:h-36" />
+                <Image
+                  src="/usp2.webp"
+                  alt="Liefde"
+                  width={144}
+                  height={144}
+                  className="w-28 h-28 md:w-36 md:h-36"
+                />
               </div>
               <div className="text-center px-1 md:px-2">
                 <h3 className="text-base md:text-lg font-bold text-gray-900 mb-1 md:mb-1.5 font-[family-name:var(--font-eb-garamond)]">Spirituele Helende Kracht</h3>
@@ -1400,7 +1418,13 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
             {/* Feature 4 - Ethically Sourced */}
             <div className="flex flex-col">
               <div className="flex items-center justify-center mb-2">
-                <img src="/usp1.svg" alt="Kwaliteit" className="w-28 h-28 md:w-36 md:h-36" />
+                <Image
+                  src="/usp1.webp"
+                  alt="Kwaliteit"
+                  width={144}
+                  height={144}
+                  className="w-28 h-28 md:w-36 md:h-36"
+                />
               </div>
               <div className="text-center px-1 md:px-2">
                 <h3 className="text-base md:text-lg font-bold text-gray-900 mb-1 md:mb-1.5 font-[family-name:var(--font-eb-garamond)]">Ethisch Gewonnen</h3>

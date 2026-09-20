@@ -16,7 +16,7 @@ export const metadata: Metadata = {
     authors: ['StonesForHealth'],
   },
   alternates: {
-    canonical: 'https://stonesforhealth.nl/blog/volle-maan-december-2025',
+    canonical: 'https://www.stonesforhealth.nl/blog/volle-maan-december-2025',
   }
 };
 
@@ -25,7 +25,7 @@ const blogPostingSchema = {
   "@type": "BlogPosting",
   "headline": "Volle Maan December 2025: Cold Moon",
   "description": "Laatste volle maan van 2025 op 26 december. Ontdek de betekenis van de Cold Moon, afrondingsrituelen en edelstenen voor reflectie en nieuw begin.",
-  "image": "https://stonesforhealth.nl/blog-images/Volle Maan December 2025- Cold Moon.webp",
+  "image": "https://www.stonesforhealth.nl/blog-images/Volle Maan December 2025- Cold Moon.webp",
   "datePublished": "2025-12-20T09:00:00Z",
   "dateModified": "2025-12-20T09:00:00Z",
   "author": {
@@ -37,12 +37,12 @@ const blogPostingSchema = {
     "name": "Stones for Health",
     "logo": {
       "@type": "ImageObject",
-      "url": "https://stonesforhealth.nl/logo.webp"
+      "url": "https://www.stonesforhealth.nl/logo.webp"
     }
   },
   "mainEntityOfPage": {
     "@type": "WebPage",
-    "@id": "https://stonesforhealth.nl/blog/volle-maan-december-2025"
+    "@id": "https://www.stonesforhealth.nl/blog/volle-maan-december-2025"
   }
 };
 

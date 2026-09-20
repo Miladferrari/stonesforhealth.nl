@@ -16,7 +16,7 @@ export const metadata: Metadata = {
     authors: ['StonesForHealth'],
   },
   alternates: {
-    canonical: 'https://stonesforhealth.nl/blog/chakras-en-hun-kleuren',
+    canonical: 'https://www.stonesforhealth.nl/blog/chakras-en-hun-kleuren',
   }
 };
 
@@ -25,7 +25,7 @@ const blogPostingSchema = {
   "@type": "BlogPosting",
   "headline": "Chakra's en hun Kleuren: De Energiepunten van je Lichaam",
   "description": "Ontdek alles over de 7 chakra's en hun kleuren. Leer welke energiepunten er zijn, hoe ze je beïnvloeden en hoe je ze in balans brengt.",
-  "image": "https://stonesforhealth.nl/blog-images/Chakra's en hun Kleuren- De Energiepunten van je Lichaam.webp",
+  "image": "https://www.stonesforhealth.nl/blog-images/Chakra's en hun Kleuren- De Energiepunten van je Lichaam.webp",
   "datePublished": "2025-03-10T09:00:00Z",
   "dateModified": "2025-03-10T09:00:00Z",
   "author": {
@@ -37,12 +37,12 @@ const blogPostingSchema = {
     "name": "Stones for Health",
     "logo": {
       "@type": "ImageObject",
-      "url": "https://stonesforhealth.nl/logo.webp"
+      "url": "https://www.stonesforhealth.nl/logo.webp"
     }
   },
   "mainEntityOfPage": {
     "@type": "WebPage",
-    "@id": "https://stonesforhealth.nl/blog/chakras-en-hun-kleuren"
+    "@id": "https://www.stonesforhealth.nl/blog/chakras-en-hun-kleuren"
   }
 };
 

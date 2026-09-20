@@ -16,7 +16,7 @@ export const metadata: Metadata = {
     authors: ['StonesForHealth'],
   },
   alternates: {
-    canonical: 'https://stonesforhealth.nl/blog/bergkristal-koning-kristallen',
+    canonical: 'https://www.stonesforhealth.nl/blog/bergkristal-koning-kristallen',
   }
 };
 
@@ -25,7 +25,7 @@ const blogPostingSchema = {
   "@type": "BlogPosting",
   "headline": "Bergkristal: De Koning onder de Kristallen",
   "description": "Ontdek waarom Bergkristal de koning van alle kristallen is. Complete gids over helder kwarts, werking, soorten en gebruik.",
-  "image": "https://stonesforhealth.nl/blog-images/Bergkristal- De Koning onder de Kristallen .webp",
+  "image": "https://www.stonesforhealth.nl/blog-images/Bergkristal- De Koning onder de Kristallen .webp",
   "datePublished": "2025-03-22T09:00:00Z",
   "dateModified": "2025-03-22T09:00:00Z",
   "author": {
@@ -37,12 +37,12 @@ const blogPostingSchema = {
     "name": "Stones for Health",
     "logo": {
       "@type": "ImageObject",
-      "url": "https://stonesforhealth.nl/logo.webp"
+      "url": "https://www.stonesforhealth.nl/logo.webp"
     }
   },
   "mainEntityOfPage": {
     "@type": "WebPage",
-    "@id": "https://stonesforhealth.nl/blog/bergkristal-koning-kristallen"
+    "@id": "https://www.stonesforhealth.nl/blog/bergkristal-koning-kristallen"
   }
 };
 

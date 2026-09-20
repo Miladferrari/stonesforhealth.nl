@@ -15,15 +15,15 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Veelgestelde Vragen (FAQ) | StonesForHealth',
     description: 'Vind antwoorden op al uw vragen over edelstenen, kristallen, verzending en meer.',
-    url: 'https://stonesforhealth.nl/faq',
+    url: 'https://www.stonesforhealth.nl/faq',
     siteName: 'Stones for Health',
     locale: 'nl_NL',
     type: 'website',
     images: [
       {
-        url: '/logo.png',
-        width: 1024,
-        height: 1024,
+        url: '/og-image.jpg',
+        width: 1200,
+        height: 630,
         alt: 'Stones for Health - FAQ',
       },
     ],
@@ -32,10 +32,10 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Veelgestelde Vragen (FAQ) | StonesForHealth',
     description: 'Vind antwoorden op al uw vragen over edelstenen, kristallen, verzending en meer.',
-    images: ['/logo.png'],
+    images: ['/og-image.jpg'],
   },
   alternates: {
-    canonical: 'https://stonesforhealth.nl/faq',
+    canonical: 'https://www.stonesforhealth.nl/faq',
   },
 };
 

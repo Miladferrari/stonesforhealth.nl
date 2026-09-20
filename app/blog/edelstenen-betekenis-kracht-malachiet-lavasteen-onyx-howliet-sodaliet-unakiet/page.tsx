@@ -28,7 +28,7 @@ export const metadata: Metadata = {
     publishedTime: '2025-09-30',
   },
   alternates: {
-    canonical: 'https://stonesforhealth.nl/blog/edelstenen-betekenis-kracht-malachiet-lavasteen-onyx-howliet-sodaliet-unakiet',
+    canonical: 'https://www.stonesforhealth.nl/blog/edelstenen-betekenis-kracht-malachiet-lavasteen-onyx-howliet-sodaliet-unakiet',
   }
 };
 
@@ -37,7 +37,7 @@ const blogPostingSchema = {
   "@type": "BlogPosting",
   "headline": "Edelstenen met Betekenis en Kracht: Malachiet, Lavasteen, Onyx, Howliet, Sodaliet en Unakiet",
   "description": "Ontdek de werking, herkomst en betekenis van zes krachtige edelstenen. Van transformatie tot rust, van bescherming tot balans - elke steen vertelt zijn eigen verhaal.",
-  "image": "https://stonesforhealth.nl/logo.webp",
+  "image": "https://www.stonesforhealth.nl/logo.webp",
   "datePublished": "2025-09-30T09:00:00Z",
   "dateModified": "2025-09-30T09:00:00Z",
   "author": {
@@ -49,7 +49,7 @@ const blogPostingSchema = {
     "name": "StonesForHealth",
     "logo": {
       "@type": "ImageObject",
-      "url": "https://stonesforhealth.nl/logo.webp"
+      "url": "https://www.stonesforhealth.nl/logo.webp"
     }
   }
 };
@@ -65,9 +65,9 @@ export default function BlogPost() {
           {/* Breadcrumbs */}
           <Breadcrumbs
             customItems={[
-              { name: 'Home', url: 'https://stonesforhealth.nl' },
-              { name: 'Blog', url: 'https://stonesforhealth.nl/blog' },
-              { name: 'Edelstenen met Betekenis en Kracht', url: 'https://stonesforhealth.nl/blog/edelstenen-betekenis-kracht-malachiet-lavasteen-onyx-howliet-sodaliet-unakiet' }
+              { name: 'Home', url: 'https://www.stonesforhealth.nl' },
+              { name: 'Blog', url: 'https://www.stonesforhealth.nl/blog' },
+              { name: 'Edelstenen met Betekenis en Kracht', url: 'https://www.stonesforhealth.nl/blog/edelstenen-betekenis-kracht-malachiet-lavasteen-onyx-howliet-sodaliet-unakiet' }
             ]}
           />
 

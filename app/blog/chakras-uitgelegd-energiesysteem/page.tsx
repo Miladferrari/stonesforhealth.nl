@@ -16,7 +16,7 @@ export const metadata: Metadata = {
     authors: ['StonesForHealth'],
   },
   alternates: {
-    canonical: 'https://stonesforhealth.nl/blog/chakras-uitgelegd-energiesysteem',
+    canonical: 'https://www.stonesforhealth.nl/blog/chakras-uitgelegd-energiesysteem',
   }
 };
 
@@ -25,7 +25,7 @@ const blogPostingSchema = {
   "@type": "BlogPosting",
   "headline": "Chakra's Uitgelegd: Zo Werkt het Energiesysteem van je Lichaam",
   "description": "Ontdek hoe het chakra-systeem werkt. Leer over de 7 hoofdchakra's, hun kleuren, betekenis en hoe je ze in balans brengt met edelstenen en meditatie.",
-  "image": "https://stonesforhealth.nl/blog-images/Chakra's Uitgelegd- Zo Werkt het Energiesysteem van je Lichaam.jpeg",
+  "image": "https://www.stonesforhealth.nl/blog-images/Chakra's Uitgelegd- Zo Werkt het Energiesysteem van je Lichaam.jpeg",
   "datePublished": "2025-10-03T09:00:00Z",
   "dateModified": "2025-10-03T09:00:00Z",
   "author": {
@@ -37,12 +37,12 @@ const blogPostingSchema = {
     "name": "Stones for Health",
     "logo": {
       "@type": "ImageObject",
-      "url": "https://stonesforhealth.nl/logo.webp"
+      "url": "https://www.stonesforhealth.nl/logo.webp"
     }
   },
   "mainEntityOfPage": {
     "@type": "WebPage",
-    "@id": "https://stonesforhealth.nl/blog/chakras-uitgelegd-energiesysteem"
+    "@id": "https://www.stonesforhealth.nl/blog/chakras-uitgelegd-energiesysteem"
   }
 };
 

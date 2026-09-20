@@ -201,7 +201,7 @@ export const AbandonedCartEmail2 = ({
                 Authentieke Kristallen & Edelstenen
               </p>
               <p style="margin: 0; color: #3b223b; font-size: 13px; opacity: 0.6;">
-                <a href="https://stonesforhealth.nl" style="color: #492c4a; text-decoration: none;">stonesforhealth.nl</a>
+                <a href="https://www.stonesforhealth.nl" style="color: #492c4a; text-decoration: none;">stonesforhealth.nl</a>
                 <span style="margin: 0 8px;">•</span>
                 <a href="mailto:info@stonesforhealth.nl" style="color: #492c4a; text-decoration: none;">info@stonesforhealth.nl</a>
               </p>
@@ -212,7 +212,7 @@ export const AbandonedCartEmail2 = ({
         <!-- Footer Note -->
         <p style="margin: 20px 0 0; color: #3b223b; font-size: 12px; opacity: 0.6; text-align: center; max-width: 500px;">
           Je ontvangt deze email omdat je items hebt toegevoegd aan je winkelwagen op stonesforhealth.nl.
-          Wil je geen herinneringen meer? <a href="https://stonesforhealth.nl" style="color: #492c4a;">Klik hier</a>
+          Wil je geen herinneringen meer? <a href="https://www.stonesforhealth.nl" style="color: #492c4a;">Klik hier</a>
         </p>
       </td>
     </tr>

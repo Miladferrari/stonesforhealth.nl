@@ -96,7 +96,7 @@ export const WelcomeDiscountEmail = ({
               <table width="100%" cellpadding="0" cellspacing="0" style="margin: 30px 0;">
                 <tr>
                   <td align="center">
-                    <a href="https://stonesforhealth.nl/bestsellers" style="display: inline-block; background: linear-gradient(135deg, #fbe022 0%, #e6cc1f 100%); color: #000000; text-decoration: none; padding: 16px 40px; border-radius: 50px; font-size: 18px; font-weight: bold; box-shadow: 0 4px 12px rgba(251, 224, 34, 0.3);">
+                    <a href="https://www.stonesforhealth.nl/bestsellers" style="display: inline-block; background: linear-gradient(135deg, #fbe022 0%, #e6cc1f 100%); color: #000000; text-decoration: none; padding: 16px 40px; border-radius: 50px; font-size: 18px; font-weight: bold; box-shadow: 0 4px 12px rgba(251, 224, 34, 0.3);">
                       🛍️ Start met winkelen
                     </a>
                   </td>
@@ -119,7 +119,7 @@ export const WelcomeDiscountEmail = ({
                 Authentieke Kristallen & Edelstenen
               </p>
               <p style="margin: 0; color: #3b223b; font-size: 13px; opacity: 0.6;">
-                <a href="https://stonesforhealth.nl" style="color: #492c4a; text-decoration: none;">stonesforhealth.nl</a>
+                <a href="https://www.stonesforhealth.nl" style="color: #492c4a; text-decoration: none;">stonesforhealth.nl</a>
                 <span style="margin: 0 8px;">•</span>
                 <a href="mailto:info@stonesforhealth.nl" style="color: #492c4a; text-decoration: none;">info@stonesforhealth.nl</a>
               </p>

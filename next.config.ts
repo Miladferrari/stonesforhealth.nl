@@ -88,6 +88,17 @@ const nextConfig: NextConfig = {
   // Power optimizations
   poweredByHeader: false,
 
+  // Permanent redirects for routes that moved or were consolidated
+  async redirects() {
+    return [
+      // The old dual sitemap is gone; point crawlers at the single one
+      { source: '/server-sitemap.xml', destination: '/sitemap.xml', permanent: true },
+      // Dutch route was replaced by /collections
+      { source: '/collectie/:slug', destination: '/collections/:slug', permanent: true },
+      { source: '/collectie', destination: '/collections', permanent: true },
+    ];
+  },
+
   // Strict mode for better error detection
   reactStrictMode: true,
 

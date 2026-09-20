@@ -29,7 +29,7 @@ export const metadata: Metadata = {
     publishedTime: '2025-11-06',
   },
   alternates: {
-    canonical: 'https://stonesforhealth.nl/blog/top-7-edelstenen-donkere-maanden',
+    canonical: 'https://www.stonesforhealth.nl/blog/top-7-edelstenen-donkere-maanden',
   },
 };
 
@@ -39,7 +39,7 @@ export default function Top7EdelstenenDonkereMaanden() {
     "@type": "BlogPosting",
     "headline": "Top 7 Edelstenen voor de Donkere Maanden van het Jaar",
     "description": "Ontdek de 7 krachtigste edelstenen die je ondersteunen tijdens de donkere herfst- en wintermaanden. Van Zonnesteen voor levenslust tot Amethist voor diepe rust.",
-    "image": "https://stonesforhealth.nl/blog-images/Top 7 Edelstenen voor de Donkere Maanden van het Jaar.jpeg",
+    "image": "https://www.stonesforhealth.nl/blog-images/Top 7 Edelstenen voor de Donkere Maanden van het Jaar.jpeg",
     "datePublished": "2025-11-06T09:00:00Z",
     "dateModified": "2025-11-06T09:00:00Z",
     "author": {
@@ -51,7 +51,7 @@ export default function Top7EdelstenenDonkereMaanden() {
       "name": "StonesForHealth",
       "logo": {
         "@type": "ImageObject",
-        "url": "https://stonesforhealth.nl/logo.webp"
+        "url": "https://www.stonesforhealth.nl/logo.webp"
       }
     }
   };
@@ -66,9 +66,9 @@ export default function Top7EdelstenenDonkereMaanden() {
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <Breadcrumbs
           customItems={[
-            { name: 'Home', url: 'https://stonesforhealth.nl' },
-            { name: 'Blog', url: 'https://stonesforhealth.nl/blog' },
-            { name: 'Top 7 Edelstenen voor de Donkere Maanden', url: 'https://stonesforhealth.nl/blog/top-7-edelstenen-donkere-maanden' }
+            { name: 'Home', url: 'https://www.stonesforhealth.nl' },
+            { name: 'Blog', url: 'https://www.stonesforhealth.nl/blog' },
+            { name: 'Top 7 Edelstenen voor de Donkere Maanden', url: 'https://www.stonesforhealth.nl/blog/top-7-edelstenen-donkere-maanden' }
           ]}
         />
 

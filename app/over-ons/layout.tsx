@@ -9,7 +9,7 @@ export const metadata: Metadata = {
     description: 'Ontdek ons verhaal en onze passie voor authentieke edelstenen.',
   },
   alternates: {
-    canonical: 'https://stonesforhealth.nl/over-ons'
+    canonical: 'https://www.stonesforhealth.nl/over-ons'
   }
 };
 

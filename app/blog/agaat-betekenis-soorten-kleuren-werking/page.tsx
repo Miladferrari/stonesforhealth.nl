@@ -33,7 +33,7 @@ export const metadata: Metadata = {
     publishedTime: '2025-04-02',
   },
   alternates: {
-    canonical: 'https://stonesforhealth.nl/blog/agaat-betekenis-soorten-kleuren-werking',
+    canonical: 'https://www.stonesforhealth.nl/blog/agaat-betekenis-soorten-kleuren-werking',
   }
 };
 
@@ -42,7 +42,7 @@ const blogPostingSchema = {
   "@type": "BlogPosting",
   "headline": "Agaat: Betekenis, Soorten, Kleuren en Spirituele Werking",
   "description": "Ontdek alles over agaat - van blauwe agaat tot vuuragaat. Leer over de betekenis, werking, soorten, kleuren en geschiedenis van deze veelzijdige edelsteen.",
-  "image": "https://stonesforhealth.nl/blog-images/Agaat- Betekenis, Soorten, Kleuren en Spirituele Werking.webp",
+  "image": "https://www.stonesforhealth.nl/blog-images/Agaat- Betekenis, Soorten, Kleuren en Spirituele Werking.webp",
   "datePublished": "2025-04-02T09:00:00Z",
   "dateModified": "2025-04-02T09:00:00Z",
   "author": {
@@ -54,12 +54,12 @@ const blogPostingSchema = {
     "name": "Stones for Health",
     "logo": {
       "@type": "ImageObject",
-      "url": "https://stonesforhealth.nl/logo.webp"
+      "url": "https://www.stonesforhealth.nl/logo.webp"
     }
   },
   "mainEntityOfPage": {
     "@type": "WebPage",
-    "@id": "https://stonesforhealth.nl/blog/agaat-betekenis-soorten-kleuren-werking"
+    "@id": "https://www.stonesforhealth.nl/blog/agaat-betekenis-soorten-kleuren-werking"
   }
 };
 

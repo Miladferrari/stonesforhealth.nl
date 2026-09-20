@@ -30,7 +30,7 @@ export const metadata: Metadata = {
     publishedTime: '2025-04-10',
   },
   alternates: {
-    canonical: 'https://stonesforhealth.nl/blog/top-10-bekendste-onbekendste-edelstenen',
+    canonical: 'https://www.stonesforhealth.nl/blog/top-10-bekendste-onbekendste-edelstenen',
   }
 };
 
@@ -39,7 +39,7 @@ const blogPostingSchema = {
   "@type": "BlogPosting",
   "headline": "Top 10 Bekendste & Onbekendste Edelstenen Met Hun Werking",
   "description": "Ontdek de top 10 meest populaire edelstenen en de top 10 zeldzame geheimen met hun unieke spirituele krachten en toepassingen.",
-  "image": "https://stonesforhealth.nl/blog-images/Top 10 Bekendste & Onbekendste Edelstenen Met Hun Werking.webp",
+  "image": "https://www.stonesforhealth.nl/blog-images/Top 10 Bekendste & Onbekendste Edelstenen Met Hun Werking.webp",
   "datePublished": "2025-04-10T09:00:00Z",
   "dateModified": "2025-04-10T09:00:00Z",
   "author": {
@@ -51,12 +51,12 @@ const blogPostingSchema = {
     "name": "Stones for Health",
     "logo": {
       "@type": "ImageObject",
-      "url": "https://stonesforhealth.nl/logo.webp"
+      "url": "https://www.stonesforhealth.nl/logo.webp"
     }
   },
   "mainEntityOfPage": {
     "@type": "WebPage",
-    "@id": "https://stonesforhealth.nl/blog/top-10-bekendste-onbekendste-edelstenen"
+    "@id": "https://www.stonesforhealth.nl/blog/top-10-bekendste-onbekendste-edelstenen"
   }
 };
 

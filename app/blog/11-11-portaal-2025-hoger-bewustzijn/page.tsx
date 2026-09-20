@@ -29,7 +29,7 @@ export const metadata: Metadata = {
     publishedTime: '2025-11-06',
   },
   alternates: {
-    canonical: 'https://stonesforhealth.nl/blog/11-11-portaal-2025-hoger-bewustzijn',
+    canonical: 'https://www.stonesforhealth.nl/blog/11-11-portaal-2025-hoger-bewustzijn',
   },
 };
 
@@ -39,7 +39,7 @@ export default function ElevenElevenPortaal2025() {
     "@type": "BlogPosting",
     "headline": "Het 11/11 Portaal van 2025 – De Poort naar Hoger Bewustzijn en Manifestatiekracht",
     "description": "Ontdek de spirituele betekenis van het 11/11 portaal, de beste edelstenen voor dit moment en een krachtig ritueel voor manifestatie en bewustwording.",
-    "image": "https://stonesforhealth.nl/blog-images/Het 11:11 Portaal van 2025 – De Poort naar Hoger Bewustzijn en Manifestatiekracht.jpeg",
+    "image": "https://www.stonesforhealth.nl/blog-images/Het 11:11 Portaal van 2025 – De Poort naar Hoger Bewustzijn en Manifestatiekracht.jpeg",
     "datePublished": "2025-11-06T11:00:00Z",
     "dateModified": "2025-11-06T11:00:00Z",
     "author": {
@@ -51,7 +51,7 @@ export default function ElevenElevenPortaal2025() {
       "name": "StonesForHealth",
       "logo": {
         "@type": "ImageObject",
-        "url": "https://stonesforhealth.nl/logo.webp"
+        "url": "https://www.stonesforhealth.nl/logo.webp"
       }
     }
   };
@@ -66,9 +66,9 @@ export default function ElevenElevenPortaal2025() {
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <Breadcrumbs
           customItems={[
-            { name: 'Home', url: 'https://stonesforhealth.nl' },
-            { name: 'Blog', url: 'https://stonesforhealth.nl/blog' },
-            { name: '11/11 Portaal 2025', url: 'https://stonesforhealth.nl/blog/11-11-portaal-2025-hoger-bewustzijn' }
+            { name: 'Home', url: 'https://www.stonesforhealth.nl' },
+            { name: 'Blog', url: 'https://www.stonesforhealth.nl/blog' },
+            { name: '11/11 Portaal 2025', url: 'https://www.stonesforhealth.nl/blog/11-11-portaal-2025-hoger-bewustzijn' }
           ]}
         />
 

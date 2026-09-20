@@ -9,7 +9,7 @@ export const metadata: Metadata = {
     description: 'Gratis verzending vanaf €30 en snelle levering binnen 2-4 werkdagen.',
   },
   alternates: {
-    canonical: 'https://stonesforhealth.nl/verzending'
+    canonical: 'https://www.stonesforhealth.nl/verzending'
   }
 };
 

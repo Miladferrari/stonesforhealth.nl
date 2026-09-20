@@ -161,7 +161,7 @@ export const AbandonedCartEmail1 = ({
                 Authentieke Kristallen & Edelstenen
               </p>
               <p style="margin: 0; color: #3b223b; font-size: 13px; opacity: 0.6;">
-                <a href="https://stonesforhealth.nl" style="color: #492c4a; text-decoration: none;">stonesforhealth.nl</a>
+                <a href="https://www.stonesforhealth.nl" style="color: #492c4a; text-decoration: none;">stonesforhealth.nl</a>
                 <span style="margin: 0 8px;">•</span>
                 <a href="mailto:info@stonesforhealth.nl" style="color: #492c4a; text-decoration: none;">info@stonesforhealth.nl</a>
               </p>
