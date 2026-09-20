@@ -5,7 +5,6 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useCart } from '@/app/contexts/CartContextStoreAPI';
 import { Product, ProductVariation } from '@/lib/woocommerce';
-import { generateProductReviewData } from '@/lib/reviewGenerator';
 import { trackProductView, trackAddToCart } from '../../../lib/analytics';
 
 interface HikeGemstoneProductPageV2Props {
@@ -153,20 +152,26 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
   const canSelectDuo = availableQuantity >= 2;
   const canSelectFamily = availableQuantity >= 3;
 
-  // Check if product is in bestsellers category (ID: 20)
-  const isBestseller = product.categories?.some((cat: any) => cat.id === 20);
-
-  // Generate comprehensive review data with individual reviews - only for bestsellers
-  const reviewData = isBestseller
-    ? generateProductReviewData(product.id)
-    : {
-        reviews: [],
-        totalReviews: 0,
-        averageRating: '0',
-        distribution: []
-      };
+  // Reviews come from WooCommerce, never from a generator: showing invented
+  // reviews — and marking them "Geverifieerd" — is a banned commercial practice
+  // under art. 6:193g BW. Until real reviews exist, the section renders its
+  // empty state and the rating block stays hidden.
+  const reviewData = {
+    reviews: [] as Array<{
+      id: number;
+      name: string;
+      location: string;
+      rating: number;
+      date: string;
+      verified: boolean;
+      text: string;
+      reply?: { author: string; date: string; text: string };
+    }>,
+    totalReviews: product.rating_count ?? 0,
+    averageRating: product.average_rating ?? '0',
+    distribution: [] as Array<{ stars: number; count: number; percentage: number }>,
+  };
   const customerReviews = reviewData.reviews;
-  console.log('[Reviews] Is bestseller:', isBestseller, 'Generated data:', reviewData);
 
   // Helper function to render stars based on rating
   const renderStars = (rating: number, size: string = 'w-4 h-4') => {
