@@ -7,6 +7,7 @@ import CollectionProductGrid from '@/app/components/collection/CollectionProduct
 import CollectionPagination from '@/app/components/collection/CollectionPagination';
 import { Product } from '@/lib/woocommerce';
 import { scrollToTopOfList } from '@/app/lib/scrollToTopOfList';
+import { trackViewItemList, toAnalyticsItem } from '@/app/lib/analytics';
 
 const PRODUCTS_PER_PAGE = 12;
 
@@ -16,6 +17,16 @@ export default function BestsellersClient() {
   const [currentPage, setCurrentPage] = useState(1);
   // Marks where the product list starts, so paging scrolls back to it
   const listTopRef = useRef<HTMLDivElement>(null);
+
+  // view_item_list fires per rendered page of results, so GA4 can attribute
+  // which listing a product was discovered in.
+  useEffect(() => {
+    if (products.length === 0) return;
+    trackViewItemList(
+      products.map((product) => toAnalyticsItem(product)),
+      'Bestsellers'
+    );
+  }, [products]);
   const [totalPages, setTotalPages] = useState(1);
 
   useEffect(() => {

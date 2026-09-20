@@ -6,6 +6,7 @@ import Image from 'next/image';
 import { useCart } from '@/app/contexts/CartContextStoreAPI';
 import { getProductReviewSummary } from '@/lib/reviewGenerator';
 import { getProductUrl } from '@/lib/slugify';
+import { trackAddToCart, toAnalyticsItem } from '@/app/lib/analytics';
 
 interface Product {
   id: number;
@@ -105,6 +106,7 @@ export default function BestsellerGrid() {
 
   const handleQuickAdd = async (product: Product) => {
     addToCart(product as any, 1);
+    trackAddToCart(toAnalyticsItem(product as any), 1);
   };
 
   // Generate a color based on product name for placeholder backgrounds

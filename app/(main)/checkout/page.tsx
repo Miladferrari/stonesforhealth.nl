@@ -7,6 +7,7 @@ import dynamic from 'next/dynamic';
 import { useCart } from '../../contexts/CartContextStoreAPI';
 import CouponInput from '../../components/CouponInput';
 import TrustpilotWidget from '../../components/TrustpilotWidget';
+import { trackBeginCheckout, toAnalyticsItem } from '../../lib/analytics';
 
 // Import type for the ref handle
 import type { StripePaymentFormHandle } from '@/app/components/StripePaymentForm';
@@ -44,6 +45,18 @@ export default function UnifiedCheckoutPage() {
     loadAllowedCountries,
     isHydrated
   } = useCart();
+
+  // begin_checkout marks the top of the funnel in GA4. Wait for hydration so
+  // the event carries the real cart instead of an empty one.
+  const beginCheckoutSent = useRef(false);
+  useEffect(() => {
+    if (beginCheckoutSent.current || !isHydrated || items.length === 0) return;
+    beginCheckoutSent.current = true;
+    trackBeginCheckout(
+      items.map((item) => toAnalyticsItem(item.product, item.quantity)),
+      getTotalPriceAfterDiscount()
+    );
+  }, [isHydrated, items, getTotalPriceAfterDiscount]);
 
   // Form state
   const [formData, setFormData] = useState({

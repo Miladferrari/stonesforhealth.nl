@@ -1,10 +1,11 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useCartWithToast } from '../../hooks/useCartWithToast';
 import CouponInput from '../../components/CouponInput';
+import { trackViewCart, trackRemoveFromCart, toAnalyticsItem } from '../../lib/analytics';
 
 export default function CartPage() {
   const { 
@@ -19,9 +20,25 @@ export default function CartPage() {
   } = useCartWithToast();
   const [removingItems, setRemovingItems] = useState<number[]>([]);
 
+  // view_cart fires once per visit: the cart hydrates asynchronously, so wait
+  // for the first non-empty render instead of firing on mount.
+  const viewCartSent = useRef(false);
+  useEffect(() => {
+    if (viewCartSent.current || items.length === 0) return;
+    viewCartSent.current = true;
+    trackViewCart(
+      items.map((item) => toAnalyticsItem(item.product, item.quantity)),
+      getTotalPrice()
+    );
+  }, [items, getTotalPrice]);
+
   const handleRemoveItem = (productId: number) => {
+    const removed = items.find((item) => item.product.id === productId);
     setRemovingItems(prev => [...prev, productId]);
     setTimeout(() => {
+      if (removed) {
+        trackRemoveFromCart(toAnalyticsItem(removed.product), removed.quantity);
+      }
       removeFromCart(productId);
       setRemovingItems(prev => prev.filter(id => id !== productId));
     }, 300);
