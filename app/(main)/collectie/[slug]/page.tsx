@@ -2,6 +2,7 @@ import { woocommerce, Category } from '@/lib/woocommerce';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
+import { resolveSlug, subcategoriesFor, DISPLAY_NAMES } from '@/app/lib/categoryMenu';
 
 // Revalidate every 60 seconds
 export const revalidate = 60;
@@ -36,7 +37,10 @@ export async function generateMetadata({ params }: CollectionPageProps): Promise
 }
 
 export default async function CollectionPage({ params }: CollectionPageProps) {
-  const { slug } = await params;
+  const { slug: rawSlug } = await params;
+  // Oude URL's (stenen-per-sterrenbeeld, elementen, ...) wijzen naar de
+  // categorie die er nu voor in de plaats is gekomen.
+  const slug = resolveSlug(rawSlug);
 
   // Mapping van Nederlandse namen naar hun display namen
   const categoryTitles: Record<string, { title: string; description: string }> = {
@@ -59,7 +63,7 @@ export default async function CollectionPage({ params }: CollectionPageProps) {
 
   try {
     // Fetch all categories
-    const allCategories = await woocommerce.getCategories({ per_page: 100, hide_empty: true });
+    const allCategories = await woocommerce.getCategories({ per_page: 100, hide_empty: false });
 
     console.log('[CollectionPage] Looking for slug:', slug);
     console.log('[CollectionPage] Available categories:', allCategories.map(c => ({ id: c.id, name: c.name, slug: c.slug, parent: c.parent })));
@@ -74,89 +78,16 @@ export default async function CollectionPage({ params }: CollectionPageProps) {
     console.log('[CollectionPage] Found parent category:', parentCategory);
 
     if (!parentCategory) {
-      console.log('[CollectionPage] Category not found in WooCommerce, checking fallback data for:', slug);
-
-      // Create a fallback category for pages that don't exist yet in WooCommerce
-      const fallbackCategories: Record<string, { id: number; name: string; slug: string; parent: number; description: string; subcategories: Array<{ name: string; slug: string; description: string }> }> = {
-        'sterrenbeeld': {
-          id: 9999,
-          name: 'Sterrenbeeld',
-          slug: 'sterrenbeeld',
-          parent: 0,
-          description: 'Ontdek welke edelstenen bij jouw sterrenbeeld horen en versterk de unieke eigenschappen van jouw zonneteken met natuurlijke energie',
-          subcategories: [
-            { name: 'Ram', slug: 'ram', description: 'Kristallen voor het sterrenbeeld Ram (21 maart - 19 april)' },
-            { name: 'Stier', slug: 'stier', description: 'Kristallen voor het sterrenbeeld Stier (20 april - 20 mei)' },
-            { name: 'Tweelingen', slug: 'tweelingen', description: 'Kristallen voor het sterrenbeeld Tweelingen (21 mei - 20 juni)' },
-            { name: 'Kreeft', slug: 'kreeft', description: 'Kristallen voor het sterrenbeeld Kreeft (21 juni - 22 juli)' },
-            { name: 'Leeuw', slug: 'leeuw', description: 'Kristallen voor het sterrenbeeld Leeuw (23 juli - 22 augustus)' },
-            { name: 'Maagd', slug: 'maagd', description: 'Kristallen voor het sterrenbeeld Maagd (23 augustus - 22 september)' },
-            { name: 'Weegschaal', slug: 'weegschaal', description: 'Kristallen voor het sterrenbeeld Weegschaal (23 september - 22 oktober)' },
-            { name: 'Schorpioen', slug: 'schorpioen', description: 'Kristallen voor het sterrenbeeld Schorpioen (23 oktober - 21 november)' },
-            { name: 'Boogschutter', slug: 'boogschutter', description: 'Kristallen voor het sterrenbeeld Boogschutter (22 november - 21 december)' },
-            { name: 'Steenbok', slug: 'steenbok', description: 'Kristallen voor het sterrenbeeld Steenbok (22 december - 19 januari)' },
-            { name: 'Waterman', slug: 'waterman', description: 'Kristallen voor het sterrenbeeld Waterman (20 januari - 18 februari)' },
-            { name: 'Vissen', slug: 'vissen', description: 'Kristallen voor het sterrenbeeld Vissen (19 februari - 20 maart)' }
-          ]
-        }
-      };
-
-      if (fallbackCategories[slug]) {
-        const fallback = fallbackCategories[slug];
-        parentCategory = {
-          id: fallback.id,
-          name: fallback.name,
-          slug: fallback.slug,
-          parent: fallback.parent,
-          description: fallback.description,
-          display: 'default',
-          image: null,
-          count: fallback.subcategories.length
-        } as Category;
-
-        // Create fake subcategories for fallback
-        subcategories = fallback.subcategories.map((sub, index) => ({
-          id: 10000 + index,
-          name: sub.name,
-          slug: sub.slug,
-          parent: fallback.id,
-          description: sub.description,
-          display: 'default',
-          image: {
-            id: 10000 + index,
-            src: `/${sub.slug}.png`,
-            alt: sub.name
-          },
-          count: 0
-        } as Category));
-
-        console.log('[CollectionPage] Using fallback data for:', slug);
-      } else {
-        console.error('[CollectionPage] No fallback data available for slug:', slug);
-        notFound();
-      }
+      console.error('[CollectionPage] Category not found in WooCommerce:', slug);
+      notFound();
     }
 
-    // Get all subcategories that belong to this parent (only if not using fallback data)
-    if (subcategories.length === 0) {
-      subcategories = allCategories.filter(cat => cat.parent === parentCategory!.id && cat.count > 0);
+    // Subcategorieën in de volgorde van de categorieboom. Dit neemt ook
+    // categorieën mee die in WooCommerce onder een andere ouder hangen maar
+    // hier wel horen, zoals de intenties onder Intenties.
+    subcategories = subcategoriesFor(parentCategory.slug, allCategories) as Category[];
 
-      console.log('[CollectionPage] Found subcategories from API:', subcategories.length);
-
-      // Sort subcategories - use zodiac order for sterrenbeeld, alphabetically for others
-      if (slug === 'sterrenbeeld') {
-        // Zodiac order
-        const zodiacOrder = ['ram', 'stier', 'tweelingen', 'kreeft', 'leeuw', 'maagd', 'weegschaal', 'schorpioen', 'boogschutter', 'steenbok', 'waterman', 'vissen'];
-        subcategories.sort((a, b) => {
-          const indexA = zodiacOrder.indexOf(a.slug.toLowerCase());
-          const indexB = zodiacOrder.indexOf(b.slug.toLowerCase());
-          return indexA - indexB;
-        });
-      } else {
-        // Sort alphabetically for other categories
-        subcategories.sort((a, b) => a.name.localeCompare(b.name, 'nl'));
-      }
-    }
+    console.log('[CollectionPage] Subcategories:', subcategories.length);
 
   } catch (error) {
     console.error('[CollectionPage] Failed to fetch categories:', error);

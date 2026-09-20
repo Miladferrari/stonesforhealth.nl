@@ -61,6 +61,17 @@ export const MENU: MenuSection[] = [
     ]
   },
   {
+    "slug": "intenties",
+    "children": [
+      "bescherming-armbanden",
+      "liefde-relaties",
+      "rust-balans",
+      "kracht-zelfvertrouwen",
+      "geluk-voorspoed",
+      "chakra-armbanden"
+    ]
+  },
+  {
     "slug": "kettingen-hangers",
     "children": [
       "edelsteen-hangers",
@@ -137,11 +148,31 @@ export const MENU: MenuSection[] = [
   }
 ];
 
+/**
+ * Oude categorie-URL's die nog in links, bookmarks en zoekresultaten staan,
+ * met de categorie waar ze nu naartoe wijzen.
+ */
+export const SLUG_ALIASES: Record<string, string> = {
+  'stenen-per-sterrenbeeld': 'sterrenbeeld-armbanden',
+  sterrenbeeld: 'sterrenbeeld-armbanden',
+  'edelstenen-mineralen': 'edelstenen-kristallen',
+  'edelsteen-sieraden': 'edelsteen-armbanden',
+  'chakru-edelstenen': 'chakra-energie',
+  elementen: 'edelstenen-kristallen',
+};
+
+/** Zet een (mogelijk verouderde) slug om naar de slug die nu bestaat. */
+export function resolveSlug(slug: string): string {
+  const key = (slug || '').toLowerCase();
+  return SLUG_ALIASES[key] || key;
+}
+
 /** Vaste volgorde van de hoofdcategorieën. */
 export const MAIN_ORDER: string[] = [
   "edelstenen-kristallen",
   "edelsteen-armbanden",
   "sterrenbeeld-armbanden",
+  "intenties",
   "kettingen-hangers",
   "pendels-spirituele-tools",
   "wonen-edelsteen-decoratie",
@@ -192,6 +223,7 @@ export const DISPLAY_NAMES: Record<string, string> = {
   "sterrenbeeld-steenbok": "Steenbok",
   "sterrenbeeld-waterman": "Waterman",
   "sterrenbeeld-vissen": "Vissen",
+  "intenties": "Intenties",
   "kettingen-hangers": "Kettingen & Hangers",
   "edelsteen-hangers": "Edelsteen Hangers",
   "donut-hangers": "Donut Hangers",

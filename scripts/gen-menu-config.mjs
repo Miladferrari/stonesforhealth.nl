@@ -33,6 +33,25 @@ export interface MenuSection {
 /** Hoofdcategorieën in menuvolgorde, elk met zijn subcategorieën. */
 export const MENU: MenuSection[] = ${JSON.stringify(sections, null, 2)};
 
+/**
+ * Oude categorie-URL's die nog in links, bookmarks en zoekresultaten staan,
+ * met de categorie waar ze nu naartoe wijzen.
+ */
+export const SLUG_ALIASES: Record<string, string> = {
+  'stenen-per-sterrenbeeld': 'sterrenbeeld-armbanden',
+  sterrenbeeld: 'sterrenbeeld-armbanden',
+  'edelstenen-mineralen': 'edelstenen-kristallen',
+  'edelsteen-sieraden': 'edelsteen-armbanden',
+  'chakru-edelstenen': 'chakra-energie',
+  elementen: 'edelstenen-kristallen',
+};
+
+/** Zet een (mogelijk verouderde) slug om naar de slug die nu bestaat. */
+export function resolveSlug(slug: string): string {
+  const key = (slug || '').toLowerCase();
+  return SLUG_ALIASES[key] || key;
+}
+
 /** Vaste volgorde van de hoofdcategorieën. */
 export const MAIN_ORDER: string[] = ${JSON.stringify(sections.map(s => s.slug), null, 2)};
 
