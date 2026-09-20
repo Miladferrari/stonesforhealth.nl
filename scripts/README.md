@@ -53,9 +53,22 @@ node scripts/hercategoriseer.mjs --apply
 node scripts/verberg-zonder-foto.mjs
 node scripts/verberg-zonder-foto.mjs --apply
 
-# 9. Controleren
+# 9. Prijzen gelijktrekken met bol
+node scripts/sync-prijzen.mjs
+node scripts/sync-prijzen.mjs --apply
+
+# 10. Controleren
 node scripts/inventory.mjs
 ```
+
+## Prijzen
+
+`sync-prijzen.mjs` vergelijkt de winkelprijs met de prijs op bol en trekt ze
+gelijk. De oude prijzen komen in `data/prijzen-voor-sync.json`, dus
+terugdraaien kan altijd met `--herstel --apply`.
+
+Let op de volgorde: de prijsklassen bij Cadeaus (onder €25, €25-50, luxe)
+volgen uit de prijs. Draai `hercategoriseer.mjs` dus **na** een prijssync.
 
 ## Producten zonder foto
 
@@ -159,6 +172,7 @@ WP_APP_PASSWORD=xxxx xxxx xxxx xxxx xxxx xxxx
 | `find-missing-on-bol.mjs` | Zoekt op bol naar producten zonder foto |
 | `hercategoriseer.mjs` | Werkt de collecties bij op de volledige titel |
 | `verberg-zonder-foto.mjs` | Haalt producten zonder foto uit de overzichten |
+| `sync-prijzen.mjs` | Trekt de winkelprijzen gelijk met bol |
 
 ## Categorie toevoegen of hernoemen
 

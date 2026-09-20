@@ -35,6 +35,8 @@ const SOORT = new Set([
   'edelsteen-harten', 'agaatschijven', 'grote-edelstenen-xxl',
   'wonen-edelsteen-decoratie', 'kristal-decoratie', 'theelichthouders', 'edelsteen-boompjes',
   'agaat-decoratie', 'white-sage', 'seleniet', 'wierook', 'reinigingssets',
+  // De prijsklassen volgen recht uit de prijs; dat is een feit, geen keuze.
+  'cadeaus-onder-25', 'cadeaus-25-50', 'luxe-cadeaus',
 ]);
 
 const decode = s => (s || '').replace(/&amp;/g, '&').replace(/&#0?39;/g, "'").replace(/&quot;/g, '"');
