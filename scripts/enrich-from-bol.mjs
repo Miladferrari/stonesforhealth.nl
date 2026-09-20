@@ -224,14 +224,45 @@ function cleanDescription(html, name = '', naam2 = '') {
   return { html: out, dropped, broken: unbalanced(out) };
 }
 
-/** Korte samenvatting: de eerste alinea, afgekapt op een zinseinde. */
-function shortDescription(html) {
-  const m = html.match(/<p[^>]*>([\s\S]*?)<\/p>/i);
-  const text = textOf(m ? m[1] : html);
-  if (text.length <= 300) return text;
-  const cut = text.slice(0, 300);
-  const stop = Math.max(cut.lastIndexOf('. '), cut.lastIndexOf('! '));
-  return (stop > 120 ? cut.slice(0, stop + 1) : cut.trimEnd() + '…');
+/**
+ * Korte samenvatting voor de meta-description. Google toont er ongeveer 155
+ * tekens van, dus we plakken alinea's aan elkaar tot we daar in de buurt zijn.
+ * Specificatielijsten slaan we eerst over: "Merk: S4H" is geen samenvatting.
+ */
+function shortDescription(html, doel = 150, max = 300) {
+  // Losse kandidaten: alinea's, en van een lijst elk item apart.
+  const kandidaten = [];
+  for (const b of blocks(html)) {
+    if (/^<(ul|ol)\b/i.test(b.trim())) {
+      for (const li of b.matchAll(/<li\b[^>]*>([\s\S]*?)<\/li>/gi)) {
+        const t = textOf(li[1]);
+        if (t) kandidaten.push(t);
+      }
+    } else {
+      const t = textOf(b);
+      // Koppen zijn geen samenvatting; die horen niet in de meta-description.
+      if (t && !isHeading(b)) kandidaten.push({ tekst: t });
+    }
+  }
+  const tekstVan = k => (typeof k === 'string' ? k : k.tekst);
+  // "Merk: S4H" is een specificatie, geen samenvatting. Die komen achteraan.
+  const isSpec = t => /^[^:]{2,25}:/.test(t) || t.length < 40;
+  const lopend = kandidaten.filter(k => !isSpec(tekstVan(k))).map(tekstVan);
+  const specs = kandidaten.filter(k => isSpec(tekstVan(k))).map(tekstVan);
+
+  let tekst = '';
+  for (const deel of [...lopend, ...specs]) {
+    if (tekst.length >= doel) break;
+    tekst = tekst ? `${tekst} ${deel}` : deel;
+  }
+  tekst = tekst.replace(/\s+/g, ' ').trim();
+  if (tekst.length <= max) return tekst;
+
+  const cut = tekst.slice(0, max);
+  const punt = Math.max(cut.lastIndexOf('. '), cut.lastIndexOf('! '));
+  if (punt > 120) return cut.slice(0, punt + 1);
+  const spatie = cut.lastIndexOf(' ');
+  return (spatie > 120 ? cut.slice(0, spatie) : cut).replace(/[\s,;:.-]+$/, '') + '…';
 }
 
 /** Alt-tekst afkappen op een woordgrens; zoekmachines lezen ~125 tekens. */
@@ -343,11 +374,14 @@ for (const { p, rec } of todo) {
   const payload = {};
   // Met --names komt de titel 1:1 van bol, ook bij een dunne beschrijving.
   if (TAKE_NAMES && rec.name && decode(rec.name) !== p.name) payload.name = decode(rec.name);
-  if (description.length >= MIN_DESC) {
+
+  // Een paar bol-pagina's hebben alleen een titel en verder geen tekst. Die
+  // leveren geen samenvatting op; dan laten we staan wat er in de shop stond.
+  const samenvatting = shortDescription(description);
+  if (description.length >= MIN_DESC && samenvatting.length >= 40) {
     payload.description = description;
-    payload.short_description = shortDescription(description);
+    payload.short_description = samenvatting;
   } else {
-    // Er bleef te weinig bruikbare tekst over; de huidige tekst blijft staan.
     tooShort.push({ sku: p.sku, name: p.name, len: description.length });
   }
 
