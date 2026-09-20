@@ -1,6 +1,6 @@
 import { MetadataRoute } from 'next';
 import { woocommerce } from '@/lib/woocommerce';
-import { BLOG_SLUGS } from '@/app/lib/blogSlugs';
+import { getPostSlugs } from '@/lib/wordpress';
 
 const baseUrl = 'https://www.stonesforhealth.nl';
 
@@ -71,18 +71,21 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority,
   }));
 
-  const blogEntries: Entry[] = BLOG_SLUGS.map((slug) => ({
-    url: `${baseUrl}/blog/${slug}`,
-    lastModified: now,
-    changeFrequency: 'monthly',
-    priority: 0.7,
-  }));
-
-  // A failing Woo call should not take the whole sitemap down with it
-  const [products, collections] = await Promise.all([
+  // A failing Woo or WordPress call should not take the whole sitemap down with it
+  const [products, collections, wordpressPosts] = await Promise.all([
     getProductEntries().catch(() => []),
     getCollectionEntries().catch(() => []),
+    getPostSlugs().catch(() => []),
   ]);
+
+  // Alle blogs komen uit WordPress; er staat niets meer hardgecodeerd
+  const blogEntries: Entry[] = wordpressPosts
+    .map((post) => ({
+      url: `${baseUrl}/blog/${post.slug}`,
+      lastModified: post.modifiedIso ? new Date(post.modifiedIso) : now,
+      changeFrequency: 'monthly' as const,
+      priority: 0.7,
+    }));
 
   return [...staticEntries, ...blogEntries, ...collections, ...products];
 }
