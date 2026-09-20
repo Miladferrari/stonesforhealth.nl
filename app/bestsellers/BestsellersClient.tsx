@@ -1,11 +1,12 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import CollectionHero from '@/app/components/collection/CollectionHero';
 import CollectionTrustBadges from '@/app/components/collection/CollectionTrustBadges';
 import CollectionProductGrid from '@/app/components/collection/CollectionProductGrid';
 import CollectionPagination from '@/app/components/collection/CollectionPagination';
 import { Product } from '@/lib/woocommerce';
+import { scrollToTopOfList } from '@/app/lib/scrollToTopOfList';
 
 const PRODUCTS_PER_PAGE = 12;
 
@@ -13,6 +14,8 @@ export default function BestsellersClient() {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
+  // Marks where the product list starts, so paging scrolls back to it
+  const listTopRef = useRef<HTMLDivElement>(null);
   const [totalPages, setTotalPages] = useState(1);
 
   useEffect(() => {
@@ -116,8 +119,7 @@ export default function BestsellersClient() {
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
-    // Scroll to top of product grid
-    window.scrollTo({ top: 800, behavior: 'smooth' });
+    scrollToTopOfList(listTopRef.current);
   };
 
   return (
@@ -132,6 +134,9 @@ export default function BestsellersClient() {
       <CollectionTrustBadges />
 
       {/* Product Grid with Pagination */}
+      {/* Scroll anchor: stays mounted while loading, so paging can
+          always aim at the start of the list */}
+      <div ref={listTopRef} aria-hidden="true" />
       {loading ? (
         <div className="flex items-center justify-center py-20">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#492c4a]"></div>

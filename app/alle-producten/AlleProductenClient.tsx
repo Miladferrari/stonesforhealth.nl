@@ -1,12 +1,13 @@
 'use client';
 
-import { useState, useEffect, Suspense } from 'react';
+import { useState, useEffect, useRef, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import CollectionHero from '@/app/components/collection/CollectionHero';
 import CollectionTrustBadges from '@/app/components/collection/CollectionTrustBadges';
 import CollectionProductGrid from '@/app/components/collection/CollectionProductGrid';
 import CollectionPagination from '@/app/components/collection/CollectionPagination';
 import { Product } from '@/lib/woocommerce';
+import { scrollToTopOfList } from '@/app/lib/scrollToTopOfList';
 import { DISPLAY_NAMES } from '../lib/categoryMenu';
 
 const PRODUCTS_PER_PAGE = 12;
@@ -18,6 +19,8 @@ function AlleProductenContent() {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
+  // Marks where the product list starts, so paging scrolls back to it
+  const listTopRef = useRef<HTMLDivElement>(null);
   const [totalPages, setTotalPages] = useState(1);
   const [collectionTitle, setCollectionTitle] = useState('ALLE PRODUCTEN');
 
@@ -135,8 +138,7 @@ function AlleProductenContent() {
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
-    // Scroll to top of product grid
-    window.scrollTo({ top: 800, behavior: 'smooth' });
+    scrollToTopOfList(listTopRef.current);
   };
 
   return (
@@ -151,6 +153,9 @@ function AlleProductenContent() {
       <CollectionTrustBadges />
 
       {/* Product Grid with Pagination */}
+      {/* Scroll anchor: stays mounted while loading, so paging can
+          always aim at the start of the list */}
+      <div ref={listTopRef} aria-hidden="true" />
       {loading ? (
         <div className="flex items-center justify-center py-20">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#492c4a]"></div>

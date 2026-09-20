@@ -1,5 +1,5 @@
 import { notFound, redirect } from 'next/navigation';
-import { woocommerce } from '@/lib/woocommerce';
+import { woocommerce, decodeEntities } from '@/lib/woocommerce';
 import HikeGemstoneProductPageV2 from './HikeGemstoneProductPageV2';
 import JsonLd from '@/app/components/JsonLd';
 import type { Metadata } from 'next';
@@ -9,6 +9,21 @@ export const revalidate = 60;
 
 interface ProductPageProps {
   params: Promise<{ slug: string }>;
+}
+
+/**
+ * De productnamen komen 1:1 van bol en zijn vaak ruim 100 tekens lang. In de
+ * <title> past ongeveer 60 tekens voordat Google afkapt, dus daar gebruiken we
+ * alleen de kop van de titel. Op de pagina zelf blijft de volledige naam staan.
+ */
+function shortTitle(name: string, max = 42): string {
+  const clean = name.replace(/\s+/g, ' ').trim();
+  if (clean.length <= max) return clean;
+  const head = clean.split(/\s+[–—|]\s+/)[0];
+  if (head && head.length <= max) return head;
+  const cut = (head || clean).slice(0, max);
+  const space = cut.lastIndexOf(' ');
+  return (space > 20 ? cut.slice(0, space) : cut).replace(/[\s,;:–-]+$/, '');
 }
 
 
@@ -41,12 +56,14 @@ export async function generateMetadata({ params }: ProductPageProps): Promise<Me
       };
     }
 
-    // Use Yoast SEO data if available, otherwise use product data as fallback
-    const fallbackDescription = product.short_description
-      ?.replace(/<[^>]*>/g, '')
-      .substring(0, 160) || product.name;
+    // De korte omschrijving is html; voor een meta-description moeten de tags
+    // eruit en de entities gedecodeerd, anders staat er "&amp;" in de snippet.
+    const plainSummary = decodeEntities((product.short_description || '').replace(/<[^>]*>/g, ' '))
+      .replace(/\s+/g, ' ')
+      .trim();
+    const fallbackDescription = plainSummary.slice(0, 160).trim() || product.name;
 
-    const seoTitle = product.yoast_seo?.title || `${product.name} | Authentieke Edelstenen | StonesForHealth`;
+    const seoTitle = product.yoast_seo?.title || `${shortTitle(product.name)} | Stones for Health`;
     const seoDescription = product.yoast_seo?.meta_description || fallbackDescription;
     const canonicalUrl = product.yoast_seo?.canonical_url || `https://www.stonesforhealth.nl/product/${product.slug}`;
     const productImage = product.images?.[0]?.src || '/og-image.jpg';
@@ -62,7 +79,7 @@ export async function generateMetadata({ params }: ProductPageProps): Promise<Me
       description: seoDescription,
       keywords: keywords,
       openGraph: {
-        title: seoTitle,
+        title: product.name,
         description: seoDescription,
         url: canonicalUrl,
         siteName: 'Stones for Health',
@@ -79,7 +96,7 @@ export async function generateMetadata({ params }: ProductPageProps): Promise<Me
       },
       twitter: {
         card: 'summary_large_image',
-        title: seoTitle,
+        title: product.name,
         description: seoDescription,
         images: [productImage],
       },
@@ -154,9 +171,11 @@ export default async function ProductPage({ params }: ProductPageProps) {
       "@context": "https://schema.org",
       "@type": "Product",
       "name": product.name,
-      "description": product.short_description?.replace(/<[^>]*>/g, '') || product.name,
+      "description": decodeEntities((product.short_description || '').replace(/<[^>]*>/g, ' ')).replace(/\s+/g, ' ').trim() || product.name,
       "image": product.images?.map(img => img.src) || [],
-      "sku": `S4H-${product.id}`,
+      // De SKU in WooCommerce is de EAN; Google gebruikt die voor rich results.
+      "sku": product.sku || `S4H-${product.id}`,
+      ...(/^\d{13}$/.test(product.sku || '') ? { "gtin13": product.sku } : {}),
       "brand": {
         "@type": "Brand",
         "name": "Stones for Health"

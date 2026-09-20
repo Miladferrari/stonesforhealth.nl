@@ -184,6 +184,41 @@ class CacheManager {
   }
 }
 
+/**
+ * De WooCommerce API geeft platte tekst html-gecodeerd terug ("Jade &amp;
+ * Aventurijn"). React codeert dat bij het renderen nog een keer, waardoor de
+ * bezoeker letterlijk "&amp;" in de titel ziet staan. Hier halen we die codering
+ * eruit. Beschrijvingen blijven ongemoeid: die zijn bewust html.
+ */
+const PLAIN_TEXT_KEYS = new Set(['name', 'alt']);
+
+export function decodeEntities(text: string): string {
+  return text
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&quot;/g, '"')
+    .replace(/&(?:apos|#0?39);/g, "'")
+    .replace(/&nbsp;/g, ' ')
+    .replace(/&#(\d+);/g, (_, code) => String.fromCharCode(Number(code)))
+    .replace(/&#x([0-9a-f]+);/gi, (_, hex) => String.fromCharCode(parseInt(hex, 16)))
+    // &amp; als laatste, anders wordt "&amp;lt;" per ongeluk een echte tag.
+    .replace(/&amp;/g, '&');
+}
+
+function decodePlainText<T>(value: T): T {
+  if (Array.isArray(value)) return value.map(decodePlainText) as unknown as T;
+  if (value && typeof value === 'object') {
+    const out: Record<string, unknown> = {};
+    for (const [key, val] of Object.entries(value)) {
+      out[key] = typeof val === 'string' && PLAIN_TEXT_KEYS.has(key)
+        ? decodeEntities(val)
+        : decodePlainText(val);
+    }
+    return out as T;
+  }
+  return value;
+}
+
 class WooCommerceAPI {
   private cache = new CacheManager();
   private pendingRequests = new Map<string, Promise<any>>();
@@ -347,7 +382,7 @@ class WooCommerceAPI {
 
         let data;
         try {
-          data = await response.json();
+          data = decodePlainText(await response.json());
         } catch (jsonError) {
           wooLogger.warn('Failed to parse JSON, returning empty data');
           return { products: [] as T, total: 0, totalPages: 0 };
@@ -521,7 +556,7 @@ class WooCommerceAPI {
 
       let data;
       try {
-        data = await response.json();
+        data = decodePlainText(await response.json());
       } catch (jsonError) {
         wooLogger.warn('Failed to parse JSON response, returning empty data');
         return [] as T;
