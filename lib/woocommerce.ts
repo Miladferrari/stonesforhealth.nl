@@ -48,6 +48,7 @@ export interface Product {
   variations?: number[];
   date_modified?: string;
   sku?: string;
+  catalog_visibility?: 'visible' | 'catalog' | 'search' | 'hidden';
   average_rating?: string;
   rating_count?: number;
   // Yoast SEO data (added via WordPress filter)
@@ -191,6 +192,18 @@ class CacheManager {
  * eruit. Beschrijvingen blijven ongemoeid: die zijn bewust html.
  */
 const PLAIN_TEXT_KEYS = new Set(['name', 'alt']);
+
+/**
+ * WooCommerce kent geen filter op zichtbaarheid in de REST API, dus dat doen
+ * we hier. Een product op "verborgen" hoort niet in de overzichten, maar de
+ * productpagina zelf blijft wel bestaan — dat is precies het verschil met een
+ * concept, en het voorkomt 404's op url's die al in de sitemap staan.
+ * Geldt daarom alleen voor lijsten, niet voor het ophalen van één product.
+ */
+function inDeCatalogus(p: Product): boolean {
+  const v = p?.catalog_visibility;
+  return v === undefined || v === 'visible' || v === 'catalog';
+}
 
 export function decodeEntities(text: string): string {
   return text
@@ -616,7 +629,10 @@ class WooCommerceAPI {
     const endpoint = `products${
       queryParams.toString() ? "?" + queryParams.toString() : ""
     }`;
-    return this.fetchAPIWithHeaders<Product[]>(endpoint);
+    const result = await this.fetchAPIWithHeaders<Product[]>(endpoint);
+    const zichtbaar = (result.products || []).filter(inDeCatalogus);
+    const verborgen = (result.products || []).length - zichtbaar.length;
+    return { ...result, products: zichtbaar, total: Math.max(0, result.total - verborgen) };
   }
 
   async getProduct(id: number, options?: { fresh?: boolean }): Promise<Product> {
@@ -679,7 +695,8 @@ class WooCommerceAPI {
     queryParams.append("status", "publish");
 
     const endpoint = `products?${queryParams.toString()}`;
-    return this.fetchAPI<Product[]>(endpoint);
+    const producten = await this.fetchAPI<Product[]>(endpoint);
+    return (producten || []).filter(inDeCatalogus);
   }
 
   async searchProducts(
@@ -699,10 +716,12 @@ class WooCommerceAPI {
     queryParams.append("status", "publish");
 
     const endpoint = `products?${queryParams.toString()}`;
-    return this.fetchAPI<Product[]>(endpoint, {
+    const gevonden = await this.fetchAPI<Product[]>(endpoint, {
       useCache: false,
       cache: "no-store",
     }); // Don't cache search results
+    // Bij zoeken telt ook 'search' mee als zichtbaar.
+    return (gevonden || []).filter(p => p?.catalog_visibility !== 'hidden');
   }
 
   async createOrder(orderData: any): Promise<any> {
