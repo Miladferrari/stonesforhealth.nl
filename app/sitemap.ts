@@ -1,7 +1,6 @@
 import { MetadataRoute } from 'next';
-import { readdirSync } from 'fs';
-import { join } from 'path';
 import { woocommerce } from '@/lib/woocommerce';
+import { BLOG_SLUGS } from '@/app/lib/blogSlugs';
 
 const baseUrl = 'https://www.stonesforhealth.nl';
 
@@ -23,18 +22,6 @@ const staticPages: Array<{ path: string; priority: number; changeFrequency: Entr
   { path: '/privacy', priority: 0.3, changeFrequency: 'yearly' },
   { path: '/voorwaarden', priority: 0.3, changeFrequency: 'yearly' },
 ];
-
-// Read blog slugs straight from the route folders so a new post is picked up
-// automatically — no second list to keep in sync.
-function getBlogSlugs(): string[] {
-  try {
-    return readdirSync(join(process.cwd(), 'app/blog'), { withFileTypes: true })
-      .filter((entry) => entry.isDirectory() && !entry.name.startsWith('[') && !entry.name.startsWith('_'))
-      .map((entry) => entry.name);
-  } catch {
-    return [];
-  }
-}
 
 async function getProductEntries(): Promise<Entry[]> {
   const entries: Entry[] = [];
@@ -84,7 +71,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority,
   }));
 
-  const blogEntries: Entry[] = getBlogSlugs().map((slug) => ({
+  const blogEntries: Entry[] = BLOG_SLUGS.map((slug) => ({
     url: `${baseUrl}/blog/${slug}`,
     lastModified: now,
     changeFrequency: 'monthly',
