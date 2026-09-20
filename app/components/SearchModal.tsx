@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { getProductUrl } from '@/lib/slugify';
+import { trackSearch } from '../lib/analytics';
 
 interface SearchModalProps {
   isOpen: boolean;
@@ -49,6 +50,9 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
             const data = await response.json();
             setResults(data);
             setSearched(true);
+            // Fires after the debounce, so GA4 records the term the visitor
+            // settled on rather than every keystroke
+            trackSearch(query.trim());
           }
         } catch (error) {
           console.error('Search error:', error);

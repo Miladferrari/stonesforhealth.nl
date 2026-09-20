@@ -8,6 +8,7 @@ import CollectionProductGrid from '@/app/components/collection/CollectionProduct
 import CollectionPagination from '@/app/components/collection/CollectionPagination';
 import { Product } from '@/lib/woocommerce';
 import { scrollToTopOfList } from '@/app/lib/scrollToTopOfList';
+import { trackViewItemList, toAnalyticsItem } from '@/app/lib/analytics';
 import { DISPLAY_NAMES } from '../lib/categoryMenu';
 
 const PRODUCTS_PER_PAGE = 12;
@@ -135,6 +136,16 @@ function AlleProductenContent() {
 
     return fallbackProducts;
   };
+
+  // view_item_list fires per rendered page of results, so GA4 can attribute
+  // which listing a product was discovered in.
+  useEffect(() => {
+    if (products.length === 0) return;
+    trackViewItemList(
+      products.map((product) => toAnalyticsItem(product)),
+      collectionTitle || 'Alle producten'
+    );
+  }, [products, collectionTitle]);
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);

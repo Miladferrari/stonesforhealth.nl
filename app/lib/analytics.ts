@@ -22,6 +22,24 @@ const hasConsent = (): boolean => {
   return localStorage.getItem('cookie_consent') === 'granted';
 };
 
+// Maps a WooCommerce product onto the shape GA4 expects. Cart items keep their
+// own quantity; elsewhere it defaults to 1.
+export const toAnalyticsItem = (
+  wooProduct: {
+    id: number | string;
+    name: string;
+    price?: string | number;
+    categories?: Array<{ name: string }>;
+  },
+  quantity: number = 1
+): Product => ({
+  id: String(wooProduct.id),
+  name: wooProduct.name,
+  price: typeof wooProduct.price === 'number' ? wooProduct.price : parseFloat(wooProduct.price || '0') || 0,
+  category: wooProduct.categories?.[0]?.name,
+  quantity,
+});
+
 // Track product view
 export const trackProductView = (product: Product) => {
   if (!hasConsent() || typeof window === 'undefined' || !window.gtag) return;

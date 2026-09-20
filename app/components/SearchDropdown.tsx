@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { getProductUrl } from '@/lib/slugify';
+import { trackSearch } from '../lib/analytics';
 
 interface SearchDropdownProps {
   isOpen: boolean;
@@ -71,6 +72,9 @@ export default function SearchDropdown({ isOpen, onClose }: SearchDropdownProps)
             const data = await response.json();
             setResults(data.slice(0, 6)); // Limit to 6 results for cleaner UI
             setSearched(true);
+            // Fires after the debounce, so GA4 records the term the visitor
+            // settled on rather than every keystroke
+            trackSearch(query.trim());
           }
         } catch (error) {
           console.error('Search error:', error);

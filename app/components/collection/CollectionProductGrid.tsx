@@ -8,6 +8,7 @@ import { useCart } from '@/app/contexts/CartContextStoreAPI';
 import { useToast } from '@/app/contexts/ToastContext';
 import { getProductReviewSummary } from '@/lib/reviewGenerator';
 import { getProductUrl } from '@/lib/slugify';
+import { trackAddToCart, toAnalyticsItem } from '@/app/lib/analytics';
 
 interface CollectionProductGridProps {
   products: Product[];
@@ -210,6 +211,7 @@ export default function CollectionProductGrid({
                       e.preventDefault();
                       e.stopPropagation();
                       addToCart(product);
+                      trackAddToCart(toAnalyticsItem(product), 1);
                       showToast('Product toegevoegd aan winkelwagen!', 'success');
                     }}
                     className="w-full rounded-lg text-sm sm:text-base font-semibold py-2.5 sm:py-3 transition-all duration-200 flex items-center justify-center gap-2 shadow-sm bg-[#492c4a] text-white hover:bg-[#492c4a]/90 hover:shadow-md active:scale-95"
