@@ -31,7 +31,7 @@ export const metadata: Metadata = {
     publishedTime: '2025-03-30',
   },
   alternates: {
-    canonical: 'https://stonesforhealth.nl/blog/s4h-sieraden-spirituele-kracht-stijl',
+    canonical: 'https://www.stonesforhealth.nl/blog/s4h-sieraden-spirituele-kracht-stijl',
   }
 };
 
@@ -40,7 +40,7 @@ const blogPostingSchema = {
   "@type": "BlogPosting",
   "headline": "S4H Sieraden: Spirituele Kracht en Stijl in Één",
   "description": "Ontdek S4H sieraden - edelsteen armbanden, kettingen en ringen met echte spirituele werking. Combineer stijl met chakra balans, bescherming en liefde.",
-  "image": "https://stonesforhealth.nl/blog-images/S4H Sieraden- Spirituele Kracht en Stijl in Één.webp",
+  "image": "https://www.stonesforhealth.nl/blog-images/S4H Sieraden- Spirituele Kracht en Stijl in Één.webp",
   "datePublished": "2025-03-30T09:00:00Z",
   "dateModified": "2025-03-30T09:00:00Z",
   "author": {
@@ -52,12 +52,12 @@ const blogPostingSchema = {
     "name": "Stones for Health",
     "logo": {
       "@type": "ImageObject",
-      "url": "https://stonesforhealth.nl/logo.webp"
+      "url": "https://www.stonesforhealth.nl/logo.webp"
     }
   },
   "mainEntityOfPage": {
     "@type": "WebPage",
-    "@id": "https://stonesforhealth.nl/blog/s4h-sieraden-spirituele-kracht-stijl"
+    "@id": "https://www.stonesforhealth.nl/blog/s4h-sieraden-spirituele-kracht-stijl"
   }
 };
 

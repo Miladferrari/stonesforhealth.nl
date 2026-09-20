@@ -16,7 +16,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Bestsellers - Meest Populaire Edelstenen | StonesForHealth',
     description: 'Ontdek onze bestselling edelstenen en kristallen. De meest geliefde stenen gekozen door duizenden klanten.',
-    url: 'https://stonesforhealth.nl/bestsellers',
+    url: 'https://www.stonesforhealth.nl/bestsellers',
     siteName: 'Stones for Health',
     locale: 'nl_NL',
     type: 'website',
@@ -27,7 +27,7 @@ export const metadata: Metadata = {
     description: 'Ontdek onze bestselling edelstenen en kristallen.',
   },
   alternates: {
-    canonical: 'https://stonesforhealth.nl/bestsellers',
+    canonical: 'https://www.stonesforhealth.nl/bestsellers',
   },
 };
 

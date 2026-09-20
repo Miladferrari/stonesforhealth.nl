@@ -28,7 +28,7 @@ export const metadata: Metadata = {
     publishedTime: '2025-10-20',
   },
   alternates: {
-    canonical: 'https://stonesforhealth.nl/blog/lapis-lazuli-hemelsteen-egypte-innerlijke-wijsheid',
+    canonical: 'https://www.stonesforhealth.nl/blog/lapis-lazuli-hemelsteen-egypte-innerlijke-wijsheid',
   }
 };
 
@@ -37,7 +37,7 @@ const blogPostingSchema = {
   "@type": "BlogPosting",
   "headline": "Lapis Lazuli - De Hemelsteen van het Oude Egypte en Innerlijke Wijsheid",
   "description": "Ontdek de kracht van Lapis Lazuli: van de tempels van het oude Egypte tot moderne spiritualiteit. Leer alles over de werking, chakra's, symboliek en gebruik van deze mystieke steen.",
-  "image": "https://stonesforhealth.nl/logo.webp",
+  "image": "https://www.stonesforhealth.nl/logo.webp",
   "datePublished": "2025-10-20T09:00:00Z",
   "dateModified": "2025-10-20T09:00:00Z",
   "author": {
@@ -49,7 +49,7 @@ const blogPostingSchema = {
     "name": "StonesForHealth",
     "logo": {
       "@type": "ImageObject",
-      "url": "https://stonesforhealth.nl/logo.webp"
+      "url": "https://www.stonesforhealth.nl/logo.webp"
     }
   }
 };
@@ -65,9 +65,9 @@ export default function BlogPost() {
           {/* Breadcrumbs */}
           <Breadcrumbs
             customItems={[
-              { name: 'Home', url: 'https://stonesforhealth.nl' },
-              { name: 'Blog', url: 'https://stonesforhealth.nl/blog' },
-              { name: 'Lapis Lazuli - De Hemelsteen', url: 'https://stonesforhealth.nl/blog/lapis-lazuli-hemelsteen-egypte-innerlijke-wijsheid' }
+              { name: 'Home', url: 'https://www.stonesforhealth.nl' },
+              { name: 'Blog', url: 'https://www.stonesforhealth.nl/blog' },
+              { name: 'Lapis Lazuli - De Hemelsteen', url: 'https://www.stonesforhealth.nl/blog/lapis-lazuli-hemelsteen-egypte-innerlijke-wijsheid' }
             ]}
           />
 

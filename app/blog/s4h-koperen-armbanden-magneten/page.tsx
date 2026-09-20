@@ -16,7 +16,7 @@ export const metadata: Metadata = {
     authors: ['StonesForHealth'],
   },
   alternates: {
-    canonical: 'https://stonesforhealth.nl/blog/s4h-koperen-armbanden-magneten',
+    canonical: 'https://www.stonesforhealth.nl/blog/s4h-koperen-armbanden-magneten',
   }
 };
 
@@ -25,7 +25,7 @@ const blogPostingSchema = {
   "@type": "BlogPosting",
   "headline": "S4H Koperen Armbanden met Magneten - Stijl, Balans en Natuurlijke Energie",
   "description": "Ontdek de kracht van koperen armbanden met magneten. Eeuwenoude kennis gecombineerd met modern design voor balans, herstel en stijlvolle energie.",
-  "image": "https://stonesforhealth.nl/blog-images/S4H Koperen Armbanden met Magneten – Stijl, Balans en Natuurlijke Energie.jpeg",
+  "image": "https://www.stonesforhealth.nl/blog-images/S4H Koperen Armbanden met Magneten – Stijl, Balans en Natuurlijke Energie.jpeg",
   "datePublished": "2025-10-01T09:00:00Z",
   "dateModified": "2025-10-01T09:00:00Z",
   "author": {
@@ -37,12 +37,12 @@ const blogPostingSchema = {
     "name": "Stones for Health",
     "logo": {
       "@type": "ImageObject",
-      "url": "https://stonesforhealth.nl/logo.webp"
+      "url": "https://www.stonesforhealth.nl/logo.webp"
     }
   },
   "mainEntityOfPage": {
     "@type": "WebPage",
-    "@id": "https://stonesforhealth.nl/blog/s4h-koperen-armbanden-magneten"
+    "@id": "https://www.stonesforhealth.nl/blog/s4h-koperen-armbanden-magneten"
   }
 };
 
@@ -51,8 +51,8 @@ export default function S4HKoperenArmbanden() {
     <main className="min-h-screen bg-white">
       <JsonLd data={blogPostingSchema} />
       <Breadcrumbs customItems={[
-        { name: 'Blog', url: 'https://stonesforhealth.nl/blog' },
-        { name: 'S4H Koperen Armbanden met Magneten', url: 'https://stonesforhealth.nl/blog/s4h-koperen-armbanden-magneten' }
+        { name: 'Blog', url: 'https://www.stonesforhealth.nl/blog' },
+        { name: 'S4H Koperen Armbanden met Magneten', url: 'https://www.stonesforhealth.nl/blog/s4h-koperen-armbanden-magneten' }
       ]} />
 
       <article className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12" style={{ fontFamily: 'var(--font-eb-garamond)' }}>

@@ -11,6 +11,7 @@ import MetaPixel from "./components/MetaPixel";
 import NewsletterPopupContainer from "./components/NewsletterPopupContainer";
 import CookieConsent from "./components/CookieConsent";
 import UTMTracker from "./components/UTMTracker";
+import { generateOrganizationSchema, generateWebsiteSearchSchema } from "./lib/structuredData";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -36,7 +37,7 @@ const ebGaramond = EB_Garamond({
 export const metadata: Metadata = {
   title: "Stonesforhealth - Natuurlijke Kristallen & Edelstenen",
   description: "Ontdek de helende kracht van natuurlijke kristallen en edelstenen. 100% authentiek, ethisch gewonnen, met liefde geselecteerd.",
-  metadataBase: new URL('https://stonesforhealth.nl'),
+  metadataBase: new URL('https://www.stonesforhealth.nl'),
   openGraph: {
     title: 'Stonesforhealth - Natuurlijke Kristallen & Edelstenen',
     description: 'Ontdek de helende kracht van natuurlijke kristallen',
@@ -45,9 +46,9 @@ export const metadata: Metadata = {
     siteName: 'Stones for Health',
     images: [
       {
-        url: '/logo.png',
-        width: 1024,
-        height: 1024,
+        url: '/og-image.jpg',
+        width: 1200,
+        height: 630,
         alt: 'Stones for Health - Edelstenen & Kristallen',
       },
     ],
@@ -56,7 +57,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Stonesforhealth - Natuurlijke Kristallen & Edelstenen',
     description: 'Ontdek de helende kracht van natuurlijke kristallen en edelstenen',
-    images: ['/logo.png'],
+    images: ['/og-image.jpg'],
   },
   robots: {
     index: true,
@@ -83,6 +84,17 @@ export default function RootLayout({
         <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
         <meta name="theme-color" content="#ffffff" />
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet" />
+        {/* Site-wide structured data: identifies the shop and the site itself
+            to Google. Page-specific schemas (Product, Article, Breadcrumb)
+            are added by the individual pages. */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(generateOrganizationSchema()) }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(generateWebsiteSearchSchema()) }}
+        />
         <script
           type="text/javascript"
           dangerouslySetInnerHTML={{

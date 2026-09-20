@@ -17,7 +17,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Alle Producten - Edelstenen & Kristallen | StonesForHealth',
     description: 'Browse alle authentieke edelstenen en kristallen bij StonesForHealth.',
-    url: 'https://stonesforhealth.nl/alle-producten',
+    url: 'https://www.stonesforhealth.nl/alle-producten',
     siteName: 'Stones for Health',
     locale: 'nl_NL',
     type: 'website',
@@ -28,7 +28,7 @@ export const metadata: Metadata = {
     description: 'Browse alle authentieke edelstenen en kristallen bij StonesForHealth.',
   },
   alternates: {
-    canonical: 'https://stonesforhealth.nl/alle-producten',
+    canonical: 'https://www.stonesforhealth.nl/alle-producten',
   },
 };
 

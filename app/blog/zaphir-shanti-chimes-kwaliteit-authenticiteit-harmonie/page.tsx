@@ -29,7 +29,7 @@ export const metadata: Metadata = {
     publishedTime: '2025-01-02',
   },
   alternates: {
-    canonical: 'https://stonesforhealth.nl/blog/zaphir-shanti-chimes-kwaliteit-authenticiteit-harmonie',
+    canonical: 'https://www.stonesforhealth.nl/blog/zaphir-shanti-chimes-kwaliteit-authenticiteit-harmonie',
   },
 };
 
@@ -39,7 +39,7 @@ export default function ZaphirShantiChimes() {
     "@type": "BlogPosting",
     "headline": "Zaphir Shanti Chimes – Kwaliteit, Authenticiteit & Harmonie",
     "description": "Ontdek originele Zaphir Shanti Chimes bij Stonesforhealth.nl. Handgemaakt in Frankrijk, zuivere klank voor meditatie, yoga en sound healing.",
-    "image": "https://stonesforhealth.nl/blog-images/Zaphir Shanti Chimes – Kwaliteit, Authenticiteit & Harmonie | Stonesforhealth.nl.jpeg",
+    "image": "https://www.stonesforhealth.nl/blog-images/Zaphir Shanti Chimes – Kwaliteit, Authenticiteit & Harmonie | Stonesforhealth.nl.jpeg",
     "datePublished": "2025-01-02T10:00:00Z",
     "dateModified": "2025-01-02T10:00:00Z",
     "author": {
@@ -51,7 +51,7 @@ export default function ZaphirShantiChimes() {
       "name": "StonesForHealth",
       "logo": {
         "@type": "ImageObject",
-        "url": "https://stonesforhealth.nl/logo.webp"
+        "url": "https://www.stonesforhealth.nl/logo.webp"
       }
     }
   };
@@ -66,9 +66,9 @@ export default function ZaphirShantiChimes() {
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <Breadcrumbs
           customItems={[
-            { name: 'Home', url: 'https://stonesforhealth.nl' },
-            { name: 'Blog', url: 'https://stonesforhealth.nl/blog' },
-            { name: 'Zaphir Shanti Chimes', url: 'https://stonesforhealth.nl/blog/zaphir-shanti-chimes-kwaliteit-authenticiteit-harmonie' }
+            { name: 'Home', url: 'https://www.stonesforhealth.nl' },
+            { name: 'Blog', url: 'https://www.stonesforhealth.nl/blog' },
+            { name: 'Zaphir Shanti Chimes', url: 'https://www.stonesforhealth.nl/blog/zaphir-shanti-chimes-kwaliteit-authenticiteit-harmonie' }
           ]}
         />
 

@@ -16,7 +16,7 @@ export const metadata: Metadata = {
     authors: ['StonesForHealth'],
   },
   alternates: {
-    canonical: 'https://stonesforhealth.nl/blog/supermaan-oktober-2025',
+    canonical: 'https://www.stonesforhealth.nl/blog/supermaan-oktober-2025',
   }
 };
 
@@ -25,7 +25,7 @@ const blogPostingSchema = {
   "@type": "BlogPosting",
   "headline": "Supermaan 7 Oktober 2025 - Krachtige Maanenergie voor Balans en Vernieuwing",
   "description": "Ontdek de krachtige supermaan van 7 oktober 2025 in Ram. Rituelen, edelstenen en spirituele betekenis voor balans, vernieuwing en persoonlijke groei.",
-  "image": "https://stonesforhealth.nl/blog-images/Supermaan 7 Oktober 2025 – Krachtige Maanenergie voor Balans en Vernieuwing.jpeg",
+  "image": "https://www.stonesforhealth.nl/blog-images/Supermaan 7 Oktober 2025 – Krachtige Maanenergie voor Balans en Vernieuwing.jpeg",
   "datePublished": "2025-10-07T09:00:00Z",
   "dateModified": "2025-10-07T09:00:00Z",
   "author": {
@@ -37,12 +37,12 @@ const blogPostingSchema = {
     "name": "Stones for Health",
     "logo": {
       "@type": "ImageObject",
-      "url": "https://stonesforhealth.nl/logo.webp"
+      "url": "https://www.stonesforhealth.nl/logo.webp"
     }
   },
   "mainEntityOfPage": {
     "@type": "WebPage",
-    "@id": "https://stonesforhealth.nl/blog/supermaan-oktober-2025"
+    "@id": "https://www.stonesforhealth.nl/blog/supermaan-oktober-2025"
   }
 };
 

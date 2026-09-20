@@ -26,15 +26,15 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Edelstenen & Kristallen Kopen | StonesForHealth',
     description: 'Koop authentieke en ethisch gewonnen edelstenen en kristallen. Gratis verzending vanaf €30.',
-    url: 'https://stonesforhealth.nl',
+    url: 'https://www.stonesforhealth.nl',
     siteName: 'Stones for Health',
     locale: 'nl_NL',
     type: 'website',
     images: [
       {
-        url: '/logo.png',
-        width: 1024,
-        height: 1024,
+        url: '/og-image.jpg',
+        width: 1200,
+        height: 630,
         alt: 'Stones for Health - Edelstenen & Kristallen Webshop',
       },
     ],
@@ -43,10 +43,10 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Edelstenen & Kristallen Kopen | StonesForHealth',
     description: 'Koop authentieke en ethisch gewonnen edelstenen en kristallen.',
-    images: ['/logo.png'],
+    images: ['/og-image.jpg'],
   },
   alternates: {
-    canonical: 'https://stonesforhealth.nl',
+    canonical: 'https://www.stonesforhealth.nl',
   },
 };
 
@@ -88,8 +88,8 @@ export default async function Home() {
     "@context": "https://schema.org",
     "@type": "Organization",
     "name": "Stones for Health",
-    "url": "https://stonesforhealth.nl",
-    "logo": "https://stonesforhealth.nl/logo.png",
+    "url": "https://www.stonesforhealth.nl",
+    "logo": "https://www.stonesforhealth.nl/logo.png",
     "description": "Nederlandse webshop voor authentieke edelstenen en kristallen. 100% ethisch gewonnen, gratis verzending vanaf €30, 30 dagen retour.",
     "address": {
       "@type": "PostalAddress",
@@ -269,11 +269,15 @@ export default async function Home() {
             {/* Right: Video */}
             <div className="relative">
               <div className="relative rounded-2xl overflow-hidden shadow-xl">
-                <video 
-                  autoPlay 
-                  muted 
-                  loop 
+                {/* Poster paints immediately so the hero has something to show
+                    while the video streams in — keeps LCP off the video itself */}
+                <video
+                  autoPlay
+                  muted
+                  loop
                   playsInline
+                  poster="/bannerhome-poster.webp"
+                  preload="metadata"
                   className="w-full h-full object-cover rounded-2xl"
                   style={{ aspectRatio: '16/10' }}
                 >
@@ -319,7 +323,7 @@ export default async function Home() {
               return (
               <Link
                 key={category.id}
-                href={`/collectie/${collectionSlug}`}
+                href={`/collections/${collectionSlug}`}
                 className="group relative bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300"
               >
                 {/* Image Container */}

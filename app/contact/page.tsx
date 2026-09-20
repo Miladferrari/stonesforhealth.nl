@@ -14,13 +14,13 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Contact - Neem Contact Op | StonesForHealth',
     description: 'Heb je vragen? Neem contact op met StonesForHealth. We helpen je graag!',
-    url: 'https://stonesforhealth.nl/contact',
+    url: 'https://www.stonesforhealth.nl/contact',
     siteName: 'Stones for Health',
     locale: 'nl_NL',
     type: 'website',
   },
   alternates: {
-    canonical: 'https://stonesforhealth.nl/contact',
+    canonical: 'https://www.stonesforhealth.nl/contact',
   },
 };
 

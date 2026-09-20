@@ -27,7 +27,7 @@ export const metadata: Metadata = {
     publishedTime: '2025-10-20',
   },
   alternates: {
-    canonical: 'https://stonesforhealth.nl/blog/edelstenen-liefde-zelfliefde-hartchakra',
+    canonical: 'https://www.stonesforhealth.nl/blog/edelstenen-liefde-zelfliefde-hartchakra',
   },
 };
 
@@ -37,7 +37,7 @@ export default function EdelstenenLiefdeZelfliefde() {
     "@type": "BlogPosting",
     "headline": "Edelstenen voor Liefde en Zelfliefde - Open Je Hart en Trek Liefde Aan",
     "description": "Ontdek de krachtigste edelstenen voor liefde en zelfliefde: rozenkwarts, rhodoniet, smaragd, kunziet en meer. Leer hoe je met hartchakra kristallen liefde aantrekt en zelfacceptatie versterkt.",
-    "image": "https://stonesforhealth.nl/logo.webp",
+    "image": "https://www.stonesforhealth.nl/logo.webp",
     "datePublished": "2025-10-20T09:00:00Z",
     "dateModified": "2025-10-20T09:00:00Z",
     "author": {
@@ -49,7 +49,7 @@ export default function EdelstenenLiefdeZelfliefde() {
       "name": "StonesForHealth",
       "logo": {
         "@type": "ImageObject",
-        "url": "https://stonesforhealth.nl/logo.webp"
+        "url": "https://www.stonesforhealth.nl/logo.webp"
       }
     }
   };
@@ -64,9 +64,9 @@ export default function EdelstenenLiefdeZelfliefde() {
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <Breadcrumbs
           customItems={[
-            { name: 'Home', url: 'https://stonesforhealth.nl' },
-            { name: 'Blog', url: 'https://stonesforhealth.nl/blog' },
-            { name: 'Edelstenen voor Liefde en Zelfliefde', url: 'https://stonesforhealth.nl/blog/edelstenen-liefde-zelfliefde-hartchakra' }
+            { name: 'Home', url: 'https://www.stonesforhealth.nl' },
+            { name: 'Blog', url: 'https://www.stonesforhealth.nl/blog' },
+            { name: 'Edelstenen voor Liefde en Zelfliefde', url: 'https://www.stonesforhealth.nl/blog/edelstenen-liefde-zelfliefde-hartchakra' }
           ]}
         />
 

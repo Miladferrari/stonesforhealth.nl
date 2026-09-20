@@ -1,15 +1,21 @@
-# *
 User-agent: *
 Allow: /
+
+# Transactional pages — no search value, keep them out of the crawl budget
+Disallow: /cart
 Disallow: /checkout
 Disallow: /checkout/*
-Disallow: /cart
-Disallow: /api/*
-Disallow: /volg-je-bestelling
+Disallow: /cart-recovery
 Disallow: /thank-you
+Disallow: /volg-je-bestelling
+Disallow: /payment-failed
+Disallow: /api/*
 
-# Host
-Host: https://stonesforhealth.nl
+# Block faceted/filter URLs that create duplicate content
+Disallow: /*?sort=
+Disallow: /*?filter=
+Disallow: /*?page=
 
-# Sitemaps
-Sitemap: https://stonesforhealth.nl/server-sitemap.xml
+Host: https://www.stonesforhealth.nl
+
+Sitemap: https://www.stonesforhealth.nl/sitemap.xml

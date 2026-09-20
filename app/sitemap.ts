@@ -1,53 +1,101 @@
 import { MetadataRoute } from 'next';
+import { readdirSync } from 'fs';
+import { join } from 'path';
 import { woocommerce } from '@/lib/woocommerce';
 
-export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl = 'https://www.stonesforhealth.nl';
+const baseUrl = 'https://www.stonesforhealth.nl';
 
-  // Fetch all products
-  const { products } = await woocommerce.getProducts({ per_page: 100 });
+// Revalidate daily so new products and posts show up without a redeploy
+export const revalidate = 86400;
 
-  // Generate product URLs
-  const productUrls = products.map((product) => ({
-    url: `${baseUrl}/product/${product.slug}`,
-    lastModified: product.date_modified ? new Date(product.date_modified) : new Date(),
-    changeFrequency: 'weekly' as const,
-    priority: 0.8,
-  }));
+type Entry = MetadataRoute.Sitemap[number];
 
-  // Static pages
-  const staticPages = [
-    {
-      url: baseUrl,
+const staticPages: Array<{ path: string; priority: number; changeFrequency: Entry['changeFrequency'] }> = [
+  { path: '', priority: 1.0, changeFrequency: 'daily' },
+  { path: '/alle-producten', priority: 0.9, changeFrequency: 'daily' },
+  { path: '/bestsellers', priority: 0.9, changeFrequency: 'daily' },
+  { path: '/collections', priority: 0.8, changeFrequency: 'daily' },
+  { path: '/blog', priority: 0.7, changeFrequency: 'weekly' },
+  { path: '/over-ons', priority: 0.6, changeFrequency: 'monthly' },
+  { path: '/contact', priority: 0.6, changeFrequency: 'monthly' },
+  { path: '/faq', priority: 0.6, changeFrequency: 'monthly' },
+  { path: '/verzending', priority: 0.5, changeFrequency: 'monthly' },
+  { path: '/privacy', priority: 0.3, changeFrequency: 'yearly' },
+  { path: '/voorwaarden', priority: 0.3, changeFrequency: 'yearly' },
+];
+
+// Read blog slugs straight from the route folders so a new post is picked up
+// automatically — no second list to keep in sync.
+function getBlogSlugs(): string[] {
+  try {
+    return readdirSync(join(process.cwd(), 'app/blog'), { withFileTypes: true })
+      .filter((entry) => entry.isDirectory() && !entry.name.startsWith('[') && !entry.name.startsWith('_'))
+      .map((entry) => entry.name);
+  } catch {
+    return [];
+  }
+}
+
+async function getProductEntries(): Promise<Entry[]> {
+  const entries: Entry[] = [];
+  const perPage = 100;
+  let page = 1;
+  let totalPages = 1;
+
+  do {
+    const { products, totalPages: pages } = await woocommerce.getProducts({ per_page: perPage, page });
+    totalPages = pages || 1;
+
+    for (const product of products) {
+      if (!product.slug) continue;
+      entries.push({
+        url: `${baseUrl}/product/${product.slug}`,
+        lastModified: product.date_modified ? new Date(product.date_modified) : new Date(),
+        changeFrequency: 'weekly',
+        priority: 0.8,
+      });
+    }
+    page++;
+  } while (page <= totalPages && page <= 20); // hard stop guards against a runaway loop
+
+  return entries;
+}
+
+async function getCollectionEntries(): Promise<Entry[]> {
+  const categories = await woocommerce.getCategories({ per_page: 100, hide_empty: true });
+
+  return categories
+    .filter((category) => category.slug)
+    .map((category) => ({
+      url: `${baseUrl}/collections/${category.slug}`,
       lastModified: new Date(),
       changeFrequency: 'daily' as const,
-      priority: 1,
-    },
-    {
-      url: `${baseUrl}/checkout`,
-      lastModified: new Date(),
-      changeFrequency: 'monthly' as const,
-      priority: 0.5,
-    },
-    {
-      url: `${baseUrl}/cart`,
-      lastModified: new Date(),
-      changeFrequency: 'monthly' as const,
-      priority: 0.5,
-    },
-    {
-      url: `${baseUrl}/faq`,
-      lastModified: new Date(),
-      changeFrequency: 'monthly' as const,
-      priority: 0.6,
-    },
-    {
-      url: `${baseUrl}/blog`,
-      lastModified: new Date(),
-      changeFrequency: 'weekly' as const,
-      priority: 0.7,
-    },
-  ];
+      priority: 0.8,
+    }));
+}
 
-  return [...staticPages, ...productUrls];
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  const now = new Date();
+
+  const staticEntries: Entry[] = staticPages.map(({ path, priority, changeFrequency }) => ({
+    url: `${baseUrl}${path}`,
+    lastModified: now,
+    changeFrequency,
+    priority,
+  }));
+
+  const blogEntries: Entry[] = getBlogSlugs().map((slug) => ({
+    url: `${baseUrl}/blog/${slug}`,
+    lastModified: now,
+    changeFrequency: 'monthly',
+    priority: 0.7,
+  }));
+
+  // A failing Woo call should not take the whole sitemap down with it
+  const [products, collections] = await Promise.all([
+    getProductEntries().catch(() => []),
+    getCollectionEntries().catch(() => []),
+  ]);
+
+  return [...staticEntries, ...blogEntries, ...collections, ...products];
 }

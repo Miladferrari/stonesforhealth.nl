@@ -90,7 +90,7 @@ export async function GET(request: NextRequest) {
       for (const cart of carts) {
         try {
           const cartData = JSON.parse(cart.cart_data);
-          const recoveryLink = `https://stonesforhealth.nl/cart-recovery?token=${cart.recovery_token}`;
+          const recoveryLink = `https://www.stonesforhealth.nl/cart-recovery?token=${cart.recovery_token}`;
 
           let emailHtml: string;
           let subject: string;

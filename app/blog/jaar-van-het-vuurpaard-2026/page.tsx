@@ -16,7 +16,7 @@ export const metadata: Metadata = {
     authors: ['StonesForHealth'],
   },
   alternates: {
-    canonical: 'https://stonesforhealth.nl/blog/jaar-van-het-vuurpaard-2026',
+    canonical: 'https://www.stonesforhealth.nl/blog/jaar-van-het-vuurpaard-2026',
   }
 };
 
@@ -25,7 +25,7 @@ const blogPostingSchema = {
   "@type": "BlogPosting",
   "headline": "2026: Het Jaar van het Vuurpaard",
   "description": "Chinese astrologie 2026: Ontdek wat het Jaar van het Vuurpaard betekent voor carrière, liefde, gezondheid en spiritualiteit.",
-  "image": "https://stonesforhealth.nl/blog-images/2026- Het Jaar van het Vuurpaard.webp",
+  "image": "https://www.stonesforhealth.nl/blog-images/2026- Het Jaar van het Vuurpaard.webp",
   "datePublished": "2026-01-01T09:00:00Z",
   "dateModified": "2026-01-01T09:00:00Z",
   "author": {
@@ -37,12 +37,12 @@ const blogPostingSchema = {
     "name": "Stones for Health",
     "logo": {
       "@type": "ImageObject",
-      "url": "https://stonesforhealth.nl/logo.webp"
+      "url": "https://www.stonesforhealth.nl/logo.webp"
     }
   },
   "mainEntityOfPage": {
     "@type": "WebPage",
-    "@id": "https://stonesforhealth.nl/blog/jaar-van-het-vuurpaard-2026"
+    "@id": "https://www.stonesforhealth.nl/blog/jaar-van-het-vuurpaard-2026"
   }
 };
 

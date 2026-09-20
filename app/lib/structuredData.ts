@@ -8,20 +8,18 @@ export function generateOrganizationSchema() {
     '@context': 'https://schema.org',
     '@type': 'Organization',
     name: 'Stonesforhealth',
-    url: 'https://stonesforhealth.nl',
-    logo: 'https://stonesforhealth.nl/logo.png',
+    url: 'https://www.stonesforhealth.nl',
+    logo: 'https://www.stonesforhealth.nl/logo.png',
     description: 'Ontdek de helende kracht van natuurlijke kristallen en edelstenen. 100% authentiek, ethisch gewonnen, met liefde geselecteerd.',
+    // KvK number doubles as the verifiable company identifier
+    identifier: '95898476',
     contactPoint: {
       '@type': 'ContactPoint',
-      telephone: '+31-6-12345678',
       contactType: 'Customer Service',
       areaServed: 'NL',
       availableLanguage: ['Dutch', 'English'],
+      url: 'https://www.stonesforhealth.nl/contact',
     },
-    sameAs: [
-      'https://www.facebook.com/stonesforhealth',
-      'https://www.instagram.com/stonesforhealth',
-    ],
     address: {
       '@type': 'PostalAddress',
       addressCountry: 'NL',
@@ -53,7 +51,7 @@ export function generateProductSchema(product: Product) {
     },
     offers: {
       '@type': 'Offer',
-      url: `https://stonesforhealth.nl/product/${product.slug}`,
+      url: `https://www.stonesforhealth.nl/product/${product.slug}`,
       priceCurrency: 'EUR',
       price: price.toFixed(2),
       priceValidUntil: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
@@ -118,15 +116,11 @@ export function generateWebsiteSearchSchema() {
   return {
     '@context': 'https://schema.org',
     '@type': 'WebSite',
-    url: 'https://stonesforhealth.nl',
-    potentialAction: {
-      '@type': 'SearchAction',
-      target: {
-        '@type': 'EntryPoint',
-        urlTemplate: 'https://stonesforhealth.nl/zoeken?q={search_term_string}',
-      },
-      'query-input': 'required name=search_term_string',
-    },
+    name: 'Stones for Health',
+    url: 'https://www.stonesforhealth.nl',
+    inLanguage: 'nl-NL',
+    // No SearchAction: search lives in a modal, there is no crawlable
+    // /zoeken?q= URL to point Google at yet.
   };
 }
 
@@ -143,13 +137,13 @@ export function generateCollectionSchema(
     '@type': 'CollectionPage',
     name: name,
     description: description,
-    url: `https://stonesforhealth.nl/collections/${name.toLowerCase()}`,
+    url: `https://www.stonesforhealth.nl/collections/${name.toLowerCase()}`,
     mainEntity: {
       '@type': 'ItemList',
       itemListElement: products.slice(0, 10).map((product, index) => ({
         '@type': 'ListItem',
         position: index + 1,
-        url: `https://stonesforhealth.nl/product/${product.slug}`,
+        url: `https://www.stonesforhealth.nl/product/${product.slug}`,
         name: product.name,
       })),
     },
@@ -164,9 +158,9 @@ export function generateLocalBusinessSchema() {
     '@context': 'https://schema.org',
     '@type': 'LocalBusiness',
     name: 'Stonesforhealth',
-    image: 'https://stonesforhealth.nl/logo.png',
-    '@id': 'https://stonesforhealth.nl',
-    url: 'https://stonesforhealth.nl',
+    image: 'https://www.stonesforhealth.nl/logo.png',
+    '@id': 'https://www.stonesforhealth.nl',
+    url: 'https://www.stonesforhealth.nl',
     telephone: '+31-6-12345678',
     priceRange: '€€',
     address: {
@@ -224,7 +218,7 @@ export function generateArticleSchema(article: {
       name: 'Stonesforhealth',
       logo: {
         '@type': 'ImageObject',
-        url: 'https://stonesforhealth.nl/logo.png',
+        url: 'https://www.stonesforhealth.nl/logo.png',
       },
     },
   };

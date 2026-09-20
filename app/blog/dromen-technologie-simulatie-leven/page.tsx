@@ -27,7 +27,7 @@ export const metadata: Metadata = {
     publishedTime: '2025-10-20',
   },
   alternates: {
-    canonical: 'https://stonesforhealth.nl/blog/dromen-technologie-simulatie-leven',
+    canonical: 'https://www.stonesforhealth.nl/blog/dromen-technologie-simulatie-leven',
   },
 };
 
@@ -37,7 +37,7 @@ export default function DromenTechnologieSimulatie() {
     "@type": "BlogPosting",
     "headline": "Dromen, Technologie & De Simulatie van het Leven",
     "description": "Een filosofische verkenning van waarom technologie niet bestaat in dromen en wat dit onthult over de aard van bewustzijn en realiteit.",
-    "image": "https://stonesforhealth.nl/logo.webp",
+    "image": "https://www.stonesforhealth.nl/logo.webp",
     "datePublished": "2025-10-20T09:00:00Z",
     "dateModified": "2025-10-20T09:00:00Z",
     "author": {
@@ -49,7 +49,7 @@ export default function DromenTechnologieSimulatie() {
       "name": "StonesForHealth",
       "logo": {
         "@type": "ImageObject",
-        "url": "https://stonesforhealth.nl/logo.webp"
+        "url": "https://www.stonesforhealth.nl/logo.webp"
       }
     }
   };
@@ -64,9 +64,9 @@ export default function DromenTechnologieSimulatie() {
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <Breadcrumbs
           customItems={[
-            { name: 'Home', url: 'https://stonesforhealth.nl' },
-            { name: 'Blog', url: 'https://stonesforhealth.nl/blog' },
-            { name: 'Dromen, Technologie & Simulatie', url: 'https://stonesforhealth.nl/blog/dromen-technologie-simulatie-leven' }
+            { name: 'Home', url: 'https://www.stonesforhealth.nl' },
+            { name: 'Blog', url: 'https://www.stonesforhealth.nl/blog' },
+            { name: 'Dromen, Technologie & Simulatie', url: 'https://www.stonesforhealth.nl/blog/dromen-technologie-simulatie-leven' }
           ]}
         />
 

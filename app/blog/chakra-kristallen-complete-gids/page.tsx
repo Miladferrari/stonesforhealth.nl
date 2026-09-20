@@ -16,7 +16,7 @@ export const metadata: Metadata = {
     authors: ['StonesForHealth'],
   },
   alternates: {
-    canonical: 'https://stonesforhealth.nl/blog/chakra-kristallen-complete-gids',
+    canonical: 'https://www.stonesforhealth.nl/blog/chakra-kristallen-complete-gids',
   }
 };
 
@@ -25,7 +25,7 @@ const blogPostingSchema = {
   "@type": "BlogPosting",
   "headline": "Complete Gids: Chakra's en Bijbehorende Kristallen",
   "description": "Ontdek alles over chakra kristallen en chakra stenen. Leer welke edelstenen bij elk van de 7 chakra's horen en hoe je ze gebruikt voor energetische balans.",
-  "image": "https://stonesforhealth.nl/blog-images/Complete Gids- Chakra's en Bijbehorende Kristallen.webp",
+  "image": "https://www.stonesforhealth.nl/blog-images/Complete Gids- Chakra's en Bijbehorende Kristallen.webp",
   "datePublished": "2025-03-15T09:00:00Z",
   "dateModified": "2025-03-15T09:00:00Z",
   "author": {
@@ -37,12 +37,12 @@ const blogPostingSchema = {
     "name": "Stones for Health",
     "logo": {
       "@type": "ImageObject",
-      "url": "https://stonesforhealth.nl/logo.webp"
+      "url": "https://www.stonesforhealth.nl/logo.webp"
     }
   },
   "mainEntityOfPage": {
     "@type": "WebPage",
-    "@id": "https://stonesforhealth.nl/blog/chakra-kristallen-complete-gids"
+    "@id": "https://www.stonesforhealth.nl/blog/chakra-kristallen-complete-gids"
   }
 };
 

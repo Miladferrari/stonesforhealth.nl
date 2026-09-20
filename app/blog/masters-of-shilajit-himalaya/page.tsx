@@ -16,7 +16,7 @@ export const metadata: Metadata = {
     authors: ['StonesForHealth'],
   },
   alternates: {
-    canonical: 'https://stonesforhealth.nl/blog/masters-of-shilajit-himalaya',
+    canonical: 'https://www.stonesforhealth.nl/blog/masters-of-shilajit-himalaya',
   }
 };
 
@@ -25,7 +25,7 @@ const blogPostingSchema = {
   "@type": "BlogPosting",
   "headline": "Masters of Shilajit: Pure Kracht uit de Himalaya",
   "description": "Ontdek Masters of Shilajit - het beste Shilajit merk. 100% pure Himalaya-hars voor energie, focus, herstel en spirituele balans.",
-  "image": "https://stonesforhealth.nl/blog-images/Masters of Shilajit- Pure Kracht uit de Himalaya.webp",
+  "image": "https://www.stonesforhealth.nl/blog-images/Masters of Shilajit- Pure Kracht uit de Himalaya.webp",
   "datePublished": "2025-03-25T09:00:00Z",
   "dateModified": "2025-03-25T09:00:00Z",
   "author": {
@@ -37,12 +37,12 @@ const blogPostingSchema = {
     "name": "Stones for Health",
     "logo": {
       "@type": "ImageObject",
-      "url": "https://stonesforhealth.nl/logo.webp"
+      "url": "https://www.stonesforhealth.nl/logo.webp"
     }
   },
   "mainEntityOfPage": {
     "@type": "WebPage",
-    "@id": "https://stonesforhealth.nl/blog/masters-of-shilajit-himalaya"
+    "@id": "https://www.stonesforhealth.nl/blog/masters-of-shilajit-himalaya"
   }
 };
 

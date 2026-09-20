@@ -12,6 +12,8 @@ const ebGaramond = EB_Garamond({
 export const metadata: Metadata = {
   title: 'Veilig Afrekenen - Stonesforhealth',
   description: 'Veilig afrekenen bij Stonesforhealth - Premium kristallen voor jouw welzijn',
+  // Transactional page: keep it and its sub-routes out of the index
+  robots: { index: false, follow: false },
 };
 
 export default function CheckoutLayout({

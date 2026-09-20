@@ -9,7 +9,7 @@ export const metadata: Metadata = {
     description: 'Onze meest populaire edelstenen en kristallen, geliefd door 4000+ klanten.',
   },
   alternates: {
-    canonical: 'https://stonesforhealth.nl/bestsellers'
+    canonical: 'https://www.stonesforhealth.nl/bestsellers'
   }
 };
 

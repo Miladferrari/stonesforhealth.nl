@@ -19,6 +19,9 @@ export default function CookieConsent() {
       window.gtag?.('consent', 'update', {
         analytics_storage: 'granted',
         ad_storage: 'granted',
+        // Consent Mode v2 — required for EU traffic since March 2024
+        ad_user_data: 'granted',
+        ad_personalization: 'granted',
       });
 
       // Enable Meta Pixel
@@ -37,6 +40,8 @@ export default function CookieConsent() {
       window.gtag?.('consent', 'update', {
         analytics_storage: 'denied',
         ad_storage: 'denied',
+        ad_user_data: 'denied',
+        ad_personalization: 'denied',
       });
 
       // Disable Meta Pixel

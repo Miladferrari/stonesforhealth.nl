@@ -16,7 +16,7 @@ export const metadata: Metadata = {
     authors: ['StonesForHealth'],
   },
   alternates: {
-    canonical: 'https://stonesforhealth.nl/blog/citrien-amethist-zon-maan-edelstenen',
+    canonical: 'https://www.stonesforhealth.nl/blog/citrien-amethist-zon-maan-edelstenen',
   }
 };
 
@@ -25,7 +25,7 @@ const blogPostingSchema = {
   "@type": "BlogPosting",
   "headline": "Citrien & Amethist: Zon & Maan in Edelstenen",
   "description": "Ontdek de perfecte balans tussen Citrien en Amethist. Zon en maan energie, actie en rust, manifestatie en spiritualiteit.",
-  "image": "https://stonesforhealth.nl/blog-images/Citrien & Amethist- Zon & Maan in Edelstenen.webp",
+  "image": "https://www.stonesforhealth.nl/blog-images/Citrien & Amethist- Zon & Maan in Edelstenen.webp",
   "datePublished": "2025-03-12T09:00:00Z",
   "dateModified": "2025-03-12T09:00:00Z",
   "author": {
@@ -37,12 +37,12 @@ const blogPostingSchema = {
     "name": "Stones for Health",
     "logo": {
       "@type": "ImageObject",
-      "url": "https://stonesforhealth.nl/logo.webp"
+      "url": "https://www.stonesforhealth.nl/logo.webp"
     }
   },
   "mainEntityOfPage": {
     "@type": "WebPage",
-    "@id": "https://stonesforhealth.nl/blog/citrien-amethist-zon-maan-edelstenen"
+    "@id": "https://www.stonesforhealth.nl/blog/citrien-amethist-zon-maan-edelstenen"
   }
 };
 

@@ -15,10 +15,10 @@ export default function Breadcrumbs({ customItems }: { customItems?: BreadcrumbI
   // Generate breadcrumb items from pathname if custom items not provided
   const generateBreadcrumbs = (): BreadcrumbItem[] => {
     if (customItems) return customItems;
-    if (!pathname) return [{ name: 'Home', url: 'https://stonesforhealth.nl' }];
+    if (!pathname) return [{ name: 'Home', url: 'https://www.stonesforhealth.nl' }];
 
     const paths = pathname.split('/').filter(Boolean);
-    const breadcrumbs: BreadcrumbItem[] = [{ name: 'Home', url: 'https://stonesforhealth.nl' }];
+    const breadcrumbs: BreadcrumbItem[] = [{ name: 'Home', url: 'https://www.stonesforhealth.nl' }];
 
     let currentPath = '';
     paths.forEach((path, index) => {
@@ -41,7 +41,7 @@ export default function Breadcrumbs({ customItems }: { customItems?: BreadcrumbI
 
       breadcrumbs.push({
         name,
-        url: `https://stonesforhealth.nl${currentPath}`
+        url: `https://www.stonesforhealth.nl${currentPath}`
       });
     });
 
@@ -88,7 +88,7 @@ export default function Breadcrumbs({ customItems }: { customItems?: BreadcrumbI
                   <span className="text-gray-600 font-medium">{item.name}</span>
                 ) : (
                   <Link
-                    href={item.url.replace('https://stonesforhealth.nl', '')}
+                    href={item.url.replace('https://www.stonesforhealth.nl', '')}
                     className="text-[#492c4a] hover:text-[#6b4069] hover:underline transition-colors"
                   >
                     {item.name}

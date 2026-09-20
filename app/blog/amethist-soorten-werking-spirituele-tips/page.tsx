@@ -31,7 +31,7 @@ export const metadata: Metadata = {
     publishedTime: '2025-04-08',
   },
   alternates: {
-    canonical: 'https://stonesforhealth.nl/blog/amethist-soorten-werking-spirituele-tips',
+    canonical: 'https://www.stonesforhealth.nl/blog/amethist-soorten-werking-spirituele-tips',
   }
 };
 
@@ -40,7 +40,7 @@ const blogPostingSchema = {
   "@type": "BlogPosting",
   "headline": "Amethist: Soorten, Werking, Vindplaatsen & Spirituele Tips",
   "description": "Ontdek amethist - de paarse steen van rust, intuïtie en spiritualiteit. Leer alles over soorten (chevron, ametrine), werking op het derde oog chakra, vindplaatsen en spirituele toepassingen.",
-  "image": "https://stonesforhealth.nl/blog-images/Amethist- Soorten, Werking, Vindplaatsen en Spirituele Tips.webp",
+  "image": "https://www.stonesforhealth.nl/blog-images/Amethist- Soorten, Werking, Vindplaatsen en Spirituele Tips.webp",
   "datePublished": "2025-04-08T09:00:00Z",
   "dateModified": "2025-04-08T09:00:00Z",
   "author": {
@@ -52,12 +52,12 @@ const blogPostingSchema = {
     "name": "Stones for Health",
     "logo": {
       "@type": "ImageObject",
-      "url": "https://stonesforhealth.nl/logo.webp"
+      "url": "https://www.stonesforhealth.nl/logo.webp"
     }
   },
   "mainEntityOfPage": {
     "@type": "WebPage",
-    "@id": "https://stonesforhealth.nl/blog/amethist-soorten-werking-spirituele-tips"
+    "@id": "https://www.stonesforhealth.nl/blog/amethist-soorten-werking-spirituele-tips"
   }
 };
 

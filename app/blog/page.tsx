@@ -17,7 +17,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Blog - Edelstenen, Kristallen & Spiritualiteit | StonesForHealth',
     description: 'Ontdek alles over edelstenen, kristallen en spiritualiteit op onze blog.',
-    url: 'https://stonesforhealth.nl/blog',
+    url: 'https://www.stonesforhealth.nl/blog',
     siteName: 'Stones for Health',
     locale: 'nl_NL',
     type: 'website',
@@ -28,7 +28,7 @@ export const metadata: Metadata = {
     description: 'Ontdek alles over edelstenen, kristallen en spiritualiteit op onze blog.',
   },
   alternates: {
-    canonical: 'https://stonesforhealth.nl/blog',
+    canonical: 'https://www.stonesforhealth.nl/blog',
   },
 };
 

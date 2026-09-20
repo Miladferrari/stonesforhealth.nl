@@ -28,7 +28,7 @@ export const metadata: Metadata = {
     publishedTime: '2025-10-20',
   },
   alternates: {
-    canonical: 'https://stonesforhealth.nl/blog/edelstenen-per-levenspad-spirituele-gidssteen',
+    canonical: 'https://www.stonesforhealth.nl/blog/edelstenen-per-levenspad-spirituele-gidssteen',
   }
 };
 
@@ -37,7 +37,7 @@ const blogPostingSchema = {
   "@type": "BlogPosting",
   "headline": "Edelstenen per Levenspad - Ontdek Jouw Spirituele Gidssteen",
   "description": "Ontdek welke edelstenen perfect bij jouw levenspadnummer passen. Van Levenspad 1 tot 9 en meestergetallen 11 en 22 - complete gids met berekening en aanbevelingen.",
-  "image": "https://stonesforhealth.nl/logo.webp",
+  "image": "https://www.stonesforhealth.nl/logo.webp",
   "datePublished": "2025-10-20T09:00:00Z",
   "dateModified": "2025-10-20T09:00:00Z",
   "author": {
@@ -49,7 +49,7 @@ const blogPostingSchema = {
     "name": "StonesForHealth",
     "logo": {
       "@type": "ImageObject",
-      "url": "https://stonesforhealth.nl/logo.webp"
+      "url": "https://www.stonesforhealth.nl/logo.webp"
     }
   }
 };
@@ -65,9 +65,9 @@ export default function BlogPost() {
           {/* Breadcrumbs */}
           <Breadcrumbs
             customItems={[
-              { name: 'Home', url: 'https://stonesforhealth.nl' },
-              { name: 'Blog', url: 'https://stonesforhealth.nl/blog' },
-              { name: 'Edelstenen per Levenspad', url: 'https://stonesforhealth.nl/blog/edelstenen-per-levenspad-spirituele-gidssteen' }
+              { name: 'Home', url: 'https://www.stonesforhealth.nl' },
+              { name: 'Blog', url: 'https://www.stonesforhealth.nl/blog' },
+              { name: 'Edelstenen per Levenspad', url: 'https://www.stonesforhealth.nl/blog/edelstenen-per-levenspad-spirituele-gidssteen' }
             ]}
           />
 

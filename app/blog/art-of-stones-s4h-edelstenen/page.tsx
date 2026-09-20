@@ -31,7 +31,7 @@ export const metadata: Metadata = {
     publishedTime: '2025-03-28',
   },
   alternates: {
-    canonical: 'https://stonesforhealth.nl/blog/art-of-stones-s4h-edelstenen',
+    canonical: 'https://www.stonesforhealth.nl/blog/art-of-stones-s4h-edelstenen',
   }
 };
 
@@ -40,7 +40,7 @@ const blogPostingSchema = {
   "@type": "BlogPosting",
   "headline": "Art-of-Stones B.V.: Het Verhaal achter S4H Edelstenen",
   "description": "Ontdek Art-of-Stones B.V., het bedrijf achter het private label S4H (Stones for Health). Hoogwaardige edelstenen en sieraden in 11 Europese landen.",
-  "image": "https://stonesforhealth.nl/blog-images/Art-of-Stones B.V.- Het Verhaal achter S4H Edelstenen.webp",
+  "image": "https://www.stonesforhealth.nl/blog-images/Art-of-Stones B.V.- Het Verhaal achter S4H Edelstenen.webp",
   "datePublished": "2025-03-28T09:00:00Z",
   "dateModified": "2025-03-28T09:00:00Z",
   "author": {
@@ -52,12 +52,12 @@ const blogPostingSchema = {
     "name": "Stones for Health",
     "logo": {
       "@type": "ImageObject",
-      "url": "https://stonesforhealth.nl/logo.webp"
+      "url": "https://www.stonesforhealth.nl/logo.webp"
     }
   },
   "mainEntityOfPage": {
     "@type": "WebPage",
-    "@id": "https://stonesforhealth.nl/blog/art-of-stones-s4h-edelstenen"
+    "@id": "https://www.stonesforhealth.nl/blog/art-of-stones-s4h-edelstenen"
   }
 };
 

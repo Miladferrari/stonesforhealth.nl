@@ -16,7 +16,7 @@ export const metadata: Metadata = {
     authors: ['StonesForHealth'],
   },
   alternates: {
-    canonical: 'https://stonesforhealth.nl/blog/volle-maan-oktober-2025',
+    canonical: 'https://www.stonesforhealth.nl/blog/volle-maan-oktober-2025',
   }
 };
 
@@ -25,7 +25,7 @@ const blogPostingSchema = {
   "@type": "BlogPosting",
   "headline": "Volle Maan Oktober 2025: De Jagermaan in Ram",
   "description": "Volle maan op 14 oktober 2025 in Ram. Ontdek de spirituele betekenis van de Jagermaan, krachtige rituelen en welke edelstenen perfect passen bij deze volle maan energie.",
-  "image": "https://stonesforhealth.nl/blog-images/Volle Maan Oktober 2025- De Jagermaan in Ram .webp",
+  "image": "https://www.stonesforhealth.nl/blog-images/Volle Maan Oktober 2025- De Jagermaan in Ram .webp",
   "datePublished": "2025-10-10T09:00:00Z",
   "dateModified": "2025-10-10T09:00:00Z",
   "author": {
@@ -37,12 +37,12 @@ const blogPostingSchema = {
     "name": "Stones for Health",
     "logo": {
       "@type": "ImageObject",
-      "url": "https://stonesforhealth.nl/logo.webp"
+      "url": "https://www.stonesforhealth.nl/logo.webp"
     }
   },
   "mainEntityOfPage": {
     "@type": "WebPage",
-    "@id": "https://stonesforhealth.nl/blog/volle-maan-oktober-2025"
+    "@id": "https://www.stonesforhealth.nl/blog/volle-maan-oktober-2025"
   }
 };
 

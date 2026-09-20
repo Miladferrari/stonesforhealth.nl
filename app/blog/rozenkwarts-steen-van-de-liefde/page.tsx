@@ -31,7 +31,7 @@ export const metadata: Metadata = {
     publishedTime: '2025-04-05',
   },
   alternates: {
-    canonical: 'https://stonesforhealth.nl/blog/rozenkwarts-steen-van-de-liefde',
+    canonical: 'https://www.stonesforhealth.nl/blog/rozenkwarts-steen-van-de-liefde',
   }
 };
 
@@ -40,7 +40,7 @@ const blogPostingSchema = {
   "@type": "BlogPosting",
   "headline": "Rozenkwarts: De Steen van de Liefde en het Hartchakra",
   "description": "Ontdek rozenkwarts - de ultieme edelsteen voor liefde, zelfliefde en emotioneel welzijn. Leer alles over de werking op het hartchakra, geschiedenis, toepassingen en spirituele kracht.",
-  "image": "https://stonesforhealth.nl/blog-images/Rozenkwarts- De Steen van de Liefde en het Hartchakra.webp",
+  "image": "https://www.stonesforhealth.nl/blog-images/Rozenkwarts- De Steen van de Liefde en het Hartchakra.webp",
   "datePublished": "2025-04-05T09:00:00Z",
   "dateModified": "2025-04-05T09:00:00Z",
   "author": {
@@ -52,12 +52,12 @@ const blogPostingSchema = {
     "name": "Stones for Health",
     "logo": {
       "@type": "ImageObject",
-      "url": "https://stonesforhealth.nl/logo.webp"
+      "url": "https://www.stonesforhealth.nl/logo.webp"
     }
   },
   "mainEntityOfPage": {
     "@type": "WebPage",
-    "@id": "https://stonesforhealth.nl/blog/rozenkwarts-steen-van-de-liefde"
+    "@id": "https://www.stonesforhealth.nl/blog/rozenkwarts-steen-van-de-liefde"
   }
 };
 

@@ -16,7 +16,7 @@ export const metadata: Metadata = {
     authors: ['StonesForHealth'],
   },
   alternates: {
-    canonical: 'https://stonesforhealth.nl/blog/jaar-van-de-houten-slang-2025',
+    canonical: 'https://www.stonesforhealth.nl/blog/jaar-van-de-houten-slang-2025',
   }
 };
 
@@ -25,7 +25,7 @@ const blogPostingSchema = {
   "@type": "BlogPosting",
   "headline": "2025: Het Jaar van de Houten Slang",
   "description": "Chinese astrologie 2025: Ontdek de wijsheid van het Jaar van de Houten Slang. Transformatie, intuïtie en spirituele groei.",
-  "image": "https://stonesforhealth.nl/blog-images/2025- Het Jaar van de Houten Slang.webp",
+  "image": "https://www.stonesforhealth.nl/blog-images/2025- Het Jaar van de Houten Slang.webp",
   "datePublished": "2025-01-29T09:00:00Z",
   "dateModified": "2025-01-29T09:00:00Z",
   "author": {
@@ -37,12 +37,12 @@ const blogPostingSchema = {
     "name": "Stones for Health",
     "logo": {
       "@type": "ImageObject",
-      "url": "https://stonesforhealth.nl/logo.webp"
+      "url": "https://www.stonesforhealth.nl/logo.webp"
     }
   },
   "mainEntityOfPage": {
     "@type": "WebPage",
-    "@id": "https://stonesforhealth.nl/blog/jaar-van-de-houten-slang-2025"
+    "@id": "https://www.stonesforhealth.nl/blog/jaar-van-de-houten-slang-2025"
   }
 };
 

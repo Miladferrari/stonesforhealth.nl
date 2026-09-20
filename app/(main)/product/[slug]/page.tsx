@@ -49,7 +49,7 @@ export async function generateMetadata({ params }: ProductPageProps): Promise<Me
     const seoTitle = product.yoast_seo?.title || `${product.name} | Authentieke Edelstenen | StonesForHealth`;
     const seoDescription = product.yoast_seo?.meta_description || fallbackDescription;
     const canonicalUrl = product.yoast_seo?.canonical_url || `https://www.stonesforhealth.nl/product/${product.slug}`;
-    const productImage = product.images?.[0]?.src || '/logo.png';
+    const productImage = product.images?.[0]?.src || '/og-image.jpg';
 
     // Build keywords from Yoast focus keyword + categories
     const categoryKeywords = product.categories?.map(c => c.name).join(', ') || '';
@@ -147,6 +147,9 @@ export default async function ProductPage({ params }: ProductPageProps) {
     }
 
     // Generate Product Schema
+    const ratingCount = product.rating_count ?? 0;
+    const averageRating = parseFloat(product.average_rating ?? '0');
+
     const productSchema = {
       "@context": "https://schema.org",
       "@type": "Product",
@@ -160,21 +163,53 @@ export default async function ProductPage({ params }: ProductPageProps) {
       },
       "offers": {
         "@type": "Offer",
-        "url": `https://stonesforhealth.nl/product/${product.slug}`,
+        "url": `https://www.stonesforhealth.nl/product/${product.slug}`,
         "priceCurrency": "EUR",
         "price": product.price || product.regular_price,
         "availability": product.stock_status === 'instock'
           ? "https://schema.org/InStock"
           : "https://schema.org/OutOfStock",
-        "priceValidUntil": new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0]
+        "priceValidUntil": new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+        // Google has required both of these for product rich results since 2024
+        "shippingDetails": {
+          "@type": "OfferShippingDetails",
+          "shippingRate": {
+            "@type": "MonetaryAmount",
+            "value": "4.95",
+            "currency": "EUR"
+          },
+          "shippingDestination": [
+            { "@type": "DefinedRegion", "addressCountry": "NL" },
+            { "@type": "DefinedRegion", "addressCountry": "BE" }
+          ],
+          "deliveryTime": {
+            "@type": "ShippingDeliveryTime",
+            "handlingTime": { "@type": "QuantitativeValue", "minValue": 0, "maxValue": 1, "unitCode": "DAY" },
+            "transitTime": { "@type": "QuantitativeValue", "minValue": 1, "maxValue": 3, "unitCode": "DAY" }
+          }
+        },
+        "hasMerchantReturnPolicy": {
+          "@type": "MerchantReturnPolicy",
+          "applicableCountry": ["NL", "BE"],
+          "returnPolicyCategory": "https://schema.org/MerchantReturnFiniteReturnWindow",
+          "merchantReturnDays": 30,
+          "returnMethod": "https://schema.org/ReturnByMail",
+          "returnFees": "https://schema.org/ReturnShippingFees"
+        }
       },
-      "aggregateRating": {
-        "@type": "AggregateRating",
-        "ratingValue": "4.8",
-        "reviewCount": "127",
-        "bestRating": "5",
-        "worstRating": "1"
-      }
+      // Only claim a rating when real reviews back it up. Inventing one is
+      // spammy structured markup and risks a manual action.
+      ...(ratingCount > 0 && averageRating > 0
+        ? {
+            aggregateRating: {
+              "@type": "AggregateRating",
+              "ratingValue": averageRating.toFixed(1),
+              "reviewCount": ratingCount,
+              "bestRating": "5",
+              "worstRating": "1"
+            }
+          }
+        : {})
     };
 
     // Always use the gemstone product page for Stonesforhealth

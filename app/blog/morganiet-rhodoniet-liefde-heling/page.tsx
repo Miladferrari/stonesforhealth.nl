@@ -16,7 +16,7 @@ export const metadata: Metadata = {
     authors: ['StonesForHealth'],
   },
   alternates: {
-    canonical: 'https://stonesforhealth.nl/blog/morganiet-rhodoniet-liefde-heling',
+    canonical: 'https://www.stonesforhealth.nl/blog/morganiet-rhodoniet-liefde-heling',
   }
 };
 
@@ -25,7 +25,7 @@ const blogPostingSchema = {
   "@type": "BlogPosting",
   "headline": "Morganiet & Rhodoniet: Edelstenen van Liefde & Heling",
   "description": "Ontdek Morganiet en Rhodoniet voor hartchakra heling. Onvoorwaardelijke liefde, emotionele heling, vergeving en compassie.",
-  "image": "https://stonesforhealth.nl/blog-images/Morganiet & Rhodoniet- Edelstenen van Liefde & Heling.webp",
+  "image": "https://www.stonesforhealth.nl/blog-images/Morganiet & Rhodoniet- Edelstenen van Liefde & Heling.webp",
   "datePublished": "2025-03-18T09:00:00Z",
   "dateModified": "2025-03-18T09:00:00Z",
   "author": {
@@ -37,12 +37,12 @@ const blogPostingSchema = {
     "name": "Stones for Health",
     "logo": {
       "@type": "ImageObject",
-      "url": "https://stonesforhealth.nl/logo.webp"
+      "url": "https://www.stonesforhealth.nl/logo.webp"
     }
   },
   "mainEntityOfPage": {
     "@type": "WebPage",
-    "@id": "https://stonesforhealth.nl/blog/morganiet-rhodoniet-liefde-heling"
+    "@id": "https://www.stonesforhealth.nl/blog/morganiet-rhodoniet-liefde-heling"
   }
 };
 

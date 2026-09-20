@@ -16,7 +16,7 @@ export const metadata: Metadata = {
     authors: ['StonesForHealth'],
   },
   alternates: {
-    canonical: 'https://stonesforhealth.nl/blog/volle-maan-november-2025',
+    canonical: 'https://www.stonesforhealth.nl/blog/volle-maan-november-2025',
   }
 };
 
@@ -25,7 +25,7 @@ const blogPostingSchema = {
   "@type": "BlogPosting",
   "headline": "Volle Maan November 2025: Beaver Moon Supermaan",
   "description": "Supermaan op 5 november 2025 om 14:19 uur. Ontdek de spirituele betekenis van de Beaver Moon, gronding rituelen en de beste edelstenen.",
-  "image": "https://stonesforhealth.nl/blog-images/Volle Maan November 2025- Beaver Moon Supermaan.webp",
+  "image": "https://www.stonesforhealth.nl/blog-images/Volle Maan November 2025- Beaver Moon Supermaan.webp",
   "datePublished": "2025-11-01T09:00:00Z",
   "dateModified": "2025-11-01T09:00:00Z",
   "author": {
@@ -37,12 +37,12 @@ const blogPostingSchema = {
     "name": "Stones for Health",
     "logo": {
       "@type": "ImageObject",
-      "url": "https://stonesforhealth.nl/logo.webp"
+      "url": "https://www.stonesforhealth.nl/logo.webp"
     }
   },
   "mainEntityOfPage": {
     "@type": "WebPage",
-    "@id": "https://stonesforhealth.nl/blog/volle-maan-november-2025"
+    "@id": "https://www.stonesforhealth.nl/blog/volle-maan-november-2025"
   }
 };
 
