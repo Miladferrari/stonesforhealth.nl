@@ -45,9 +45,46 @@ node scripts/enrich-from-bol.mjs --apply
 node scripts/fix-seo.mjs                        # laat zien wat er scheef staat
 node scripts/fix-seo.mjs --apply
 
-# 7. Controleren
+# 7. Collecties bijwerken nu de titels compleet zijn
+node scripts/hercategoriseer.mjs
+node scripts/hercategoriseer.mjs --apply
+
+# 8. Producten zonder foto uit de winkel halen
+node scripts/verberg-zonder-foto.mjs
+node scripts/verberg-zonder-foto.mjs --apply
+
+# 9. Controleren
 node scripts/inventory.mjs
 ```
+
+## Producten zonder foto
+
+28 producten hebben geen bol-tegenhanger en dus geen foto. Zoeken op bol op
+naam én EAN levert niets op (`find-missing-on-bol.mjs`), dus die foto's moeten
+zelf gemaakt worden.
+
+`verberg-zonder-foto.mjs` haalt ze uit alle overzichten door
+`catalog_visibility` op `hidden` te zetten. Bewust niet op concept: alle 28
+staan in de sitemap, en concept zou 28 geïndexeerde URL's een 404 geven. De
+productpagina blijft dus gewoon werken via een directe link.
+
+Wat er is gewijzigd komt in `data/verborgen-zonder-foto.json`. Zodra er foto's
+zijn: `node scripts/verberg-zonder-foto.mjs --herstel --apply` — dat zet
+precies die producten terug, en slaat producten over die nog steeds geen foto
+hebben.
+
+## Collecties
+
+`hercategoriseer.mjs` rekent de categorieën opnieuw uit op de volledige
+bol-titel. De oorspronkelijke indeling kwam van de korte Excel-namen
+("S4H Armband"), waar weinig uit af te leiden viel.
+
+Het script **voegt toe** wat de titel duidelijk zegt en **haalt alleen
+soort-categorieën weg die de titel tegenspreekt** — een ketting die in
+"8 mm armbanden" staat. Thema-, intentie- en cadeaucategorieën blijven staan:
+die zijn handmatig gekozen. Ook `dames-armbanden`, `heren-armbanden` en
+`armband-sets` blijven, want wie het draagt en of het een set is staat lang
+niet altijd in de titel.
 
 ## Bol.com overnemen
 
@@ -119,6 +156,9 @@ WP_APP_PASSWORD=xxxx xxxx xxxx xxxx xxxx xxxx
 | `enrich-from-bol.mjs` | Zet beschrijvingen en foto's in WooCommerce |
 | `wp-media.mjs` | Uploadt foto's naar de WordPress-mediabibliotheek |
 | `fix-seo.mjs` | Repareert namen en alt-teksten na de import |
+| `find-missing-on-bol.mjs` | Zoekt op bol naar producten zonder foto |
+| `hercategoriseer.mjs` | Werkt de collecties bij op de volledige titel |
+| `verberg-zonder-foto.mjs` | Haalt producten zonder foto uit de overzichten |
 
 ## Categorie toevoegen of hernoemen
 
