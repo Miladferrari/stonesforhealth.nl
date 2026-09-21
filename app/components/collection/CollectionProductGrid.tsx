@@ -138,8 +138,17 @@ export default function CollectionProductGrid({
                           sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 20vw"
                         />
                       ) : (
-                        <div className="w-full h-full bg-gray-200 flex items-center justify-center">
-                          <span className="text-gray-400">No image</span>
+                        /* Een handvol producten heeft nog geen productfoto. Liever
+                           het merkbeeld dan een grijs vlak met Engelse tekst. */
+                        <div className="w-full h-full bg-[#f7f3f7] flex flex-col items-center justify-center gap-2 p-4">
+                          <Image
+                            src="/logo.webp"
+                            alt=""
+                            width={72}
+                            height={72}
+                            className="opacity-25"
+                          />
+                          <span className="text-[#492c4a]/50 text-xs text-center">Foto volgt</span>
                         </div>
                       )}
                     </div>
