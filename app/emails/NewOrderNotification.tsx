@@ -29,6 +29,8 @@ interface NewOrderNotificationEmailProps {
     country: string;
   };
   subtotal: string;
+  /** Het btw-bedrag dat in het totaal zit. Alle bedragen zijn inclusief btw. */
+  vat?: string;
   shippingCost: string;
   discount?: string;
   total: string;
@@ -45,6 +47,7 @@ export function NewOrderNotificationEmail({
   shippingAddress,
   billingAddress,
   subtotal,
+  vat,
   shippingCost,
   discount,
   total,
@@ -180,6 +183,14 @@ export function NewOrderNotificationEmail({
                   <td style="padding: 8px 0; text-align: right; color: #16a34a;">
                     <span>Korting:</span>
                     <span style="margin-left: 40px; font-weight: 600;">-€${discount}</span>
+                  </td>
+                </tr>
+                ` : ''}
+                ${vat ? `
+                <tr>
+                  <td style="padding: 8px 0; text-align: right; color: #6b7280; font-size: 14px;">
+                    <span>Waarvan btw:</span>
+                    <span style="margin-left: 40px;">€${vat}</span>
                   </td>
                 </tr>
                 ` : ''}

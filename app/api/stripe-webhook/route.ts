@@ -4,6 +4,7 @@ import { sendMail, isMailConfigured } from '@/lib/mail';
 import { woocommerce } from '@/lib/woocommerce';
 import { fulfilPaidOrder, updateOrderStatus } from '@/lib/order-fulfilment';
 import { OrderRecoveryEmail } from '@/app/emails/OrderRecovery';
+import { brutoStukprijs } from '@/lib/orderAmounts';
 
 /**
  * Initialize Stripe with the secret key from environment variables
@@ -140,10 +141,11 @@ export async function POST(request: NextRequest) {
               if (customerEmail) {
                 // Stuur failed order email DIRECT
                 if (isMailConfigured()) {
+                  // Inclusief btw; WooCommerce levert regelbedragen exclusief.
                   const items = orderData.line_items.map((item: any) => ({
                     name: item.name,
                     quantity: item.quantity,
-                    price: parseFloat(item.price).toFixed(2),
+                    price: brutoStukprijs(item).toFixed(2),
                   }));
 
                   const total = parseFloat(orderData.total).toFixed(2);

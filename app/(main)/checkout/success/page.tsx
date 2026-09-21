@@ -5,6 +5,7 @@ import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { useCart } from '../../../contexts/CartContextStoreAPI';
 import { trackPurchase } from '../../../lib/analytics';
+import { brutoStukprijs, brutoVerzending } from '@/lib/orderAmounts';
 
 function SuccessContent() {
   const searchParams = useSearchParams();
@@ -59,7 +60,8 @@ function SuccessContent() {
               const items = data.order.line_items?.map((item: any) => ({
                 id: item.product_id.toString(),
                 name: item.name,
-                price: parseFloat(item.price),
+                // Inclusief btw, anders rapporteert GA4 de omzet te laag.
+                price: brutoStukprijs(item),
                 quantity: item.quantity,
                 category: item.categories?.[0] || 'Edelstenen',
               })) || [];
@@ -69,7 +71,7 @@ function SuccessContent() {
                 items,
                 parseFloat(data.order.total),
                 parseFloat(data.order.total_tax || '0'),
-                parseFloat(data.order.shipping_total || '0')
+                brutoVerzending(data.order)
               );
 
               // Mark this order as tracked to prevent duplicate tracking
