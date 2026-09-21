@@ -1,3 +1,5 @@
+import { GRATIS_VANAF_TEKST } from '@/lib/shippingConfig';
+
 // Email Template 2: Sent after 24 hours and every 3 days
 // Includes 5% discount code "COMEBACK5"
 
@@ -148,7 +150,7 @@ export const AbandonedCartEmail2 = ({
                           <div style="width: 20px; height: 20px; border-radius: 50%; background-color: #492c4a; color: white; text-align: center; font-size: 12px; line-height: 20px;">✓</div>
                         </td>
                         <td style="color: #000000; font-size: 15px; font-weight: 600;">
-                          Gratis verzending vanaf €30
+                          ${GRATIS_VANAF_TEKST}
                         </td>
                       </tr>
                       <tr>

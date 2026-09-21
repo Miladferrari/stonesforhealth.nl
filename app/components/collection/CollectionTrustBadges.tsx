@@ -1,5 +1,7 @@
 'use client';
 
+import { GRATIS_VANAF, bedragKort } from '@/lib/shippingConfig';
+
 export default function CollectionTrustBadges() {
   const badges = [
     {
@@ -27,7 +29,7 @@ export default function CollectionTrustBadges() {
         </svg>
       ),
       title: "Gratis Verzending",
-      subtitle: "Vanaf €30"
+      subtitle: `Vanaf ${bedragKort(GRATIS_VANAF)}`
     },
     {
       icon: (

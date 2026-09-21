@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { GRATIS_VANAF, VERZENDKOSTEN, LEVERTIJD, bedrag, bedragKort } from '@/lib/shippingConfig';
 
 interface FAQItem {
   question: string;
@@ -57,12 +58,12 @@ const faqData: FAQItem[] = [
   {
     category: 'Verzending & Levering',
     question: 'Wat zijn de verzendkosten?',
-    answer: 'Nederland: €3,95 | Gratis vanaf €30,- <br/> België: €5,95 | Gratis vanaf €50,- <br/> Duitsland & Frankrijk: €7,95 | Gratis vanaf €75,- <br/> Rest van Europa: €9,95 | Gratis vanaf €100,-'
+    answer: `Nederland: ${bedrag(VERZENDKOSTEN)} | Gratis vanaf ${bedragKort(GRATIS_VANAF)} <br/> België: ${bedrag(VERZENDKOSTEN)} | Gratis vanaf ${bedragKort(GRATIS_VANAF)} <br/> We verzenden alleen naar Nederland en België.`
   },
   {
     category: 'Verzending & Levering',
     question: 'Hoe lang duurt de levering?',
-    answer: 'Nederland: 1-2 werkdagen <br/> België: 2-3 werkdagen <br/> Duitsland & Frankrijk: 3-5 werkdagen <br/> Rest van Europa: 4-7 werkdagen <br/> Bestellingen geplaatst voor 15:00 worden nog dezelfde dag verzonden (werkdagen).'
+    answer: `Nederland: ${LEVERTIJD.NL} <br/> België: ${LEVERTIJD.BE} <br/> Bestellingen geplaatst voor 15:00 worden nog dezelfde dag verzonden (werkdagen).`
   },
   {
     category: 'Verzending & Levering',

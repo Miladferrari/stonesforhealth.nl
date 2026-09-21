@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useCartWithToast } from '@/app/hooks/useCartWithToast';
 import type { Product } from '@/lib/woocommerce';
 import Image from 'next/image';
+import { GRATIS_VANAF, bedragKort } from '@/lib/shippingConfig';
 
 interface ProductDetailProps {
   product: Product;
@@ -313,7 +314,7 @@ export default function ProductDetailHormozi({ product, relatedProducts }: Produ
                   </span>
                 )}
               </div>
-              <p className="text-sm text-gray-600">Inclusief BTW • Gratis verzending vanaf €30</p>
+              <p className="text-sm text-gray-600">{`Inclusief BTW • Gratis verzending vanaf ${bedragKort(GRATIS_VANAF)}`}</p>
             </div>
 
             {/* Quantity and CTA */}

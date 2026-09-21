@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { useCart } from '@/app/contexts/CartContextStoreAPI';
 import { Product, ProductVariation } from '@/lib/woocommerce';
 import { trackProductView, trackAddToCart } from '../../../lib/analytics';
+import { GRATIS_VANAF, bedragKort } from '@/lib/shippingConfig';
 
 interface HikeGemstoneProductPageV2Props {
   product: Product;
@@ -968,7 +969,7 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
                     <path d="M0 9C0 4.02944 4.02944 0 9 0C13.9706 0 18 4.02944 18 9C18 13.9706 13.9706 18 9 18C4.02944 18 0 13.9706 0 9Z" fill="currentColor"></path>
                     <path d="M5 8.8L7.62937 11.6L13 6" stroke="#ffffff" fill="none"></path>
                   </svg>
-                  <span className="text-base md:text-lg text-gray-700 font-[family-name:var(--font-eb-garamond)]">Gratis verzending vanaf €30 – Binnen Nederland & België</span>
+                  <span className="text-base md:text-lg text-gray-700 font-[family-name:var(--font-eb-garamond)]">{`Gratis verzending vanaf ${bedragKort(GRATIS_VANAF)} – Binnen Nederland & België`}</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <svg role="presentation" focusable="false" strokeWidth="2" width="24" height="24" className="text-green-600 flex-shrink-0" style={{ "--icon-height": "24px" } as React.CSSProperties} viewBox="0 0 18 18">

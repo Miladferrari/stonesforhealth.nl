@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import FAQClient from './FAQClient';
 import JsonLd from '@/app/components/JsonLd';
+import { GRATIS_VANAF, VERZENDKOSTEN, LEVERTIJD, bedrag, bedragKort } from '@/lib/shippingConfig';
 
 export const metadata: Metadata = {
   title: 'Veelgestelde Vragen (FAQ) - Edelstenen & Kristallen | StonesForHealth',
@@ -75,11 +76,11 @@ const faqDataForSchema = [
   },
   {
     question: 'Wat zijn de verzendkosten?',
-    answer: 'Nederland: €3,95 (Gratis vanaf €30). België: €5,95 (Gratis vanaf €50). Duitsland & Frankrijk: €7,95 (Gratis vanaf €75). Rest van Europa: €9,95 (Gratis vanaf €100).'
+    answer: `Nederland: ${bedrag(VERZENDKOSTEN)} (Gratis vanaf ${bedragKort(GRATIS_VANAF)}). België: ${bedrag(VERZENDKOSTEN)} (Gratis vanaf ${bedragKort(GRATIS_VANAF)}). We verzenden alleen naar Nederland en België.`
   },
   {
     question: 'Hoe lang duurt de levering?',
-    answer: 'Nederland: 1-2 werkdagen. België: 2-3 werkdagen. Duitsland & Frankrijk: 3-5 werkdagen. Rest van Europa: 4-7 werkdagen. Bestellingen geplaatst voor 15:00 worden nog dezelfde dag verzonden (werkdagen).'
+    answer: `Nederland: ${LEVERTIJD.NL}. België: ${LEVERTIJD.BE}. Bestellingen geplaatst voor 15:00 worden nog dezelfde dag verzonden (werkdagen).`
   },
   {
     question: 'Kan ik mijn pakket volgen?',

@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useCartWithToast } from '../hooks/useCartWithToast';
 import TrustpilotWidget from './TrustpilotWidget';
+import { GRATIS_VANAF, VERZENDKOSTEN, bedragKort, GRATIS_VANAF_TEKST, isGratisVerzending, restTotGratis } from '@/lib/shippingConfig';
 
 export default function SlideInCart() {
   const router = useRouter();
@@ -97,7 +98,7 @@ export default function SlideInCart() {
 
             {/* Free shipping progress bar */}
             {items.length > 0 && (() => {
-              const FREE_SHIPPING_THRESHOLD = 30;
+              const FREE_SHIPPING_THRESHOLD = GRATIS_VANAF;
               const currentTotal = getTotalPriceAfterDiscount();
               const remaining = FREE_SHIPPING_THRESHOLD - currentTotal;
               const progressPercentage = Math.min((currentTotal / FREE_SHIPPING_THRESHOLD) * 100, 100);
@@ -320,7 +321,7 @@ export default function SlideInCart() {
                       <svg className="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" />
                       </svg>
-                      <span className="font-[family-name:var(--font-eb-garamond)]">Gratis verzending vanaf €30</span>
+                      <span className="font-[family-name:var(--font-eb-garamond)]">{GRATIS_VANAF_TEKST}</span>
                     </div>
                   </div>
 

@@ -1,4 +1,8 @@
 import { woocommerce } from '@/lib/woocommerce';
+import {
+  GRATIS_VANAF, VERZENDKOSTEN, VERZENDLANDEN, LEVERTIJD,
+  bedragKort, isGratisVerzending, restTotGratis,
+} from '@/lib/shippingConfig';
 
 // Fetch shipping zones from WooCommerce (no caching for real-time updates)
 export async function fetchShippingZones() {
@@ -98,31 +102,27 @@ export async function getAllowedCountries() {
 
 // Calculate shipping rates based on country and cart total
 export async function calculateShippingRates(country: string, total: number, postcode?: string) {
-  // OVERRIDE: For BE and NL, always use our new shipping rates (€4.95 / free from €30)
-  if (country === 'BE' || country === 'NL') {
-    console.log(`[Shipping API] Using override rates for ${country}: €4.95 / free from €30`);
-
+  // De tarieven staan niet in WooCommerce maar in lib/shippingConfig.ts.
+  if (VERZENDLANDEN[country]) {
     const rates: any[] = [];
+    const levertijd = LEVERTIJD[country];
 
-    // Check if free shipping threshold is met (€30)
-    if (total >= 30) {
-      console.log('[Shipping API] Free shipping threshold met (€30)');
+    if (isGratisVerzending(total)) {
       rates.push({
         method_id: 'free_shipping:1',
-        method_title: 'Gratis verzekerde verzending + Track and trace | Boven €30',
+        method_title: `Gratis verzekerde verzending + Track and trace | Boven ${bedragKort(GRATIS_VANAF)}`,
         cost: 0,
         free: true,
-        delivery_time: country === 'NL' ? '1-2 werkdagen' : '2-3 werkdagen'
+        delivery_time: levertijd,
       });
     } else {
-      // Add paid shipping rate with remaining amount for free shipping
       rates.push({
         method_id: 'flat_rate:1',
         method_title: 'Verzekerde verzending + Track and trace | 1-2 dagen thuis',
-        cost: 4.95,
+        cost: VERZENDKOSTEN,
         free: false,
-        delivery_time: country === 'NL' ? '1-2 werkdagen' : '2-3 werkdagen',
-        free_shipping_remaining: 30 - total
+        delivery_time: levertijd,
+        free_shipping_remaining: restTotGratis(total),
       });
     }
 

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getAllowedCountries, calculateShippingRates } from '@/lib/shipping';
+import { VERZENDKOSTEN, VERZENDLANDEN, LEVERTIJD, isGratisVerzending, restTotGratis } from '@/lib/shippingConfig';
 
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
@@ -62,26 +63,26 @@ export async function GET(request: NextRequest) {
       const country = searchParams.get('country') || 'NL';
       const total = parseFloat(searchParams.get('total') || '0');
 
-      if (country === 'BE' || country === 'NL') {
+      if (VERZENDLANDEN[country]) {
         const rates = [];
+        const levertijd = LEVERTIJD[country];
 
-        // Check if free shipping threshold is met (€30)
-        if (total >= 30) {
+        if (isGratisVerzending(total)) {
           rates.push({
             method_id: 'free_shipping:1',
             method_title: 'Gratis verzending',
             cost: 0,
             free: true,
-            delivery_time: country === 'NL' ? '1-2 werkdagen' : '2-3 werkdagen'
+            delivery_time: levertijd,
           });
         } else {
           rates.push({
             method_id: 'flat_rate:1',
             method_title: 'Verzending',
-            cost: 4.95,
+            cost: VERZENDKOSTEN,
             free: false,
-            delivery_time: country === 'NL' ? '1-2 werkdagen' : '2-3 werkdagen',
-            free_shipping_remaining: 30 - total
+            delivery_time: levertijd,
+            free_shipping_remaining: restTotGratis(total),
           });
         }
 
@@ -95,7 +96,7 @@ export async function GET(request: NextRequest) {
     }
 
     return NextResponse.json({
-      countries: ['BE', 'NL'],
+      countries: Object.keys(VERZENDLANDEN),
       countriesWithNames: {
         'BE': 'België',
         'NL': 'Nederland'

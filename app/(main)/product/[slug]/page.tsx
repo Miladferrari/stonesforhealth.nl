@@ -3,6 +3,7 @@ import { woocommerce, decodeEntities } from '@/lib/woocommerce';
 import HikeGemstoneProductPageV2 from './HikeGemstoneProductPageV2';
 import JsonLd from '@/app/components/JsonLd';
 import type { Metadata } from 'next';
+import { VERZENDKOSTEN } from '@/lib/shippingConfig';
 
 // Use ISR with 60 second revalidation for better performance
 export const revalidate = 60;
@@ -196,7 +197,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
           "@type": "OfferShippingDetails",
           "shippingRate": {
             "@type": "MonetaryAmount",
-            "value": "4.95",
+            "value": String(VERZENDKOSTEN),
             "currency": "EUR"
           },
           "shippingDestination": [

@@ -1,10 +1,11 @@
 import type { Metadata } from 'next';
 import AlleProductenClient from './AlleProductenClient';
+import { GRATIS_VANAF, bedragKort } from '@/lib/shippingConfig';
 
 // Server component - handles SEO metadata
 export const metadata: Metadata = {
   title: 'Alle Producten - Edelstenen & Kristallen | StonesForHealth',
-  description: 'Browse alle authentieke edelstenen en kristallen bij StonesForHealth. Ontdek onze volledige collectie met chakra stenen, beschermingsstenen en meer. Gratis verzending vanaf €30.',
+  description: `Browse alle authentieke edelstenen en kristallen bij StonesForHealth. Ontdek onze volledige collectie met chakra stenen, beschermingsstenen en meer. Gratis verzending vanaf ${bedragKort(GRATIS_VANAF)}.`,
   keywords: [
     'alle edelstenen',
     'kristallen collectie',
