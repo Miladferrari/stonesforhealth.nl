@@ -51,6 +51,8 @@ export async function POST(request: NextRequest) {
       ? ['ideal']
       : paymentMethod === 'bancontact'
       ? ['bancontact']
+      : paymentMethod === 'klarna'
+      ? ['klarna']
       : ['card'];
 
     const paymentIntent = await stripe.paymentIntents.create({

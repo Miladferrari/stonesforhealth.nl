@@ -17,7 +17,7 @@ interface PaymentFormProps {
   clientSecret: string;
   orderId: string;
   orderKey: string;
-  paymentMethod: 'card' | 'ideal' | 'bancontact';
+  paymentMethod: 'card' | 'ideal' | 'bancontact' | 'klarna';
   onSuccess: () => void;
   onError: (error: string) => void;
   customerName?: string;
@@ -30,9 +30,10 @@ function CheckoutForm({ orderId, orderKey, paymentMethod, onSuccess, onError, cu
   const [isProcessing, setIsProcessing] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
 
-  // Hide billing fields for iDEAL and Bancontact
+  // Hide billing fields for iDEAL, Bancontact and Klarna: those details are
+  // already collected in the checkout form and sent along on confirm
   useEffect(() => {
-    if (paymentMethod === 'ideal' || paymentMethod === 'bancontact') {
+    if (paymentMethod === 'ideal' || paymentMethod === 'bancontact' || paymentMethod === 'klarna') {
       const styleId = 'hide-billing-fields-style';
       let styleElement = document.getElementById(styleId);
 
@@ -140,6 +141,7 @@ function CheckoutForm({ orderId, orderKey, paymentMethod, onSuccess, onError, cu
             layout: 'tabs',
             paymentMethodOrder: paymentMethod === 'card' ? ['card'] :
                                paymentMethod === 'ideal' ? ['ideal'] :
+                               paymentMethod === 'klarna' ? ['klarna'] :
                                ['bancontact'],
             defaultValues: {
               billingDetails: {
