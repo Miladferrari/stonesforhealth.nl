@@ -416,12 +416,16 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
       // Calculate bundle discount percentage
       const bundleDiscount = selectedBundle === 'duo' ? 20 : selectedBundle === 'family' ? 25 : 0;
 
-      // Create bundle info to pass to cart
-      const bundleInfo = {
-        type: selectedBundle,
-        discount: bundleDiscount,
-        totalPrice: bundlePrices[selectedBundle as keyof typeof bundlePrices]
-      };
+      // Alleen meesturen als er echt een bundel is gekozen. Bij 'single' is de
+      // bundelprijs gelijk aan de gewone prijs, en dan zette de winkelwagen er
+      // een doorgestreepte prijs bij die nergens op sloeg.
+      const bundleInfo = bundleDiscount > 0
+        ? {
+            type: selectedBundle,
+            discount: bundleDiscount,
+            totalPrice: bundlePrices[selectedBundle as keyof typeof bundlePrices],
+          }
+        : undefined;
 
       // For variable products with bundles, add each item separately with its variation
       if (product.type === 'variable' && selectedVariations[0]) {

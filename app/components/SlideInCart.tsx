@@ -166,11 +166,13 @@ export default function SlideInCart() {
                   const price = parseFloat(item.product.price);
                   const regularPrice = item.product.regular_price ? parseFloat(item.product.regular_price) : price;
                   const mainImage = item.product.images[0];
-                  const hasDiscount = regularPrice > price;
 
                   // Calculate display price - use bundle price if available
                   const displayPrice = item.bundlePrice !== undefined ? item.bundlePrice : (price * item.quantity);
                   const originalPrice = regularPrice * item.quantity;
+                  // Alleen doorstrepen als er daadwerkelijk minder betaald wordt.
+                  // Een cent marge, want dit zijn floats.
+                  const toontKorting = originalPrice - displayPrice > 0.005;
 
                   // Bundle badge info
                   const bundleBadge = item.bundleType === 'duo' ? '2 PAAR -20%' :
@@ -244,7 +246,7 @@ export default function SlideInCart() {
                                 <span className="text-sm font-semibold text-[#492c4a]">
                                   €{displayPrice.toFixed(2)}
                                 </span>
-                                {(hasDiscount || item.bundlePrice) && (
+                                {toontKorting && (
                                   <span className="text-xs text-gray-500 line-through">
                                     €{originalPrice.toFixed(2)}
                                   </span>
@@ -270,12 +272,14 @@ export default function SlideInCart() {
 
               {/* Simple Totals */}
               <div className="space-y-3 mb-4">
-                <div className="flex justify-between items-center">
-                  <span className="text-xl text-gray-600 font-[family-name:var(--font-eb-garamond)]">Totale korting</span>
-                  <span className="text-2xl font-medium text-green-600 font-[family-name:var(--font-eb-garamond)]">
-                    {getTotalSavings() > 0 ? `-€${getTotalSavings().toFixed(2)}` : '€0.00'}
-                  </span>
-                </div>
+                {getTotalSavings() > 0 && (
+                  <div className="flex justify-between items-center">
+                    <span className="text-xl text-gray-600 font-[family-name:var(--font-eb-garamond)]">Totale korting</span>
+                    <span className="text-2xl font-medium text-green-600 font-[family-name:var(--font-eb-garamond)]">
+                      -€{getTotalSavings().toFixed(2)}
+                    </span>
+                  </div>
+                )}
                 {shipping.rates.length > 0 && (
                   <div className="flex justify-between items-center">
                     <span className="text-lg text-gray-600 font-[family-name:var(--font-eb-garamond)]">Verzending</span>
