@@ -5,7 +5,6 @@ import Image from 'next/image';
 import { useState, useCallback, memo, useEffect } from 'react';
 import { useCartWithToast } from '../hooks/useCartWithToast';
 import type { Product } from '@/lib/woocommerce';
-import { getProductReviewSummary } from '@/lib/reviewGenerator';
 import { trackAddToCart } from '../lib/analytics';
 import { getProductUrl } from '@/lib/slugify';
 
@@ -20,59 +19,6 @@ const ProductCard = memo(function ProductCard({ product }: ProductCardProps) {
   const [isWishlisted, setIsWishlisted] = useState(false);
 
   // Function to render stars with partial fill based on rating
-  const renderStars = (rating: number) => {
-    // If rating is 0, show 5 empty gray stars
-    if (rating === 0) {
-      return (
-        <>
-          {[...Array(5)].map((_, i) => (
-            <svg
-              key={`star-${product.id}-${i}`}
-              className="w-3.5 h-3.5 inline-block"
-              viewBox="0 0 20 20"
-            >
-              <path
-                d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"
-                fill="#D1D5DB"
-              />
-            </svg>
-          ))}
-        </>
-      );
-    }
-
-    const fullStars = Math.floor(rating);
-    const partialFill = (rating - fullStars) * 100;
-
-    return (
-      <>
-        {[...Array(5)].map((_, i) => (
-          <svg
-            key={`star-${product.id}-${i}`}
-            className="w-3.5 h-3.5 inline-block"
-            viewBox="0 0 20 20"
-          >
-            <defs>
-              {i === fullStars && partialFill > 0 && (
-                <linearGradient id={`star-gradient-${product.id}-${i}`} x1="0%" y1="0%" x2="100%" y2="0%">
-                  <stop offset={`${partialFill}%`} stopColor="#FAD14C" />
-                  <stop offset={`${partialFill}%`} stopColor="#D1D5DB" />
-                </linearGradient>
-              )}
-            </defs>
-            <path
-              d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"
-              fill={
-                i < fullStars ? '#FAD14C' :
-                i === fullStars && partialFill > 0 ? `url(#star-gradient-${product.id}-${i})` :
-                '#D1D5DB'
-              }
-            />
-          </svg>
-        ))}
-      </>
-    );
-  };
   
   const mainImage = product.images[0];
   const price = parseFloat(product.price);
@@ -83,14 +29,6 @@ const ProductCard = memo(function ProductCard({ product }: ProductCardProps) {
   // Check if product is out of stock
   const isOutOfStock = product.stock_status !== 'instock' || product.stock_quantity === 0;
 
-  // Check if product is in bestsellers category (ID: 20)
-  const isBestseller = product.categories?.some((cat: any) => cat.slug === 'bestsellers');
-
-  // Get review data from the review generator - only for bestsellers
-  const { rating, count: reviewCount } = isBestseller
-    ? getProductReviewSummary(product.id)
-    : { rating: 0, count: 0 };
-  
   // Initialize wishlist state from localStorage
   useEffect(() => {
     const checkWishlistStatus = () => {
@@ -216,13 +154,6 @@ const ProductCard = memo(function ProductCard({ product }: ProductCardProps) {
             {product.name}
           </h3>
         </Link>
-
-        <div className="flex items-center gap-1 mb-2">
-          <div className="flex">
-            {renderStars(rating)}
-          </div>
-          <span className="text-xs text-gray-500">({reviewCount})</span>
-        </div>
 
         <div className="flex items-center justify-between mb-3">
           <div className="min-h-[2.5rem] flex flex-col justify-end">
