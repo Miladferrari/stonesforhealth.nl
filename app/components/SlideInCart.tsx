@@ -4,7 +4,6 @@ import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useCartWithToast } from '../hooks/useCartWithToast';
-import TrustpilotWidget from './TrustpilotWidget';
 import { GRATIS_VANAF, VERZENDKOSTEN, bedragKort, GRATIS_VANAF_TEKST, isGratisVerzending, restTotGratis } from '@/lib/shippingConfig';
 
 export default function SlideInCart() {
@@ -134,11 +133,6 @@ export default function SlideInCart() {
                 </div>
               );
             })()}
-          </div>
-
-          {/* Trustpilot Widget */}
-          <div className="px-5 py-3 bg-gradient-to-r from-[#faf8f4] to-white border-b border-[#E8DCC6]">
-            <TrustpilotWidget />
           </div>
 
           {/* Cart items */}
