@@ -4,7 +4,6 @@ import { useEffect, useState, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Image from 'next/image';
 import { useCart } from '@/app/contexts/CartContextStoreAPI';
-import TrustpilotWidget from '@/app/components/TrustpilotWidget';
 import dynamic from 'next/dynamic';
 
 // Dynamically import payment form to avoid SSR issues
@@ -553,13 +552,6 @@ function PaymentPageContent() {
             {/* Trust Section - Mobile/Tablet Only */}
             <div className="lg:hidden pb-6">
               <div className="pt-6">
-                {/* Trustpilot Widget */}
-                <div className="mb-4">
-                  <TrustpilotWidget />
-                </div>
-                <h4 className="text-base font-medium text-black mb-4 text-left uppercase tracking-wider font-[family-name:var(--font-eb-garamond)]">
-                  WAAROM MEER DAN 4.278 KLANTEN VOOR STONESFORHEALTH KOZEN
-                </h4>
                 <div className="space-y-4">
                   {/* 30 Days Return */}
                   <div className="flex items-start gap-3">
@@ -771,13 +763,6 @@ function PaymentPageContent() {
           {/* Why choose us section */}
           <div className="pb-6">
             <div className="border-t border-[#e5e7eb] pt-6">
-              {/* Trustpilot Widget */}
-              <div className="mb-4">
-                <TrustpilotWidget />
-              </div>
-              <h4 className="text-base font-medium text-black mb-4 text-left uppercase tracking-wider font-[family-name:var(--font-eb-garamond)]">
-                WAAROM MEER DAN 4.278 KLANTEN VOOR STONESFORHEALTH KOZEN
-              </h4>
               <div className="space-y-4">
                 <div className="flex items-start gap-3">
                   <div className="flex-shrink-0 w-10 h-10">
