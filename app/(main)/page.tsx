@@ -120,62 +120,6 @@ export default async function Home() {
             
             {/* Left: Text Content */}
             <div className="text-center lg:text-left">
-              {/* Reviews - Mobile/Tablet: above title, Desktop: below buttons */}
-              <div className="lg:hidden mb-6 flex justify-center">
-                <div className="inline-flex items-center justify-center gap-4 bg-white/60 backdrop-blur-sm rounded-full px-5 py-3 shadow-sm border border-gray-100">
-                  {/* Profile avatars */}
-                  <div className="flex -space-x-3">
-                    <img
-                      src="https://i.pravatar.cc/150?img=1"
-                      alt="Tevreden klant Anna - Stonesforhealth review avatar"
-                      className="w-10 h-10 rounded-full border-2 border-white object-cover shadow-sm"
-                    />
-                    <img
-                      src="https://i.pravatar.cc/150?img=5"
-                      alt="Verified customer Maria - 5 sterren review Stonesforhealth"
-                      className="w-10 h-10 rounded-full border-2 border-white object-cover shadow-sm"
-                    />
-                    <img
-                      src="https://i.pravatar.cc/150?img=9"
-                      alt="Klant Sophie - Positieve edelstenen ervaring review"
-                      className="w-10 h-10 rounded-full border-2 border-white object-cover shadow-sm"
-                    />
-                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#492c4a] to-[#6b4069] border-2 border-white flex items-center justify-center text-white text-xs font-bold shadow-sm">
-                      +3K
-                    </div>
-                  </div>
-                  
-                  {/* Divider */}
-                  <div className="h-8 w-px bg-gradient-to-b from-transparent via-gray-300 to-transparent"></div>
-                  
-                  {/* Stars and text */}
-                  <div className="flex flex-col">
-                    <div className="flex items-center gap-1">
-                      <div className="flex items-center">
-                        {[...Array(5)].map((_, i) => (
-                          <svg key={i} className="w-3.5 h-3.5" viewBox="0 0 20 20">
-                            {i < 4 ? (
-                              <path className="text-[#492c4a] fill-current" d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                            ) : (
-                              <>
-                                <path fill="#e0e0e0" d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                                <defs>
-                                  <clipPath id={`star-clip-${i}`}>
-                                    <rect x="0" y="0" width="8" height="20" />
-                                  </clipPath>
-                                </defs>
-                                <path fill="#492c4a" d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" clipPath={`url(#star-clip-${i})`} />
-                              </>
-                            )}
-                          </svg>
-                        ))}
-                      </div>
-                      <span className="text-xs bg-[#492c4a]/10 text-[#492c4a] px-1.5 py-0.5 rounded-md font-semibold">4.4/5</span>
-                    </div>
-                    <span className="text-[11px] text-gray-600 font-medium mt-1 font-[family-name:var(--font-eb-garamond)]">Vertrouwd door <span className="font-bold text-[#492c4a]">4000+</span> klanten</span>
-                  </div>
-                </div>
-              </div>
 
               <h1 className="text-4xl lg:text-5xl xl:text-6xl font-bold text-[#492c4a] mb-6 leading-tight font-[family-name:var(--font-eb-garamond)]">
                 Ontdek de kracht van <span className="text-[#492c4a] font-bold">kristallen</span>
@@ -208,63 +152,6 @@ export default async function Home() {
                 */}
               </div>
 
-              {/* Reviews - Desktop only */}
-              <div className="hidden lg:block space-y-3">
-                <div className="inline-flex items-center justify-center lg:justify-start gap-4 bg-white/60 backdrop-blur-sm rounded-full px-5 py-3 shadow-sm border border-gray-100">
-                  {/* Profile avatars */}
-                  <div className="flex -space-x-3">
-                    <img
-                      src="https://i.pravatar.cc/150?img=1"
-                      alt="Tevreden klant Anna - Stonesforhealth review avatar"
-                      className="w-10 h-10 rounded-full border-2 border-white object-cover shadow-sm"
-                    />
-                    <img
-                      src="https://i.pravatar.cc/150?img=5"
-                      alt="Verified customer Maria - 5 sterren review Stonesforhealth"
-                      className="w-10 h-10 rounded-full border-2 border-white object-cover shadow-sm"
-                    />
-                    <img
-                      src="https://i.pravatar.cc/150?img=9"
-                      alt="Klant Sophie - Positieve edelstenen ervaring review"
-                      className="w-10 h-10 rounded-full border-2 border-white object-cover shadow-sm"
-                    />
-                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#492c4a] to-[#6b4069] border-2 border-white flex items-center justify-center text-white text-xs font-bold shadow-sm">
-                      +3K
-                    </div>
-                  </div>
-
-                  {/* Divider */}
-                  <div className="h-8 w-px bg-gradient-to-b from-transparent via-gray-300 to-transparent"></div>
-
-                  {/* Stars and text */}
-                  <div className="flex flex-col">
-                    <div className="flex items-center gap-1">
-                      <div className="flex items-center">
-                        {[...Array(5)].map((_, i) => (
-                          <svg key={i} className="w-3.5 h-3.5" viewBox="0 0 20 20">
-                            {i < 4 ? (
-                              <path className="text-[#492c4a] fill-current" d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                            ) : (
-                              <>
-                                <path fill="#e0e0e0" d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                                <defs>
-                                  <clipPath id={`star-clip-${i}`}>
-                                    <rect x="0" y="0" width="8" height="20" />
-                                  </clipPath>
-                                </defs>
-                                <path fill="#492c4a" d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" clipPath={`url(#star-clip-${i})`} />
-                              </>
-                            )}
-                          </svg>
-                        ))}
-                      </div>
-                      <span className="text-xs bg-[#492c4a]/10 text-[#492c4a] px-1.5 py-0.5 rounded-md font-semibold">4.4/5</span>
-                    </div>
-                    <span className="text-[11px] text-gray-600 font-medium mt-1 font-[family-name:var(--font-eb-garamond)]">Vertrouwd door <span className="font-bold text-[#492c4a]">4000+</span> klanten</span>
-                  </div>
-                </div>
-
-              </div>
             </div>
 
             {/* Right: Video */}
