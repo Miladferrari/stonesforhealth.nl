@@ -612,16 +612,6 @@ function PaymentPageContent() {
           {/* Order summary - right side (desktop) */}
           <div className="hidden lg:block lg:w-2/5 bg-gray-100">
             <div className="sticky top-0 h-screen overflow-y-auto py-8 pl-8 pr-8 bg-gray-100">
-          {/* Trust banner */}
-          <div className="mb-4">
-            <img
-              loading="eager"
-              alt="Trust banner"
-              className="w-full h-auto"
-              src="https://cdn.shopify.com/s/files/1/0762/7286/1524/files/Figma_2024-09-25_10.52.45.png?v=1727254377"
-            />
-          </div>
-
           {/* Cart items */}
           <div className="pb-4">
             <div className="max-h-80 overflow-y-auto pr-1" role="table">
