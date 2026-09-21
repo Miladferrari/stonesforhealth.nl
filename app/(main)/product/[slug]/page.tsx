@@ -79,7 +79,9 @@ export async function generateMetadata({ params }: ProductPageProps): Promise<Me
       description: seoDescription,
       keywords: keywords,
       openGraph: {
-        title: product.name,
+        // Same title as the <title> tag: when a Yoast title is set it should
+        // also be what shows up when the page is shared
+        title: seoTitle,
         description: seoDescription,
         url: canonicalUrl,
         siteName: 'Stones for Health',
