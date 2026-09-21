@@ -165,7 +165,7 @@ export default function CollectionProductGrid({
                   {/* Rating */}
                   {(() => {
                     // Check if product is in bestsellers category (ID: 20)
-                    const isBestseller = product.categories?.some((cat: any) => cat.id === 20);
+                    const isBestseller = product.categories?.some((cat: any) => cat.slug === 'bestsellers');
 
                     // Get review data from the review generator - only for bestsellers
                     const reviewData = isBestseller

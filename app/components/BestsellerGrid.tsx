@@ -66,9 +66,10 @@ export default function BestsellerGrid() {
 
   const fetchProducts = async () => {
     try {
-      // Fetch from bestsellers category (ID: 20), limited to 5 products
+      // Op slug, niet op id: ids worden opnieuw uitgedeeld als de
+      // categorieboom wordt herbouwd, slugs blijven hetzelfde.
       // Add cache control to ensure fresh data
-      const response = await fetch('/api/woocommerce/products?per_page=5&category=20', {
+      const response = await fetch('/api/woocommerce/products?per_page=5&category=bestsellers', {
         cache: 'no-store',
         headers: {
           'Content-Type': 'application/json',

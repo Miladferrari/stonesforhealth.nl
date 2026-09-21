@@ -21,7 +21,25 @@ export async function GET(request: NextRequest) {
       params.order = searchParams.get('order') as 'asc' | 'desc';
     }
     if (searchParams.get('category')) {
-      params.category = searchParams.get('category');
+      const categoryParam = searchParams.get('category')!;
+      // Categorie-ids veranderen zodra de categorieboom opnieuw wordt
+      // opgebouwd; een slug niet. Daarom hier dezelfde omzetting als in
+      // /api/products, zodat beide routes een slug accepteren.
+      if (isNaN(Number(categoryParam))) {
+        try {
+          const categories = await woocommerce.getCategories({ per_page: 100 });
+          const matched = categories.find(cat => cat.slug === categoryParam);
+          params.category = matched ? matched.id.toString() : categoryParam;
+          if (!matched) {
+            console.warn(`[API /woocommerce/products] Categorie "${categoryParam}" niet gevonden`);
+          }
+        } catch (error) {
+          console.error('[API /woocommerce/products] Omzetten van categorie mislukt:', error);
+          params.category = categoryParam;
+        }
+      } else {
+        params.category = categoryParam;
+      }
     }
     if (searchParams.get('include')) {
       params.include = searchParams.get('include')!.split(',').map(id => parseInt(id));
