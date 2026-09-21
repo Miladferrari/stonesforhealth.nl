@@ -62,7 +62,10 @@ export async function POST(request: NextRequest) {
       metadata: {
         orderId: order.id.toString(),
       },
-      receipt_email: order.billing?.email || undefined,
+      // Bewust geen receipt_email: met dat veld stuurt Stripe zelf een bon
+      // naar de klant, bovenop onze eigen bestelbevestiging. Die twee mails
+      // spreken elkaar tegen in vorm en afzender. De bevestiging komt uit
+      // lib/order-fulfilment.ts, met de factuur-pdf erbij.
       description: `Order #${order.id} - Stones for Health`,
     });
 
