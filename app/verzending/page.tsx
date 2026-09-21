@@ -1,8 +1,9 @@
 import { Metadata } from 'next';
+import { GRATIS_VANAF, VERZENDKOSTEN, bedrag, bedragKort } from '@/lib/shippingConfig';
 
 export const metadata: Metadata = {
   title: 'Verzending & Retour | Stones for Health',
-  description: 'Informatie over verzending, levertijden, verzendkosten en retourbeleid bij Stones for Health. Gratis verzending vanaf €30 in Nederland en België.',
+  description: `Informatie over verzending, levertijden, verzendkosten en retourbeleid bij Stones for Health. Gratis verzending vanaf ${bedragKort(GRATIS_VANAF)} in Nederland en België.`,
 };
 
 export default function VerzendingPage() {
@@ -28,7 +29,7 @@ export default function VerzendingPage() {
             <h3 className="font-bold font-[family-name:var(--font-eb-garamond)] text-gray-900 mb-2">Gratis Verzending</h3>
             <p className="text-sm text-gray-700 font-[family-name:var(--font-eb-garamond)]">
               Nederland & België<br />
-              vanaf €30
+              {`vanaf ${bedragKort(GRATIS_VANAF)}`}
             </p>
           </div>
 
@@ -72,18 +73,18 @@ export default function VerzendingPage() {
                 <div className="space-y-2">
                   <div className="flex justify-between items-center py-2 border-b">
                     <span className="font-[family-name:var(--font-eb-garamond)] text-gray-700">Nederland - Standaard</span>
-                    <span className="font-semibold font-[family-name:var(--font-eb-garamond)] text-gray-900">€4,95</span>
+                    <span className="font-semibold font-[family-name:var(--font-eb-garamond)] text-gray-900">{bedrag(VERZENDKOSTEN)}</span>
                   </div>
                   <div className="flex justify-between items-center py-2 border-b">
-                    <span className="font-[family-name:var(--font-eb-garamond)] text-gray-700">Nederland - Vanaf €30</span>
+                    <span className="font-[family-name:var(--font-eb-garamond)] text-gray-700">{`Nederland - Vanaf ${bedragKort(GRATIS_VANAF)}`}</span>
                     <span className="font-semibold font-[family-name:var(--font-eb-garamond)] text-green-600">Gratis</span>
                   </div>
                   <div className="flex justify-between items-center py-2 border-b">
                     <span className="font-[family-name:var(--font-eb-garamond)] text-gray-700">België - Standaard</span>
-                    <span className="font-semibold font-[family-name:var(--font-eb-garamond)] text-gray-900">€4,95</span>
+                    <span className="font-semibold font-[family-name:var(--font-eb-garamond)] text-gray-900">{bedrag(VERZENDKOSTEN)}</span>
                   </div>
                   <div className="flex justify-between items-center py-2 border-b">
-                    <span className="font-[family-name:var(--font-eb-garamond)] text-gray-700">België - Vanaf €30</span>
+                    <span className="font-[family-name:var(--font-eb-garamond)] text-gray-700">{`België - Vanaf ${bedragKort(GRATIS_VANAF)}`}</span>
                     <span className="font-semibold font-[family-name:var(--font-eb-garamond)] text-green-600">Gratis</span>
                   </div>
                 </div>

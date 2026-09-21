@@ -1,3 +1,5 @@
+import { GRATIS_VANAF_TEKST } from '@/lib/shippingConfig';
+
 interface OrderRecoveryEmailProps {
   customerName: string;
   orderNumber: string;
@@ -118,7 +120,7 @@ export function OrderRecoveryEmail({
                     </td>
                     <td width="33%" align="center" style="padding: 10px;">
                       <div style="font-size: 32px; margin-bottom: 8px;">📦</div>
-                      <div style="color: #3b223b; font-size: 14px; font-weight: 600;">Gratis verzending vanaf €25</div>
+                      <div style="color: #3b223b; font-size: 14px; font-weight: 600;">${GRATIS_VANAF_TEKST}</div>
                     </td>
                     <td width="33%" align="center" style="padding: 10px;">
                       <div style="font-size: 32px; margin-bottom: 8px;">💚</div>
