@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getOrderWithKey } from '@/lib/order-security';
+import { brutoRegel, brutoStukprijs, brutoVerzending, brutoKorting } from '@/lib/orderAmounts';
 
 export async function GET(request: NextRequest) {
   try {
@@ -51,20 +52,21 @@ export async function GET(request: NextRequest) {
         postcode: order.shipping.postcode,
         country: order.shipping.country
       },
+      // Bedragen inclusief btw: WooCommerce levert ze exclusief.
       line_items: order.line_items?.map((item: any) => ({
         id: item.id,
         name: item.name,
         quantity: item.quantity,
-        price: item.price,
-        total: item.total
+        price: brutoStukprijs(item).toFixed(2),
+        total: brutoRegel(item).toFixed(2)
       })),
       shipping_lines: order.shipping_lines?.map((line: any) => ({
         method_title: line.method_title,
-        total: line.total
+        total: brutoVerzending(order).toFixed(2)
       })),
       coupon_lines: order.coupon_lines?.map((coupon: any) => ({
         code: coupon.code,
-        discount: coupon.discount
+        discount: brutoKorting(order).toFixed(2)
       }))
     });
 
@@ -121,19 +123,20 @@ export async function POST(request: NextRequest) {
           postcode: order.billing.postcode,
           country: order.billing.country
         },
+        // Bedragen inclusief btw: WooCommerce levert ze exclusief.
         items: order.line_items?.map((item: any) => ({
           id: item.id,
           name: item.name,
           quantity: item.quantity,
-          price: item.price,
-          total: item.total,
+          price: brutoStukprijs(item).toFixed(2),
+          total: brutoRegel(item).toFixed(2),
           images: item.image ? [{ src: item.image.src }] : []
         })) || [],
         shipping_method: order.shipping_lines?.[0]?.method_title || 'Standaard verzending',
-        shipping_total: order.shipping_total || '0',
+        shipping_total: brutoVerzending(order).toFixed(2),
         coupon: order.coupon_lines?.[0] ? {
           code: order.coupon_lines[0].code,
-          discount: order.coupon_lines[0].discount
+          discount: brutoKorting(order).toFixed(2)
         } : null
       }
     });

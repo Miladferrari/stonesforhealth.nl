@@ -3,6 +3,10 @@ import { sendMail, isMailConfigured, ADMIN_EMAIL } from '@/lib/mail';
 import { woocommerce } from '@/lib/woocommerce';
 import { verifyPaymentForOrder } from '@/lib/order-security';
 import { OrderConfirmationEmail } from '@/app/emails/OrderConfirmation';
+import {
+  brutoRegel, brutoStukprijs, brutoSubtotaal, brutoVerzending,
+  brutoKorting, btwBedrag, totalenKloppen,
+} from '@/lib/orderAmounts';
 import { NewOrderNotificationEmail } from '@/app/emails/NewOrderNotification';
 
 // WooCommerce API configuration
@@ -212,11 +216,13 @@ export async function sendOrderEmails(orderId: string): Promise<void> {
       minute: '2-digit',
     });
 
+    // WooCommerce geeft regelbedragen exclusief btw terug; de klant hoort de
+    // prijs te zien die hij betaalt. Zie lib/orderAmounts.ts.
     const items = order.line_items.map((item: any) => ({
       name: item.name,
       quantity: item.quantity,
-      price: parseFloat(item.price).toFixed(2),
-      total: parseFloat(item.total).toFixed(2),
+      price: brutoStukprijs(item).toFixed(2),
+      total: brutoRegel(item).toFixed(2),
     }));
 
     const shippingAddress = {
@@ -239,12 +245,20 @@ export async function sendOrderEmails(orderId: string): Promise<void> {
       country: order.billing.country,
     };
 
-    const subtotal = (parseFloat(order.total) - parseFloat(order.shipping_total) - parseFloat(order.total_tax || '0')).toFixed(2);
-    const shippingCost = parseFloat(order.shipping_total).toFixed(2);
-    const discount = order.discount_total && parseFloat(order.discount_total) > 0
-      ? parseFloat(order.discount_total).toFixed(2)
-      : undefined;
+    const subtotal = brutoSubtotaal(order).toFixed(2);
+    const shippingCost = brutoVerzending(order).toFixed(2);
+    const discount = brutoKorting(order) > 0 ? brutoKorting(order).toFixed(2) : undefined;
+    const vat = btwBedrag(order) > 0 ? btwBedrag(order).toFixed(2) : undefined;
     const total = parseFloat(order.total).toFixed(2);
+
+    // Subtotaal - korting + verzending hoort gelijk te zijn aan het totaal.
+    // Klopt dat niet, dan is er iets mis met de order en willen we dat weten.
+    if (!totalenKloppen(order)) {
+      console.error(
+        `[Email] Totalen van order ${order.number} sluiten niet aan: ` +
+        `subtotaal ${subtotal} - korting ${discount ?? '0.00'} + verzending ${shippingCost} != totaal ${total}`
+      );
+    }
 
     const paymentMethodLabels: { [key: string]: string } = {
       'stripe': 'iDEAL / Bancontact / Creditcard',
@@ -271,6 +285,7 @@ export async function sendOrderEmails(orderId: string): Promise<void> {
           subtotal,
           shippingCost,
           discount,
+          vat,
           total,
           paymentMethod,
         });
@@ -314,6 +329,7 @@ export async function sendOrderEmails(orderId: string): Promise<void> {
           subtotal,
           shippingCost,
           discount,
+          vat,
           total,
           paymentMethod,
         });

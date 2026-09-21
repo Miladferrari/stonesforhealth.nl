@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { woocommerce } from '@/lib/woocommerce';
+import { brutoRegel, brutoStukprijs, brutoVerzending } from '@/lib/orderAmounts';
 
 // Status mapping for customer-friendly display
 const STATUS_MAPPING: Record<string, {
@@ -178,7 +179,8 @@ export async function POST(request: NextRequest) {
           // Shipping info
           shipping: {
             method: order.shipping_lines?.[0]?.method_title || 'Standaard verzending',
-            total: order.shipping_total || '0',
+            // Inclusief btw; WooCommerce levert shipping_total exclusief.
+            total: brutoVerzending(order).toFixed(2),
             address: {
               city: order.shipping?.city || order.billing.city,
               postcode: order.shipping?.postcode || order.billing.postcode,
@@ -197,11 +199,12 @@ export async function POST(request: NextRequest) {
           },
 
           // Order items (simplified)
+          // Bedragen inclusief btw: WooCommerce levert ze exclusief.
           items: order.line_items?.map((item: any) => ({
             name: item.name,
             quantity: item.quantity,
-            total: item.total,
-            price: item.price,
+            total: brutoRegel(item).toFixed(2),
+            price: brutoStukprijs(item).toFixed(2),
             image: item.image?.src || null
           })) || [],
 
