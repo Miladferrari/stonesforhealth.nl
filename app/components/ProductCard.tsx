@@ -84,7 +84,7 @@ const ProductCard = memo(function ProductCard({ product }: ProductCardProps) {
   const isOutOfStock = product.stock_status !== 'instock' || product.stock_quantity === 0;
 
   // Check if product is in bestsellers category (ID: 20)
-  const isBestseller = product.categories?.some((cat: any) => cat.id === 20);
+  const isBestseller = product.categories?.some((cat: any) => cat.slug === 'bestsellers');
 
   // Get review data from the review generator - only for bestsellers
   const { rating, count: reviewCount } = isBestseller

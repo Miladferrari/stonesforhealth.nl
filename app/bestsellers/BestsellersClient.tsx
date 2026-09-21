@@ -36,8 +36,9 @@ export default function BestsellersClient() {
   const fetchBestsellers = async () => {
     setLoading(true);
     try {
-      // Fetch products from the bestsellers category (ID: 20)
-      const apiUrl = `/api/products?per_page=${PRODUCTS_PER_PAGE}&page=${currentPage}&category=20`;
+      // Op slug, niet op id: ids worden opnieuw uitgedeeld als de
+      // categorieboom wordt herbouwd, slugs blijven hetzelfde.
+      const apiUrl = `/api/products?per_page=${PRODUCTS_PER_PAGE}&page=${currentPage}&category=bestsellers`;
 
       const response = await fetch(apiUrl);
 

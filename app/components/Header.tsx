@@ -131,9 +131,7 @@ const Header = memo(function Header() {
     productFetchTimeout.current = setTimeout(async () => {
       setLoadingProducts(true);
       try {
-        const url = category.slug === 'bestsellers'
-          ? `/api/products?per_page=5&category=20`
-          : `/api/products?per_page=5&category=${category.slug}`;
+        const url = `/api/products?per_page=5&category=${category.slug}`;
 
         const response = await fetch(url);
         if (response.ok) {
