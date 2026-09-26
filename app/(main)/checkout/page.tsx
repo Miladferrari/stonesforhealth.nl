@@ -263,9 +263,7 @@ export default function UnifiedCheckoutPage() {
         name: item.product.name,
         quantity: item.quantity,
         price: parseFloat(item.product.price),
-        image: item.product.images[0]?.src || '',
-        bundleType: item.bundleType,
-        bundlePrice: item.bundlePrice
+        image: item.product.images[0]?.src || ''
       }));
 
       await fetch('/api/abandoned-cart/save', {

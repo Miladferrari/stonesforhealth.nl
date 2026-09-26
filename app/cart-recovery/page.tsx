@@ -38,14 +38,7 @@ function CartRecoveryContent() {
           if (productResponse.ok) {
             const product = await productResponse.json();
 
-            // Add to cart with bundle info if available
-            const bundleInfo = item.bundleType ? {
-              type: item.bundleType,
-              discount: item.bundleDiscount || 0,
-              totalPrice: item.bundlePrice || 0
-            } : undefined;
-
-            addToCart(product, item.quantity, bundleInfo);
+            addToCart(product, item.quantity);
           }
         }
 

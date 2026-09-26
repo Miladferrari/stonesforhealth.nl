@@ -161,16 +161,11 @@ export default function SlideInCart() {
                   const regularPrice = item.product.regular_price ? parseFloat(item.product.regular_price) : price;
                   const mainImage = item.product.images[0];
 
-                  // Calculate display price - use bundle price if available
-                  const displayPrice = item.bundlePrice !== undefined ? item.bundlePrice : (price * item.quantity);
+                  const displayPrice = price * item.quantity;
                   const originalPrice = regularPrice * item.quantity;
                   // Alleen doorstrepen als er daadwerkelijk minder betaald wordt.
                   // Een cent marge, want dit zijn floats.
                   const toontKorting = originalPrice - displayPrice > 0.005;
-
-                  // Bundle badge info
-                  const bundleBadge = item.bundleType === 'duo' ? '2 PAAR -20%' :
-                                     item.bundleType === 'family' ? '3 PAAR -25%' : null;
 
                   return (
                     <div key={`${item.product.id}-${index}`} className="bg-white border border-[#E8DCC6]/40 rounded-lg overflow-hidden hover:border-[#492c4a]/20 transition-colors">
@@ -192,12 +187,6 @@ export default function SlideInCart() {
                               </div>
                             )}
                           </a>
-                          {/* Bundle badge overlay */}
-                          {bundleBadge && (
-                            <div className="absolute -top-1 -right-1 bg-green-500 text-white text-[9px] font-bold px-1.5 py-0.5 rounded shadow-sm">
-                              {bundleBadge}
-                            </div>
-                          )}
                         </div>
 
                         {/* Product details */}
@@ -207,12 +196,6 @@ export default function SlideInCart() {
                               <a href={`/product/${item.product.slug}`} className="text-sm font-medium text-gray-900 hover:text-[#492c4a] transition-colors line-clamp-2">
                                 {item.product.name}
                               </a>
-                              {/* Bundle info below product name */}
-                              {bundleBadge && (
-                                <div className="mt-1 text-[10px] text-green-600 font-semibold">
-                                  BUNDEL KORTING: {item.bundleDiscount}% EXTRA
-                                </div>
-                              )}
                             </div>
                             <button
                               onClick={() => removeFromCart(item.product.id)}

@@ -74,7 +74,6 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
   const [isAddingToCart, setIsAddingToCart] = useState(false);
   const [showStickyHeader, setShowStickyHeader] = useState(false);
   const [selectedSize, setSelectedSize] = useState('3-5 cm');
-  const [selectedBundle, setSelectedBundle] = useState<'single' | 'duo' | 'family'>('single');
   const [showReviewDropdown, setShowReviewDropdown] = useState(false);
   const [activeTab, setActiveTab] = useState('description');
   const [currentReviewIndex, setCurrentReviewIndex] = useState(0);
@@ -86,7 +85,8 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
 
   // Variation state
   const [variations, setVariations] = useState<ProductVariation[]>([]);
-  const [selectedVariations, setSelectedVariations] = useState<(ProductVariation | null)[]>([null, null, null]); // For single, duo, family
+  // Eén gekozen variatie; het aantal bepaalt hoe vaak die in de winkelwagen komt
+  const [selectedVariations, setSelectedVariations] = useState<(ProductVariation | null)[]>([null]);
   const [loadingVariations, setLoadingVariations] = useState(false);
   const [showVariationError, setShowVariationError] = useState(false);
   const [variationErrorMessage, setVariationErrorMessage] = useState('');
@@ -148,10 +148,6 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
   // Calculate available quantity (stock minus what's in cart) - use variation stock if selected
   const availableQuantity = currentStockQuantity !== null ? Math.max(0, currentStockQuantity - cartQuantity) : Infinity;
 
-  // Check if each bundle option is available
-  const canSelectSingle = availableQuantity >= 1;
-  const canSelectDuo = availableQuantity >= 2;
-  const canSelectFamily = availableQuantity >= 3;
 
   // Reviews come from WooCommerce, never from a generator: showing invented
   // reviews — and marking them "Geverifieerd" — is a banned commercial practice
@@ -232,27 +228,17 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
   const isOnSale = (selectedVariations[0] ? selectedVariations[0].on_sale : product.on_sale) && regularPrice > price;
   const discount = isOnSale ? Math.round(((regularPrice - price) / regularPrice) * 100) : 0;
 
-  // Bundle pricing
-  const bundlePrices = {
-    single: price,
-    duo: price * 1.6, // 20% discount
-    family: price * 2.25 // 25% discount (3 * 0.75 = 2.25)
-  };
+  // Wat de klant voor het gekozen aantal betaalt
+  const lineTotal = price * quantity;
+  const lineRegularTotal = regularPrice * quantity;
 
-  // Auto-adjust selected bundle if current selection becomes unavailable
+  // Het aantal mag nooit boven de resterende voorraad uitkomen. Legt de klant
+  // iets in de winkelwagen, dan zakt availableQuantity en zakt het aantal mee.
   useEffect(() => {
-    if (selectedBundle === 'family' && !canSelectFamily) {
-      if (canSelectDuo) {
-        setSelectedBundle('duo');
-      } else if (canSelectSingle) {
-        setSelectedBundle('single');
-      }
-    } else if (selectedBundle === 'duo' && !canSelectDuo) {
-      if (canSelectSingle) {
-        setSelectedBundle('single');
-      }
+    if (availableQuantity !== Infinity && quantity > availableQuantity) {
+      setQuantity(Math.max(1, availableQuantity));
     }
-  }, [availableQuantity, selectedBundle, canSelectSingle, canSelectDuo, canSelectFamily]);
+  }, [availableQuantity, quantity]);
 
   // Auto-scroll to selected thumbnail
   useEffect(() => {
@@ -379,21 +365,12 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
   }, [product]);
 
   const handleAddToCart = async () => {
-    // Check if variations are required but not selected
-    if (product.type === 'variable') {
-      const bundleIndex = selectedBundle === 'single' ? 0 : selectedBundle === 'duo' ? 1 : 2;
-      const quantityToAdd = selectedBundle === 'duo' ? 2 : selectedBundle === 'family' ? 3 : 1;
-
-      // Check if all required variations are selected for this bundle
-      for (let i = 0; i < quantityToAdd; i++) {
-        if (!selectedVariations[i]) {
-          const itemLabel = quantityToAdd === 1 ? 'een variatie' : `een variatie voor item ${i + 1}`;
-          setVariationErrorMessage(`Selecteer eerst ${itemLabel}`);
-          setShowVariationError(true);
-          setTimeout(() => setShowVariationError(false), 4000);
-          return;
-        }
-      }
+    // Bij een variabel product moet er eerst een variatie gekozen zijn
+    if (product.type === 'variable' && !selectedVariations[0]) {
+      setVariationErrorMessage('Selecteer eerst een variatie');
+      setShowVariationError(true);
+      setTimeout(() => setShowVariationError(false), 4000);
+      return;
     }
 
     // Don't add to cart if out of stock or max quantity reached
@@ -402,61 +379,39 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
       return;
     }
 
-    const quantityToAdd = selectedBundle === 'duo' ? 2 : selectedBundle === 'family' ? 3 : 1;
+    const quantityToAdd = Math.max(1, Math.min(quantity, availableQuantity));
 
-    // Double-check that selected bundle quantity is available
     if (quantityToAdd > availableQuantity) {
-      console.warn('Cannot add to cart: Selected bundle quantity exceeds available stock');
+      console.warn('Cannot add to cart: quantity exceeds available stock');
       return;
     }
 
     setIsAddingToCart(true);
 
     try {
-      // Calculate bundle discount percentage
-      const bundleDiscount = selectedBundle === 'duo' ? 20 : selectedBundle === 'family' ? 25 : 0;
+      const variation = selectedVariations[0];
 
-      // Alleen meesturen als er echt een bundel is gekozen. Bij 'single' is de
-      // bundelprijs gelijk aan de gewone prijs, en dan zette de winkelwagen er
-      // een doorgestreepte prijs bij die nergens op sloeg.
-      const bundleInfo = bundleDiscount > 0
-        ? {
-            type: selectedBundle,
-            discount: bundleDiscount,
-            totalPrice: bundlePrices[selectedBundle as keyof typeof bundlePrices],
-          }
-        : undefined;
+      if (product.type === 'variable' && variation) {
+        // De variatieprijs telt, niet de bereikprijs van het bovenliggende product
+        const productWithVariation = {
+          ...product,
+          variation_id: variation.id,
+          price: variation.price,
+          regular_price: variation.regular_price,
+          sale_price: variation.sale_price,
+          on_sale: variation.on_sale
+        };
 
-      // For variable products with bundles, add each item separately with its variation
-      if (product.type === 'variable' && selectedVariations[0]) {
-        // Add each item in the bundle separately with its own variation_id
-        for (let i = 0; i < quantityToAdd; i++) {
-          // Use the variation at index i, or fallback to the first variation if not enough selected
-          const variation = selectedVariations[i] || selectedVariations[0];
-
-          const productWithVariation = {
-            ...product,
-            variation_id: variation.id,
-            // Update the price to the variation's price
-            price: variation.price,
-            regular_price: variation.regular_price,
-            sale_price: variation.sale_price,
-            on_sale: variation.on_sale
-          };
-
-          // Add individual item with quantity 1
-          addToCart(productWithVariation as any, 1, bundleInfo);
-        }
+        addToCart(productWithVariation as any, quantityToAdd);
       } else {
-        // For simple products or single items, add as before
-        addToCart(product as any, quantityToAdd, bundleInfo);
+        addToCart(product as any, quantityToAdd);
       }
 
       // Track add to cart event
       trackAddToCart({
         id: product.id.toString(),
         name: product.name,
-        price: bundlePrices[selectedBundle as keyof typeof bundlePrices] / quantityToAdd,
+        price,
         category: product.categories?.[0]?.name,
       }, quantityToAdd);
 
@@ -563,9 +518,7 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
                 {/* Mobile view - Only price */}
                 <div className="sm:hidden">
                   <span className="text-lg font-bold text-black font-[family-name:var(--font-eb-garamond)]">
-                    €{selectedBundle === 'single' ? price.toFixed(2).replace('.', ',') :
-                      selectedBundle === 'duo' ? bundlePrices.duo.toFixed(2).replace('.', ',') :
-                      bundlePrices.family.toFixed(2).replace('.', ',')}
+                    €{lineTotal.toFixed(2).replace('.', ',')}
                   </span>
                 </div>
 
@@ -574,20 +527,16 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
                   <h5 className="text-sm sm:text-base font-semibold text-gray-900 truncate font-[family-name:var(--font-eb-garamond)]">{product.name}</h5>
                   <div className="flex flex-wrap items-center gap-2 sm:gap-3">
                     <span className="text-base sm:text-lg font-semibold text-black font-[family-name:var(--font-eb-garamond)]">
-                      €{selectedBundle === 'single' ? price.toFixed(2).replace('.', ',') :
-                        selectedBundle === 'duo' ? bundlePrices.duo.toFixed(2).replace('.', ',') :
-                        bundlePrices.family.toFixed(2).replace('.', ',')}
+                      €{lineTotal.toFixed(2).replace('.', ',')}
                     </span>
                     {isOnSale && (
                       <>
                         <span className="text-xs sm:text-sm text-gray-400 line-through hidden min-[808px]:inline font-[family-name:var(--font-eb-garamond)]">
-                          €{selectedBundle === 'single' ? regularPrice.toFixed(2).replace('.', ',') :
-                            selectedBundle === 'duo' ? (regularPrice * 2).toFixed(2).replace('.', ',') :
-                            (regularPrice * 3).toFixed(2).replace('.', ',')}
+                          €{lineRegularTotal.toFixed(2).replace('.', ',')}
                         </span>
                         <span className="badge inline-flex max-[425px]:inline-flex items-center gap-1 text-black text-[10px] sm:text-xs font-bold px-1.5 sm:px-2 py-0.5 sm:py-1 rounded hidden lg:inline-flex font-[family-name:var(--font-eb-garamond)]" style={{ backgroundColor: '#fbe022' }}>
                           <span className="material-icons-outlined text-xs sm:text-sm">local_offer</span>
-                          <span>JE BESPAART {selectedBundle === 'duo' ? '10' : selectedBundle === 'family' ? '17' : discount}%</span>
+                          <span>JE BESPAART {discount}%</span>
                         </span>
                       </>
                     )}
@@ -595,30 +544,29 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
                 </div>
               </div>
 
-              {/* Bundle Selector - Improved styling */}
-              <div className="relative">
-                <select
-                  className="appearance-none px-3 sm:px-4 lg:px-5 py-2.5 sm:py-2.5 lg:py-3 pr-8 sm:pr-10 border border-gray-300 sm:border-gray-400 rounded-md sm:rounded-lg text-xs sm:text-base font-semibold focus:outline-none focus:ring-2 focus:ring-black focus:border-black bg-white text-black cursor-pointer hover:border-black transition-all min-w-[85px] sm:min-w-[140px] lg:min-w-[180px] font-[family-name:var(--font-eb-garamond)]"
-                  value={selectedBundle}
-                  onChange={(e) => {
-                    const value = e.target.value as 'single' | 'duo' | 'family';
-                    setSelectedBundle(value);
-                    // Update quantity based on bundle selection
-                    if (value === 'single') setQuantity(1);
-                    else if (value === 'duo') setQuantity(2);
-                    else if (value === 'family') setQuantity(3);
-                  }}
+              {/* Aantal kiezen - compacte variant voor de sticky balk */}
+              <div className="flex items-center border border-gray-300 sm:border-gray-400 rounded-md sm:rounded-lg overflow-hidden bg-white flex-shrink-0">
+                <button
+                  type="button"
+                  onClick={() => setQuantity((q) => Math.max(1, q - 1))}
+                  disabled={quantity <= 1}
+                  aria-label="Aantal verlagen"
+                  className="px-2.5 sm:px-3 py-2.5 lg:py-3 text-black hover:bg-gray-100 disabled:opacity-30 disabled:hover:bg-transparent transition-colors min-h-[44px]"
                 >
-                  <option value="single">Solo Set</option>
-                  <option value="duo">Balans Duo</option>
-                  <option value="family">Mystery Trio</option>
-                </select>
-                {/* Custom dropdown arrow */}
-                <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2 sm:pr-3">
-                  <svg className="h-4 w-4 sm:h-5 sm:w-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                  </svg>
-                </div>
+                  <span className="material-icons-outlined text-base sm:text-lg leading-none">remove</span>
+                </button>
+                <span className="px-2 sm:px-3 min-w-[28px] sm:min-w-[36px] text-center text-sm sm:text-base font-semibold text-black font-[family-name:var(--font-eb-garamond)]">
+                  {quantity}
+                </span>
+                <button
+                  type="button"
+                  onClick={() => setQuantity((q) => Math.min(availableQuantity, q + 1))}
+                  disabled={quantity >= availableQuantity}
+                  aria-label="Aantal verhogen"
+                  className="px-2.5 sm:px-3 py-2.5 lg:py-3 text-black hover:bg-gray-100 disabled:opacity-30 disabled:hover:bg-transparent transition-colors min-h-[44px]"
+                >
+                  <span className="material-icons-outlined text-base sm:text-lg leading-none">add</span>
+                </button>
               </div>
 
               {/* Add to Cart Button - Different designs for mobile and desktop */}
@@ -1059,211 +1007,72 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
               </div>
             </div>
 
-            {/* Bundle options - Hike style */}
-            <div className="kaching-bundles__block-title text-center text-base md:text-lg font-medium text-black mt-3 mb-3 flex items-center justify-center">
-              <span className="flex-1 h-0.5 mr-3" style={{ backgroundColor: '#d1d5db' }}></span>
-              <span className="font-semibold font-[family-name:var(--font-eb-garamond)]">Bundelpromotie is geldig tot 23.59 uur</span>
-              <span className="flex-1 h-0.5 ml-3" style={{ backgroundColor: '#d1d5db' }}></span>
-            </div>
-            <div className="space-y-4">
-
-              {/* Single option */}
-              <div className="kaching-bundles__bar-wrapper">
-                <div
-                  role="button"
-                  tabIndex={canSelectSingle ? 0 : -1}
-                  className={`kaching-bundles__bar-main relative block p-4 border rounded-lg transition-all ${
-                    !canSelectSingle
-                      ? 'border-gray-200 bg-gray-50 cursor-not-allowed opacity-50'
-                      : selectedBundle === 'single'
-                      ? 'border-black bg-white cursor-pointer'
-                      : 'border-gray-300 hover:border-gray-400 bg-white cursor-pointer'
-                  }`}
-                  onClick={() => canSelectSingle && setSelectedBundle('single')}
-                >
-                  <input
-                    type="radio"
-                    className="sr-only"
-                    name="bundle"
-                    value="single"
-                    checked={selectedBundle === 'single'}
-                    disabled={!canSelectSingle}
-                    onChange={(e) => canSelectSingle && setSelectedBundle(e.target.value as 'single' | 'duo' | 'family')}
-                  />
-                  <div className="kaching-bundles__bar-content flex items-center justify-between">
-                    <div className="flex items-center gap-3">
-                      <div className={`kaching-bundles__bar-radio w-5 h-5 rounded-full border-2 flex items-center justify-center ${
-                        selectedBundle === 'single'
-                          ? 'border-black bg-black'
-                          : 'border-gray-400 bg-white'
-                      }`}>
-                        {selectedBundle === 'single' && (
-                          <div className="w-2 h-2 bg-white rounded-full" />
-                        )}
-                      </div>
-                      <div className="kaching-bundles__bar-content-left">
-                        <div className="kaching-bundles__bar-first-line">
-                          <span className="kaching-bundles__bar-title text-base md:text-lg font-semibold text-gray-900 font-[family-name:var(--font-eb-garamond)]">1 PAAR</span>
-                        </div>
-                        <div className="kaching-bundles__bar-subtitle text-base md:text-lg text-gray-600 font-[family-name:var(--font-eb-garamond)]">Voor jouw persoonlijke reis</div>
-                      </div>
-                    </div>
-                    <div className="kaching-bundles__bar-pricing text-right">
-                      <div className="kaching-bundles__bar-price text-lg font-semibold text-gray-900 font-[family-name:var(--font-eb-garamond)]">€{bundlePrices.single.toFixed(2).replace('.', ',')}</div>
-                      {isOnSale && (
-                        <div className="kaching-bundles__bar-full-price text-sm text-gray-400 line-through font-[family-name:var(--font-eb-garamond)]">€{regularPrice.toFixed(2).replace('.', ',')}</div>
-                      )}
-                    </div>
+            {/* Aantal kiezen */}
+            <div className="mt-4 border border-gray-300 rounded-lg p-4 bg-white">
+              <div className="flex items-center justify-between gap-4">
+                <div>
+                  <div className="text-base md:text-lg font-semibold text-gray-900 mb-2 font-[family-name:var(--font-eb-garamond)]">
+                    Aantal
                   </div>
-                  {/* Variation dropdown for single */}
-                  {product.type === 'variable' && variations.length > 0 && (
-                    <div className="mt-3 border-t border-gray-200 pt-2">
-                      {renderVariationDropdown(0)}
+                  <div className="flex items-center border border-gray-400 rounded-lg overflow-hidden w-fit">
+                    <button
+                      type="button"
+                      onClick={() => setQuantity((q) => Math.max(1, q - 1))}
+                      disabled={quantity <= 1 || isOutOfStock}
+                      aria-label="Aantal verlagen"
+                      className="px-4 py-2.5 text-black hover:bg-gray-100 disabled:opacity-30 disabled:hover:bg-transparent transition-colors min-h-[44px]"
+                    >
+                      <span className="material-icons-outlined text-lg leading-none">remove</span>
+                    </button>
+                    <span
+                      aria-live="polite"
+                      className="px-5 min-w-[52px] text-center text-lg font-semibold text-black border-x border-gray-300 py-2.5 font-[family-name:var(--font-eb-garamond)]"
+                    >
+                      {quantity}
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => setQuantity((q) => Math.min(availableQuantity, q + 1))}
+                      disabled={quantity >= availableQuantity || isOutOfStock}
+                      aria-label="Aantal verhogen"
+                      className="px-4 py-2.5 text-black hover:bg-gray-100 disabled:opacity-30 disabled:hover:bg-transparent transition-colors min-h-[44px]"
+                    >
+                      <span className="material-icons-outlined text-lg leading-none">add</span>
+                    </button>
+                  </div>
+                </div>
+
+                <div className="text-right">
+                  <div className="text-xl md:text-2xl font-semibold text-gray-900 font-[family-name:var(--font-eb-garamond)]">
+                    €{lineTotal.toFixed(2).replace('.', ',')}
+                  </div>
+                  {isOnSale && (
+                    <div className="text-sm text-gray-400 line-through font-[family-name:var(--font-eb-garamond)]">
+                      €{lineRegularTotal.toFixed(2).replace('.', ',')}
+                    </div>
+                  )}
+                  {quantity > 1 && (
+                    <div className="text-sm text-gray-600 font-[family-name:var(--font-eb-garamond)]">
+                      €{price.toFixed(2).replace('.', ',')} per stuk
                     </div>
                   )}
                 </div>
               </div>
 
-              {/* Duo option */}
-              <div className="kaching-bundles__bar-wrapper relative">
-                <div
-                  role="button"
-                  tabIndex={canSelectDuo ? 0 : -1}
-                  className={`kaching-bundles__bar-main relative block p-4 border rounded-lg transition-all ${
-                    !canSelectDuo
-                      ? 'border-gray-200 bg-gray-50 cursor-not-allowed opacity-50'
-                      : selectedBundle === 'duo'
-                      ? 'border-black bg-white cursor-pointer'
-                      : 'border-gray-300 hover:border-gray-400 bg-white cursor-pointer'
-                  }`}
-                  onClick={() => canSelectDuo && setSelectedBundle('duo')}
-                >
-                  <input
-                    type="radio"
-                    className="sr-only"
-                    name="bundle"
-                    value="duo"
-                    checked={selectedBundle === 'duo'}
-                    disabled={!canSelectDuo}
-                    onChange={(e) => canSelectDuo && setSelectedBundle(e.target.value as 'single' | 'duo' | 'family')}
-                  />
-                  <div className="kaching-bundles__bar-content flex items-center justify-between">
-                    <div className="flex items-center gap-3">
-                      <div className={`kaching-bundles__bar-radio w-5 h-5 rounded-full border-2 flex items-center justify-center ${
-                        selectedBundle === 'duo'
-                          ? 'border-black bg-black'
-                          : 'border-gray-400 bg-white'
-                      }`}>
-                        {selectedBundle === 'duo' && (
-                          <div className="w-2 h-2 bg-white rounded-full" />
-                        )}
-                      </div>
-                      <div className="kaching-bundles__bar-content-left">
-                        <div className="kaching-bundles__bar-first-line flex items-center gap-2">
-                          <span className="kaching-bundles__bar-title text-base md:text-lg font-semibold text-gray-900 font-[family-name:var(--font-eb-garamond)]">2 PAAR</span>
-                          <span className="bg-green-100 text-green-700 text-base md:text-lg font-bold px-2 py-0.5 rounded uppercase font-[family-name:var(--font-eb-garamond)]">
-                            20% EXTRA KORTING
-                          </span>
-                        </div>
-                        <div className="kaching-bundles__bar-subtitle text-base md:text-lg text-black font-medium font-[family-name:var(--font-eb-garamond)]">Ideaal om te combineren of cadeau te doen</div>
-                      </div>
-                    </div>
-                    <div className="kaching-bundles__bar-pricing text-right">
-                      <div className="kaching-bundles__bar-price text-lg font-semibold text-black font-[family-name:var(--font-eb-garamond)]">€{bundlePrices.duo.toFixed(2).replace('.', ',')}</div>
-                      <div className="kaching-bundles__bar-full-price text-sm text-gray-400 line-through font-[family-name:var(--font-eb-garamond)]">€{(bundlePrices.single * 2).toFixed(2).replace('.', ',')}</div>
-                    </div>
-                  </div>
-                  {/* Variation dropdowns for duo (2 items) */}
-                  {product.type === 'variable' && variations.length > 0 && (
-                    <div className="mt-3 space-y-2 border-t border-gray-200 pt-2">
-                      <div className="flex items-center gap-2">
-                        <span className="text-xs font-semibold text-gray-600 font-[family-name:var(--font-eb-garamond)] min-w-[45px]">Item 1:</span>
-                        <div className="flex-1">{renderVariationDropdown(0)}</div>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <span className="text-xs font-semibold text-gray-600 font-[family-name:var(--font-eb-garamond)] min-w-[45px]">Item 2:</span>
-                        <div className="flex-1">{renderVariationDropdown(1)}</div>
-                      </div>
-                    </div>
-                  )}
+              {/* Alleen tonen wat we echt weten: WooCommerce houdt de voorraad
+                  niet altijd bij, dan is availableQuantity Infinity */}
+              {!isOutOfStock && availableQuantity !== Infinity && availableQuantity <= 10 && (
+                <div className="mt-3 text-sm text-gray-600 font-[family-name:var(--font-eb-garamond)]">
+                  Nog {availableQuantity} op voorraad
                 </div>
-              </div>
+              )}
 
-              {/* Family/Trio option - Most Popular */}
-              <div className="kaching-bundles__bar-wrapper relative">
-                <div
-                  role="button"
-                  tabIndex={canSelectFamily ? 0 : -1}
-                  className={`kaching-bundles__bar-main relative block p-4 border rounded-lg transition-all ${
-                    !canSelectFamily
-                      ? 'border-gray-200 bg-gray-50 cursor-not-allowed opacity-50'
-                      : selectedBundle === 'family'
-                      ? 'border-black bg-white cursor-pointer'
-                      : 'border-gray-300 hover:border-gray-400 bg-white cursor-pointer'
-                  }`}
-                  onClick={() => canSelectFamily && setSelectedBundle('family')}
-                >
-                  <div className="kaching-bundles__bar-most-popular kaching-bundles__bar-most-popular--simple absolute -top-3 right-2">
-                    <div className="kaching-bundles__bar-most-popular__content text-black text-xs font-bold px-3 py-1 rounded uppercase" style={{ backgroundColor: '#fbe022' }}>
-                      MEEST POPULAIR!
-                    </div>
-                  </div>
-                  <input
-                    type="radio"
-                    className="sr-only"
-                    name="bundle"
-                    value="family"
-                    checked={selectedBundle === 'family'}
-                    disabled={!canSelectFamily}
-                    onChange={(e) => canSelectFamily && setSelectedBundle(e.target.value as 'single' | 'duo' | 'family')}
-                  />
-                  <div className="kaching-bundles__bar-content flex items-center justify-between">
-                    <div className="flex items-center gap-3">
-                      <div className={`kaching-bundles__bar-radio w-5 h-5 rounded-full border-2 flex items-center justify-center ${
-                        selectedBundle === 'family'
-                          ? 'border-black bg-black'
-                          : 'border-gray-400 bg-white'
-                      }`}>
-                        {selectedBundle === 'family' && (
-                          <div className="w-2 h-2 bg-white rounded-full" />
-                        )}
-                      </div>
-                      <div className="kaching-bundles__bar-content-left">
-                        <div className="kaching-bundles__bar-first-line flex items-center gap-2">
-                          <span className="kaching-bundles__bar-title text-base md:text-lg font-semibold text-gray-900 font-[family-name:var(--font-eb-garamond)]">3 PAAR 🌸</span>
-                          <span className="bg-green-100 text-green-700 text-base md:text-lg font-bold px-2 py-0.5 rounded uppercase font-[family-name:var(--font-eb-garamond)]">
-                            25% EXTRA KORTING
-                          </span>
-                        </div>
-                        <div className="kaching-bundles__bar-subtitle text-base md:text-lg text-black font-medium font-[family-name:var(--font-eb-garamond)]">
-                          PLUS Gratis mysterie-item{bundlePrices.family >= 30 ? ' & gratis verzending' : ''}
-                        </div>
-                      </div>
-                    </div>
-                    <div className="kaching-bundles__bar-pricing text-right">
-                      <div className="kaching-bundles__bar-price text-lg font-semibold text-black font-[family-name:var(--font-eb-garamond)]">€{bundlePrices.family.toFixed(2).replace('.', ',')}</div>
-                      <div className="kaching-bundles__bar-full-price text-sm text-gray-400 line-through font-[family-name:var(--font-eb-garamond)]">€{(bundlePrices.single * 3).toFixed(2).replace('.', ',')}</div>
-                    </div>
-                  </div>
-                  {/* Variation dropdowns for family (3 items) */}
-                  {product.type === 'variable' && variations.length > 0 && (
-                    <div className="mt-3 space-y-2 border-t border-gray-200 pt-2">
-                      <div className="flex items-center gap-2">
-                        <span className="text-xs font-semibold text-gray-600 font-[family-name:var(--font-eb-garamond)] min-w-[45px]">Item 1:</span>
-                        <div className="flex-1">{renderVariationDropdown(0)}</div>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <span className="text-xs font-semibold text-gray-600 font-[family-name:var(--font-eb-garamond)] min-w-[45px]">Item 2:</span>
-                        <div className="flex-1">{renderVariationDropdown(1)}</div>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <span className="text-xs font-semibold text-gray-600 font-[family-name:var(--font-eb-garamond)] min-w-[45px]">Item 3:</span>
-                        <div className="flex-1">{renderVariationDropdown(2)}</div>
-                      </div>
-                    </div>
-                  )}
+              {/* Variatie kiezen bij een variabel product */}
+              {product.type === 'variable' && variations.length > 0 && (
+                <div className="mt-4 border-t border-gray-200 pt-3">
+                  {renderVariationDropdown(0)}
                 </div>
-              </div>
+              )}
             </div>
 
             {/* Variation Error Message */}

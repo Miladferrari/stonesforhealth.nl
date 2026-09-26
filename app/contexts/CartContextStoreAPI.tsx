@@ -12,9 +12,6 @@ import { storeAPI, StoreCart } from '@/lib/woocommerce-store';
 interface CartItem {
   product: Product;
   quantity: number;
-  bundleType?: 'single' | 'duo' | 'family';
-  bundleDiscount?: number;
-  bundlePrice?: number;
   variation_id?: number;
 }
 
@@ -27,17 +24,11 @@ interface ShippingInfo {
   error: string | null;
 }
 
-interface BundleInfo {
-  type: 'single' | 'duo' | 'family';
-  discount: number;
-  totalPrice: number;
-}
-
 interface CartContextType {
   items: CartItem[];
   isCartOpen: boolean;
   setIsCartOpen: (isOpen: boolean) => void;
-  addToCart: (product: Product, quantity?: number, bundleInfo?: BundleInfo) => void;
+  addToCart: (product: Product, quantity?: number) => void;
   removeFromCart: (productId: number) => void;
   updateQuantity: (productId: number, quantity: number) => void;
   clearCart: () => void;
@@ -198,7 +189,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   // Add to cart with Store API
-  const addToCart = async (product: Product, quantity: number = 1, bundleInfo?: BundleInfo) => {
+  const addToCart = async (product: Product, quantity: number = 1) => {
     // Don't add out of stock products
     if (product.stock_status !== 'instock' || product.stock_quantity === 0) {
       console.warn('Cannot add out of stock product to cart:', product.name);
@@ -211,7 +202,6 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     console.log('[Cart] Adding to cart:', {
       productName: product.name,
       quantity,
-      bundleInfo,
       variationId
     });
 
@@ -223,43 +213,14 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       let newItems;
 
       if (existingItem) {
-        // If adding more of the same bundle type, merge quantities
-        if (bundleInfo && existingItem.bundleType === bundleInfo.type) {
-          newItems = prevItems.map(item =>
-            item.product.id === product.id && item.variation_id === variationId
-              ? {
-                  ...item,
-                  quantity: item.quantity + quantity,
-                  bundlePrice: bundleInfo.totalPrice
-                }
-              : item
-          );
-        } else {
-          // Otherwise add as separate cart item
-          newItems = [
-            ...prevItems,
-            {
-              product,
-              quantity,
-              bundleType: bundleInfo?.type,
-              bundleDiscount: bundleInfo?.discount,
-              bundlePrice: bundleInfo?.totalPrice,
-              variation_id: variationId
-            }
-          ];
-        }
+        // Zelfde product en variatie: aantallen bij elkaar optellen
+        newItems = prevItems.map(item =>
+          item.product.id === product.id && item.variation_id === variationId
+            ? { ...item, quantity: item.quantity + quantity }
+            : item
+        );
       } else {
-        newItems = [
-          ...prevItems,
-          {
-            product,
-            quantity,
-            bundleType: bundleInfo?.type,
-            bundleDiscount: bundleInfo?.discount,
-            bundlePrice: bundleInfo?.totalPrice,
-            variation_id: variationId
-          }
-        ];
+        newItems = [...prevItems, { product, quantity, variation_id: variationId }];
       }
 
       // Save to localStorage immediately
@@ -313,21 +274,6 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
           return item;
         }
 
-        // If item has bundle pricing, recalculate the bundle price
-        if (item.bundleType && item.bundleDiscount && item.bundlePrice) {
-          const basePrice = parseFloat(item.product.price);
-          // Calculate new bundle price based on quantity
-          const discountMultiplier = (100 - item.bundleDiscount) / 100;
-          const newBundlePrice = basePrice * quantity * discountMultiplier;
-
-          return {
-            ...item,
-            quantity,
-            bundlePrice: newBundlePrice
-          };
-        }
-
-        // For non-bundle items, just update quantity
         return { ...item, quantity };
       });
 
@@ -469,11 +415,6 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     }
     // Fallback to local calculation
     return items.reduce((total, item) => {
-      // If bundle price is set, use that instead of calculating from product price
-      if (item.bundlePrice !== undefined) {
-        return total + item.bundlePrice;
-      }
-      // Otherwise use normal price × quantity
       const price = parseFloat(item.product.sale_price || item.product.price);
       return total + (price * item.quantity);
     }, 0);
@@ -507,23 +448,8 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     return getTotalPrice() - getDiscountAmount();
   };
 
-  // Calculate total savings (bundle discounts + coupon discounts)
-  const getTotalSavings = () => {
-    // Calculate bundle discount savings
-    const bundleSavings = items.reduce((total, item) => {
-      if (item.bundlePrice !== undefined) {
-        const regularPrice = parseFloat(item.product.price) * item.quantity;
-        const bundlePrice = item.bundlePrice;
-        return total + (regularPrice - bundlePrice);
-      }
-      return total;
-    }, 0);
-
-    // Add coupon discount
-    const couponDiscount = getDiscountAmount();
-
-    return bundleSavings + couponDiscount;
-  };
+  // Wat de klant bespaart komt nu alleen nog van een kortingscode
+  const getTotalSavings = () => getDiscountAmount();
 
   const getShippingCost = () => {
     if (storeCart?.totals && storeCart.totals.total_shipping) {
