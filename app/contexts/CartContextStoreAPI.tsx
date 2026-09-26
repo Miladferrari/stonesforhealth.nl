@@ -28,7 +28,8 @@ interface CartContextType {
   items: CartItem[];
   isCartOpen: boolean;
   setIsCartOpen: (isOpen: boolean) => void;
-  addToCart: (product: Product, quantity?: number) => void;
+  /** false als het product niet toegevoegd kon worden, bijvoorbeeld omdat het uitverkocht is */
+  addToCart: (product: Product, quantity?: number) => boolean;
   removeFromCart: (productId: number) => void;
   updateQuantity: (productId: number, quantity: number) => void;
   clearCart: () => void;
@@ -189,11 +190,11 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   // Add to cart with Store API
-  const addToCart = async (product: Product, quantity: number = 1) => {
+  const addToCart = (product: Product, quantity: number = 1): boolean => {
     // Don't add out of stock products
     if (product.stock_status !== 'instock' || product.stock_quantity === 0) {
       console.warn('Cannot add out of stock product to cart:', product.name);
-      return;
+      return false;
     }
 
     // Extract variation_id if present
@@ -232,6 +233,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       return newItems;
     });
     setIsCartOpen(true);
+    return true;
   };
 
   // Remove from cart (local management only)

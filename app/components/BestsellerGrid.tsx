@@ -21,6 +21,9 @@ interface Product {
   on_sale: boolean;
   average_rating?: string;
   rating_count?: number;
+  // Nodig om een uitverkocht product niet in de winkelwagen te laten belanden
+  stock_status?: string;
+  stock_quantity?: number | null;
 }
 
 export default function BestsellerGrid() {
@@ -71,8 +74,9 @@ export default function BestsellerGrid() {
     fetchProducts();
   }, []);
 
-  const handleQuickAdd = async (product: Product) => {
-    addToCart(product as any, 1);
+  const handleQuickAdd = (product: Product) => {
+    // Niet doen alsof het gelukt is als de winkelwagen het product weigert
+    if (!addToCart(product as any, 1)) return;
     trackAddToCart(toAnalyticsItem(product as any), 1);
   };
 
@@ -116,6 +120,7 @@ export default function BestsellerGrid() {
   return (
     <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4 lg:gap-6">
       {products.map((product) => {
+        const isOutOfStock = product.stock_status !== 'instock' || product.stock_quantity === 0;
         const productUrl = getProductUrl(product);
 
         return (
@@ -203,14 +208,31 @@ export default function BestsellerGrid() {
             <button
               onClick={(e) => {
                 e.stopPropagation();
+                if (isOutOfStock) return;
                 handleQuickAdd(product);
               }}
-              className="w-full rounded-lg text-sm sm:text-base font-semibold py-2.5 sm:py-3 transition-all duration-200 flex items-center justify-center gap-2 shadow-sm bg-[#492c4a] text-white hover:bg-[#492c4a]/90 hover:shadow-md active:scale-95"
+              disabled={isOutOfStock}
+              className={`w-full rounded-lg text-sm sm:text-base font-semibold py-2.5 sm:py-3 transition-all duration-200 flex items-center justify-center gap-2 shadow-sm ${
+                isOutOfStock
+                  ? 'bg-gray-400 text-white cursor-not-allowed'
+                  : 'bg-[#492c4a] text-white hover:bg-[#492c4a]/90 hover:shadow-md active:scale-95'
+              }`}
             >
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
-              </svg>
-              In Winkelwagen
+              {isOutOfStock ? (
+                <>
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                  Uitverkocht
+                </>
+              ) : (
+                <>
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                  </svg>
+                  In Winkelwagen
+                </>
+              )}
             </button>
           </div>
         </div>
