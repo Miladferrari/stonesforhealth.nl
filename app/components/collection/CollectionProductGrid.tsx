@@ -51,6 +51,7 @@ export default function CollectionProductGrid({
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-6">
             {products.map((product) => {
             const discount = calculateDiscount(product);
+            const isOutOfStock = product.stock_status !== 'instock' || product.stock_quantity === 0;
             const isHovered = hoveredProduct === product.id;
 
             const productUrl = getProductUrl(product);
@@ -142,21 +143,43 @@ export default function CollectionProductGrid({
                   {/* Spacer to push button to bottom */}
                   <div className="flex-grow"></div>
 
-                  {/* Add to Cart Button */}
+                  {/* Add to Cart Button. Toast pas tonen als het toevoegen echt
+                      gelukt is: bij een uitverkocht product weigert de winkelwagen
+                      en kreeg de klant eerder toch "toegevoegd" te zien. */}
                   <button
                     onClick={(e) => {
                       e.preventDefault();
                       e.stopPropagation();
-                      addToCart(product);
+                      if (isOutOfStock) return;
+                      if (!addToCart(product)) {
+                        showToast('Dit product is uitverkocht', 'error');
+                        return;
+                      }
                       trackAddToCart(toAnalyticsItem(product), 1);
                       showToast('Product toegevoegd aan winkelwagen!', 'success');
                     }}
-                    className="w-full rounded-lg text-sm sm:text-base font-semibold py-2.5 sm:py-3 transition-all duration-200 flex items-center justify-center gap-2 shadow-sm bg-[#492c4a] text-white hover:bg-[#492c4a]/90 hover:shadow-md active:scale-95"
+                    disabled={isOutOfStock}
+                    className={`w-full rounded-lg text-sm sm:text-base font-semibold py-2.5 sm:py-3 transition-all duration-200 flex items-center justify-center gap-2 shadow-sm ${
+                      isOutOfStock
+                        ? 'bg-gray-400 text-white cursor-not-allowed'
+                        : 'bg-[#492c4a] text-white hover:bg-[#492c4a]/90 hover:shadow-md active:scale-95'
+                    }`}
                   >
+                    {isOutOfStock ? (
+                      <>
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                     </svg>
-                    In Winkelwagen
+                    Uitverkocht
+                      </>
+                    ) : (
+                      <>
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                        </svg>
+                        In Winkelwagen
+                      </>
+                    )}
                   </button>
                 </div>
               </div>
