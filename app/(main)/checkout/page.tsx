@@ -263,9 +263,7 @@ export default function UnifiedCheckoutPage() {
         name: item.product.name,
         quantity: item.quantity,
         price: parseFloat(item.product.price),
-        image: item.product.images[0]?.src || '',
-        bundleType: item.bundleType,
-        bundlePrice: item.bundlePrice
+        image: item.product.images[0]?.src || ''
       }));
 
       await fetch('/api/abandoned-cart/save', {
@@ -491,11 +489,18 @@ export default function UnifiedCheckoutPage() {
 
         // Store new order data in session
         sessionStorage.setItem('pendingOrderId', order.id.toString());
+        // Bedragen meegeven als vangnet: lukt het ophalen van de order op de
+        // bedanktpagina niet, dan kan die toch een volledig overzicht tonen
         sessionStorage.setItem('orderData', JSON.stringify({
           id: order.id,
           order_key: order.order_key,
           shippingMethodId: shipping.selectedRate?.method_id || null,
+          shipping_method: shipping.selectedRate?.method_title || null,
           couponCode: appliedCoupon?.code || null,
+          subtotal: subtotal.toFixed(2),
+          shipping_total: shippingCost.toFixed(2),
+          tax: tax.toFixed(2),
+          coupon: appliedCoupon ? { code: appliedCoupon.code, discount: discountAmount.toFixed(2) } : null,
           total: order.total,
           currency: order.currency,
           items: items,

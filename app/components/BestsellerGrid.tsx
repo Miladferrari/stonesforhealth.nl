@@ -176,9 +176,17 @@ export default function BestsellerGrid() {
                     <span className="text-xs text-gray-500 line-through block">
                       €{parseFloat(product.regular_price).toFixed(2).replace('.', ',')}
                     </span>
-                    <span className="text-base sm:text-lg md:text-xl font-bold text-[#492c4a]">
-                      €{parseFloat(product.price).toFixed(2).replace('.', ',')}
-                    </span>
+                    <div className="flex items-baseline gap-2 flex-wrap">
+                      <span className="text-base sm:text-lg md:text-xl font-bold text-[#492c4a]">
+                        €{parseFloat(product.price).toFixed(2).replace('.', ',')}
+                      </span>
+                      {Math.round((1 - parseFloat(product.price) / parseFloat(product.regular_price)) * 100) > 0 && (
+                        <span className="inline-flex items-center gap-1 rounded whitespace-nowrap text-black px-1.5 py-0.5" style={{ backgroundColor: '#fbe022' }}>
+                          <span className="material-icons-outlined" style={{ fontSize: '13px' }}>local_offer</span>
+                          <span className="text-[10px] sm:text-xs font-extrabold tracking-wide">{Math.round((1 - parseFloat(product.price) / parseFloat(product.regular_price)) * 100)}% KORTING</span>
+                        </span>
+                      )}
+                    </div>
                   </>
                 ) : (
                   <span className="text-base sm:text-lg md:text-xl font-bold text-[#492c4a]">

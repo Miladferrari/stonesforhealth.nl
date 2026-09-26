@@ -122,7 +122,7 @@ export default function SlideInCart() {
               return (
                 <div className="mt-3 bg-[#492c4a]/5 rounded-lg p-3">
                   <p className="text-sm text-gray-700 mb-2">
-                    Nog <span className="font-semibold text-[#492c4a]">€{remaining.toFixed(2)}</span> voor gratis verzending
+                    Nog <span className="font-semibold text-[#492c4a]">€{remaining.toFixed(2).replace('.', ',')}</span> voor gratis verzending
                   </p>
                   <div className="w-full bg-gray-200 rounded-full h-2">
                     <div
@@ -161,16 +161,11 @@ export default function SlideInCart() {
                   const regularPrice = item.product.regular_price ? parseFloat(item.product.regular_price) : price;
                   const mainImage = item.product.images[0];
 
-                  // Calculate display price - use bundle price if available
-                  const displayPrice = item.bundlePrice !== undefined ? item.bundlePrice : (price * item.quantity);
+                  const displayPrice = price * item.quantity;
                   const originalPrice = regularPrice * item.quantity;
                   // Alleen doorstrepen als er daadwerkelijk minder betaald wordt.
                   // Een cent marge, want dit zijn floats.
                   const toontKorting = originalPrice - displayPrice > 0.005;
-
-                  // Bundle badge info
-                  const bundleBadge = item.bundleType === 'duo' ? '2 PAAR -20%' :
-                                     item.bundleType === 'family' ? '3 PAAR -25%' : null;
 
                   return (
                     <div key={`${item.product.id}-${index}`} className="bg-white border border-[#E8DCC6]/40 rounded-lg overflow-hidden hover:border-[#492c4a]/20 transition-colors">
@@ -192,12 +187,6 @@ export default function SlideInCart() {
                               </div>
                             )}
                           </a>
-                          {/* Bundle badge overlay */}
-                          {bundleBadge && (
-                            <div className="absolute -top-1 -right-1 bg-green-500 text-white text-[9px] font-bold px-1.5 py-0.5 rounded shadow-sm">
-                              {bundleBadge}
-                            </div>
-                          )}
                         </div>
 
                         {/* Product details */}
@@ -207,12 +196,6 @@ export default function SlideInCart() {
                               <a href={`/product/${item.product.slug}`} className="text-sm font-medium text-gray-900 hover:text-[#492c4a] transition-colors line-clamp-2">
                                 {item.product.name}
                               </a>
-                              {/* Bundle info below product name */}
-                              {bundleBadge && (
-                                <div className="mt-1 text-[10px] text-green-600 font-semibold">
-                                  BUNDEL KORTING: {item.bundleDiscount}% EXTRA
-                                </div>
-                              )}
                             </div>
                             <button
                               onClick={() => removeFromCart(item.product.id)}
@@ -238,11 +221,11 @@ export default function SlideInCart() {
                             <div className="text-right">
                               <div className="flex flex-col items-end">
                                 <span className="text-sm font-semibold text-[#492c4a]">
-                                  €{displayPrice.toFixed(2)}
+                                  €{displayPrice.toFixed(2).replace('.', ',')}
                                 </span>
                                 {toontKorting && (
                                   <span className="text-xs text-gray-500 line-through">
-                                    €{originalPrice.toFixed(2)}
+                                    €{originalPrice.toFixed(2).replace('.', ',')}
                                   </span>
                                 )}
                               </div>
@@ -270,7 +253,7 @@ export default function SlideInCart() {
                   <div className="flex justify-between items-center">
                     <span className="text-xl text-gray-600 font-[family-name:var(--font-eb-garamond)]">Totale korting</span>
                     <span className="text-2xl font-medium text-green-600 font-[family-name:var(--font-eb-garamond)]">
-                      -€{getTotalSavings().toFixed(2)}
+                      -€{getTotalSavings().toFixed(2).replace('.', ',')}
                     </span>
                   </div>
                 )}
@@ -284,7 +267,7 @@ export default function SlideInCart() {
                 )}
                 <div className="flex justify-between items-center">
                   <span className="text-2xl font-medium text-gray-900 font-[family-name:var(--font-eb-garamond)]">Totaal</span>
-                  <span className="text-3xl font-bold text-[#492c4a] font-[family-name:var(--font-eb-garamond)]">€{getTotalPriceAfterDiscount().toFixed(2)}</span>
+                  <span className="text-3xl font-bold text-[#492c4a] font-[family-name:var(--font-eb-garamond)]">€{getTotalPriceAfterDiscount().toFixed(2).replace('.', ',')}</span>
                 </div>
               </div>
               

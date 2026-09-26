@@ -65,13 +65,6 @@ export default function CollectionProductGrid({
                 <Link href={productUrl}>
                   {/* Product Image */}
                   <div className="relative aspect-square overflow-hidden">
-                    {/* Discount Badge */}
-                    {discount > 0 && (
-                      <div className="absolute top-2 left-2 z-10 bg-[#492c4a] text-white text-xs px-2 py-1 rounded-full font-bold">
-                        -{discount}%
-                      </div>
-                    )}
-
                     {/* Product Image with Hover Effect */}
                     <div className="relative w-full h-full">
                       {product.images && product.images.length > 0 ? (
@@ -122,15 +115,25 @@ export default function CollectionProductGrid({
                       {product.on_sale && product.regular_price ? (
                         <>
                           <span className="text-xs text-gray-500 line-through block">
-                            €{parseFloat(product.regular_price).toFixed(2)}
+                            €{parseFloat(product.regular_price).toFixed(2).replace('.', ',')}
                           </span>
-                          <span className="text-base sm:text-lg md:text-xl font-bold text-[#492c4a]">
-                            €{parseFloat(product.price).toFixed(2)}
-                          </span>
+                          {/* Zelfde opzet als in ProductCard: de korting bij het
+                              bedrag, niet alleen in het hoekje op de foto */}
+                          <div className="flex items-baseline gap-2 flex-wrap">
+                            <span className="text-base sm:text-lg md:text-xl font-bold text-[#492c4a]">
+                              €{parseFloat(product.price).toFixed(2).replace('.', ',')}
+                            </span>
+                            {discount > 0 && (
+                              <span className="inline-flex items-center gap-1 rounded whitespace-nowrap text-black px-1.5 py-0.5" style={{ backgroundColor: '#fbe022' }}>
+                                <span className="material-icons-outlined" style={{ fontSize: '13px' }}>local_offer</span>
+                                <span className="text-[10px] sm:text-xs font-extrabold tracking-wide">{discount}% KORTING</span>
+                              </span>
+                            )}
+                          </div>
                         </>
                       ) : (
                         <span className="text-base sm:text-lg md:text-xl font-bold text-[#492c4a]">
-                          €{parseFloat(product.price).toFixed(2)}
+                          €{parseFloat(product.price).toFixed(2).replace('.', ',')}
                         </span>
                       )}
                     </div>

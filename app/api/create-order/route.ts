@@ -2,17 +2,10 @@ import { NextRequest, NextResponse } from 'next/server';
 import { woocommerce } from '@/lib/woocommerce';
 import { calculateShippingRates } from '@/lib/shipping';
 
-// Bundle discounts as offered on the product page: minimum quantity and discount percentage
-const BUNDLE_RULES: Record<string, { minQuantity: number; discount: number }> = {
-  duo: { minQuantity: 2, discount: 20 },
-  family: { minQuantity: 3, discount: 25 },
-};
-
 interface PricedItem {
   productId: number;
   variationId?: number;
   quantity: number;
-  bundleType?: string;
   unitPrice: number;
 }
 
@@ -41,7 +34,7 @@ async function priceItem(item: any): Promise<PricedItem> {
     throw new Error('Product is niet (meer) beschikbaar');
   }
 
-  return { productId, variationId, quantity, bundleType: item.bundleType, unitPrice };
+  return { productId, variationId, quantity, unitPrice };
 }
 
 export async function POST(request: NextRequest) {
@@ -58,24 +51,9 @@ export async function POST(request: NextRequest) {
 
     const pricedItems = await Promise.all(items.map(priceItem));
 
-    // Variable bundles are added as separate lines, so bundle quantity is counted per product
-    const bundleQuantities = new Map<string, number>();
-    for (const item of pricedItems) {
-      if (item.bundleType) {
-        const key = `${item.productId}:${item.bundleType}`;
-        bundleQuantities.set(key, (bundleQuantities.get(key) || 0) + item.quantity);
-      }
-    }
-
     let itemsTotal = 0;
-    const lineDiscounts: number[] = [];
     const lineItems = pricedItems.map((item) => {
-      const rule = item.bundleType ? BUNDLE_RULES[item.bundleType] : undefined;
-      const bundleQuantity = bundleQuantities.get(`${item.productId}:${item.bundleType}`) || 0;
-      const discount = rule && bundleQuantity >= rule.minQuantity ? rule.discount : 0;
-
-      lineDiscounts.push(discount);
-      itemsTotal += item.unitPrice * item.quantity * (100 - discount) / 100;
+      itemsTotal += item.unitPrice * item.quantity;
 
       // No subtotal/total here: WooCommerce prices the line itself, so VAT
       // (prices including or excluding tax) is always handled correctly
@@ -157,18 +135,6 @@ export async function POST(request: NextRequest) {
     // Line and shipping totals in the REST API are excluding tax. Rather than guessing the
     // tax setup, correct them based on what WooCommerce calculated for this order.
     const adjustments: any = {};
-
-    const discountedLines = (order.line_items || [])
-      .map((line: any, index: number) => ({ line, discount: lineDiscounts[index] || 0 }))
-      .filter(({ discount }: { discount: number }) => discount > 0)
-      .map(({ line, discount }: { line: any; discount: number }) => ({
-        id: line.id,
-        subtotal: (parseFloat(line.subtotal) * (100 - discount) / 100).toFixed(2),
-        total: (parseFloat(line.total) * (100 - discount) / 100).toFixed(2)
-      }));
-    if (discountedLines.length > 0) {
-      adjustments.line_items = discountedLines;
-    }
 
     // The shipping cost shown to the customer includes VAT
     const shippingLine = order.shipping_lines?.[0];

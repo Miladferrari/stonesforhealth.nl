@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getOrderWithKey } from '@/lib/order-security';
-import { brutoRegel, brutoStukprijs, brutoVerzending, brutoKorting } from '@/lib/orderAmounts';
+import { brutoRegel, brutoStukprijs, brutoVerzending, brutoKorting, brutoSubtotaal, btwBedrag, totalenKloppen } from '@/lib/orderAmounts';
 
 export async function GET(request: NextRequest) {
   try {
@@ -102,6 +102,14 @@ export async function POST(request: NextRequest) {
     // Check if payment is completed
     const isPaid = ['processing', 'completed'].includes(order.status);
 
+    if (!totalenKloppen(order)) {
+      console.error(
+        `[check-order] Totalen van order ${order.number || order.id} sluiten niet aan: ` +
+        `subtotaal ${brutoSubtotaal(order).toFixed(2)} - korting ${brutoKorting(order).toFixed(2)} ` +
+        `+ verzending ${brutoVerzending(order).toFixed(2)} != totaal ${order.total}`
+      );
+    }
+
     // Return in the format expected by thank-you page
     return NextResponse.json({
       success: true,
@@ -134,6 +142,8 @@ export async function POST(request: NextRequest) {
         })) || [],
         shipping_method: order.shipping_lines?.[0]?.method_title || 'Standaard verzending',
         shipping_total: brutoVerzending(order).toFixed(2),
+        subtotal: brutoSubtotaal(order).toFixed(2),
+        tax: btwBedrag(order).toFixed(2),
         coupon: order.coupon_lines?.[0] ? {
           code: order.coupon_lines[0].code,
           discount: brutoKorting(order).toFixed(2)

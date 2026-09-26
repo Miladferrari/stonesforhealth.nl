@@ -159,12 +159,22 @@ const ProductCard = memo(function ProductCard({ product }: ProductCardProps) {
           <div className="min-h-[2.5rem] flex flex-col justify-end">
             {isOnSale && regularPrice > price && (
               <span className="text-xs text-gray-500 line-through block">
-                €{regularPrice.toFixed(2)}
+                €{regularPrice.toFixed(2).replace('.', ',')}
               </span>
             )}
-            <span className="text-base sm:text-lg md:text-xl font-bold text-[#492c4a]">
-              €{price.toFixed(2)}
-            </span>
+            {/* Korting ook hier, niet alleen in het hoekje op de foto: bij het
+                bedrag is het de plek waar iemand het afweegt */}
+            <div className="flex items-baseline gap-2 flex-wrap">
+              <span className="text-base sm:text-lg md:text-xl font-bold text-[#492c4a]">
+                €{price.toFixed(2).replace('.', ',')}
+              </span>
+              {discount > 0 && (
+                <span className="inline-flex items-center gap-1 rounded whitespace-nowrap text-black px-1.5 py-0.5" style={{ backgroundColor: '#fbe022' }}>
+                  <span className="material-icons-outlined" style={{ fontSize: '13px' }}>local_offer</span>
+                  <span className="text-[10px] sm:text-xs font-extrabold tracking-wide">{discount}% KORTING</span>
+                </span>
+              )}
+            </div>
           </div>
         </div>
 

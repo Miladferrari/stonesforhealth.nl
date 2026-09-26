@@ -5,6 +5,7 @@ import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useCart } from '@/app/contexts/CartContextStoreAPI';
+import { euro } from '@/lib/orderAmounts';
 
 interface OrderData {
   id: number;
@@ -41,10 +42,17 @@ interface OrderData {
     postcode?: string;
     [key: string]: any;
   };
+  // Bedragen inclusief btw, zoals /api/check-order ze levert
+  subtotal?: string;
+  shipping_total?: string;
+  shipping_method?: string;
+  tax?: string;
+  coupon?: { code: string; discount: string } | null;
   items: Array<{
     name: string;
     quantity: number;
     price: string;
+    total?: string;
     images?: Array<{ src: string }>;
     product?: {
       name?: string;
@@ -137,40 +145,37 @@ function ThankYouContent() {
 
       setHasFetched(true); // Mark as fetched
 
+      // Wat in sessionStorage staat komt uit de winkelwagen en kent geen
+      // verzendkosten of btw. De server rekent die wel uit, dus die gaat voor;
+      // sessionStorage is alleen het vangnet als de order niet op te halen is.
+      const storedOrderData = sessionStorage.getItem('orderData');
+
       try {
-        // Get order data from session storage
-        const storedOrderData = sessionStorage.getItem('orderData');
-        
-        if (storedOrderData) {
+        const response = await fetch('/api/check-order', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ orderId, orderKey }),
+        });
+
+        const result = response.ok ? await response.json() : null;
+
+        if (result?.success && result.order) {
+          setOrderData(result.order);
+          sessionStorage.removeItem('orderData');
+          sessionStorage.removeItem('pendingOrderId');
+        } else if (storedOrderData) {
           const data = JSON.parse(storedOrderData);
           if (data.id.toString() === orderId) {
             setOrderData(data);
-            // Clear session storage after successful payment
             sessionStorage.removeItem('orderData');
             sessionStorage.removeItem('pendingOrderId');
-          }
-        }
-        
-        // If not in session, fetch from API
-        if (!storedOrderData) {
-          const response = await fetch('/api/check-order', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ orderId, orderKey }),
-          });
-
-          if (!response.ok) {
-            throw new Error('Kon bestelgegevens niet ophalen');
-          }
-
-          const result = await response.json();
-          if (result.success && result.order) {
-            setOrderData(result.order);
           } else {
             throw new Error('Bestelling niet gevonden');
           }
+        } else {
+          throw new Error('Kon bestelgegevens niet ophalen');
         }
       } catch (err: any) {
         console.error('Error fetching order:', err);
@@ -226,6 +231,17 @@ function ThankYouContent() {
     );
   }
 
+  // Bedragen komen inclusief btw van /api/check-order. Komt de order uit
+  // sessionStorage (vangnet), dan ontbreken ze en tonen we alleen het totaal.
+  const getal = (v: string | undefined) =>
+    v !== undefined && v !== null && v !== '' && Number.isFinite(parseFloat(v)) ? parseFloat(v) : null;
+
+  const subtotaal = getal(orderData.subtotal);
+  const verzending = getal(orderData.shipping_total);
+  const btw = getal(orderData.tax);
+  const korting = getal(orderData.coupon?.discount) ?? 0;
+  const heeftTotalen = subtotaal !== null || verzending !== null;
+
   return (
     <div className="min-h-screen bg-white">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
@@ -260,7 +276,7 @@ function ThankYouContent() {
               </div>
               <div>
                 <p className="font-[family-name:var(--font-eb-garamond)] text-gray-600 text-base">Totaalbedrag</p>
-                <p className="font-[family-name:var(--font-eb-garamond)] font-medium text-gray-900 text-lg">€{parseFloat(orderData.total).toFixed(2)}</p>
+                <p className="font-[family-name:var(--font-eb-garamond)] font-medium text-gray-900 text-lg">{euro(parseFloat(orderData.total))}</p>
               </div>
             </div>
           </div>
@@ -288,6 +304,11 @@ function ThankYouContent() {
               {(orderData.items || []).map((item, index) => {
                 const productName = item.name || item.product?.name || 'Product';
                 const productPrice = item.price || item.product?.price || '0';
+                // De server levert het regeltotaal inclusief btw; alleen als dat
+                // ontbreekt zelf vermenigvuldigen
+                const productLineTotal = item.total !== undefined
+                  ? parseFloat(item.total)
+                  : parseFloat(productPrice) * (item.quantity || 1);
                 const productImages = item.images || item.product?.images || [];
                 const productQuantity = item.quantity || 1;
 
@@ -325,7 +346,7 @@ function ThankYouContent() {
                           {productQuantity}x
                         </span>
                         <span className="font-[family-name:var(--font-eb-garamond)] text-sm text-gray-500">
-                          €{parseFloat(productPrice).toFixed(2)} per stuk
+                          {euro(parseFloat(productPrice))} per stuk
                         </span>
                       </div>
                     )}
@@ -334,12 +355,58 @@ function ThankYouContent() {
                   {/* Price */}
                   <div className="flex flex-col items-end">
                     <p className="font-[family-name:var(--font-eb-garamond)] font-bold text-xl text-gray-900">
-                      €{(parseFloat(productPrice) * productQuantity).toFixed(2)}
+                      {euro(productLineTotal)}
                     </p>
                   </div>
                 </div>
               )})}
             </div>
+
+            {/* Totalen: dezelfde opbouw als in de bevestigingsmail, zodat de
+                klant hier ziet waar het eindbedrag uit is opgebouwd */}
+            {heeftTotalen && (
+              <div className="mt-6 pt-6 border-t border-gray-200 space-y-2">
+                {subtotaal !== null && (
+                  <div className="flex justify-between items-baseline gap-4 text-gray-600">
+                    <span className="font-[family-name:var(--font-eb-garamond)] text-base">Subtotaal</span>
+                    <span className="font-[family-name:var(--font-eb-garamond)] text-base whitespace-nowrap shrink-0">{euro(subtotaal)}</span>
+                  </div>
+                )}
+
+                {korting > 0 && (
+                  <div className="flex justify-between items-baseline gap-4 text-green-700">
+                    <span className="font-[family-name:var(--font-eb-garamond)] text-base min-w-0">
+                      Korting{orderData.coupon?.code ? ` (${orderData.coupon.code})` : ''}
+                    </span>
+                    <span className="font-[family-name:var(--font-eb-garamond)] text-base whitespace-nowrap shrink-0">-{euro(korting)}</span>
+                  </div>
+                )}
+
+                {verzending !== null && (
+                  <div className="flex justify-between items-baseline gap-4 text-gray-600">
+                    <span className="font-[family-name:var(--font-eb-garamond)] text-base min-w-0">
+                      Verzendkosten{orderData.shipping_method ? ` (${orderData.shipping_method})` : ''}
+                    </span>
+                    <span className="font-[family-name:var(--font-eb-garamond)] text-base whitespace-nowrap shrink-0">
+                      {verzending > 0 ? euro(verzending) : 'Gratis'}
+                    </span>
+                  </div>
+                )}
+
+                <div className="flex justify-between items-baseline gap-4 pt-3 border-t border-gray-200">
+                  <span className="font-[family-name:var(--font-eb-garamond)] font-semibold text-gray-900 text-lg">Totaal</span>
+                  <span className="font-[family-name:var(--font-eb-garamond)] font-bold text-gray-900 text-xl">
+                    {euro(parseFloat(orderData.total))}
+                  </span>
+                </div>
+
+                {btw !== null && btw > 0 && (
+                  <p className="text-sm text-gray-500 font-[family-name:var(--font-eb-garamond)]">
+                    Inclusief {euro(btw)} btw
+                  </p>
+                )}
+              </div>
+            )}
           </div>
         </div>
 
