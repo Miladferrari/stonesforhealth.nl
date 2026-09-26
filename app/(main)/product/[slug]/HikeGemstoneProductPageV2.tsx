@@ -6,7 +6,7 @@ import Link from 'next/link';
 import { useCart } from '@/app/contexts/CartContextStoreAPI';
 import { Product, ProductVariation } from '@/lib/woocommerce';
 import { trackProductView, trackAddToCart } from '../../../lib/analytics';
-import { GRATIS_VANAF, bedragKort } from '@/lib/shippingConfig';
+import { GRATIS_VANAF, bedragKort, bedrag, isGratisVerzending, restTotGratis } from '@/lib/shippingConfig';
 
 interface HikeGemstoneProductPageV2Props {
   product: Product;
@@ -134,7 +134,7 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
     }
   };
 
-  // Check if product is out of stock - use variation stock if selected (for single bundle)
+  // Voorraad van de gekozen variatie, anders die van het product zelf
   const currentStockStatus = selectedVariations[0] ? selectedVariations[0].stock_status : product.stock_status;
   const currentStockQuantity = selectedVariations[0] ? selectedVariations[0].stock_quantity : product.stock_quantity;
   const isOutOfStock = currentStockStatus !== 'instock' || currentStockQuantity === 0;
@@ -217,7 +217,7 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
     energy: 'Kalmerend & Beschermend',
   };
 
-  // Calculate pricing - use variation price if selected (for single bundle)
+  // Prijs van de gekozen variatie, anders die van het product zelf
   const basePrice = selectedVariations[0] ? parseFloat(selectedVariations[0].price) : parseFloat(product.price);
   const baseRegularPrice = selectedVariations[0]
     ? (selectedVariations[0].regular_price ? parseFloat(selectedVariations[0].regular_price) : basePrice)
@@ -231,6 +231,19 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
   // Wat de klant voor het gekozen aantal betaalt
   const lineTotal = price * quantity;
   const lineRegularTotal = regularPrice * quantity;
+
+  // Vanaf hoeveel stuks de voorraadmelding verdwijnt. Boven dit aantal is
+  // "nog maar enkele op voorraad" niet meer waar.
+  const VOORRAADMELDING_VANAF = 40;
+  // availableQuantity ook meewegen: ligt alles al in de winkelwagen, dan staat
+  // er straks "Binnenkort weer op voorraad" op de knop en zou een melding dat
+  // er nog exemplaren zijn elkaar tegenspreken.
+  const toontVoorraadmelding =
+    !isOutOfStock &&
+    availableQuantity > 0 &&
+    typeof currentStockQuantity === 'number' &&
+    currentStockQuantity > 0 &&
+    currentStockQuantity <= VOORRAADMELDING_VANAF;
 
   // Het aantal mag nooit boven de resterende voorraad uitkomen. Legt de klant
   // iets in de winkelwagen, dan zakt availableQuantity en zakt het aantal mee.
@@ -425,7 +438,7 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
     }
   };
 
-  // Check if product has images - use variation image if selected and available (for single bundle)
+  // Foto van de gekozen variatie, anders die van het product zelf
   const variationImage = selectedVariations[0]?.image;
   const baseImages = product.images && product.images.length > 0 ? product.images : [];
   const hasImages = baseImages.length > 0 || Boolean(variationImage);
@@ -983,28 +996,47 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
                 )}
               </div>
 
-              {/* Tax and shipping info */}
+              {/* Btw en verzending. Geen "wordt berekend bij checkout" meer: dat
+                  klinkt als een naheffing terwijl de drempel gewoon vastligt. */}
               <p className="text-sm text-gray-600 font-[family-name:var(--font-eb-garamond)] mb-2">
-                Inclusief BTW.
-                <Link href="/verzending" className="underline hover:text-gray-800 ml-1">
-                  Verzendkosten berekend
-                </Link> bij checkout.
+                Inclusief btw.{' '}
+                {isGratisVerzending(lineTotal) ? (
+                  <span className="text-green-700 font-semibold">Gratis verzending.</span>
+                ) : (
+                  <>
+                    Nog {bedrag(restTotGratis(lineTotal))} tot{' '}
+                    <Link href="/verzending" className="underline hover:text-gray-800">gratis verzending</Link>.
+                  </>
+                )}
               </p>
 
-              {/* Spring sale info */}
-              <div className="custom-spring-sale-info bg-amber-50 border border-amber-200 rounded-md p-3 mt-4 mb-3">
-                <div className="metafield-rich_text_field flex items-center gap-3">
-                  <div className="flex-shrink-0">
-                    <span className="relative flex h-3 w-3">
-                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
-                      <span className="relative inline-flex rounded-full h-3 w-3 bg-amber-500"></span>
-                    </span>
+              {/* Voorraadmelding. Alleen tonen als we de voorraad echt kennen en
+                  die onder de drempel ligt, met het werkelijke aantal erin. Een
+                  vaste tekst op elk product is schijnschaarste en daar handhaaft
+                  de ACM op. "In de sale" verschijnt alleen als het product ook
+                  daadwerkelijk is afgeprijsd in WooCommerce. */}
+              {toontVoorraadmelding && (
+                <div className="bg-amber-50 border border-amber-200 rounded-md p-3 mt-4 mb-3">
+                  <div className="flex items-center gap-3">
+                    <div className="flex-shrink-0">
+                      <span className="relative flex h-3 w-3">
+                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
+                        <span className="relative inline-flex rounded-full h-3 w-3 bg-amber-500"></span>
+                      </span>
+                    </div>
+                    <p className="text-base md:text-lg text-gray-800 m-0 font-[family-name:var(--font-eb-garamond)]">
+                      {isOnSale ? (
+                        <>
+                          <span className="font-semibold text-amber-700 font-[family-name:var(--font-eb-garamond)]">In de sale</span>
+                          {' '}— nog {currentStockQuantity} {currentStockQuantity === 1 ? 'exemplaar' : 'exemplaren'} op voorraad
+                        </>
+                      ) : (
+                        <>Nog {currentStockQuantity} {currentStockQuantity === 1 ? 'exemplaar' : 'exemplaren'} op voorraad</>
+                      )}
+                    </p>
                   </div>
-                  <p className="text-base md:text-lg text-gray-800 m-0 font-[family-name:var(--font-eb-garamond)]">
-                    Vanwege onze <span className="font-semibold text-amber-700 font-[family-name:var(--font-eb-garamond)]">najaarssale</span> zijn er nog maar enkele exemplaren op voorraad!
-                  </p>
                 </div>
-              </div>
+              )}
             </div>
 
             {/* Aantal kiezen */}
@@ -1059,11 +1091,11 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
                 </div>
               </div>
 
-              {/* Alleen tonen wat we echt weten: WooCommerce houdt de voorraad
-                  niet altijd bij, dan is availableQuantity Infinity */}
-              {!isOutOfStock && availableQuantity !== Infinity && availableQuantity <= 10 && (
+              {/* Verklaart waarom de plusknop niet verder kan. De melding boven
+                  de prijs toont de voorraad zelf al, dus dit alleen bij de grens. */}
+              {!isOutOfStock && availableQuantity !== Infinity && availableQuantity > 0 && quantity >= availableQuantity && (
                 <div className="mt-3 text-sm text-gray-600 font-[family-name:var(--font-eb-garamond)]">
-                  Nog {availableQuantity} op voorraad
+                  Dit is alles wat er nog op voorraad ligt
                 </div>
               )}
 
