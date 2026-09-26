@@ -549,7 +549,7 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
                         </span>
                         <span className="badge inline-flex max-[425px]:inline-flex items-center gap-1 text-black text-[10px] sm:text-xs font-bold px-1.5 sm:px-2 py-0.5 sm:py-1 rounded hidden lg:inline-flex font-[family-name:var(--font-eb-garamond)]" style={{ backgroundColor: '#fbe022' }}>
                           <span className="material-icons-outlined text-xs sm:text-sm">local_offer</span>
-                          <span>JE BESPAART {discount}%</span>
+                          <span>{discount}% KORTING</span>
                         </span>
                       </>
                     )}
@@ -976,21 +976,22 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
                     <span className="text-xl text-gray-400 line-through font-[family-name:var(--font-eb-garamond)]">
                       €{regularPrice.toFixed(2).replace('.', ',')}
                     </span>
-                    <span className="badge number-discount_saved discount_saved-51613903651156" style={{
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      gap: '3px',
-                      background: '#000000',
-                      color: 'white',
-                      padding: '4px 10px',
-                      borderRadius: '4px',
-                      fontSize: '12px',
-                      fontWeight: '800',
-                      textTransform: 'uppercase',
-                      letterSpacing: '0.05em'
-                    }}>
-                      <span className="material-icons-outlined" style={{ fontSize: '14px' }}>local_offer</span>
-                      <span style={{ fontWeight: '900' }} className="font-[family-name:var(--font-eb-garamond)]">JE BESPAART {discount}%</span>
+                    {/* Opvallender dan het zwarte labeltje dat er stond: dit is
+                        het huisstijlgeel dat ook op de bestelknop zit. Alleen
+                        het percentage in kapitalen, anders wordt de badge zo
+                        breed dat hij over twee regels valt. */}
+                    <span
+                      className="inline-flex items-center gap-1.5 rounded-md whitespace-nowrap font-[family-name:var(--font-eb-garamond)]"
+                      style={{
+                        background: '#fbe022',
+                        color: '#000',
+                        padding: '5px 10px',
+                        fontSize: '15px',
+                        boxShadow: '0 1px 2px rgba(0,0,0,0.08)',
+                      }}
+                    >
+                      <span className="material-icons-outlined" style={{ fontSize: '17px' }}>local_offer</span>
+                      <span style={{ fontWeight: 900, letterSpacing: '0.03em' }}>{discount}% KORTING</span>
                     </span>
                   </>
                 )}
@@ -1041,7 +1042,7 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
 
             {/* Aantal kiezen */}
             <div className="mt-4 border border-gray-300 rounded-lg p-4 bg-white">
-              <div className="flex items-center justify-between gap-4">
+              <div className="flex items-end justify-between gap-4">
                 <div>
                   <div className="text-base md:text-lg font-semibold text-gray-900 mb-2 font-[family-name:var(--font-eb-garamond)]">
                     Aantal
@@ -1074,21 +1075,16 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
                   </div>
                 </div>
 
-                <div className="text-right">
-                  <div className="text-xl md:text-2xl font-semibold text-gray-900 font-[family-name:var(--font-eb-garamond)]">
-                    €{lineTotal.toFixed(2).replace('.', ',')}
-                  </div>
-                  {isOnSale && (
-                    <div className="text-sm text-gray-400 line-through font-[family-name:var(--font-eb-garamond)]">
-                      €{lineRegularTotal.toFixed(2).replace('.', ',')}
-                    </div>
-                  )}
-                  {quantity > 1 && (
+                {quantity > 1 && (
+                  <div className="text-right">
                     <div className="text-sm text-gray-600 font-[family-name:var(--font-eb-garamond)]">
-                      €{price.toFixed(2).replace('.', ',')} per stuk
+                      {quantity} × €{price.toFixed(2).replace('.', ',')}
                     </div>
-                  )}
-                </div>
+                    <div className="text-xl md:text-2xl font-semibold text-gray-900 font-[family-name:var(--font-eb-garamond)]">
+                      €{lineTotal.toFixed(2).replace('.', ',')}
+                    </div>
+                  </div>
+                )}
               </div>
 
               {/* Verklaart waarom de plusknop niet verder kan. De melding boven

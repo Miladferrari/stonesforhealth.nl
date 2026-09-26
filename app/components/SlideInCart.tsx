@@ -122,7 +122,7 @@ export default function SlideInCart() {
               return (
                 <div className="mt-3 bg-[#492c4a]/5 rounded-lg p-3">
                   <p className="text-sm text-gray-700 mb-2">
-                    Nog <span className="font-semibold text-[#492c4a]">€{remaining.toFixed(2)}</span> voor gratis verzending
+                    Nog <span className="font-semibold text-[#492c4a]">€{remaining.toFixed(2).replace('.', ',')}</span> voor gratis verzending
                   </p>
                   <div className="w-full bg-gray-200 rounded-full h-2">
                     <div
@@ -221,11 +221,11 @@ export default function SlideInCart() {
                             <div className="text-right">
                               <div className="flex flex-col items-end">
                                 <span className="text-sm font-semibold text-[#492c4a]">
-                                  €{displayPrice.toFixed(2)}
+                                  €{displayPrice.toFixed(2).replace('.', ',')}
                                 </span>
                                 {toontKorting && (
                                   <span className="text-xs text-gray-500 line-through">
-                                    €{originalPrice.toFixed(2)}
+                                    €{originalPrice.toFixed(2).replace('.', ',')}
                                   </span>
                                 )}
                               </div>
@@ -253,7 +253,7 @@ export default function SlideInCart() {
                   <div className="flex justify-between items-center">
                     <span className="text-xl text-gray-600 font-[family-name:var(--font-eb-garamond)]">Totale korting</span>
                     <span className="text-2xl font-medium text-green-600 font-[family-name:var(--font-eb-garamond)]">
-                      -€{getTotalSavings().toFixed(2)}
+                      -€{getTotalSavings().toFixed(2).replace('.', ',')}
                     </span>
                   </div>
                 )}
@@ -267,7 +267,7 @@ export default function SlideInCart() {
                 )}
                 <div className="flex justify-between items-center">
                   <span className="text-2xl font-medium text-gray-900 font-[family-name:var(--font-eb-garamond)]">Totaal</span>
-                  <span className="text-3xl font-bold text-[#492c4a] font-[family-name:var(--font-eb-garamond)]">€{getTotalPriceAfterDiscount().toFixed(2)}</span>
+                  <span className="text-3xl font-bold text-[#492c4a] font-[family-name:var(--font-eb-garamond)]">€{getTotalPriceAfterDiscount().toFixed(2).replace('.', ',')}</span>
                 </div>
               </div>
               
