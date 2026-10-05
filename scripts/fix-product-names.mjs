@@ -6,6 +6,7 @@
 //   node scripts/fix-product-names.mjs --apply
 
 import { woo, getAll, assertCredentials } from './woo.mjs';
+import { normalizeProductName } from './product-names.mjs';
 
 assertCredentials();
 const APPLY = process.argv.includes('--apply');
@@ -44,6 +45,7 @@ function needsCasingFix(name) {
 }
 
 function cleanName(name) {
+  name = normalizeProductName(name);
   let out = name.replace(/\s{2,}/g, ' ').trim();
   if (needsCasingFix(out)) out = titleCase(out);
 

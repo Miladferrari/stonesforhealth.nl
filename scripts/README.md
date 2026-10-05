@@ -169,6 +169,9 @@ WP_APP_PASSWORD=xxxx xxxx xxxx xxxx xxxx xxxx
 | `enrich-from-bol.mjs` | Zet beschrijvingen en foto's in WooCommerce |
 | `wp-media.mjs` | Uploadt foto's naar de WordPress-mediabibliotheek |
 | `fix-seo.mjs` | Repareert namen en alt-teksten na de import |
+| `fix-title-entities.mjs` | Herstelt uitsluitend HTML-codering in producttitels |
+| `wp-product-titles.mjs` | Leest en schrijft ruwe WordPress-producttitels |
+| `product-names.mjs` | Decodeert productnamen vóór import/updates |
 | `find-missing-on-bol.mjs` | Zoekt op bol naar producten zonder foto |
 | `hercategoriseer.mjs` | Werkt de collecties bij op de volledige titel |
 | `verberg-zonder-foto.mjs` | Haalt producten zonder foto uit de overzichten |
@@ -186,6 +189,17 @@ zowel Armbanden als Cadeaus) bestaan één keer in WooCommerce en worden in het
 menu op beide plekken getoond, met dezelfde URL.
 
 ## Veiligheid
+
+Producttitels met speciale tekens worden na een WooCommerce-write via de
+WordPress REST API als platte tekst opgeslagen en gecontroleerd. Hiervoor zijn
+`WP_USER` en `WP_APP_PASSWORD` nodig; de client controleert deze vóór de write.
+Ook `fix-seo.mjs` gebruikt deze credentials om echte opgeslagen titels te lezen.
+
+`node scripts/fix-title-entities.mjs` toont eerst de voorgenomen correcties op
+`title.raw`. Met `--apply` worden uitsluitend de titels aangepast, met een
+back-up in `data/title-entities-before-*.json` en controle op titel en slug.
+WooCommerce `name` is geen betrouwbare controle op ruwe opslag: ook
+`context=edit` kan entities teruggeven.
 
 `cleanup-testdata.mjs` verwijdert **nooit** een betaalde bestelling. Orders die
 niet duidelijk testdata zijn, worden als `ONDUIDELIJK` gemeld en overgeslagen.

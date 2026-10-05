@@ -4,6 +4,8 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { productNamePayload } from './product-names.mjs';
+import { assertTitleCredentials, setRawProductTitle } from './wp-product-titles.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
@@ -53,6 +55,13 @@ function buildUrl(endpoint, params = {}) {
 }
 
 async function request(method, endpoint, { params = {}, body } = {}) {
+  body = productNamePayload(endpoint, body);
+  const rawTitleWrite = ['POST', 'PUT'].includes(method)
+    && /^products(?:\/\d+)?$/.test(endpoint)
+    && typeof body?.name === 'string' && /[&<>"']/.test(body.name);
+  // WooCommerce codeert speciale tekens bij het opslaan van name. Controleer
+  // vooraf de credentials voor de WordPress-route die echte tekst bewaart.
+  if (rawTitleWrite) assertTitleCredentials();
   const url = buildUrl(endpoint, params);
   const res = await fetch(url, {
     method,
@@ -68,6 +77,10 @@ async function request(method, endpoint, { params = {}, body } = {}) {
     err.status = res.status;
     err.data = data;
     throw err;
+  }
+  if (rawTitleWrite) {
+    const saved = await setRawProductTitle(data.id, body.name, data.slug);
+    data.name = saved.name;
   }
   return { data, headers: res.headers };
 }

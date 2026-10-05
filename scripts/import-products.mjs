@@ -7,6 +7,7 @@
 
 import { woo, getAll, assertCredentials } from './woo.mjs';
 import { loadProducts, plan } from './preview-import.mjs';
+import { normalizeProductName } from './product-names.mjs';
 
 assertCredentials();
 
@@ -25,6 +26,7 @@ const XLSX = args.find(a => a.endsWith('.xlsx'));
  * zodat "2-delige" en "18-21 cm" heel blijven.
  */
 function splitTitle(title) {
+  title = normalizeProductName(title);
   const parts = title.split(/\s+[–—-]\s+|\s*\|\s*/).map(s => s.trim()).filter(Boolean);
   let name = parts.shift() || title;
   // Titels die met het merk beginnen ("S4H - Orgonite ...") leveren een leeg

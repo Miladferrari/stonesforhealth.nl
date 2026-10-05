@@ -12,6 +12,8 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { woo, getAll, assertCredentials } from './woo.mjs';
 import { decode } from './bol.mjs';
+import { normalizeProductName } from './product-names.mjs';
+import { getRawProductTitles } from './wp-product-titles.mjs';
 import { hasWpCredentials, checkWpCredentials } from './wp-media.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -63,7 +65,7 @@ function isPlaceholder(naam) {
 }
 
 function schoonNaam(naam) {
-  return decode(naam).replace(/^SS4H\b/, 'S4H').replace(/\s+/g, ' ').trim();
+  return normalizeProductName(naam).replace(/^SS4H\b/, 'S4H').replace(/\s+/g, ' ').trim();
 }
 
 function kortAlt(tekst, max = MAX_ALT) {
@@ -76,13 +78,16 @@ function kortAlt(tekst, max = MAX_ALT) {
 
 // ---------- 1 + 2: namen ----------
 
-const producten = await getAll('products', { status: 'any' });
+const producten = await getAll('products', { status: 'any', context: 'edit' });
+const rawNames = new Map((await getRawProductTitles()).map(p => [p.id, p.name]));
 const naamFixes = [];
 
 for (const p of producten) {
-  const huidig = p.name;
+  const huidig = rawNames.get(p.id);
+  if (huidig === undefined) throw new Error(`Ruwe titel ontbreekt voor product ${p.id}.`);
+  p.name = huidig;
   let nieuw = schoonNaam(huidig);
-  let reden = nieuw !== decode(huidig) ? 'merk/tekens' : '';
+  let reden = nieuw !== huidig ? 'merk/tekens' : '';
 
   if (isPlaceholder(nieuw)) {
     const bol = bolNaam.get(String(p.sku));
