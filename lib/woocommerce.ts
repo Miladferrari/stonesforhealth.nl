@@ -35,6 +35,11 @@ export interface Product {
     name: string;
     slug: string;
   }>;
+  tags?: Array<{
+    id: number;
+    name: string;
+    slug: string;
+  }>;
   stock_status: string;
   stock_quantity: number | null;
   attributes?: Array<{
@@ -235,6 +240,7 @@ function decodePlainText<T>(value: T): T {
 class WooCommerceAPI {
   private cache = new CacheManager();
   private pendingRequests = new Map<string, Promise<any>>();
+  private zoekCatalogus: { producten: Product[]; tijd: number } | null = null;
 
   // Get config dynamically for each request
   private get config(): WooCommerceConfig {
@@ -699,29 +705,37 @@ class WooCommerceAPI {
     return (producten || []).filter(inDeCatalogus);
   }
 
-  async searchProducts(
-    search: string,
-    params?: {
-      per_page?: number;
-      page?: number;
+  /**
+   * Alle producten die in zoekresultaten mogen staan, voor lib/productSearch.
+   * Volgens de WooCommerce-zichtbaarheid: "visible" en "search" wel, "catalog"
+   * (alleen winkel) en "hidden" niet. Met _fields, want de volledige
+   * productdata (yoast_head, meta_data) is ruim 15 kB per product.
+   */
+  async getSearchCatalog(): Promise<Product[]> {
+    if (this.zoekCatalogus && Date.now() - this.zoekCatalogus.tijd < 60000) {
+      return this.zoekCatalogus.producten;
     }
-  ): Promise<Product[]> {
-    const queryParams = new URLSearchParams();
-    queryParams.append("search", search);
-
-    if (params?.per_page)
-      queryParams.append("per_page", params.per_page.toString());
-    if (params?.page) queryParams.append("page", params.page.toString());
-    // Only fetch published products - WooCommerce returns all stock statuses by default
-    queryParams.append("status", "publish");
-
-    const endpoint = `products?${queryParams.toString()}`;
-    const gevonden = await this.fetchAPI<Product[]>(endpoint, {
-      useCache: false,
-      cache: "no-store",
-    }); // Don't cache search results
-    // Bij zoeken telt ook 'search' mee als zichtbaar.
-    return (gevonden || []).filter(p => p?.catalog_visibility !== 'hidden');
+    const velden = [
+      'id', 'name', 'slug', 'permalink', 'type', 'price', 'regular_price', 'sale_price', 'on_sale',
+      'images', 'categories', 'tags', 'attributes', 'stock_status', 'stock_quantity', 'sku',
+      'catalog_visibility', 'short_description', 'description',
+    ].join(',');
+    const alles: Product[] = [];
+    let verwacht = 0;
+    for (let page = 1; page <= 20; page++) {
+      const { products, total, totalPages } = await this.fetchAPIWithHeaders<Product[]>(
+        `products?per_page=100&page=${page}&status=publish&_fields=${velden}`
+      );
+      if (page === 1) verwacht = total;
+      alles.push(...(products || []));
+      if (page >= totalPages) break;
+    }
+    const producten = alles.filter(
+      p => !p.catalog_visibility || p.catalog_visibility === 'visible' || p.catalog_visibility === 'search'
+    );
+    // Een half mislukte ophaalactie niet een minuut lang vasthouden.
+    if (alles.length > 0 && alles.length === verwacht) this.zoekCatalogus = { producten, tijd: Date.now() };
+    return producten;
   }
 
   async createOrder(orderData: any): Promise<any> {

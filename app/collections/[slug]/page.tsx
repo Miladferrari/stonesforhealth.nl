@@ -35,6 +35,9 @@ export default function CollectionPage() {
   const [products, setProducts] = useState<Product[]>([]);
   const [subcategories, setSubcategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
+  // Geen verzonnen producten tonen als de API faalt: die zijn wel in de
+  // winkelwagen te leggen, maar bestaan niet.
+  const [laadFout, setLaadFout] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   // Marks where the product list starts, so paging scrolls back to it
   const listTopRef = useRef<HTMLDivElement>(null);
@@ -90,6 +93,7 @@ export default function CollectionPage() {
 
   const fetchProducts = async () => {
     setLoading(true);
+    setLaadFout(false);
     try {
       // Fetch category info for proper title
       const categoriesResponse = await fetch('/api/categories');
@@ -128,65 +132,18 @@ export default function CollectionPage() {
         }
       } else {
         console.error('Failed to fetch products');
-        // Use fallback products
-        setProducts(generateFallbackProducts());
-        setTotalPages(3);
+        setProducts([]);
+        setTotalPages(1);
+        setLaadFout(true);
       }
     } catch (error) {
       console.error('Error fetching products:', error);
-      // Use fallback products
-      setProducts(generateFallbackProducts());
-      setTotalPages(3);
+      setProducts([]);
+      setTotalPages(1);
+      setLaadFout(true);
     } finally {
       setLoading(false);
     }
-  };
-
-  const generateFallbackProducts = (): Product[] => {
-    // Generate fallback products for demonstration
-    const fallbackProducts: Product[] = [];
-    const startId = (currentPage - 1) * PRODUCTS_PER_PAGE;
-
-    const productNames = [
-      'Amethist Cluster', 'Rozenkwarts Hart', 'Bergkristal Punt', 'Labradoriet Steen',
-      'Maansteen Hanger', 'Tijgeroog Bol', 'Lapis Lazuli Raw', 'Seleniet Toren',
-      'Obsidiaan Piramide', 'Aventurijn Tumbled', 'Citrien Geode', 'Fluoriet Octaëder'
-    ];
-
-    for (let i = 0; i < PRODUCTS_PER_PAGE; i++) {
-      const id = startId + i + 1;
-      const isOnSale = Math.random() > 0.5;
-      const basePrice = Math.floor(Math.random() * 50) + 20;
-
-      fallbackProducts.push({
-        id,
-        name: productNames[i % productNames.length] + ' - Premium Kwaliteit',
-        slug: `product-${id}`,
-        permalink: `/product/${id}`,
-        type: 'simple' as const,
-        price: isOnSale ? (basePrice * 0.7).toFixed(2) : basePrice.toFixed(2),
-        regular_price: basePrice.toFixed(2),
-        sale_price: isOnSale ? (basePrice * 0.7).toFixed(2) : '',
-        on_sale: isOnSale,
-        images: [
-          {
-            id: 1,
-            src: '/1.jpeg',
-            alt: productNames[i % productNames.length]
-          }
-        ],
-        categories: [],
-        tags: [],
-        attributes: [],
-        variations: [],
-        short_description: 'Prachtige natuurlijke edelsteen met krachtige energie.',
-        description: 'Deze authentieke edelsteen is zorgvuldig geselecteerd voor zijn unieke eigenschappen.',
-        stock_status: 'instock',
-        stock_quantity: 10
-      } as Product);
-    }
-
-    return fallbackProducts;
   };
 
   // view_item_list fires per rendered page of results, so GA4 can attribute
@@ -258,6 +215,7 @@ export default function CollectionPage() {
             currentPage={currentPage}
             totalPages={totalPages}
             onPageChange={handlePageChange}
+            laadFout={laadFout}
           />
 
           {/* Pagination */}

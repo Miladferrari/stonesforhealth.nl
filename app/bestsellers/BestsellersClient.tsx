@@ -14,6 +14,9 @@ const PRODUCTS_PER_PAGE = 12;
 export default function BestsellersClient() {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
+  // Geen verzonnen producten tonen als de API faalt: die zijn wel in de
+  // winkelwagen te leggen, maar bestaan niet.
+  const [laadFout, setLaadFout] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   // Marks where the product list starts, so paging scrolls back to it
   const listTopRef = useRef<HTMLDivElement>(null);
@@ -35,6 +38,7 @@ export default function BestsellersClient() {
 
   const fetchBestsellers = async () => {
     setLoading(true);
+    setLaadFout(false);
     try {
       // Op slug, niet op id: ids worden opnieuw uitgedeeld als de
       // categorieboom wordt herbouwd, slugs blijven hetzelfde.
@@ -65,68 +69,18 @@ export default function BestsellersClient() {
         }
       } else {
         console.error('Failed to fetch bestsellers');
-        // Use fallback products
-        setProducts(generateFallbackBestsellers());
-        setTotalPages(2);
+        setProducts([]);
+        setTotalPages(1);
+        setLaadFout(true);
       }
     } catch (error) {
       console.error('Error fetching bestsellers:', error);
-      // Use fallback products
-      setProducts(generateFallbackBestsellers());
-      setTotalPages(2);
+      setProducts([]);
+      setTotalPages(1);
+      setLaadFout(true);
     } finally {
       setLoading(false);
     }
-  };
-
-  const generateFallbackBestsellers = (): Product[] => {
-    // Generate fallback bestseller products
-    const fallbackProducts: Product[] = [];
-    const startId = (currentPage - 1) * PRODUCTS_PER_PAGE;
-
-    const bestsellers = [
-      'Amethist Cluster - Bestseller', 'Rozenkwarts Hart - Top Verkoper',
-      'Bergkristal Punt - Populair', 'Labradoriet Steen - Favoriet',
-      'Tijgeroog Bol - Bestseller', 'Seleniet Toren - Meest Verkocht',
-      'Obsidiaan Piramide - Top Keuze', 'Citrien Geode - Populair',
-      'Maansteen Hanger - Bestseller', 'Lapis Lazuli Raw - Favoriet',
-      'Aventurijn Tumbled - Top Pick', 'Fluoriet Octaëder - Hot Item'
-    ];
-
-    for (let i = 0; i < PRODUCTS_PER_PAGE; i++) {
-      const id = startId + i + 1;
-      const basePrice = Math.floor(Math.random() * 30) + 35; // Higher base price for bestsellers
-      const isOnSale = Math.random() > 0.3; // More likely to be on sale
-
-      fallbackProducts.push({
-        id,
-        name: bestsellers[i % bestsellers.length],
-        slug: `bestseller-${id}`,
-        permalink: `/product/${id}`,
-        type: 'simple' as const,
-        price: isOnSale ? (basePrice * 0.75).toFixed(2) : basePrice.toFixed(2),
-        regular_price: basePrice.toFixed(2),
-        sale_price: isOnSale ? (basePrice * 0.75).toFixed(2) : '',
-        on_sale: isOnSale,
-        images: [
-          {
-            id: 1,
-            src: '/1.jpeg',
-            alt: bestsellers[i % bestsellers.length]
-          }
-        ],
-        categories: [],
-        tags: [],
-        attributes: [],
-        variations: [],
-        short_description: '⭐ Bestseller - Door klanten aanbevolen!',
-        description: 'Een van onze meest populaire edelstenen, geliefd om zijn krachtige eigenschappen.',
-        stock_status: 'instock',
-        stock_quantity: 10
-      } as Product);
-    }
-
-    return fallbackProducts;
   };
 
   const handlePageChange = (page: number) => {
@@ -153,7 +107,7 @@ export default function BestsellersClient() {
         <div className="flex items-center justify-center py-20">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#492c4a]"></div>
         </div>
-      ) : products.length === 0 ? (
+      ) : products.length === 0 && !laadFout ? (
         <div className="flex flex-col items-center justify-center py-20 px-4">
           <h2 className="text-2xl font-bold text-gray-900 mb-4 font-[family-name:var(--font-eb-garamond)]">
             Nog geen bestsellers beschikbaar
@@ -173,6 +127,7 @@ export default function BestsellersClient() {
             currentPage={currentPage}
             totalPages={totalPages}
             onPageChange={handlePageChange}
+            laadFout={laadFout}
           />
 
           {/* Pagination */}

@@ -16,6 +16,7 @@ const PRODUCTS_PER_PAGE = 12;
 function AlleProductenContent() {
   const searchParams = useSearchParams();
   const category = searchParams?.get('category');
+  const search = searchParams?.get('search')?.trim() || '';
 
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
@@ -24,18 +25,45 @@ function AlleProductenContent() {
   const listTopRef = useRef<HTMLDivElement>(null);
   const [totalPages, setTotalPages] = useState(1);
   const [collectionTitle, setCollectionTitle] = useState('ALLE PRODUCTEN');
+  const [totalResults, setTotalResults] = useState(0);
+  const [laadFout, setLaadFout] = useState(false);
+  // Alleen het antwoord op het laatste verzoek telt, ook als een ouder later binnenkomt
+  const verzoekRef = useRef(0);
+
+  // Nieuwe zoekterm of categorie: terug naar pagina 1. Tijdens het renderen,
+  // zodat er niet eerst nog een verzoek voor de oude pagina uitgaat.
+  const filterKey = `${category || ''}|${search}`;
+  const [paginaFilter, setPaginaFilter] = useState(filterKey);
+  if (paginaFilter !== filterKey) {
+    setPaginaFilter(filterKey);
+    setCurrentPage(1);
+  }
 
   useEffect(() => {
     fetchProducts();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [category, currentPage]);
+  }, [category, search, currentPage]);
+
+  // Geen verzonnen producten tonen als de API faalt: die zijn wel in de
+  // winkelwagen te leggen, maar bestaan niet.
+  const toonLaadFout = () => {
+    setProducts([]);
+    setTotalPages(1);
+    setTotalResults(0);
+    setLaadFout(true);
+  };
 
   const fetchProducts = async () => {
+    const verzoek = ++verzoekRef.current;
     setLoading(true);
+    setLaadFout(false);
     try {
       let apiUrl = '/api/products?per_page=' + PRODUCTS_PER_PAGE + '&page=' + currentPage;
 
-      if (category) {
+      if (search) {
+        apiUrl = `/api/search?q=${encodeURIComponent(search)}&per_page=${PRODUCTS_PER_PAGE}&page=${currentPage}`;
+        setCollectionTitle('ZOEKRESULTATEN');
+      } else if (category) {
         apiUrl += '&category=' + category;
 
         // Titel uit de categorieboom, met de slug als terugval.
@@ -47,9 +75,11 @@ function AlleProductenContent() {
       }
 
       const response = await fetch(apiUrl);
+      if (verzoek !== verzoekRef.current) return;
 
       if (response.ok) {
         const data = await response.json();
+        if (verzoek !== verzoekRef.current) return;
 
         if (Array.isArray(data)) {
           setProducts(data);
@@ -71,70 +101,19 @@ function AlleProductenContent() {
         } else if (data.products) {
           setProducts(data.products);
           setTotalPages(data.totalPages || 1);
+          setTotalResults(data.total || 0);
         }
       } else {
-        // API might be unavailable, using fallback products
-        console.warn('Products API not available, using fallback products');
-        // Use fallback products
-        setProducts(generateFallbackProducts());
-        setTotalPages(1); // Only show 1 page for fallback
+        console.error('Failed to fetch products');
+        toonLaadFout();
       }
     } catch (error) {
-      // Handle error gracefully without alarming console errors
-      console.warn('Using fallback products due to API unavailability');
-      // Use fallback products
-      setProducts(generateFallbackProducts());
-      setTotalPages(1); // Only show 1 page for fallback
+      if (verzoek !== verzoekRef.current) return;
+      console.error('Error fetching products:', error);
+      toonLaadFout();
     } finally {
-      setLoading(false);
+      if (verzoek === verzoekRef.current) setLoading(false);
     }
-  };
-
-  const generateFallbackProducts = (): Product[] => {
-    // Generate fallback products for demonstration
-    const fallbackProducts: Product[] = [];
-    const startId = (currentPage - 1) * PRODUCTS_PER_PAGE;
-
-    const productNames = [
-      'Amethist Cluster', 'Rozenkwarts Hart', 'Bergkristal Punt', 'Labradoriet Steen',
-      'Maansteen Hanger', 'Tijgeroog Bol', 'Lapis Lazuli Raw', 'Seleniet Toren',
-      'Obsidiaan Piramide', 'Aventurijn Tumbled', 'Citrien Geode', 'Fluoriet Octaëder'
-    ];
-
-    for (let i = 0; i < PRODUCTS_PER_PAGE; i++) {
-      const id = startId + i + 1;
-      const isOnSale = Math.random() > 0.5;
-      const basePrice = Math.floor(Math.random() * 50) + 20;
-
-      fallbackProducts.push({
-        id,
-        name: productNames[i % productNames.length] + ' - Premium Kwaliteit',
-        slug: `product-${id}`,
-        permalink: `/product/${id}`,
-        type: 'simple' as const,
-        price: isOnSale ? (basePrice * 0.7).toFixed(2) : basePrice.toFixed(2),
-        regular_price: basePrice.toFixed(2),
-        sale_price: isOnSale ? (basePrice * 0.7).toFixed(2) : '',
-        on_sale: isOnSale,
-        images: [
-          {
-            id: 1,
-            src: '/1.jpeg',
-            alt: productNames[i % productNames.length]
-          }
-        ],
-        categories: [],
-        tags: [],
-        attributes: [],
-        variations: [],
-        short_description: 'Prachtige natuurlijke edelsteen met krachtige energie.',
-        description: 'Deze authentieke edelsteen is zorgvuldig geselecteerd voor zijn unieke eigenschappen.',
-        stock_status: 'instock',
-        stock_quantity: 10
-      } as Product);
-    }
-
-    return fallbackProducts;
   };
 
   // view_item_list fires per rendered page of results, so GA4 can attribute
@@ -157,7 +136,11 @@ function AlleProductenContent() {
       {/* Hero Section */}
       <CollectionHero
         title={collectionTitle}
-        discount="TOT WEL 50% KORTING"
+        discount={
+          search && !loading && !laadFout
+            ? `${totalResults} ${totalResults === 1 ? 'product' : 'producten'} voor "${search}"`
+            : search ? `Zoeken naar "${search}"` : 'TOT WEL 50% KORTING'
+        }
       />
 
       {/* Trust Badges */}
@@ -178,6 +161,11 @@ function AlleProductenContent() {
             currentPage={currentPage}
             totalPages={totalPages}
             onPageChange={handlePageChange}
+            laadFout={laadFout}
+            {...(search && {
+              emptyTitle: `Geen producten gevonden voor "${search}"`,
+              emptyText: 'Probeer een andere of kortere zoekterm, of bekijk al onze producten.',
+            })}
           />
 
           {/* Pagination */}
