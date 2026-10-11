@@ -26,6 +26,7 @@ function AlleProductenContent() {
   const [totalPages, setTotalPages] = useState(1);
   const [collectionTitle, setCollectionTitle] = useState('ALLE PRODUCTEN');
   const [totalResults, setTotalResults] = useState(0);
+  const [laadFout, setLaadFout] = useState(false);
   // Alleen het antwoord op het laatste verzoek telt, ook als een ouder later binnenkomt
   const verzoekRef = useRef(0);
 
@@ -43,9 +44,19 @@ function AlleProductenContent() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [category, search, currentPage]);
 
+  // Geen verzonnen producten tonen als de API faalt: die zijn wel in de
+  // winkelwagen te leggen, maar bestaan niet.
+  const toonLaadFout = () => {
+    setProducts([]);
+    setTotalPages(1);
+    setTotalResults(0);
+    setLaadFout(true);
+  };
+
   const fetchProducts = async () => {
     const verzoek = ++verzoekRef.current;
     setLoading(true);
+    setLaadFout(false);
     try {
       let apiUrl = '/api/products?per_page=' + PRODUCTS_PER_PAGE + '&page=' + currentPage;
 
@@ -92,81 +103,17 @@ function AlleProductenContent() {
           setTotalPages(data.totalPages || 1);
           setTotalResults(data.total || 0);
         }
-      } else if (search) {
-        // Geen nepproducten tonen als zoekresultaat
-        setProducts([]);
-        setTotalPages(1);
-        setTotalResults(0);
       } else {
-        // API might be unavailable, using fallback products
-        console.warn('Products API not available, using fallback products');
-        // Use fallback products
-        setProducts(generateFallbackProducts());
-        setTotalPages(1); // Only show 1 page for fallback
+        console.error('Failed to fetch products');
+        toonLaadFout();
       }
     } catch (error) {
       if (verzoek !== verzoekRef.current) return;
-      if (search) {
-        setProducts([]);
-        setTotalPages(1);
-        setTotalResults(0);
-        return;
-      }
-      // Handle error gracefully without alarming console errors
-      console.warn('Using fallback products due to API unavailability');
-      // Use fallback products
-      setProducts(generateFallbackProducts());
-      setTotalPages(1); // Only show 1 page for fallback
+      console.error('Error fetching products:', error);
+      toonLaadFout();
     } finally {
       if (verzoek === verzoekRef.current) setLoading(false);
     }
-  };
-
-  const generateFallbackProducts = (): Product[] => {
-    // Generate fallback products for demonstration
-    const fallbackProducts: Product[] = [];
-    const startId = (currentPage - 1) * PRODUCTS_PER_PAGE;
-
-    const productNames = [
-      'Amethist Cluster', 'Rozenkwarts Hart', 'Bergkristal Punt', 'Labradoriet Steen',
-      'Maansteen Hanger', 'Tijgeroog Bol', 'Lapis Lazuli Raw', 'Seleniet Toren',
-      'Obsidiaan Piramide', 'Aventurijn Tumbled', 'Citrien Geode', 'Fluoriet Octaëder'
-    ];
-
-    for (let i = 0; i < PRODUCTS_PER_PAGE; i++) {
-      const id = startId + i + 1;
-      const isOnSale = Math.random() > 0.5;
-      const basePrice = Math.floor(Math.random() * 50) + 20;
-
-      fallbackProducts.push({
-        id,
-        name: productNames[i % productNames.length] + ' - Premium Kwaliteit',
-        slug: `product-${id}`,
-        permalink: `/product/${id}`,
-        type: 'simple' as const,
-        price: isOnSale ? (basePrice * 0.7).toFixed(2) : basePrice.toFixed(2),
-        regular_price: basePrice.toFixed(2),
-        sale_price: isOnSale ? (basePrice * 0.7).toFixed(2) : '',
-        on_sale: isOnSale,
-        images: [
-          {
-            id: 1,
-            src: '/1.jpeg',
-            alt: productNames[i % productNames.length]
-          }
-        ],
-        categories: [],
-        tags: [],
-        attributes: [],
-        variations: [],
-        short_description: 'Prachtige natuurlijke edelsteen met krachtige energie.',
-        description: 'Deze authentieke edelsteen is zorgvuldig geselecteerd voor zijn unieke eigenschappen.',
-        stock_status: 'instock',
-        stock_quantity: 10
-      } as Product);
-    }
-
-    return fallbackProducts;
   };
 
   // view_item_list fires per rendered page of results, so GA4 can attribute
@@ -190,7 +137,7 @@ function AlleProductenContent() {
       <CollectionHero
         title={collectionTitle}
         discount={
-          search && !loading
+          search && !loading && !laadFout
             ? `${totalResults} ${totalResults === 1 ? 'product' : 'producten'} voor "${search}"`
             : search ? `Zoeken naar "${search}"` : 'TOT WEL 50% KORTING'
         }
@@ -214,6 +161,7 @@ function AlleProductenContent() {
             currentPage={currentPage}
             totalPages={totalPages}
             onPageChange={handlePageChange}
+            laadFout={laadFout}
             {...(search && {
               emptyTitle: `Geen producten gevonden voor "${search}"`,
               emptyText: 'Probeer een andere of kortere zoekterm, of bekijk al onze producten.',
