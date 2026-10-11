@@ -14,13 +14,17 @@ interface CollectionProductGridProps {
   currentPage: number;
   totalPages: number;
   onPageChange: (page: number) => void;
+  emptyTitle?: string;
+  emptyText?: string;
 }
 
 export default function CollectionProductGrid({
   products,
   currentPage,
   totalPages,
-  onPageChange
+  onPageChange,
+  emptyTitle = 'Producten komen binnenkort',
+  emptyText = 'We werken aan deze collectie. Bekijk ondertussen onze andere producten.'
 }: CollectionProductGridProps) {
   const [hoveredProduct, setHoveredProduct] = useState<number | null>(null);
   const { addToCart } = useCart();
@@ -40,10 +44,10 @@ export default function CollectionProductGrid({
         {products.length === 0 ? (
           <div className="text-center py-16">
             <h3 className="text-2xl font-semibold text-gray-900 mb-3 font-[family-name:var(--font-eb-garamond)]">
-              Producten komen binnenkort
+              {emptyTitle}
             </h3>
             <p className="text-gray-600 font-[family-name:var(--font-eb-garamond)]">
-              We werken aan deze collectie. Bekijk ondertussen onze andere producten.
+              {emptyText}
             </p>
           </div>
         ) : (

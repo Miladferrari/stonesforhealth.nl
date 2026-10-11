@@ -3,8 +3,15 @@
 import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 import { getProductUrl } from '@/lib/slugify';
 import { trackSearch } from '../lib/analytics';
+
+const POPULAIR = ['Amethist', 'Rozenkwarts', 'Bergkristal', 'Chakra'];
+
+const euro = (bedrag: string) => `€${parseFloat(bedrag).toFixed(2).replace('.', ',')}`;
+
+const zoekUrl = (term: string) => `/alle-producten?search=${encodeURIComponent(term.trim())}`;
 
 interface SearchDropdownProps {
   isOpen: boolean;
@@ -14,11 +21,12 @@ interface SearchDropdownProps {
 export default function SearchDropdown({ isOpen, onClose }: SearchDropdownProps) {
   const [query, setQuery] = useState('');
   const [results, setResults] = useState<any[]>([]);
+  const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(false);
   const [searched, setSearched] = useState(false);
-  const searchTimeout = useRef<NodeJS.Timeout | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const router = useRouter();
 
   // Focus input when dropdown opens
   useEffect(() => {
@@ -32,6 +40,7 @@ export default function SearchDropdown({ isOpen, onClose }: SearchDropdownProps)
     if (!isOpen) {
       setQuery('');
       setResults([]);
+      setTotal(0);
       setSearched(false);
     }
   }, [isOpen]);
@@ -59,42 +68,51 @@ export default function SearchDropdown({ isOpen, onClose }: SearchDropdownProps)
 
   // Handle search with debouncing
   useEffect(() => {
-    if (searchTimeout.current) {
-      clearTimeout(searchTimeout.current);
-    }
-
-    if (query.trim().length >= 2) {
-      setLoading(true);
-      searchTimeout.current = setTimeout(async () => {
-        try {
-          const response = await fetch(`/api/search?q=${encodeURIComponent(query)}`);
-          if (response.ok) {
-            const data = await response.json();
-            setResults(data.slice(0, 6)); // Limit to 6 results for cleaner UI
-            setSearched(true);
-            // Fires after the debounce, so GA4 records the term the visitor
-            // settled on rather than every keystroke
-            trackSearch(query.trim());
-          }
-        } catch (error) {
-          console.error('Search error:', error);
-          setResults([]);
-        } finally {
-          setLoading(false);
-        }
-      }, 300); // 300ms debounce
-    } else {
+    if (query.trim().length < 2) {
       setResults([]);
+      setTotal(0);
       setSearched(false);
       setLoading(false);
+      return;
     }
 
-    return () => {
-      if (searchTimeout.current) {
-        clearTimeout(searchTimeout.current);
+    setLoading(true);
+    // Een trager antwoord op een oudere zoekterm mag het nieuwe niet overschrijven
+    const controller = new AbortController();
+    const timeout = setTimeout(async () => {
+      try {
+        const response = await fetch(`/api/search?q=${encodeURIComponent(query.trim())}&per_page=6`, {
+          signal: controller.signal,
+        });
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        const data = await response.json();
+        setResults(data.products || []);
+        setTotal(data.total || 0);
+        setSearched(true);
+        // Fires after the debounce, so GA4 records the term the visitor
+        // settled on rather than every keystroke
+        trackSearch(query.trim());
+      } catch (error) {
+        if (controller.signal.aborted) return;
+        console.error('Search error:', error);
+        setResults([]);
+        setTotal(0);
+        setSearched(true);
       }
+      setLoading(false);
+    }, 300); // 300ms debounce
+
+    return () => {
+      clearTimeout(timeout);
+      controller.abort();
     };
   }, [query]);
+
+  const toonAlleResultaten = () => {
+    if (query.trim().length < 2) return;
+    router.push(zoekUrl(query));
+    onClose();
+  };
 
   // Handle escape key
   useEffect(() => {
@@ -137,13 +155,19 @@ export default function SearchDropdown({ isOpen, onClose }: SearchDropdownProps)
             <input
               ref={inputRef}
               type="text"
+              enterKeyHint="search"
+              aria-label="Zoek naar producten"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') toonAlleResultaten();
+              }}
               placeholder="Zoek naar producten..."
               className="flex-1 text-lg text-gray-900 outline-none placeholder-gray-400 font-[family-name:var(--font-eb-garamond)]"
             />
             <button
               onClick={onClose}
+              aria-label="Zoeken sluiten"
               className="p-1 text-gray-400 hover:text-gray-600 transition-colors"
             >
               <svg
@@ -175,6 +199,17 @@ export default function SearchDropdown({ isOpen, onClose }: SearchDropdownProps)
                 <p className="text-gray-500 font-[family-name:var(--font-eb-garamond)]">
                   Geen producten gevonden voor "{query}"
                 </p>
+                <div className="flex flex-wrap justify-center gap-2 mt-4">
+                  {POPULAIR.map((term) => (
+                    <button
+                      key={term}
+                      onClick={() => setQuery(term)}
+                      className="px-3 py-1 bg-gray-100 hover:bg-gray-200 rounded-full text-sm text-gray-700 transition-colors font-[family-name:var(--font-eb-garamond)]"
+                    >
+                      {term}
+                    </button>
+                  ))}
+                </div>
               </div>
             )}
 
@@ -209,27 +244,30 @@ export default function SearchDropdown({ isOpen, onClose }: SearchDropdownProps)
                         {product.name}
                       </h3>
                       <div className="flex items-center gap-2 mt-0.5">
-                        {product.sale_price ? (
+                        {product.on_sale && product.regular_price ? (
                           <>
-                            <span className="text-[#492c4a] font-semibold text-sm">€{product.sale_price}</span>
-                            <span className="text-gray-400 line-through text-xs">€{product.regular_price}</span>
+                            <span className="text-[#492c4a] font-semibold text-sm">{euro(product.price)}</span>
+                            <span className="text-gray-400 line-through text-xs">{euro(product.regular_price)}</span>
                           </>
                         ) : (
-                          <span className="text-[#492c4a] font-semibold text-sm">€{product.price}</span>
+                          <span className="text-[#492c4a] font-semibold text-sm">{euro(product.price)}</span>
+                        )}
+                        {product.stock_status !== 'instock' && (
+                          <span className="text-xs text-gray-400">Uitverkocht</span>
                         )}
                       </div>
                     </div>
                   </Link>
                 ))}
 
-                {results.length >= 6 && (
+                {total > results.length && (
                   <div className="col-span-full text-center pt-2">
                     <Link
-                      href={`/alle-producten?search=${encodeURIComponent(query)}`}
+                      href={zoekUrl(query)}
                       onClick={onClose}
                       className="text-[#492c4a] hover:text-[#3a2339] text-sm font-medium transition-colors font-[family-name:var(--font-eb-garamond)]"
                     >
-                      Bekijk alle resultaten →
+                      Bekijk alle {total} resultaten →
                     </Link>
                   </div>
                 )}
@@ -248,7 +286,7 @@ export default function SearchDropdown({ isOpen, onClose }: SearchDropdownProps)
               <div className="py-4">
                 <p className="text-sm text-gray-500 mb-3 font-[family-name:var(--font-eb-garamond)]">Populaire zoekopdrachten:</p>
                 <div className="flex flex-wrap gap-2">
-                  {['Amethist', 'Rozenkwarts', 'Bergkristal', 'Chakra'].map((term) => (
+                  {POPULAIR.map((term) => (
                     <button
                       key={term}
                       onClick={() => setQuery(term)}

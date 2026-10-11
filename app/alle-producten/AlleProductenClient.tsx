@@ -16,6 +16,7 @@ const PRODUCTS_PER_PAGE = 12;
 function AlleProductenContent() {
   const searchParams = useSearchParams();
   const category = searchParams?.get('category');
+  const search = searchParams?.get('search')?.trim() || '';
 
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
@@ -24,18 +25,34 @@ function AlleProductenContent() {
   const listTopRef = useRef<HTMLDivElement>(null);
   const [totalPages, setTotalPages] = useState(1);
   const [collectionTitle, setCollectionTitle] = useState('ALLE PRODUCTEN');
+  const [totalResults, setTotalResults] = useState(0);
+  // Alleen het antwoord op het laatste verzoek telt, ook als een ouder later binnenkomt
+  const verzoekRef = useRef(0);
+
+  // Nieuwe zoekterm of categorie: terug naar pagina 1. Tijdens het renderen,
+  // zodat er niet eerst nog een verzoek voor de oude pagina uitgaat.
+  const filterKey = `${category || ''}|${search}`;
+  const [paginaFilter, setPaginaFilter] = useState(filterKey);
+  if (paginaFilter !== filterKey) {
+    setPaginaFilter(filterKey);
+    setCurrentPage(1);
+  }
 
   useEffect(() => {
     fetchProducts();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [category, currentPage]);
+  }, [category, search, currentPage]);
 
   const fetchProducts = async () => {
+    const verzoek = ++verzoekRef.current;
     setLoading(true);
     try {
       let apiUrl = '/api/products?per_page=' + PRODUCTS_PER_PAGE + '&page=' + currentPage;
 
-      if (category) {
+      if (search) {
+        apiUrl = `/api/search?q=${encodeURIComponent(search)}&per_page=${PRODUCTS_PER_PAGE}&page=${currentPage}`;
+        setCollectionTitle('ZOEKRESULTATEN');
+      } else if (category) {
         apiUrl += '&category=' + category;
 
         // Titel uit de categorieboom, met de slug als terugval.
@@ -47,9 +64,11 @@ function AlleProductenContent() {
       }
 
       const response = await fetch(apiUrl);
+      if (verzoek !== verzoekRef.current) return;
 
       if (response.ok) {
         const data = await response.json();
+        if (verzoek !== verzoekRef.current) return;
 
         if (Array.isArray(data)) {
           setProducts(data);
@@ -71,7 +90,13 @@ function AlleProductenContent() {
         } else if (data.products) {
           setProducts(data.products);
           setTotalPages(data.totalPages || 1);
+          setTotalResults(data.total || 0);
         }
+      } else if (search) {
+        // Geen nepproducten tonen als zoekresultaat
+        setProducts([]);
+        setTotalPages(1);
+        setTotalResults(0);
       } else {
         // API might be unavailable, using fallback products
         console.warn('Products API not available, using fallback products');
@@ -80,13 +105,20 @@ function AlleProductenContent() {
         setTotalPages(1); // Only show 1 page for fallback
       }
     } catch (error) {
+      if (verzoek !== verzoekRef.current) return;
+      if (search) {
+        setProducts([]);
+        setTotalPages(1);
+        setTotalResults(0);
+        return;
+      }
       // Handle error gracefully without alarming console errors
       console.warn('Using fallback products due to API unavailability');
       // Use fallback products
       setProducts(generateFallbackProducts());
       setTotalPages(1); // Only show 1 page for fallback
     } finally {
-      setLoading(false);
+      if (verzoek === verzoekRef.current) setLoading(false);
     }
   };
 
@@ -157,7 +189,11 @@ function AlleProductenContent() {
       {/* Hero Section */}
       <CollectionHero
         title={collectionTitle}
-        discount="TOT WEL 50% KORTING"
+        discount={
+          search && !loading
+            ? `${totalResults} ${totalResults === 1 ? 'product' : 'producten'} voor "${search}"`
+            : search ? `Zoeken naar "${search}"` : 'TOT WEL 50% KORTING'
+        }
       />
 
       {/* Trust Badges */}
@@ -178,6 +214,10 @@ function AlleProductenContent() {
             currentPage={currentPage}
             totalPages={totalPages}
             onPageChange={handlePageChange}
+            {...(search && {
+              emptyTitle: `Geen producten gevonden voor "${search}"`,
+              emptyText: 'Probeer een andere of kortere zoekterm, of bekijk al onze producten.',
+            })}
           />
 
           {/* Pagination */}
