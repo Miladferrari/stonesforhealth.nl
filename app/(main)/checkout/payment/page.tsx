@@ -513,6 +513,53 @@ function PaymentPageContent() {
                     </div>
                   )}
                 </div>
+
+                {/* Klarna */}
+                <div>
+                  <label className={`block p-4 border rounded-lg cursor-pointer transition-all ${selectedPaymentMethod === 'klarna' ? 'border-[#492c4a] bg-[#492c4a]/5' : 'border-[#E8DCC6] hover:border-[#492c4a]/50'}`}>
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center flex-1">
+                        <input
+                          type="radio"
+                          name="paymentMethod"
+                          value="klarna"
+                          checked={selectedPaymentMethod === 'klarna'}
+                          onChange={(e) => handlePaymentMethodChange(e.target.value)}
+                          className="mr-3 text-[#492c4a] focus:ring-[#492c4a]"
+                        />
+                        <div className="flex-1">
+                          <p className="font-medium text-[#2D2D2D] font-[family-name:var(--font-eb-garamond)]">Klarna</p>
+                          <p className="text-sm text-gray-600 mt-1 font-[family-name:var(--font-eb-garamond)]">Achteraf betalen of in termijnen</p>
+                        </div>
+                      </div>
+                    </div>
+                  </label>
+                  {/* Show payment form for Klarna when selected */}
+                  {selectedPaymentMethod === 'klarna' && showPaymentForm && clientSecret && (
+                    <div className="mt-3 ml-4 mr-4 mb-2">
+                      <div className="p-4 bg-gray-50 border border-gray-200 rounded-lg">
+                        <EmbeddedPaymentForm
+                          clientSecret={clientSecret}
+                          orderId={orderId!}
+                          orderKey={orderKey!}
+                          paymentMethod="klarna"
+                          onSuccess={handlePaymentSuccess}
+                          onError={handlePaymentError}
+                          customerName={(() => {
+                            const orderData = sessionStorage.getItem('orderData');
+                            const parsedOrderData = orderData ? JSON.parse(orderData) : null;
+                            return `${parsedOrderData?.formData?.firstName || ''} ${parsedOrderData?.formData?.lastName || ''}`.trim();
+                          })()}
+                          customerEmail={(() => {
+                            const orderData = sessionStorage.getItem('orderData');
+                            const parsedOrderData = orderData ? JSON.parse(orderData) : null;
+                            return parsedOrderData?.formData?.email || '';
+                          })()}
+                        />
+                      </div>
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
 

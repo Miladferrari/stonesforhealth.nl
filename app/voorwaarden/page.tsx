@@ -142,7 +142,7 @@ export default function VoorwaardenPage() {
             <h2 className="text-2xl font-bold text-gray-900 mb-4">Artikel 11 - Betaling</h2>
             <ol className="list-decimal pl-6 text-gray-700 space-y-2">
               <li>Voor zover niet anders is bepaald in de overeenkomst of aanvullende voorwaarden, dienen de door de consument verschuldigde bedragen te worden voldaan bij het plaatsen van de bestelling.</li>
-              <li>De consument kan betalen via de aangeboden betaalmethoden: iDEAL, creditcard (Visa/Mastercard), Bancontact en andere door Stripe ondersteunde betaalmethoden.</li>
+              <li>De consument kan betalen via de aangeboden betaalmethoden: iDEAL, creditcard (Visa/Mastercard), Bancontact, Klarna en andere door Stripe ondersteunde betaalmethoden.</li>
               <li>De consument heeft de plicht om onjuistheden in verstrekte of vermelde betaalgegevens onverwijld aan de ondernemer te melden.</li>
               <li>Indien de betaling niet kan worden geïncasseerd, behoudt de ondernemer zich het recht voor de bestelling te annuleren.</li>
             </ol>
