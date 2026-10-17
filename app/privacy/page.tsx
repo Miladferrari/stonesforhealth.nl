@@ -102,7 +102,7 @@ export default function PrivacyPage() {
             </p>
             <ul className="list-disc pl-6 text-gray-700 space-y-2">
               <li>Bezorgdiensten (PostNL, DHL)</li>
-              <li>Betalingsproviders (Stripe, iDEAL)</li>
+              <li>Betalingsproviders (Stripe, iDEAL, Klarna)</li>
               <li>E-mailmarketingplatforms</li>
               <li>Hosting- en websitediensten</li>
               <li>Boekhoudsoftware</li>

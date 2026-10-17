@@ -36,7 +36,7 @@ const faqData: FAQItem[] = [
   {
     category: 'Bestellen & Betalen',
     question: 'Hoe kan ik betalen?',
-    answer: 'Wij accepteren verschillende veilige betaalmethoden: iDEAL (Nederland), Bancontact (België), Visa, Mastercard en andere creditcards. Alle betalingen worden veilig verwerkt via Stripe, een van de meest betrouwbare betalingsplatformen ter wereld.'
+    answer: 'Wij accepteren verschillende veilige betaalmethoden: iDEAL (Nederland), Bancontact (België), Klarna (achteraf betalen of in termijnen), Visa, Mastercard en andere creditcards. Alle betalingen worden veilig verwerkt via Stripe, een van de meest betrouwbare betalingsplatformen ter wereld.'
   },
   {
     category: 'Bestellen & Betalen',

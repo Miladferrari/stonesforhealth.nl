@@ -25,7 +25,7 @@ export interface StripePaymentFormHandle {
   submit: () => void;
 }
 
-type PaymentMethod = 'ideal' | 'card' | 'bancontact';
+type PaymentMethod = 'ideal' | 'card' | 'bancontact' | 'klarna';
 
 interface PaymentMethodOption {
   id: PaymentMethod;
@@ -55,6 +55,13 @@ const paymentMethods: PaymentMethodOption[] = [
     icon: '/images/bancontact.svg',
     iconType: 'image',
     iconBg: 'bg-purple-50'
+  },
+  {
+    id: 'klarna',
+    name: 'Klarna',
+    icon: '/images/klarna.png',
+    iconType: 'image',
+    iconBg: 'bg-pink-50'
   }
 ];
 
@@ -207,7 +214,7 @@ const PaymentForm = forwardRef<StripePaymentFormHandle, StripePaymentFormProps>(
               radios: false,
               spacedAccordionItems: true
             },
-            paymentMethodOrder: ['ideal', 'card', 'bancontact']
+            paymentMethodOrder: ['ideal', 'card', 'bancontact', 'klarna']
           }}
         />
       </div>
