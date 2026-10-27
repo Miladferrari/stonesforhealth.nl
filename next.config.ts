@@ -96,6 +96,28 @@ const nextConfig: NextConfig = {
       // Dutch route was replaced by /collections
       { source: '/collectie/:slug', destination: '/collections/:slug', permanent: true },
       { source: '/collectie', destination: '/collections', permanent: true },
+
+      // --- Oude site (Search Console: 29x "Not found (404)", okt 2026) ---
+      // Artikelen van de oude site (.htm) naar het best passende blog
+      { source: '/nl/shilajit-de-nieuwste-ontdekkingen-over-dit-oude-natuurwonder.htm', destination: '/blog/masters-of-shilajit-himalaya', permanent: true },
+      { source: '/roze-amethist-de-zachte-kracht-van-kristallijne-liefde-.htm', destination: '/blog/amethist-soorten-werking-spirituele-tips', permanent: true },
+      { source: '/agaat-soorten-kleuren.htm', destination: '/blog/agaat-betekenis-soorten-kleuren-werking', permanent: true },
+      { source: '/nl/steurmaan-augustus-2025-betekenis-numerologie-spirituele-inzichten.htm', destination: '/blog', permanent: true },
+      { source: '/de/blogs/:path*', destination: '/blog', permanent: true },
+      // Verwijderde producten naar de vervanger
+      { source: '/product/s4h-tijgeroog-rood-edelstenen-armband-8-mm-kralen-size-18-cm', destination: '/product/s4h-rode-tijgeroog-armband-bescherming-innerlijke-kracht-focus-spirituele-edelsteen-8mm-energie-armband-voor-zelfvertrouwen-leiderschap-aarding', permanent: true },
+      { source: '/product/s4h-citrien-armband-set-inclusief-kaart-losse-citrien-edelsteen', destination: '/product/s4h-citrien-armband-set-8-mm-kralen-18-21-cm-met-ruwe-citrien-edelsteen-informatiekaart-edelstenen-cadeauset', permanent: true },
+      { source: '/product/s4h-edelsteen-armband-8mm-stabilize-emotions-emotionele-balans-rust', destination: '/product/s4h-edelstenen-armband-rust-balans-8-mm-18-cm', permanent: true },
+      // Overige oude artikel- en productpagina's (.htm = artikel, .html = product)
+      { source: '/:path*.htm', destination: '/blog', permanent: true },
+      { source: '/:path*.html', destination: '/alle-producten', permanent: true },
+      // Oude taal- en home-routes bestaan niet meer; de shop is alleen Nederlands
+      { source: '/home', destination: '/', permanent: true },
+      { source: '/:lang(nl|en|de)', destination: '/', permanent: true },
+      { source: '/:lang(nl|en|de)/home', destination: '/', permanent: true },
+      { source: '/:lang(nl|en|de)/:path*', destination: '/', permanent: true },
+      // Testpagina die nooit online had mogen staan
+      { source: '/test-store-api', destination: '/', permanent: true },
     ];
   },
 

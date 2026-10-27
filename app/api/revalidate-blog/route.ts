@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { revalidatePath, revalidateTag } from 'next/cache';
+import { SITE_URL, submitToIndexNow } from '@/lib/indexnow';
 
 // Webhook die WordPress aanroept zodra de klant een bericht publiceert of
 // bijwerkt. Zonder dit verschijnt een nieuwe blog pas na de ISR-termijn van
@@ -27,6 +28,11 @@ function refresh(slug: string | null) {
   revalidatePath('/blog');
   revalidatePath('/sitemap.xml');
   if (slug) revalidatePath(`/blog/${slug}`);
+
+  // Bing meteen laten weten dat er een (nieuw) bericht is; mag op de
+  // achtergrond en mag nooit de webhook laten falen
+  const changed = slug ? [`${SITE_URL}/blog/${slug}`, `${SITE_URL}/blog`] : [`${SITE_URL}/blog`];
+  submitToIndexNow(changed).catch((error) => console.warn('[revalidate-blog] IndexNow mislukt:', error));
 }
 
 export async function POST(request: NextRequest) {
