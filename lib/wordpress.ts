@@ -186,3 +186,30 @@ export async function getPostSlugs(): Promise<Array<{ slug: string; modifiedIso:
     .filter((p) => p.slug)
     .map((p) => ({ slug: p.slug, modifiedIso: p.modified }));
 }
+
+export interface CategorySeo {
+  title: string | null;
+  description: string | null;
+}
+
+// Yoast-titel en -omschrijving van een productcategorie. Yoast zet die als
+// `yoast_head_json` op het publieke product_cat-endpoint, dus geen sleutel nodig.
+export async function getCategorySeo(slug: string): Promise<CategorySeo | null> {
+  const base = apiBase();
+  if (!base || !slug) return null;
+
+  const response = await fetch(
+    `${base}/product_cat?slug=${encodeURIComponent(slug)}&_fields=slug,yoast_head_json`,
+    { next: { revalidate: 3600, tags: ['categories'] } },
+  );
+  if (!response.ok) return null;
+
+  const rows: Array<{ yoast_head_json?: { title?: string; description?: string } }> = await response.json();
+  const yoast = rows[0]?.yoast_head_json;
+  if (!yoast) return null;
+
+  return {
+    title: yoast.title?.trim() || null,
+    description: yoast.description?.trim() || null,
+  };
+}

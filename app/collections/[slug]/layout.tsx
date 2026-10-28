@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { DISPLAY_NAMES, resolveSlug } from '@/app/lib/categoryMenu';
 import { woocommerce } from '@/lib/woocommerce';
+import { getCategorySeo } from '@/lib/wordpress';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -31,16 +32,27 @@ export async function generateMetadata({ params }: LayoutProps): Promise<Metadat
 
   const fallbackDescription = `Ontdek onze ${name.toLowerCase()} bij Stones for Health. 100% authentieke edelstenen en kristallen, met zorg geselecteerd en snel in huis.`;
 
+  let title = `${name} kopen | Stones for Health`;
+  let ogTitle = `${name} | Stones for Health`;
   let description = fallbackDescription;
   let image: string | undefined;
 
   try {
-    const categories = await woocommerce.getCategories({ per_page: 100 });
+    const [categories, seo] = await Promise.all([
+      woocommerce.getCategories({ per_page: 100 }),
+      getCategorySeo(resolved).catch(() => null),
+    ]);
     const category = categories.find((c) => c.slug === resolved || c.slug === slug);
     if (category) {
       description = toDescription(category.description || '', fallbackDescription);
       image = category.image?.src;
     }
+    // Wat Arthur in Yoast bij de categorie invult, gaat voor op de terugval
+    if (seo?.title) {
+      title = seo.title;
+      ogTitle = seo.title;
+    }
+    if (seo?.description) description = seo.description;
   } catch {
     // Woo being unreachable should not block the page from rendering
   }
@@ -48,11 +60,11 @@ export async function generateMetadata({ params }: LayoutProps): Promise<Metadat
   const canonical = `/collections/${slug}`;
 
   return {
-    title: `${name} kopen | Stones for Health`,
+    title,
     description,
     alternates: { canonical },
     openGraph: {
-      title: `${name} | Stones for Health`,
+      title: ogTitle,
       description,
       url: canonical,
       type: 'website',

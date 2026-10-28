@@ -12,7 +12,7 @@ export const revalidate = 60;
 
 export const metadata: Metadata = {
   title: 'Edelstenen & Kristallen Kopen | Authentiek & Ethisch | StonesForHealth',
-  description: `Koop authentieke edelstenen en kristallen bij StonesForHealth ✓ 100% Ethisch Gewonnen ✓ Gratis Verzending ${bedragKort(GRATIS_VANAF)}+ ✓ 30 Dagen Retour ✓ 4000+ Tevreden Klanten`,
+  description: `Koop authentieke edelstenen en kristallen bij StonesForHealth ✓ 100% Ethisch Gewonnen ✓ Gratis Verzending ${bedragKort(GRATIS_VANAF)}+ ✓ 30 Dagen Retour`,
   keywords: [
     'edelstenen kopen',
     'kristallen kopen',
@@ -354,70 +354,6 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* Customer Reviews Slider */}
-      <section className="py-16 bg-[#f7f3ec]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl lg:text-4xl font-bold text-[#492c4a] text-center mb-10 font-[family-name:var(--font-eb-garamond)]">
-            Klanten zijn dol op onze edelstenen!
-          </h2>
-
-          {/* Floating review images - Infinite scroll */}
-          <div className="relative overflow-hidden">
-            <div className="flex gap-4 animate-scroll">
-              <div className="w-56 h-80 flex-shrink-0 relative">
-                <Image alt="Klant review foto - Amethist edelsteen healing ervaring" className="object-cover rounded-lg" src="/review1.png" fill sizes="224px" />
-              </div>
-              <div className="w-56 h-80 flex-shrink-0 relative">
-                <Image alt="Instagram klantfoto - Kristallen collectie display Stonesforhealth" className="object-cover rounded-lg" src="/review2.png" fill sizes="224px" />
-              </div>
-              <div className="w-56 h-80 flex-shrink-0 relative">
-                <Image alt="Customer testimonial - Healing stenen meditatie setup" className="object-cover rounded-lg" src="/review3.png" fill sizes="224px" />
-              </div>
-              <div className="w-56 h-80 flex-shrink-0 relative">
-                <Image alt="Meditatie met kristallen - Klant ervaring foto Stonesforhealth" className="object-cover rounded-lg" src="/review4.png" fill sizes="224px" />
-              </div>
-              <div className="w-56 h-80 flex-shrink-0 relative">
-                <Image alt="Chakra stenen arrangement - 7 chakra kristallen testimonial" className="object-cover rounded-lg" src="/review5.png" fill sizes="224px" />
-              </div>
-              <div className="w-56 h-80 flex-shrink-0 relative">
-                <Image alt="Edelsteen sieraden collectie - Klant review Stonesforhealth" className="object-cover rounded-lg" src="/review6.png" fill sizes="224px" />
-              </div>
-              <div className="w-56 h-80 flex-shrink-0 relative">
-                <Image alt="Kristallen energie healing - Customer experience foto" className="object-cover rounded-lg" src="/review7.png" fill sizes="224px" />
-              </div>
-              <div className="w-56 h-80 flex-shrink-0 relative">
-                <Image alt="Healing kristallen testimonial - Rozenkwarts bergkristal klant foto" className="object-cover rounded-lg" src="/review8.png" fill sizes="224px" />
-              </div>
-              {/* Duplicate set for seamless loop */}
-              <div className="w-56 h-80 flex-shrink-0 relative">
-                <Image alt="Klant review foto - Amethist edelsteen healing ervaring" className="object-cover rounded-lg" src="/review1.png" fill sizes="224px" />
-              </div>
-              <div className="w-56 h-80 flex-shrink-0 relative">
-                <Image alt="Instagram klantfoto - Kristallen collectie display Stonesforhealth" className="object-cover rounded-lg" src="/review2.png" fill sizes="224px" />
-              </div>
-              <div className="w-56 h-80 flex-shrink-0 relative">
-                <Image alt="Customer testimonial - Healing stenen meditatie setup" className="object-cover rounded-lg" src="/review3.png" fill sizes="224px" />
-              </div>
-              <div className="w-56 h-80 flex-shrink-0 relative">
-                <Image alt="Meditatie met kristallen - Klant ervaring foto Stonesforhealth" className="object-cover rounded-lg" src="/review4.png" fill sizes="224px" />
-              </div>
-              <div className="w-56 h-80 flex-shrink-0 relative">
-                <Image alt="Chakra stenen arrangement - 7 chakra kristallen testimonial" className="object-cover rounded-lg" src="/review5.png" fill sizes="224px" />
-              </div>
-              <div className="w-56 h-80 flex-shrink-0 relative">
-                <Image alt="Edelsteen sieraden collectie - Klant review Stonesforhealth" className="object-cover rounded-lg" src="/review6.png" fill sizes="224px" />
-              </div>
-              <div className="w-56 h-80 flex-shrink-0 relative">
-                <Image alt="Kristallen energie healing - Customer experience foto" className="object-cover rounded-lg" src="/review7.png" fill sizes="224px" />
-              </div>
-              <div className="w-56 h-80 flex-shrink-0 relative">
-                <Image alt="Healing kristallen testimonial - Rozenkwarts bergkristal klant foto" className="object-cover rounded-lg" src="/review8.png" fill sizes="224px" />
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* Wave Transition */}
       <div className="relative -mt-8 pointer-events-none">
         <svg viewBox="0 0 1440 80" fill="none" className="w-full h-20">
@@ -460,9 +396,6 @@ export default async function Home() {
             <h2 className="text-4xl lg:text-5xl font-bold text-white mb-6 font-[family-name:var(--font-eb-garamond)]">
               Ontdek Jouw Perfecte Kristal in <span className="text-yellow-300">3 Minuten</span>
             </h2>
-            <p className="text-xl text-white/90 max-w-3xl mx-auto mb-6 font-[family-name:var(--font-eb-garamond)]">
-              Al <span className="font-bold text-yellow-300">2.347 mensen</span> vonden deze maand hun ideale kristal in onze winkel
-            </p>
             
             {/* Trust badges */}
             <div className="flex flex-wrap justify-center gap-6 text-sm text-white/80">
@@ -556,33 +489,9 @@ export default async function Home() {
               <div className="absolute -top-8 -right-8 w-32 h-32 bg-white/5 rounded-full blur-3xl"></div>
               
               <div className="text-center mb-6">
-                {/* Trust indicator */}
-                <div className="inline-flex items-center gap-2 bg-white/30 backdrop-blur px-5 py-2.5 rounded-full text-base mb-6">
-                  <span className="text-white font-bold">Al 2.347 tevreden gebruikers deze maand</span>
-                </div>
-                
                 <h3 className="text-3xl font-bold text-white mb-4 font-[family-name:var(--font-eb-garamond)]">
                   Start Jouw Kristalreis
                 </h3>
-                
-                {/* Social proof */}
-                <div className="flex justify-center items-center gap-4 mb-6">
-                  <div className="flex -space-x-2">
-                    <img src="https://i.pravatar.cc/32?img=1" alt="Verified Stonesforhealth klant - 5 sterren testimonial" className="w-8 h-8 rounded-full border-2 border-white" />
-                    <img src="https://i.pravatar.cc/32?img=5" alt="Tevreden klant review avatar - Kristallen webshop" className="w-8 h-8 rounded-full border-2 border-white" />
-                    <img src="https://i.pravatar.cc/32?img=9" alt="Customer testimonial photo - Edelstenen ervaring" className="w-8 h-8 rounded-full border-2 border-white" />
-                  </div>
-                  <div className="text-left">
-                    <div className="flex items-center gap-1">
-                      {[...Array(5)].map((_, i) => (
-                        <svg key={i} className="w-5 h-5 text-yellow-400 fill-current" viewBox="0 0 20 20">
-                          <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                        </svg>
-                      ))}
-                    </div>
-                    <span className="text-sm text-white font-bold">4.9 uit 4000+ klanten</span>
-                  </div>
-                </div>
               </div>
 
               {/* Key benefits */}
@@ -604,17 +513,6 @@ export default async function Home() {
                     <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                   </svg>
                   <span className="text-base text-white font-semibold font-[family-name:var(--font-eb-garamond)]">Wetenschappelijk onderbouwd</span>
-                </div>
-              </div>
-
-              {/* Testimonial */}
-              <div className="bg-white/20 backdrop-blur rounded-xl p-5 mb-6 border border-white/30">
-                <p className="text-base text-white font-medium italic mb-3">
-                  "De winkel heeft een geweldige selectie kristallen. Ik vond precies wat ik zocht en voel me nu veel rustiger."
-                </p>
-                <div className="flex items-center gap-2">
-                  <img src="https://i.pravatar.cc/24?img=3" alt="Sarah K - Verified customer testimonial Stonesforhealth" className="w-6 h-6 rounded-full" />
-                  <span className="text-sm text-white/90 font-bold">Sarah K. - Verified</span>
                 </div>
               </div>
 

@@ -13,60 +13,6 @@ interface HikeGemstoneProductPageV2Props {
   relatedProducts?: Product[];
 }
 
-// Legacy customer reviews data (will be replaced by dynamic generation)
-const legacyCustomerReviews = [
-  {
-    id: 1,
-    name: "Sarah van der Meer",
-    location: "Amsterdam",
-    rating: 5,
-    date: "2 weken geleden",
-    verified: true,
-    text: "Deze amethist heeft mijn leven veranderd! Ik voel me rustiger en slaap eindelijk weer door.",
-    image: "/images/review-1.jpg"
-  },
-  {
-    id: 2,
-    name: "Mark Jansen",
-    location: "Rotterdam",
-    rating: 5,
-    date: "1 maand geleden",
-    verified: true,
-    text: "Prachtige kwaliteit en de energie is direct voelbaar. Aanrader!",
-    image: "/images/review-2.jpg"
-  },
-  {
-    id: 3,
-    name: "Lisa de Boer",
-    location: "Utrecht",
-    rating: 4,
-    date: "3 weken geleden",
-    verified: true,
-    text: "Mijn angsten zijn verminderd sinds ik deze steen draag. Heel tevreden!",
-    image: "/images/review-3.jpg"
-  },
-  {
-    id: 4,
-    name: "Peter Bakker",
-    location: "Den Haag",
-    rating: 5,
-    date: "1 week geleden",
-    verified: true,
-    text: "Gebruik hem tijdens meditatie. De kracht is fenomenaal.",
-    image: "/images/review-4.jpg"
-  },
-  {
-    id: 5,
-    name: "Emma Visser",
-    location: "Eindhoven",
-    rating: 4,
-    date: "2 maanden geleden",
-    verified: true,
-    text: "Mooiste steen uit mijn collectie. Super blij mee!",
-    image: "/images/review-5.jpg"
-  }
-];
-
 export default function HikeGemstoneProductPageV2({ product, relatedProducts = [] }: HikeGemstoneProductPageV2Props) {
   const { addToCart, items } = useCart();
   const [selectedImage, setSelectedImage] = useState(0);
@@ -744,25 +690,6 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
 
           {/* Right: Product details sidebar */}
           <div className="space-y-6">
-            {/* Customer satisfaction banner */}
-            <div className="flex items-center bg-[#ECECEC] p-3 rounded-lg">
-              <div className="flex -space-x-2">
-                <img
-                  src="https://i.pravatar.cc/150?img=5"
-                  alt="Maria"
-                  className="w-10 h-10 rounded-full border-2 border-white object-cover shadow-sm"
-                />
-                <img
-                  src="https://i.pravatar.cc/150?img=12"
-                  alt="Sophie"
-                  className="w-10 h-10 rounded-full border-2 border-white object-cover shadow-sm"
-                />
-              </div>
-              <div className="text-base md:text-lg ml-4 text-gray-700 font-[family-name:var(--font-eb-garamond)]">
-                Sluit je aan bij 4000+ tevreden klanten - beoordeeld met 4.6/5
-              </div>
-            </div>
-
             {/* Product title */}
             <div>
               <h1 className="text-4xl font-bold text-gray-900 mb-3 font-[family-name:var(--font-eb-garamond)]">
@@ -955,7 +882,7 @@ export default function HikeGemstoneProductPageV2({ product, relatedProducts = [
                     <path d="M0 9C0 4.02944 4.02944 0 9 0C13.9706 0 18 4.02944 18 9C18 13.9706 13.9706 18 9 18C4.02944 18 0 13.9706 0 9Z" fill="currentColor"></path>
                     <path d="M5 8.8L7.62937 11.6L13 6" stroke="#ffffff" fill="none"></path>
                   </svg>
-                  <span className="text-base md:text-lg text-gray-700 font-[family-name:var(--font-eb-garamond)]">Meer dan 4.000 tevreden klanten</span>
+                  <span className="text-base md:text-lg text-gray-700 font-[family-name:var(--font-eb-garamond)]">Ethisch gewonnen en met zorg geselecteerd</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <svg role="presentation" focusable="false" strokeWidth="2" width="24" height="24" className="text-green-600 flex-shrink-0" style={{ "--icon-height": "24px" } as React.CSSProperties} viewBox="0 0 18 18">

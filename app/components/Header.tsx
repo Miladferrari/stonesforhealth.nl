@@ -88,7 +88,7 @@ const Header = memo(function Header() {
           // Filter main categories only (parent === 0, exclude uncategorized)
           // and put them in the order defined by the category tree.
           const mainCategories = sortMainCategories(
-            data.filter((cat: any) => cat.parent === 0 && cat.slug !== 'uncategorized')
+            data.filter((cat: any) => cat.parent === 0 && cat.slug !== 'uncategorized' && (cat.count ?? 1) > 0)
           );
 
           console.log('[Header] Main categories:', mainCategories.length, mainCategories.map((c: any) => c.name));
@@ -147,9 +147,7 @@ const Header = memo(function Header() {
     }, 200);
   };
 
-  // Get subcategories for a parent category, in the order of the category tree.
-  // Categories that belong under two parents (e.g. "Armband Sets" under both
-  // Armbanden and Cadeaus) are shown under both, linking to the same page.
+  // Subcategorieën zoals ze in WooCommerce onder deze categorie hangen.
   const getSubcategories = (category: any) => {
     if (!category?.slug) return [];
     return subcategoriesFor(category.slug, allCategories);

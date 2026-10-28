@@ -7,7 +7,7 @@ export const metadata: Metadata = {
   keywords: 'bestseller edelstenen, populaire kristallen, meest verkocht, amethist, rozenkwarts',
   openGraph: {
     title: 'Bestsellers | StonesForHealth',
-    description: 'Onze meest populaire edelstenen en kristallen, geliefd door 4000+ klanten.',
+    description: 'Onze meest populaire edelstenen en kristallen.',
   },
   alternates: {
     canonical: 'https://www.stonesforhealth.nl/bestsellers'

@@ -8,7 +8,10 @@ export interface MenuSection {
   children: string[];
 }
 
-/** Hoofdcategorieën in menuvolgorde, elk met zijn subcategorieën. */
+/**
+ * Gewenste volgorde van subcategorieën per hoofdcategorie. Alleen nog een
+ * sorteerhulp: welke subcategorie waar hangt, bepaalt WooCommerce.
+ */
 export const MENU: MenuSection[] = [
   {
     "slug": "edelstenen-kristallen",
@@ -280,32 +283,26 @@ export function sortMainCategories<T extends { slug: string; name: string }>(cat
 }
 
 /**
- * Subcategorieën van een hoofdcategorie in menuvolgorde. Neemt ook categorieën
- * mee die in WooCommerce onder een andere ouder hangen maar hier wel getoond
- * moeten worden (zoals "Armband Sets" onder zowel Armbanden als Cadeaus).
+ * Subcategorieën van een categorie, zoals ze in WooCommerce onder die
+ * categorie hangen (veld `parent`). WooCommerce is leidend: wat Arthur daar
+ * verschuift, verschuift hier mee. De volgorde uit MENU wordt alleen nog
+ * gebruikt om bekende subcategorieën te sorteren; onbekende komen daarna op
+ * naam. Lege categorieën (0 producten) blijven uit het menu.
  */
-export function subcategoriesFor<T extends { id: number; slug: string; parent: number }>(
+export function subcategoriesFor<T extends { id: number; slug: string; parent: number; name?: string; count?: number }>(
   parentSlug: string,
   allCategories: T[],
 ): T[] {
-  const section = MENU.find(s => s.slug === parentSlug);
-  const bySlug = new Map(allCategories.map(c => [c.slug, c]));
+  const parent = allCategories.find(c => c.slug === parentSlug);
+  if (!parent) return [];
 
-  if (!section) {
-    const parent = bySlug.get(parentSlug);
-    return parent ? allCategories.filter(c => c.parent === parent.id) : [];
-  }
+  const order = MENU.find(s => s.slug === parentSlug)?.children ?? [];
+  const rank = (c: T) => {
+    const i = order.indexOf(c.slug);
+    return i === -1 ? Number.MAX_SAFE_INTEGER : i;
+  };
 
-  const ordered = section.children.map(slug => bySlug.get(slug)).filter((c): c is T => Boolean(c));
-
-  // Subcategorieën die in WooCommerce zijn toegevoegd maar nog niet in de boom
-  // staan, alsnog tonen zodat ze niet onzichtbaar blijven.
-  const parent = bySlug.get(parentSlug);
-  if (parent) {
-    const shown = new Set(ordered.map(c => c.id));
-    for (const c of allCategories) {
-      if (c.parent === parent.id && !shown.has(c.id)) ordered.push(c);
-    }
-  }
-  return ordered;
+  return allCategories
+    .filter(c => c.parent === parent.id && (c.count ?? 1) > 0)
+    .sort((a, b) => rank(a) - rank(b) || (a.name || a.slug).localeCompare(b.name || b.slug));
 }

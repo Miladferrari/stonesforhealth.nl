@@ -5,7 +5,7 @@ import { GRATIS_VANAF, bedragKort } from '@/lib/shippingConfig';
 // Server component - handles SEO metadata
 export const metadata: Metadata = {
   title: 'Bestsellers - Meest Populaire Edelstenen | StonesForHealth',
-  description: `Ontdek onze bestselling edelstenen en kristallen. De meest geliefde en effectieve stenen, gekozen door duizenden tevreden klanten. Gratis verzending vanaf ${bedragKort(GRATIS_VANAF)}.`,
+  description: `Ontdek onze bestselling edelstenen en kristallen. Onze meest gekozen stenen. Gratis verzending vanaf ${bedragKort(GRATIS_VANAF)}.`,
   keywords: [
     'bestseller edelstenen',
     'populaire kristallen',

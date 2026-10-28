@@ -10,7 +10,7 @@ import CollectionPagination from '@/app/components/collection/CollectionPaginati
 import { Product } from '@/lib/woocommerce';
 import { scrollToTopOfList } from '@/app/lib/scrollToTopOfList';
 import { trackViewItemList, toAnalyticsItem } from '@/app/lib/analytics';
-import { subcategoriesFor, MENU, DISPLAY_NAMES } from '@/app/lib/categoryMenu';
+import { subcategoriesFor, DISPLAY_NAMES } from '@/app/lib/categoryMenu';
 
 const PRODUCTS_PER_PAGE = 12;
 
@@ -56,27 +56,18 @@ export default function CollectionPage() {
   const checkIfParentCategory = async () => {
     setLoading(true);
     try {
-      // Een hoofdcategorie uit de categorieboom toont zijn subcategorieën in
-      // plaats van een productlijst. Welke dat zijn, staat in de menuconfig,
-      // dus dit werkt voor elke categorie die we aanmaken.
-      const isParent = MENU.some(
-        (section) => section.slug === slug.toLowerCase() && section.children.length > 0
-      );
+      // Een categorie met subcategorieën in WooCommerce toont die
+      // subcategorieën in plaats van een productlijst. WooCommerce is leidend.
+      const categoriesResponse = await fetch('/api/categories');
+      const allCategories: Category[] = await categoriesResponse.json();
+      const parentCat = allCategories.find(cat => cat.slug.toLowerCase() === slug.toLowerCase());
+      const children = parentCat ? subcategoriesFor(slug.toLowerCase(), allCategories) : [];
 
-      if (isParent) {
-        const categoriesResponse = await fetch('/api/categories');
-        const allCategories: Category[] = await categoriesResponse.json();
-
-        const parentCat = allCategories.find(cat => cat.slug.toLowerCase() === slug.toLowerCase());
-
-        if (parentCat) {
-          setParentCategoryId(parentCat.id);
-          setCollectionTitle((parentCat.name || DISPLAY_NAMES[slug] || slug).toUpperCase());
-          // subcategoriesFor houdt de volgorde van de boom aan en neemt ook
-          // categorieën mee die onder een tweede ouder horen.
-          setSubcategories(subcategoriesFor(slug.toLowerCase(), allCategories));
-          setShowSubcategories(true);
-        }
+      if (parentCat && children.length > 0) {
+        setParentCategoryId(parentCat.id);
+        setCollectionTitle((parentCat.name || DISPLAY_NAMES[slug] || slug).toUpperCase());
+        setSubcategories(children);
+        setShowSubcategories(true);
       } else {
         setShowSubcategories(false);
       }
